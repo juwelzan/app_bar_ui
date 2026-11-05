@@ -21,7 +21,7 @@ class ScrollResponsiveDemoApp extends StatelessWidget {
       valueListenable: themeModeNotifier,
       builder: (context, currentThemeMode, _) {
         return MaterialApp(
-          title: 'Scroll Responsive UI Demo',
+          title: 'Scroll Responsive UI Showcase',
           debugShowCheckedModeBanner: false,
           themeMode: currentThemeMode,
           theme: ThemeData(
@@ -38,25 +38,87 @@ class ScrollResponsiveDemoApp extends StatelessWidget {
             ),
             useMaterial3: true,
           ),
-          home: const DashboardScreen(),
+          home: const ShowcaseHomeScreen(),
         );
       },
     );
   }
 }
 
-/// A comprehensive dashboard screen demonstrating scroll-responsive transitions.
-class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({super.key});
+/// Main container screen featuring a bottom navigation bar switching across 5 showcase tabs.
+class ShowcaseHomeScreen extends StatefulWidget {
+  const ShowcaseHomeScreen({super.key});
 
   @override
-  State<DashboardScreen> createState() => _DashboardScreenState();
+  State<ShowcaseHomeScreen> createState() => _ShowcaseHomeScreenState();
 }
 
-class _DashboardScreenState extends State<DashboardScreen> {
-  final ScrollController _scrollController = ScrollController();
+class _ShowcaseHomeScreenState extends State<ShowcaseHomeScreen> {
+  int _currentTabIndex = 0;
 
-  // Live telemetry notifier for high-performance zero-rebuild telemetry updates
+  final List<Widget> _tabs = const [
+    CoreHeaderTab(),
+    CollapsingStickyTab(),
+    PullToExpandTab(),
+    ParallaxAndRevealsTab(),
+    PresetSwitcherTab(),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: IndexedStack(index: _currentTabIndex, children: _tabs),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _currentTabIndex,
+        onDestinationSelected: (index) {
+          setState(() => _currentTabIndex = index);
+        },
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.dashboard_outlined),
+            selectedIcon: Icon(Icons.dashboard),
+            label: 'Core Header',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.view_day_outlined),
+            selectedIcon: Icon(Icons.view_day),
+            label: 'Collapsing',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.unfold_more_outlined),
+            selectedIcon: Icon(Icons.unfold_more),
+            label: 'Pull Expand',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.auto_awesome_mosaic_outlined),
+            selectedIcon: Icon(Icons.auto_awesome_mosaic),
+            label: 'Parallax',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.style_outlined),
+            selectedIcon: Icon(Icons.style),
+            label: 'Presets',
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ============================================================================
+// TAB 1: Core Scroll Header with Dual Icon Swaps & Live Telemetry
+// ============================================================================
+
+class CoreHeaderTab extends StatefulWidget {
+  const CoreHeaderTab({super.key});
+
+  @override
+  State<CoreHeaderTab> createState() => _CoreHeaderTabState();
+}
+
+class _CoreHeaderTabState extends State<CoreHeaderTab> {
+  final ScrollResponsiveController _controller = ScrollResponsiveController();
+
   final ValueNotifier<ScrollProgressDetails> _telemetryNotifier =
       ValueNotifier<ScrollProgressDetails>(
         const ScrollProgressDetails(
@@ -68,17 +130,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
       );
 
-  // Configurable options
-  ScrollTransitionType _transitionType = ScrollTransitionType.scrollProgress;
-  bool _enableFade = true;
-  bool _enableScale = true;
-  bool _enableSlide = true;
   bool _hideStatusBar = true;
   String _thresholdPreset = 'Standard (20-80px)';
 
   @override
   void dispose() {
-    _scrollController.dispose();
+    _controller.dispose();
     _telemetryNotifier.dispose();
     super.dispose();
   }
@@ -101,9 +158,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           trailingStartOffset: 40.0,
           trailingEndOffset: 120.0,
           statusBarHideOffset: 130.0,
-          statusBarShowOffset: 60.0,
+          statusBarShowOffset: 70.0,
         );
-      case 'Standard (20-80px)':
       default:
         return const ScrollThresholdConfig(
           leadingStartOffset: 20.0,
@@ -116,400 +172,155 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
   }
 
-  void _scrollToTop() {
-    if (_scrollController.hasClients) {
-      _scrollController.animateTo(
-        0.0,
-        duration: const Duration(milliseconds: 400),
-        curve: Curves.easeOutCubic,
-      );
-    }
-  }
-
-  void _showNotificationSheet() {
-    showModalBottomSheet<void>(
-      context: context,
-      showDragHandle: true,
-      isScrollControlled: true,
-      builder: (context) => SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20.0, 8.0, 20.0, 28.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  const Icon(Icons.notifications_active, color: Colors.amber),
-                  const SizedBox(width: 8.0),
-                  Text(
-                    'Notifications (3)',
-                    style: Theme.of(context).textTheme.titleLarge
-                        ?.copyWith(fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-              const Divider(height: 24.0),
-              const ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: CircleAvatar(
-                  backgroundColor: Colors.blueAccent,
-                  child: Icon(Icons.cloud_done, color: Colors.white, size: 20),
-                ),
-                title: Text('Database sync completed'),
-                subtitle: Text('2 minutes ago'),
-              ),
-              const ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: CircleAvatar(
-                  backgroundColor: Colors.green,
-                  child: Icon(Icons.security, color: Colors.white, size: 20),
-                ),
-                title: Text('Security audit passed'),
-                subtitle: Text('1 hour ago'),
-              ),
-              const ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: CircleAvatar(
-                  backgroundColor: Colors.orange,
-                  child: Icon(Icons.bolt, color: Colors.white, size: 20),
-                ),
-                title: Text('High performance mode active'),
-                subtitle: Text('3 hours ago'),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _showProfileSheet() {
-    showModalBottomSheet<void>(
-      context: context,
-      showDragHandle: true,
-      isScrollControlled: true,
-      builder: (context) => SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20.0, 8.0, 20.0, 28.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const CircleAvatar(
-                radius: 36,
-                backgroundColor: Color(0xFF3F51B5),
-                child: Text(
-                  'AR',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 12.0),
-              Text(
-                'Alex Rivera',
-                style: Theme.of(context).textTheme.titleLarge
-                    ?.copyWith(fontWeight: FontWeight.bold),
-              ),
-              Text(
-                'Lead Architect & Developer',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-              ),
-              const SizedBox(height: 20.0),
-              ListTile(
-                leading: const Icon(Icons.email_outlined),
-                title: const Text('alex.rivera@example.com'),
-                dense: true,
-              ),
-              ListTile(
-                leading: const Icon(Icons.badge_outlined),
-                title: const Text('Employee ID #94821'),
-                dense: true,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final config = ScrollResponsiveConfig(
-      pinSideActions: true,
-      transparentActions: true,
-      hideStatusBarOnScroll: _hideStatusBar,
-      enableReverseAnimation: true,
-      thresholds: _getThresholdConfig(),
-      animation: ScrollAnimationConfig(
-        transitionType: _transitionType,
-        duration: const Duration(milliseconds: 250),
-        curve: Curves.easeInOutCubic,
-        minScale: 0.75,
-        maxScale: 1.0,
-        slideOffset: const Offset(0.0, 0.15),
-        enableFade: _enableFade,
-        enableScale: _enableScale,
-        enableSlide: _enableSlide,
-      ),
-    );
-
     return ScrollResponsiveScaffold(
-      controller: _scrollController,
-      config: config,
-      // Left side action: Profile Avatar initially, Drawer icon when scrolled
-      initialLeading: const Tooltip(
-        message: 'View Profile',
-        child: CircleAvatar(
-          radius: 18,
-          backgroundColor: Color(0xFF3F51B5),
-          child: Text(
-            'AR',
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
+      controller: _controller,
+      config: ScrollResponsiveConfig(
+        thresholds: _getThresholdConfig(),
+        statusBar: StatusBarConfig(
+          enabled: _hideStatusBar,
+          hideOnScroll: _hideStatusBar,
+        ),
+      ),
+      initialLeading: const Icon(Icons.menu, size: 24),
+      scrolledLeading: const Icon(Icons.arrow_back, size: 24),
+      initialTrailing: const Icon(Icons.search, size: 24),
+      scrolledTrailing: const Icon(Icons.tune, size: 24),
+      onLeadingInitialTap: () {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Menu tapped!'),
+            duration: Duration(milliseconds: 700),
           ),
-        ),
-      ),
-      scrolledLeading: const Tooltip(
-        message: 'Open Navigation Drawer',
-        child: Icon(Icons.menu, size: 26),
-      ),
-
-      // Right side action: Notification initially, Profile Avatar when scrolled
-      initialTrailing: Tooltip(
-        message: 'View Notifications',
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            const Icon(Icons.notifications_none, size: 26),
-            Positioned(
-              top: 8,
-              right: 8,
-              child: Container(
-                width: 8,
-                height: 8,
-                decoration: const BoxDecoration(
-                  color: Colors.redAccent,
-                  shape: BoxShape.circle,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-      scrolledTrailing: const Tooltip(
-        message: 'Quick Profile Access',
-        child: CircleAvatar(
-          radius: 17,
-          backgroundColor: Color(0xFF3F51B5),
-          child: Text(
-            'AR',
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ),
-
-      // Callbacks
-      onLeadingInitialTap: _showProfileSheet,
-      // onLeadingScrolledTap will automatically open drawer since drawer is provided
-      onTrailingInitialTap: _showNotificationSheet,
-      onTrailingScrolledTap: _showProfileSheet,
-
-      onScrollUpdate: (details) {
-        _telemetryNotifier.value = details;
+        );
       },
-
-      // Floating Action Button to demonstrate reverse scroll animation
-      floatingActionButton: ValueListenableBuilder<ScrollProgressDetails>(
-        valueListenable: _telemetryNotifier,
-        builder: (context, details, child) {
-          final isScrolled = details.offset > 80.0;
-          return AnimatedOpacity(
-            opacity: isScrolled ? 1.0 : 0.0,
-            duration: const Duration(milliseconds: 200),
-            child: IgnorePointer(
-              ignoring: !isScrolled,
-              child: FloatingActionButton.extended(
-                onPressed: _scrollToTop,
-                icon: const Icon(Icons.arrow_upward),
-                label: const Text('Scroll to Top'),
-              ),
-            ),
-          );
-        },
-      ),
-
-      // Navigation Drawer
-      drawer: NavigationDrawer(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(28, 20, 16, 10),
-            child: Text(
-              'Workspace Menu',
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+      onLeadingScrolledTap: () => _controller.scrollToTop(),
+      onTrailingInitialTap: () {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Search tapped!'),
+            duration: Duration(milliseconds: 700),
           ),
-          const NavigationDrawerDestination(
-            icon: Icon(Icons.dashboard_outlined),
-            selectedIcon: Icon(Icons.dashboard),
-            label: Text('Dashboard'),
+        );
+      },
+      onTrailingScrolledTap: () {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Filter options tapped!'),
+            duration: Duration(milliseconds: 700),
           ),
-          const NavigationDrawerDestination(
-            icon: Icon(Icons.insights_outlined),
-            selectedIcon: Icon(Icons.insights),
-            label: Text('Analytics'),
-          ),
-          const NavigationDrawerDestination(
-            icon: Icon(Icons.task_alt_outlined),
-            selectedIcon: Icon(Icons.task_alt),
-            label: Text('Tasks'),
-          ),
-          const NavigationDrawerDestination(
-            icon: Icon(Icons.settings_outlined),
-            selectedIcon: Icon(Icons.settings),
-            label: Text('Settings'),
-          ),
-        ],
-      ),
-
-      // Fully scrollable header
-      header: ScrollResponsiveHeader(
-        welcome: const Text('Welcome back, Alex 👋'),
-        title: const Text('Project Overview'),
-        subtitle: const Text('High-efficiency scroll responsive layout system'),
-        content: Wrap(
-          spacing: 8.0,
-          runSpacing: 8.0,
+        );
+      },
+      onScrollUpdate: (details) => _telemetryNotifier.value = details,
+      header: Container(
+        padding: const EdgeInsets.fromLTRB(20.0, 56.0, 20.0, 20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Chip(
-              avatar: const Icon(Icons.touch_app, size: 16),
-              label: const Text('Independent Pins'),
-              visualDensity: VisualDensity.compact,
-            ),
-            Chip(
-              avatar: const Icon(Icons.animation, size: 16),
-              label: const Text('Fluid 120 FPS'),
-              visualDensity: VisualDensity.compact,
-            ),
-            Chip(
-              avatar: const Icon(Icons.phone_android, size: 16),
-              label: const Text('Status Bar Sync'),
-              visualDensity: VisualDensity.compact,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Welcome Back,',
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                      Text(
+                        'Alex Morgan',
+                        style: theme.textTheme.headlineMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                IconButton.filledTonal(
+                  icon: Icon(
+                    theme.brightness == Brightness.dark
+                        ? Icons.light_mode
+                        : Icons.dark_mode,
+                  ),
+                  onPressed: () {
+                    themeModeNotifier.value =
+                        theme.brightness == Brightness.dark
+                        ? ThemeMode.light
+                        : ThemeMode.dark;
+                  },
+                ),
+              ],
             ),
           ],
         ),
       ),
-
-      // Main scrollable body
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Telemetry Monitor Card
+            // Live Telemetry Card
             Card(
               elevation: 0,
               color: theme.colorScheme.surfaceContainerHighest.withValues(
                 alpha: 0.5,
               ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16.0),
-                side: BorderSide(
-                  color: theme.colorScheme.outlineVariant.withValues(
-                    alpha: 0.5,
-                  ),
-                ),
-              ),
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: ValueListenableBuilder<ScrollProgressDetails>(
                   valueListenable: _telemetryNotifier,
-                  builder: (context, details, child) {
+                  builder: (context, details, _) {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Row(
-                              children: [
-                                const Icon(Icons.speed, size: 20),
-                                const SizedBox(width: 8.0),
-                                Text(
-                                  'Live Transition Telemetry',
-                                  style: theme.textTheme.titleMedium?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
+                            Icon(
+                              Icons.speed,
+                              size: 20,
+                              color: theme.colorScheme.primary,
                             ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8.0,
-                                vertical: 2.0,
-                              ),
-                              decoration: BoxDecoration(
-                                color: details.offset > 0
-                                    ? Colors.green.withValues(alpha: 0.15)
-                                    : Colors.grey.withValues(alpha: 0.15),
-                                borderRadius: BorderRadius.circular(12.0),
-                              ),
-                              child: Text(
-                                details.offset > 0 ? 'SCROLLING' : 'IDLE',
-                                style: TextStyle(
-                                  fontSize: 10.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: details.offset > 0
-                                      ? Colors.green
-                                      : Colors.grey,
-                                ),
+                            const SizedBox(width: 8.0),
+                            Text(
+                              'Live Scroll Telemetry',
+                              style: theme.textTheme.titleSmall?.copyWith(
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 12.0),
+                        const Divider(height: 20.0),
                         _buildTelemetryRow(
                           'Scroll Offset',
                           '${details.offset.toStringAsFixed(1)} px',
                         ),
-                        const SizedBox(height: 6.0),
+                        const SizedBox(height: 8.0),
                         _buildTelemetryRow(
-                          'Left Icon Progress (Avatar → Drawer)',
+                          'Leading Progress',
                           '${(details.leadingProgress * 100).toInt()}%',
                           progress: details.leadingProgress,
                         ),
-                        const SizedBox(height: 6.0),
+                        const SizedBox(height: 8.0),
                         _buildTelemetryRow(
-                          'Right Icon Progress (Bell → Avatar)',
+                          'Trailing Progress',
                           '${(details.trailingProgress * 100).toInt()}%',
                           progress: details.trailingProgress,
                         ),
-                        const SizedBox(height: 6.0),
-                        _buildTelemetryRow(
-                          'System Status Bar',
-                          details.isStatusBarHidden
-                              ? 'Hidden (Scrolled)'
-                              : 'Visible (Restored)',
-                        ),
-                        const SizedBox(height: 6.0),
+                        const SizedBox(height: 8.0),
                         _buildTelemetryRow(
                           'Scroll Direction',
                           details.scrollDirection.name.toUpperCase(),
+                        ),
+                        const SizedBox(height: 8.0),
+                        _buildTelemetryRow(
+                          'Status Bar Hidden',
+                          details.isStatusBarHidden ? 'YES' : 'NO',
                         ),
                       ],
                     );
@@ -517,17 +328,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ),
             ),
-
             const SizedBox(height: 16.0),
 
-            // Live Settings Card
+            // Settings Controls
             Card(
               elevation: 0,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16.0),
+                borderRadius: BorderRadius.circular(12.0),
                 side: BorderSide(
                   color: theme.colorScheme.outlineVariant.withValues(
-                    alpha: 0.5,
+                    alpha: 0.4,
                   ),
                 ),
               ),
@@ -537,130 +347,52 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Interactive Config Controls',
-                      style: theme.textTheme.titleMedium?.copyWith(
+                      'Configuration',
+                      style: theme.textTheme.titleSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 8.0),
-                    // Theme Mode Selector
-                    ValueListenableBuilder<ThemeMode>(
-                      valueListenable: themeModeNotifier,
-                      builder: (context, currentMode, _) {
-                        return ListTile(
-                          contentPadding: EdgeInsets.zero,
-                          title: const Text('Theme Mode'),
-                          trailing: DropdownButton<ThemeMode>(
-                            value: currentMode,
-                            underline: const SizedBox(),
-                            items: const [
-                              DropdownMenuItem(
-                                value: ThemeMode.system,
-                                child: Text('System'),
-                              ),
-                              DropdownMenuItem(
-                                value: ThemeMode.light,
-                                child: Text('Light'),
-                              ),
-                              DropdownMenuItem(
-                                value: ThemeMode.dark,
-                                child: Text('Dark'),
-                              ),
-                            ],
-                            onChanged: (val) {
-                              if (val != null) {
-                                themeModeNotifier.value = val;
-                              }
-                            },
-                          ),
-                        );
+                    const SizedBox(height: 12.0),
+                    DropdownButtonFormField<String>(
+                      initialValue: _thresholdPreset,
+                      decoration: const InputDecoration(
+                        labelText: 'Threshold Range',
+                        border: OutlineInputBorder(),
+                      ),
+                      items: const [
+                        DropdownMenuItem(
+                          value: 'Fast (10-40px)',
+                          child: Text('Fast (10-40px)'),
+                        ),
+                        DropdownMenuItem(
+                          value: 'Standard (20-80px)',
+                          child: Text('Standard (20-80px)'),
+                        ),
+                        DropdownMenuItem(
+                          value: 'Delayed (40-120px)',
+                          child: Text('Delayed (40-120px)'),
+                        ),
+                      ],
+                      onChanged: (val) {
+                        if (val != null) setState(() => _thresholdPreset = val);
                       },
                     ),
-                    // Threshold Preset Selector
-                    ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      title: const Text('Threshold Preset'),
-                      trailing: DropdownButton<String>(
-                        value: _thresholdPreset,
-                        underline: const SizedBox(),
-                        items: const [
-                          DropdownMenuItem(
-                            value: 'Fast (10-40px)',
-                            child: Text('Fast (10-40px)'),
-                          ),
-                          DropdownMenuItem(
-                            value: 'Standard (20-80px)',
-                            child: Text('Standard (20-80px)'),
-                          ),
-                          DropdownMenuItem(
-                            value: 'Delayed (40-120px)',
-                            child: Text('Delayed (40-120px)'),
-                          ),
-                        ],
-                        onChanged: (val) {
-                          if (val != null) {
-                            setState(() => _thresholdPreset = val);
-                          }
-                        },
-                      ),
-                    ),
+                    const SizedBox(height: 8.0),
                     SwitchListTile.adaptive(
                       contentPadding: EdgeInsets.zero,
                       title: const Text('Hide Status Bar on Scroll'),
                       value: _hideStatusBar,
                       onChanged: (val) => setState(() => _hideStatusBar = val),
                     ),
-                    SwitchListTile.adaptive(
-                      contentPadding: EdgeInsets.zero,
-                      title: const Text('Fade Animation'),
-                      value: _enableFade,
-                      onChanged: (val) => setState(() => _enableFade = val),
-                    ),
-                    SwitchListTile.adaptive(
-                      contentPadding: EdgeInsets.zero,
-                      title: const Text('Scale Animation'),
-                      value: _enableScale,
-                      onChanged: (val) => setState(() => _enableScale = val),
-                    ),
-                    SwitchListTile.adaptive(
-                      contentPadding: EdgeInsets.zero,
-                      title: const Text('Slide Animation'),
-                      value: _enableSlide,
-                      onChanged: (val) => setState(() => _enableSlide = val),
-                    ),
-                    ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      title: const Text('Transition Mode'),
-                      trailing: DropdownButton<ScrollTransitionType>(
-                        value: _transitionType,
-                        underline: const SizedBox(),
-                        items: const [
-                          DropdownMenuItem(
-                            value: ScrollTransitionType.scrollProgress,
-                            child: Text('Scroll Progress'),
-                          ),
-                          DropdownMenuItem(
-                            value: ScrollTransitionType.thresholdTriggered,
-                            child: Text('Triggered Animation'),
-                          ),
-                        ],
-                        onChanged: (val) {
-                          if (val != null) {
-                            setState(() => _transitionType = val);
-                          }
-                        },
-                      ),
-                    ),
                   ],
                 ),
               ),
             ),
-
             const SizedBox(height: 16.0),
 
-            // List of activity items demonstrating continuous scrolling
+            // Continuous scroll demo items
             ...List.generate(
-              20,
+              15,
               (index) => Card(
                 elevation: 0,
                 margin: const EdgeInsets.only(bottom: 10.0),
@@ -677,19 +409,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     backgroundColor: theme.colorScheme.primaryContainer,
                     child: Text('${index + 1}'),
                   ),
-                  title: Text('Activity Task #${index + 1}'),
-                  subtitle: Text(
-                    'Status update event logged at ${10 + index}:00 AM',
-                  ),
+                  title: Text('Activity Item #${index + 1}'),
+                  subtitle: Text('Recorded event log at ${10 + index}:00 AM'),
                   trailing: const Icon(Icons.chevron_right, size: 20),
-                  onTap: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Tapped task #${index + 1}'),
-                        duration: const Duration(seconds: 1),
-                      ),
-                    );
-                  },
                 ),
               ),
             ),
@@ -707,11 +429,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded(
-              child: Text(
-                label,
-                style: const TextStyle(fontSize: 12.0, color: Colors.grey),
-              ),
+            Text(
+              label,
+              style: const TextStyle(fontSize: 12.0, color: Colors.grey),
             ),
             Text(
               value,
@@ -730,6 +450,541 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ],
       ],
+    );
+  }
+}
+
+// ============================================================================
+// TAB 2: Collapsing Header & Sticky Tab Bar
+// ============================================================================
+
+class CollapsingStickyTab extends StatefulWidget {
+  const CollapsingStickyTab({super.key});
+
+  @override
+  State<CollapsingStickyTab> createState() => _CollapsingStickyTabState();
+}
+
+class _CollapsingStickyTabState extends State<CollapsingStickyTab>
+    with SingleTickerProviderStateMixin {
+  late final TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return ScrollResponsiveScaffold(
+      initialLeading: const Icon(Icons.arrow_back),
+      initialTrailing: const Icon(Icons.bookmark_border),
+      scrolledTrailing: const Icon(Icons.bookmark),
+      slivers: [
+        // Smooth Collapsing Header
+        ScrollCollapsingHeader(
+          expandedHeight: 220.0,
+          collapsedHeight: 64.0,
+          pinned: true,
+          builder: (context, progress) {
+            return Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    theme.colorScheme.primary,
+                    theme.colorScheme.tertiary,
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Align(
+                alignment: Alignment.lerp(
+                  Alignment.bottomLeft,
+                  Alignment.center,
+                  progress,
+                )!,
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: (1.0 - progress) * 20.0),
+                  child: Text(
+                    'Collapsing Header',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18.0 + (1.0 - progress) * 10.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+
+        // Sticky Tab Bar
+        ScrollStickyTabBar(
+          pinned: true,
+          elevation: 3.0,
+          child: TabBar(
+            controller: _tabController,
+            tabs: const [
+              Tab(text: 'Overview'),
+              Tab(text: 'Features'),
+              Tab(text: 'Reviews'),
+            ],
+          ),
+        ),
+
+        // Tab Content List
+        SliverPadding(
+          padding: const EdgeInsets.all(16.0),
+          sliver: SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) => Card(
+                elevation: 0,
+                margin: const EdgeInsets.only(bottom: 12.0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                  side: BorderSide(
+                    color: theme.colorScheme.outlineVariant.withValues(
+                      alpha: 0.3,
+                    ),
+                  ),
+                ),
+                child: ListTile(
+                  leading: Icon(
+                    Icons.check_circle_outline,
+                    color: theme.colorScheme.primary,
+                  ),
+                  title: Text('Specification Metric #${index + 1}'),
+                  subtitle: Text(
+                    'Verified 60/120 FPS high-refresh sliver performance',
+                  ),
+                ),
+              ),
+              childCount: 20,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ============================================================================
+// TAB 3: Pull to Expand Header with Rubber-Band Stretch
+// ============================================================================
+
+class PullToExpandTab extends StatelessWidget {
+  const PullToExpandTab({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return ScrollResponsiveScaffold(
+      physics: const BouncingScrollPhysics(
+        parent: AlwaysScrollableScrollPhysics(),
+      ),
+      initialLeading: const Icon(Icons.arrow_back),
+      initialTrailing: const Icon(Icons.share),
+      slivers: [
+        // Rubber-Band Zoom & Pull-to-Expand Sliver Header
+        ScrollPullToExpandHeader(
+          expandedHeight: 240.0,
+          stretchTriggerOffset: 120.0,
+          content: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const CircleAvatar(
+                  radius: 32.0,
+                  backgroundColor: Colors.white,
+                  child: Icon(
+                    Icons.person,
+                    size: 40.0,
+                    color: Color(0xFF2C3E50),
+                  ),
+                ),
+                const SizedBox(height: 8.0),
+                const Text(
+                  'Eleanor Vance',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 22.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  'Senior Product Designer',
+                  style: TextStyle(color: Colors.white.withValues(alpha: 0.8)),
+                ),
+              ],
+            ),
+          ),
+          child: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xFF2C3E50), Color(0xFF4CA1AF)],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+            ),
+            child: const Center(
+              child: Icon(Icons.landscape, size: 72, color: Colors.white38),
+            ),
+          ),
+        ),
+
+        // Profile content
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    _buildStatColumn('Posts', '142', theme),
+                    _buildStatColumn('Followers', '12.8k', theme),
+                    _buildStatColumn('Following', '480', theme),
+                  ],
+                ),
+                const SizedBox(height: 24.0),
+                Text(
+                  'User Feed',
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8.0),
+              ],
+            ),
+          ),
+        ),
+
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) => Card(
+              elevation: 0,
+              margin: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 6.0,
+              ),
+              child: ListTile(
+                leading: const Icon(Icons.article_outlined),
+                title: Text('Design Article #${index + 1}'),
+                subtitle: const Text(
+                  'Pull down at the very top to see rubber-band zoom!',
+                ),
+              ),
+            ),
+            childCount: 15,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStatColumn(String label, String value, ThemeData theme) {
+    return Column(
+      children: [
+        Text(
+          value,
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 4.0),
+        Text(
+          label,
+          style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey),
+        ),
+      ],
+    );
+  }
+}
+
+// ============================================================================
+// TAB 4: Parallax Container & Animated Section Reveals
+// ============================================================================
+
+class ParallaxAndRevealsTab extends StatefulWidget {
+  const ParallaxAndRevealsTab({super.key});
+
+  @override
+  State<ParallaxAndRevealsTab> createState() => _ParallaxAndRevealsTabState();
+}
+
+class _ParallaxAndRevealsTabState extends State<ParallaxAndRevealsTab> {
+  final ScrollResponsiveController _controller = ScrollResponsiveController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return ScrollResponsiveScaffold(
+      controller: _controller,
+      progressIndicator: ScrollProgressIndicator(
+        type: ProgressIndicatorType.linear,
+        color: theme.colorScheme.primary,
+        height: 3.5,
+      ),
+      floatingActionButton: ScrollToTopButton(scrollController: _controller),
+      scrollAwareFab: true,
+      initialLeading: const Icon(Icons.arrow_back),
+      initialTrailing: const Icon(Icons.share),
+      slivers: [
+        // Hero Parallax Layer
+        SliverToBoxAdapter(
+          child: SizedBox(
+            height: 240.0,
+            child: ScrollParallax(
+              speedFactor: 0.5,
+              child: Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Color(0xFF8E2DE2), Color(0xFF4A00E0)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
+                child: const Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.layers, size: 48.0, color: Colors.white70),
+                      SizedBox(height: 8.0),
+                      Text(
+                        'Flow Parallax Container',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 22.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        'Repaints via FlowDelegate with ZERO rebuilds',
+                        style: TextStyle(color: Colors.white70),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+
+        // Animated Section Reveals
+        SliverPadding(
+          padding: const EdgeInsets.all(16.0),
+          sliver: SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) => ScrollSectionReveal(
+                slideOffset: const Offset(0.0, 30.0),
+                child: Card(
+                  elevation: 0,
+                  margin: const EdgeInsets.only(bottom: 12.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                    side: BorderSide(
+                      color: theme.colorScheme.outlineVariant.withValues(
+                        alpha: 0.3,
+                      ),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Revealed Section #${index + 1}',
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 6.0),
+                        Text(
+                          'This section smoothly animates into view as you scroll down.',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              childCount: 16,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ============================================================================
+// TAB 5: Presets Showcase (Material, Minimal, iOS, Dashboard, Transparent)
+// ============================================================================
+
+class PresetSwitcherTab extends StatefulWidget {
+  const PresetSwitcherTab({super.key});
+
+  @override
+  State<PresetSwitcherTab> createState() => _PresetSwitcherTabState();
+}
+
+class _PresetSwitcherTabState extends State<PresetSwitcherTab> {
+  String _selectedPreset = 'Material';
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        // Preset Selection Bar
+        SafeArea(
+          bottom: false,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 8.0),
+            child: DropdownButtonFormField<String>(
+              key: const ValueKey('preset_dropdown'),
+              initialValue: _selectedPreset,
+              decoration: const InputDecoration(
+                labelText: 'Choose Scaffold Preset',
+                border: OutlineInputBorder(),
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 10.0,
+                ),
+              ),
+              items: const [
+                DropdownMenuItem(
+                  value: 'Material',
+                  child: Text('Material Preset'),
+                ),
+                DropdownMenuItem(
+                  value: 'Minimal',
+                  child: Text('Minimal Preset'),
+                ),
+                DropdownMenuItem(
+                  value: 'iOS',
+                  child: Text('iOS Inspired Preset'),
+                ),
+                DropdownMenuItem(
+                  value: 'Dashboard',
+                  child: Text('Dashboard Preset'),
+                ),
+                DropdownMenuItem(
+                  value: 'Transparent',
+                  child: Text('Transparent Floating Preset'),
+                ),
+              ],
+              onChanged: (val) {
+                if (val != null) setState(() => _selectedPreset = val);
+              },
+            ),
+          ),
+        ),
+        const Divider(height: 1),
+
+        // Live Selected Preset Scaffold
+        Expanded(child: _buildSelectedPreset()),
+      ],
+    );
+  }
+
+  Widget _buildSelectedPreset() {
+    switch (_selectedPreset) {
+      case 'Minimal':
+        return ScrollResponsiveScaffold.minimal(
+          headerTitle: const Text('Minimal Preset'),
+          headerSubtitle: const Text('Zero-clutter lightweight header'),
+          initialLeading: const Icon(Icons.arrow_back),
+          body: _buildPresetContent('Minimal Design Style'),
+        );
+      case 'iOS':
+        return ScrollResponsiveScaffold.iosInspired(
+          headerTitle: const Text('iOS Inspired'),
+          headerSubtitle: const Text('Cupertino curve with smooth collapse'),
+          initialLeading: const Icon(Icons.arrow_back_ios),
+          body: _buildPresetContent('iOS Cupertino Design Style'),
+        );
+      case 'Dashboard':
+        return ScrollResponsiveScaffold.dashboard(
+          headerTitle: const Text('Dashboard Preset'),
+          headerSubtitle: const Text('High-density metrics overview'),
+          initialLeading: const Icon(Icons.menu),
+          initialTrailing: const Icon(Icons.notifications_none),
+          body: _buildPresetContent('Dashboard Design Style'),
+        );
+      case 'Transparent':
+        return ScrollResponsiveScaffold.transparentFloating(
+          headerTitle: const Text('Transparent Floating'),
+          headerSubtitle: const Text('Floating overlay over content'),
+          initialLeading: const Icon(Icons.arrow_back),
+          body: _buildPresetContent('Transparent Floating Style'),
+        );
+      default:
+        return ScrollResponsiveScaffold.material(
+          headerTitle: const Text('Material Preset'),
+          headerSubtitle: const Text('Standard Material Design 3 spec'),
+          initialLeading: const Icon(Icons.menu),
+          initialTrailing: const Icon(Icons.search),
+          body: _buildPresetContent('Standard Material Style'),
+        );
+    }
+  }
+
+  Widget _buildPresetContent(String presetName) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Card(
+            elevation: 0,
+            color: Colors.blue.withValues(alpha: 0.1),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                'Demonstrating: $presetName\nConstructed cleanly via ScrollResponsiveScaffold.${_selectedPreset.toLowerCase()}()',
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16.0),
+          ...List.generate(
+            15,
+            (index) => ListTile(
+              leading: CircleAvatar(child: Text('${index + 1}')),
+              title: Text('$presetName Entry #${index + 1}'),
+              subtitle: const Text(
+                'Scroll up and down to observe preset-specific thresholds.',
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

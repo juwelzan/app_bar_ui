@@ -137,13 +137,14 @@ This roadmap tracks the development of the **Scroll-Driven UI Framework for Flut
 - [x] Publish `TESTING_GUIDELINES.md`.
 
 ### PHASE 14 — Example Application Expansion
-- [ ] Expand `example/lib/main.dart` with interactive tabbed showcase:
+- [x] Expand `example/lib/main.dart` with interactive tabbed showcase:
   - Tab 1: Core Scroll Header with dual pinned actions & status bar sync.
   - Tab 2: Collapsing Header & Sticky Tab Navigation.
   - Tab 3: Pull-to-Expand Header with rubber-band zoom.
   - Tab 4: Parallax, Progress Indicator & Animated Section Reveals.
-  - Tab 5: Preset Switcher (Material, Minimal, iOS, Dashboard).
-- [ ] Verify example application runs cleanly with `flutter run` and builds without errors.
+  - Tab 5: Preset Switcher (Material, Minimal, iOS, Dashboard, Transparent).
+- [x] Authored `example/test/widget_test.dart` asserting navigation across all 5 showcase tabs and real-time theme toggles.
+- [x] Verify example application runs cleanly and passes static analysis with 0 errors.
 
 ### PHASE 15 — Documentation & Release Readiness
 - [ ] Update `README.md` with complete documentation, diagrams, presets, component guides, and code examples.

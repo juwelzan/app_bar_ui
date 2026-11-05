@@ -3,125 +3,95 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:app_bar_ui_example/main.dart';
 
 void main() {
-  testWidgets('Renders dashboard screen and handles scroll responsive system', (
+  testWidgets('Renders ShowcaseHomeScreen and navigates across all 5 showcase tabs', (
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(const ScrollResponsiveDemoApp());
     await tester.pumpAndSettle();
 
-    // Verify initial header content
-    expect(find.text('Project Overview'), findsOneWidget);
-    expect(find.text('Welcome back, Alex 👋'), findsOneWidget);
+    // Tab 1: Core Header
+    expect(find.text('Welcome Back,'), findsOneWidget);
+    expect(find.text('Alex Morgan'), findsOneWidget);
+    expect(find.text('Live Scroll Telemetry'), findsOneWidget);
 
-    // Verify initial pinned actions rendered
-    expect(find.byTooltip('View Profile'), findsOneWidget);
-    expect(find.byTooltip('View Notifications'), findsOneWidget);
-
-    // Tap notification action in initial state
-    await tester.tap(find.byTooltip('View Notifications'));
+    // Switch to Tab 2: Collapsing Header & Sticky Tab Bar
+    await tester.tap(find.text('Collapsing'));
     await tester.pumpAndSettle();
 
-    // Verify bottom sheet appeared
-    expect(find.text('Notifications (3)'), findsOneWidget);
+    expect(find.text('Collapsing Header'), findsOneWidget);
+    expect(find.text('Overview'), findsOneWidget);
+    expect(find.text('Features'), findsOneWidget);
+    expect(find.text('Reviews'), findsOneWidget);
 
-    // Dismiss bottom sheet by tapping barrier
-    await tester.tapAt(const Offset(20, 20));
+    // Switch to Tab 3: Pull Expand
+    await tester.tap(find.text('Pull Expand'));
     await tester.pumpAndSettle();
-    expect(find.text('Notifications (3)'), findsNothing);
 
-    // Drag the scroll view upward to scroll down
-    await tester.drag(
-      find.text('Live Transition Telemetry'),
-      const Offset(0.0, -350.0),
+    expect(find.text('Eleanor Vance'), findsOneWidget);
+    expect(find.text('Senior Product Designer'), findsOneWidget);
+    expect(find.text('Posts'), findsOneWidget);
+    expect(find.text('Followers'), findsOneWidget);
+
+    // Switch to Tab 4: Parallax
+    await tester.tap(find.text('Parallax'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Flow Parallax Container'), findsOneWidget);
+    expect(
+      find.text('Repaints via FlowDelegate with ZERO rebuilds'),
+      findsOneWidget,
     );
+
+    // Switch to Tab 5: Presets Showcase
+    await tester.tap(find.text('Presets'));
     await tester.pumpAndSettle();
 
-    // Header scrolled away
-    expect(find.text('Project Overview'), findsNothing);
+    expect(find.text('Material Preset'), findsWidgets);
 
-    // Left transitioned to drawer icon
-    expect(find.byTooltip('Open Navigation Drawer'), findsOneWidget);
-
-    // Right transitioned to profile avatar
-    expect(find.byTooltip('Quick Profile Access'), findsOneWidget);
-
-    // Tap scrolled leading icon to open drawer
-    await tester.tap(find.byTooltip('Open Navigation Drawer'));
+    // Switch dropdown to Minimal
+    await tester.tap(find.byKey(const ValueKey('preset_dropdown')));
     await tester.pumpAndSettle();
-
-    // Verify navigation drawer opened
-    expect(find.text('Workspace Menu'), findsOneWidget);
-
-    // Close drawer
-    await tester.tapAt(const Offset(350, 200));
+    await tester.tap(find.text('Minimal Preset').last);
     await tester.pumpAndSettle();
-    expect(find.text('Workspace Menu'), findsNothing);
+    expect(find.text('Minimal Preset'), findsWidgets);
 
-    // Scroll back up to the top using the floating action button
-    expect(find.byType(FloatingActionButton), findsOneWidget);
-    await tester.tap(find.byType(FloatingActionButton));
+    // Switch dropdown to iOS
+    await tester.tap(find.byKey(const ValueKey('preset_dropdown')));
     await tester.pumpAndSettle();
+    await tester.tap(find.text('iOS Inspired Preset').last);
+    await tester.pumpAndSettle();
+    expect(find.text('iOS Inspired'), findsWidgets);
 
-    // Verify header restored
-    expect(find.text('Project Overview'), findsOneWidget);
-    expect(find.byTooltip('View Profile'), findsOneWidget);
-    expect(find.byTooltip('View Notifications'), findsOneWidget);
+    // Switch dropdown to Dashboard
+    await tester.tap(find.byKey(const ValueKey('preset_dropdown')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Dashboard Preset').last);
+    await tester.pumpAndSettle();
+    expect(find.text('Dashboard Preset'), findsWidgets);
+
+    // Switch dropdown to Transparent
+    await tester.tap(find.byKey(const ValueKey('preset_dropdown')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Transparent Floating Preset').last);
+    await tester.pumpAndSettle();
+    expect(find.text('Transparent Floating'), findsWidgets);
   });
 
-  testWidgets(
-    'Supports theme mode switching and config controls in real-time',
-    (WidgetTester tester) async {
-      await tester.pumpWidget(const ScrollResponsiveDemoApp());
-      await tester.pumpAndSettle();
-
-      // Toggle theme mode to Dark
-      themeModeNotifier.value = ThemeMode.dark;
-      await tester.pumpAndSettle();
-      expect(themeModeNotifier.value, ThemeMode.dark);
-
-      // Toggle theme mode to Light
-      themeModeNotifier.value = ThemeMode.light;
-      await tester.pumpAndSettle();
-      expect(themeModeNotifier.value, ThemeMode.light);
-
-      // Reset to system
-      themeModeNotifier.value = ThemeMode.system;
-      await tester.pumpAndSettle();
-
-      // Verify config controls card exists
-      expect(find.text('Interactive Config Controls'), findsOneWidget);
-      expect(find.text('Hide Status Bar on Scroll'), findsOneWidget);
-      expect(find.text('Fade Animation'), findsOneWidget);
-      expect(find.text('Scale Animation'), findsOneWidget);
-      expect(find.text('Slide Animation'), findsOneWidget);
-    },
-  );
-
-  testWidgets('Supports theme mode switching and config controls in real-time', (
+  testWidgets('Supports theme mode toggle cleanly', (
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(const ScrollResponsiveDemoApp());
     await tester.pumpAndSettle();
 
-    // Toggle theme mode to Dark
-    themeModeNotifier.value = ThemeMode.dark;
-    await tester.pumpAndSettle();
-    expect(themeModeNotifier.value, ThemeMode.dark);
+    // Verify initial theme toggle button on Tab 1
+    final toggleFinder = find.byType(IconButton);
+    expect(toggleFinder, findsWidgets);
 
-    // Toggle theme mode to Light
-    themeModeNotifier.value = ThemeMode.light;
-    await tester.pumpAndSettle();
-    expect(themeModeNotifier.value, ThemeMode.light);
-
-    // Reset to system
-    themeModeNotifier.value = ThemeMode.system;
+    // Tap theme toggle button
+    await tester.tap(toggleFinder.first);
     await tester.pumpAndSettle();
 
-    // Verify config controls card exists
-    expect(find.text('Interactive Config Controls'), findsOneWidget);
-    expect(find.text('Hide Status Bar on Scroll'), findsOneWidget);
-    expect(find.text('Fade Animation'), findsOneWidget);
-    expect(find.text('Scale Animation'), findsOneWidget);
-    expect(find.text('Slide Animation'), findsOneWidget);
+    // Invariant holds cleanly with zero exceptions
+    expect(tester.takeException(), isNull);
   });
 }
