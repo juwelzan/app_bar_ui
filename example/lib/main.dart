@@ -844,7 +844,7 @@ class _ParallaxAndRevealsTabState extends State<ParallaxAndRevealsTab> {
 }
 
 // ============================================================================
-// TAB 5: Presets Showcase (Material, Minimal, iOS, Dashboard, Transparent)
+// TAB 5: Presets Showcase (Quick Switcher + 20-Preset Interactive Gallery)
 // ============================================================================
 
 class PresetSwitcherTab extends StatefulWidget {
@@ -859,6 +859,37 @@ class _PresetSwitcherTabState extends State<PresetSwitcherTab> {
 
   @override
   Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 2,
+      child: Column(
+        children: [
+          Material(
+            color: Theme.of(context).colorScheme.surface,
+            elevation: 1,
+            child: const TabBar(
+              tabs: [
+                Tab(icon: Icon(Icons.swap_horiz), text: 'Quick Switcher'),
+                Tab(
+                  icon: Icon(Icons.grid_view_rounded),
+                  text: '20 Presets Gallery',
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: TabBarView(
+              children: [
+                _buildQuickSwitcherTab(context),
+                const PresetGalleryView(),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildQuickSwitcherTab(BuildContext context) {
     return Column(
       children: [
         // Preset Selection Bar
@@ -980,6 +1011,641 @@ class _PresetSwitcherTabState extends State<PresetSwitcherTab> {
               title: Text('$presetName Entry #${index + 1}'),
               subtitle: const Text(
                 'Scroll up and down to observe preset-specific thresholds.',
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Interactive 20-Preset Showcase Gallery displaying all 20 presets in preview cards.
+class PresetGalleryView extends StatelessWidget {
+  const PresetGalleryView({super.key});
+
+  String _getCategory(ScrollHeaderPreset preset) {
+    switch (preset) {
+      case ScrollHeaderPreset.minimal:
+      case ScrollHeaderPreset.transparent:
+      case ScrollHeaderPreset.floating:
+      case ScrollHeaderPreset.material:
+      case ScrollHeaderPreset.ios:
+      case ScrollHeaderPreset.centerTitle:
+        return 'Box Header';
+      case ScrollHeaderPreset.largeTitle:
+      case ScrollHeaderPreset.flexibleSpace:
+      case ScrollHeaderPreset.collapsing:
+      case ScrollHeaderPreset.parallax:
+        return 'Collapsible Sliver';
+      case ScrollHeaderPreset.gradient:
+      case ScrollHeaderPreset.image:
+        return 'Color & Media';
+      case ScrollHeaderPreset.profile:
+      case ScrollHeaderPreset.dashboard:
+      case ScrollHeaderPreset.search:
+      case ScrollHeaderPreset.segmented:
+      case ScrollHeaderPreset.stickyTab:
+        return 'Specialized Layout';
+      case ScrollHeaderPreset.compactScroll:
+      case ScrollHeaderPreset.sideActionTransition:
+      case ScrollHeaderPreset.customBuilder:
+        return 'Dynamic & Custom';
+    }
+  }
+
+  IconData _getIcon(ScrollHeaderPreset preset) {
+    switch (preset) {
+      case ScrollHeaderPreset.minimal:
+        return Icons.short_text;
+      case ScrollHeaderPreset.transparent:
+        return Icons.opacity;
+      case ScrollHeaderPreset.floating:
+        return Icons.layers_outlined;
+      case ScrollHeaderPreset.material:
+        return Icons.view_compact_alt;
+      case ScrollHeaderPreset.ios:
+        return Icons.phone_iphone;
+      case ScrollHeaderPreset.centerTitle:
+        return Icons.format_align_center;
+      case ScrollHeaderPreset.largeTitle:
+        return Icons.title;
+      case ScrollHeaderPreset.flexibleSpace:
+        return Icons.aspect_ratio;
+      case ScrollHeaderPreset.collapsing:
+        return Icons.vertical_align_center;
+      case ScrollHeaderPreset.parallax:
+        return Icons.auto_awesome_motion;
+      case ScrollHeaderPreset.gradient:
+        return Icons.gradient;
+      case ScrollHeaderPreset.image:
+        return Icons.image_outlined;
+      case ScrollHeaderPreset.profile:
+        return Icons.account_circle_outlined;
+      case ScrollHeaderPreset.dashboard:
+        return Icons.dashboard_outlined;
+      case ScrollHeaderPreset.search:
+        return Icons.search;
+      case ScrollHeaderPreset.segmented:
+        return Icons.view_week_outlined;
+      case ScrollHeaderPreset.stickyTab:
+        return Icons.tab;
+      case ScrollHeaderPreset.compactScroll:
+        return Icons.unfold_less;
+      case ScrollHeaderPreset.sideActionTransition:
+        return Icons.transform;
+      case ScrollHeaderPreset.customBuilder:
+        return Icons.code;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      padding: const EdgeInsets.all(16.0),
+      itemCount: ScrollHeaderPreset.values.length,
+      itemBuilder: (context, index) {
+        final preset = ScrollHeaderPreset.values[index];
+        final category = _getCategory(preset);
+        final icon = _getIcon(preset);
+
+        return Card(
+          margin: const EdgeInsets.only(bottom: 12.0),
+          elevation: 1,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.0),
+          ),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(12.0),
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (context) => PresetDetailScreen(preset: preset),
+                ),
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                children: [
+                  Container(
+                    width: 48.0,
+                    height: 48.0,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.primaryContainer,
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Icon(
+                      icon,
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    ),
+                  ),
+                  const SizedBox(width: 16.0),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              '#${index + 1}',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).colorScheme.primary,
+                                fontSize: 12.0,
+                              ),
+                            ),
+                            const SizedBox(width: 6.0),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 6.0,
+                                vertical: 2.0,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .surfaceContainerHighest,
+                                borderRadius: BorderRadius.circular(4.0),
+                              ),
+                              child: Text(
+                                category,
+                                style: TextStyle(
+                                  fontSize: 10.0,
+                                  fontWeight: FontWeight.w600,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurfaceVariant,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 4.0),
+                        Text(
+                          preset.label,
+                          style: const TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 2.0),
+                        Text(
+                          preset.description,
+                          style: TextStyle(
+                            fontSize: 13.0,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Icon(Icons.arrow_forward_ios, size: 16.0),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+/// Full-screen interactive demo for any of the 20 presets.
+class PresetDetailScreen extends StatefulWidget {
+  const PresetDetailScreen({super.key, required this.preset});
+
+  final ScrollHeaderPreset preset;
+
+  @override
+  State<PresetDetailScreen> createState() => _PresetDetailScreenState();
+}
+
+class _PresetDetailScreenState extends State<PresetDetailScreen> {
+  final ScrollResponsiveController _controller = ScrollResponsiveController();
+  final TextEditingController _searchController = TextEditingController();
+  int _selectedSegment = 0;
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final headerWidget = _buildHeader(widget.preset);
+
+    final content = ScrollResponsiveScaffold(
+      controller: _controller,
+      header: headerWidget,
+      body: _buildBody(context),
+    );
+
+    if (widget.preset == ScrollHeaderPreset.stickyTab) {
+      return DefaultTabController(length: 3, child: Scaffold(body: content));
+    }
+
+    return Scaffold(body: content);
+  }
+
+  ScrollHeader _buildHeader(ScrollHeaderPreset preset) {
+    switch (preset) {
+      case ScrollHeaderPreset.minimal:
+        return ScrollHeader.minimal(
+          title: Text(preset.label),
+          subtitle: const Text('Minimal & clean visual weight'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          actions: const [
+            IconButton(icon: Icon(Icons.more_vert), onPressed: null),
+          ],
+        );
+
+      case ScrollHeaderPreset.transparent:
+        return ScrollHeader.transparent(
+          title: Text(preset.label),
+          subtitle: const Text('Overlaid above content'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          actions: const [IconButton(icon: Icon(Icons.share), onPressed: null)],
+        );
+
+      case ScrollHeaderPreset.floating:
+        return ScrollHeader.floating(
+          title: Text(preset.label),
+          subtitle: const Text('Rounded floating island'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          actions: const [
+            IconButton(icon: Icon(Icons.favorite_border), onPressed: null),
+          ],
+        );
+
+      case ScrollHeaderPreset.material:
+        return ScrollHeader.material(
+          title: Text(preset.label),
+          subtitle: const Text('Material 3 tonal surface'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          actions: const [
+            IconButton(icon: Icon(Icons.search), onPressed: null),
+          ],
+        );
+
+      case ScrollHeaderPreset.ios:
+        return ScrollHeader.ios(
+          title: Text(preset.label),
+          leading: TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Back'),
+          ),
+          actions: const [
+            IconButton(icon: Icon(Icons.edit_outlined), onPressed: null),
+          ],
+        );
+
+      case ScrollHeaderPreset.centerTitle:
+        return ScrollHeader.centerTitle(
+          title: Text(preset.label),
+          subtitle: const Text('Symmetrically centered'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          actions: const [
+            IconButton(icon: Icon(Icons.info_outline), onPressed: null),
+          ],
+        );
+
+      case ScrollHeaderPreset.largeTitle:
+        return ScrollHeader.largeTitle(
+          title: Text(preset.label),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          actions: const [
+            IconButton(icon: Icon(Icons.more_horiz), onPressed: null),
+          ],
+        );
+
+      case ScrollHeaderPreset.flexibleSpace:
+        return ScrollHeader.flexibleSpace(
+          title: Text(preset.label),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xFF1E3A8A), Color(0xFF3B82F6)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+            child: const Center(
+              child: Text(
+                'Flexible Space Banner Area',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        );
+
+      case ScrollHeaderPreset.collapsing:
+        return ScrollHeader.collapsing(
+          title: Text(preset.label),
+          subtitle: const Text('Smooth hero collapse'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          actions: const [IconButton(icon: Icon(Icons.tune), onPressed: null)],
+        );
+
+      case ScrollHeaderPreset.parallax:
+        return ScrollHeader.parallax(
+          title: Text(preset.label),
+          subtitle: const Text('0.5x Parallax background motion'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          background: Container(
+            decoration: const BoxDecoration(
+              gradient: RadialGradient(
+                colors: [Color(0xFF7C3AED), Color(0xFF312E81)],
+                radius: 1.2,
+              ),
+            ),
+          ),
+        );
+
+      case ScrollHeaderPreset.gradient:
+        return ScrollHeader.gradient(
+          title: Text(preset.label),
+          subtitle: const Text('Multi-stop vibrant gradient'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          gradient: const LinearGradient(
+            colors: [Color(0xFFEC4899), Color(0xFF8B5CF6)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        );
+
+      case ScrollHeaderPreset.image:
+        return ScrollHeader.image(
+          title: Text(preset.label),
+          subtitle: const Text('Image with contrast scrim'),
+          image: const NetworkImage(
+            'https://picsum.photos/seed/appbar/800/400',
+          ),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          overlayGradient: LinearGradient(
+            colors: [
+              Colors.black.withValues(alpha: 0.7),
+              Colors.black.withValues(alpha: 0.3),
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+          overlayColor: Colors.black45,
+        );
+
+      case ScrollHeaderPreset.profile:
+        return ScrollHeader.profile(
+          name: const Text('Sophia Rodriguez'),
+          handleOrRole: const Text('@sophia • Staff Engineer'),
+          avatar: const CircleAvatar(
+            radius: 26.0,
+            backgroundColor: Colors.teal,
+            child: Text('SR', style: TextStyle(color: Colors.white)),
+          ),
+          stats: const Row(
+            children: [
+              Text(
+                '14.2K Followers',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13.0),
+              ),
+              SizedBox(width: 16.0),
+              Text(
+                '840 Following',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13.0),
+              ),
+            ],
+          ),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          actions: const [
+            IconButton(icon: Icon(Icons.person_add_alt_1), onPressed: null),
+          ],
+        );
+
+      case ScrollHeaderPreset.dashboard:
+        return ScrollHeader.dashboard(
+          greeting: const Text('Good Morning,'),
+          userName: const Text('Ethan Walker'),
+          dateOrSubtitle: const Text('Nov 6, 2026 • Systems Healthy'),
+          metricsRow: const Row(
+            children: [
+              Chip(avatar: Icon(Icons.bolt, size: 16), label: Text('99.99%')),
+              SizedBox(width: 8.0),
+              Chip(
+                avatar: Icon(Icons.trending_up, size: 16),
+                label: Text('\$42.5K'),
+              ),
+            ],
+          ),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
+        );
+
+      case ScrollHeaderPreset.search:
+        return ScrollHeader.search(
+          title: Text(preset.label),
+          searchController: _searchController,
+          searchHint: 'Search documentation & presets...',
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          actions: const [IconButton(icon: Icon(Icons.tune), onPressed: null)],
+        );
+
+      case ScrollHeaderPreset.segmented:
+        return ScrollHeader.segmented(
+          title: Text(preset.label),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          segments: SegmentedButton<int>(
+            segments: const [
+              ButtonSegment(value: 0, label: Text('All')),
+              ButtonSegment(value: 1, label: Text('Starred')),
+              ButtonSegment(value: 2, label: Text('Recent')),
+            ],
+            selected: {_selectedSegment},
+            onSelectionChanged: (set) =>
+                setState(() => _selectedSegment = set.first),
+          ),
+        );
+
+      case ScrollHeaderPreset.stickyTab:
+        return ScrollHeader.stickyTab(
+          title: Text(preset.label),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          tabBar: const TabBar(
+            tabs: [
+              Tab(text: 'General'),
+              Tab(text: 'Metrics'),
+              Tab(text: 'Settings'),
+            ],
+          ),
+        );
+
+      case ScrollHeaderPreset.compactScroll:
+        return ScrollHeader.compactScroll(
+          title: Text(preset.label),
+          subtitle: const Text('Quickly collapses to 48px'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          actions: const [
+            IconButton(icon: Icon(Icons.more_vert), onPressed: null),
+          ],
+        );
+
+      case ScrollHeaderPreset.sideActionTransition:
+        return ScrollHeader.sideActionTransition(
+          title: Text(preset.label),
+          subtitle: const Text('Transforms leading & trailing on scroll'),
+          initialLeading: const Icon(Icons.menu),
+          scrolledLeading: const Icon(Icons.arrow_back),
+          initialTrailing: const Icon(Icons.notifications_none),
+          scrolledTrailing: const Icon(Icons.check),
+          onLeadingTap: () => Navigator.of(context).pop(),
+        );
+
+      case ScrollHeaderPreset.customBuilder:
+        return ScrollHeader.customBuilder(
+          builder: (context, progress, overlaps) {
+            final theme = Theme.of(context);
+            return Container(
+              color: Color.lerp(
+                theme.colorScheme.primary,
+                theme.colorScheme.tertiary,
+                progress,
+              ),
+              child: SafeArea(
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Custom Builder: ${(progress * 100).toInt()}% Scrolled',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8.0),
+                      ElevatedButton.icon(
+                        icon: const Icon(Icons.arrow_back, size: 16),
+                        label: const Text('Back to Gallery'),
+                        onPressed: () => Navigator.of(context).pop(),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+    }
+  }
+
+  Widget _buildBody(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Card(
+            color: Theme.of(context).colorScheme.primaryContainer
+                .withValues(alpha: 0.4),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.preset.label,
+                    style: const TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4.0),
+                  Text(widget.preset.description),
+                  const SizedBox(height: 12.0),
+                  AnimatedBuilder(
+                    animation: _controller,
+                    builder: (context, _) {
+                      return Text(
+                        'Live Scroll Offset: ${_controller.currentOffset.toStringAsFixed(1)} px',
+                        style: const TextStyle(
+                          fontFamily: 'monospace',
+                          fontWeight: FontWeight.w600,
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 16.0),
+          ...List.generate(
+            30,
+            (i) => ListTile(
+              leading: CircleAvatar(child: Text('${i + 1}')),
+              title: Text('Sample item #${i + 1}'),
+              subtitle: Text(
+                'Scroll up and down to observe "${widget.preset.label}" interactions.',
               ),
             ),
           ),

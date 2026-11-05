@@ -31,6 +31,11 @@ export 'src/widgets/scroll_aware_side_actions.dart';
 export 'src/widgets/scroll_expandable_fab.dart';
 export 'src/widgets/scroll_page_indicator.dart';
 export 'src/widgets/smart_visibility_transition.dart';
+export 'src/widgets/sliver_widget_marker.dart';
+export 'src/presets/scroll_header.dart';
+export 'src/presets/scroll_header_preset.dart';
+export 'src/presets/scroll_header_style.dart';
+export 'src/presets/headers/base_header.dart';
 
 import 'app_bar_ui_platform_interface.dart';
 

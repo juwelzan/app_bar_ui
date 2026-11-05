@@ -1,0 +1,1347 @@
+import 'package:flutter/material.dart';
+
+import '../widgets/sliver_widget_marker.dart';
+import 'headers/collapsing_headers.dart';
+import 'headers/dynamic_headers.dart';
+import 'headers/minimal_headers.dart';
+import 'headers/specialized_headers.dart';
+import 'headers/standard_headers.dart';
+import 'scroll_header_preset.dart';
+import 'scroll_header_style.dart';
+
+/// A versatile, preset-driven AppBar and Header widget for the Scroll-Driven UI Framework.
+///
+/// Provides 20 out-of-the-box professional design presets covering everything from
+/// minimalist headers and floating cards to collapsing parallax banners and profile covers.
+///
+/// Can be used directly inside [ScrollResponsiveScaffold.header] or standalone.
+class ScrollHeader extends StatelessWidget with SliverWidgetMarker {
+  /// Creates a [ScrollHeader] using the specified [preset].
+  const ScrollHeader({
+    super.key,
+    required this.preset,
+    this.title,
+    this.subtitle,
+    this.leading,
+    this.actions,
+    this.style,
+    this.safeArea = true,
+    this.expandedHeight,
+    this.collapsedHeight,
+    this.flexibleSpace,
+    this.background,
+    this.image,
+    this.gradient,
+    this.scrolledGradient,
+    this.overlayGradient,
+    this.overlayColor,
+    this.speedFactor = 0.5,
+    this.name,
+    this.handleOrRole,
+    this.avatar,
+    this.stats,
+    this.onAvatarTap,
+    this.greeting,
+    this.userName,
+    this.dateOrSubtitle,
+    this.metricsRow,
+    this.searchController,
+    this.searchHint = 'Search...',
+    this.onSearchChanged,
+    this.onSearchSubmitted,
+    this.segments,
+    this.selectedSegment,
+    this.onSegmentSelected,
+    this.tabBar,
+    this.initialLeading,
+    this.scrolledLeading,
+    this.initialTrailing,
+    this.scrolledTrailing,
+    this.onLeadingTap,
+    this.onTrailingTap,
+    this.builder,
+  });
+
+  /// Preset 1: Minimal Header
+  const ScrollHeader.minimal({
+    super.key,
+    this.title,
+    this.subtitle,
+    this.leading,
+    this.actions,
+    this.style,
+    this.safeArea = true,
+  }) : preset = ScrollHeaderPreset.minimal,
+       expandedHeight = null,
+       collapsedHeight = null,
+       flexibleSpace = null,
+       background = null,
+       image = null,
+       gradient = null,
+       scrolledGradient = null,
+       overlayGradient = null,
+       overlayColor = null,
+       speedFactor = 0.5,
+       name = null,
+       handleOrRole = null,
+       avatar = null,
+       stats = null,
+       onAvatarTap = null,
+       greeting = null,
+       userName = null,
+       dateOrSubtitle = null,
+       metricsRow = null,
+       searchController = null,
+       searchHint = 'Search...',
+       onSearchChanged = null,
+       onSearchSubmitted = null,
+       segments = null,
+       selectedSegment = null,
+       onSegmentSelected = null,
+       tabBar = null,
+       initialLeading = null,
+       scrolledLeading = null,
+       initialTrailing = null,
+       scrolledTrailing = null,
+       onLeadingTap = null,
+       onTrailingTap = null,
+       builder = null;
+
+  /// Preset 2: Transparent Header
+  const ScrollHeader.transparent({
+    super.key,
+    this.title,
+    this.subtitle,
+    this.leading,
+    this.actions,
+    this.style,
+    this.safeArea = true,
+  }) : preset = ScrollHeaderPreset.transparent,
+       expandedHeight = null,
+       collapsedHeight = null,
+       flexibleSpace = null,
+       background = null,
+       image = null,
+       gradient = null,
+       scrolledGradient = null,
+       overlayGradient = null,
+       overlayColor = null,
+       speedFactor = 0.5,
+       name = null,
+       handleOrRole = null,
+       avatar = null,
+       stats = null,
+       onAvatarTap = null,
+       greeting = null,
+       userName = null,
+       dateOrSubtitle = null,
+       metricsRow = null,
+       searchController = null,
+       searchHint = 'Search...',
+       onSearchChanged = null,
+       onSearchSubmitted = null,
+       segments = null,
+       selectedSegment = null,
+       onSegmentSelected = null,
+       tabBar = null,
+       initialLeading = null,
+       scrolledLeading = null,
+       initialTrailing = null,
+       scrolledTrailing = null,
+       onLeadingTap = null,
+       onTrailingTap = null,
+       builder = null;
+
+  /// Preset 3: Floating Header
+  const ScrollHeader.floating({
+    super.key,
+    this.title,
+    this.subtitle,
+    this.leading,
+    this.actions,
+    this.style,
+    this.safeArea = true,
+  }) : preset = ScrollHeaderPreset.floating,
+       expandedHeight = null,
+       collapsedHeight = null,
+       flexibleSpace = null,
+       background = null,
+       image = null,
+       gradient = null,
+       scrolledGradient = null,
+       overlayGradient = null,
+       overlayColor = null,
+       speedFactor = 0.5,
+       name = null,
+       handleOrRole = null,
+       avatar = null,
+       stats = null,
+       onAvatarTap = null,
+       greeting = null,
+       userName = null,
+       dateOrSubtitle = null,
+       metricsRow = null,
+       searchController = null,
+       searchHint = 'Search...',
+       onSearchChanged = null,
+       onSearchSubmitted = null,
+       segments = null,
+       selectedSegment = null,
+       onSegmentSelected = null,
+       tabBar = null,
+       initialLeading = null,
+       scrolledLeading = null,
+       initialTrailing = null,
+       scrolledTrailing = null,
+       onLeadingTap = null,
+       onTrailingTap = null,
+       builder = null;
+
+  /// Preset 4: Material Inspired Header
+  const ScrollHeader.material({
+    super.key,
+    this.title,
+    this.subtitle,
+    this.leading,
+    this.actions,
+    this.style,
+    this.safeArea = true,
+  }) : preset = ScrollHeaderPreset.material,
+       expandedHeight = null,
+       collapsedHeight = null,
+       flexibleSpace = null,
+       background = null,
+       image = null,
+       gradient = null,
+       scrolledGradient = null,
+       overlayGradient = null,
+       overlayColor = null,
+       speedFactor = 0.5,
+       name = null,
+       handleOrRole = null,
+       avatar = null,
+       stats = null,
+       onAvatarTap = null,
+       greeting = null,
+       userName = null,
+       dateOrSubtitle = null,
+       metricsRow = null,
+       searchController = null,
+       searchHint = 'Search...',
+       onSearchChanged = null,
+       onSearchSubmitted = null,
+       segments = null,
+       selectedSegment = null,
+       onSegmentSelected = null,
+       tabBar = null,
+       initialLeading = null,
+       scrolledLeading = null,
+       initialTrailing = null,
+       scrolledTrailing = null,
+       onLeadingTap = null,
+       onTrailingTap = null,
+       builder = null;
+
+  /// Preset 5: iOS Inspired Header
+  const ScrollHeader.ios({
+    super.key,
+    this.title,
+    this.subtitle,
+    this.leading,
+    this.actions,
+    this.style,
+    this.safeArea = true,
+  }) : preset = ScrollHeaderPreset.ios,
+       expandedHeight = null,
+       collapsedHeight = null,
+       flexibleSpace = null,
+       background = null,
+       image = null,
+       gradient = null,
+       scrolledGradient = null,
+       overlayGradient = null,
+       overlayColor = null,
+       speedFactor = 0.5,
+       name = null,
+       handleOrRole = null,
+       avatar = null,
+       stats = null,
+       onAvatarTap = null,
+       greeting = null,
+       userName = null,
+       dateOrSubtitle = null,
+       metricsRow = null,
+       searchController = null,
+       searchHint = 'Search...',
+       onSearchChanged = null,
+       onSearchSubmitted = null,
+       segments = null,
+       selectedSegment = null,
+       onSegmentSelected = null,
+       tabBar = null,
+       initialLeading = null,
+       scrolledLeading = null,
+       initialTrailing = null,
+       scrolledTrailing = null,
+       onLeadingTap = null,
+       onTrailingTap = null,
+       builder = null;
+
+  /// Preset 6: Center Title Header
+  const ScrollHeader.centerTitle({
+    super.key,
+    this.title,
+    this.subtitle,
+    this.leading,
+    this.actions,
+    this.style,
+    this.safeArea = true,
+  }) : preset = ScrollHeaderPreset.centerTitle,
+       expandedHeight = null,
+       collapsedHeight = null,
+       flexibleSpace = null,
+       background = null,
+       image = null,
+       gradient = null,
+       scrolledGradient = null,
+       overlayGradient = null,
+       overlayColor = null,
+       speedFactor = 0.5,
+       name = null,
+       handleOrRole = null,
+       avatar = null,
+       stats = null,
+       onAvatarTap = null,
+       greeting = null,
+       userName = null,
+       dateOrSubtitle = null,
+       metricsRow = null,
+       searchController = null,
+       searchHint = 'Search...',
+       onSearchChanged = null,
+       onSearchSubmitted = null,
+       segments = null,
+       selectedSegment = null,
+       onSegmentSelected = null,
+       tabBar = null,
+       initialLeading = null,
+       scrolledLeading = null,
+       initialTrailing = null,
+       scrolledTrailing = null,
+       onLeadingTap = null,
+       onTrailingTap = null,
+       builder = null;
+
+  /// Preset 7: Large Title Header
+  const ScrollHeader.largeTitle({
+    super.key,
+    this.title,
+    this.leading,
+    this.actions,
+    this.style,
+    this.expandedHeight = 140.0,
+    this.collapsedHeight = kToolbarHeight,
+    this.safeArea = true,
+  }) : preset = ScrollHeaderPreset.largeTitle,
+       subtitle = null,
+       flexibleSpace = null,
+       background = null,
+       image = null,
+       gradient = null,
+       scrolledGradient = null,
+       overlayGradient = null,
+       overlayColor = null,
+       speedFactor = 0.5,
+       name = null,
+       handleOrRole = null,
+       avatar = null,
+       stats = null,
+       onAvatarTap = null,
+       greeting = null,
+       userName = null,
+       dateOrSubtitle = null,
+       metricsRow = null,
+       searchController = null,
+       searchHint = 'Search...',
+       onSearchChanged = null,
+       onSearchSubmitted = null,
+       segments = null,
+       selectedSegment = null,
+       onSegmentSelected = null,
+       tabBar = null,
+       initialLeading = null,
+       scrolledLeading = null,
+       initialTrailing = null,
+       scrolledTrailing = null,
+       onLeadingTap = null,
+       onTrailingTap = null,
+       builder = null;
+
+  /// Preset 8: Flexible Space Header
+  const ScrollHeader.flexibleSpace({
+    super.key,
+    this.title,
+    required this.flexibleSpace,
+    this.leading,
+    this.actions,
+    this.style,
+    this.expandedHeight = 220.0,
+    this.collapsedHeight = kToolbarHeight,
+    this.safeArea = true,
+  }) : preset = ScrollHeaderPreset.flexibleSpace,
+       subtitle = null,
+       background = null,
+       image = null,
+       gradient = null,
+       scrolledGradient = null,
+       overlayGradient = null,
+       overlayColor = null,
+       speedFactor = 0.5,
+       name = null,
+       handleOrRole = null,
+       avatar = null,
+       stats = null,
+       onAvatarTap = null,
+       greeting = null,
+       userName = null,
+       dateOrSubtitle = null,
+       metricsRow = null,
+       searchController = null,
+       searchHint = 'Search...',
+       onSearchChanged = null,
+       onSearchSubmitted = null,
+       segments = null,
+       selectedSegment = null,
+       onSegmentSelected = null,
+       tabBar = null,
+       initialLeading = null,
+       scrolledLeading = null,
+       initialTrailing = null,
+       scrolledTrailing = null,
+       onLeadingTap = null,
+       onTrailingTap = null,
+       builder = null;
+
+  /// Preset 9: Collapsing Header
+  const ScrollHeader.collapsing({
+    super.key,
+    this.title,
+    this.subtitle,
+    this.leading,
+    this.actions,
+    this.builder,
+    this.style,
+    this.expandedHeight = 200.0,
+    this.collapsedHeight = kToolbarHeight,
+    this.safeArea = true,
+  }) : preset = ScrollHeaderPreset.collapsing,
+       flexibleSpace = null,
+       background = null,
+       image = null,
+       gradient = null,
+       scrolledGradient = null,
+       overlayGradient = null,
+       overlayColor = null,
+       speedFactor = 0.5,
+       name = null,
+       handleOrRole = null,
+       avatar = null,
+       stats = null,
+       onAvatarTap = null,
+       greeting = null,
+       userName = null,
+       dateOrSubtitle = null,
+       metricsRow = null,
+       searchController = null,
+       searchHint = 'Search...',
+       onSearchChanged = null,
+       onSearchSubmitted = null,
+       segments = null,
+       selectedSegment = null,
+       onSegmentSelected = null,
+       tabBar = null,
+       initialLeading = null,
+       scrolledLeading = null,
+       initialTrailing = null,
+       scrolledTrailing = null,
+       onLeadingTap = null,
+       onTrailingTap = null;
+
+  /// Preset 10: Parallax Header
+  const ScrollHeader.parallax({
+    super.key,
+    required this.background,
+    this.title,
+    this.subtitle,
+    this.leading,
+    this.actions,
+    this.speedFactor = 0.5,
+    this.expandedHeight = 220.0,
+    this.collapsedHeight = kToolbarHeight,
+    this.style,
+    this.safeArea = true,
+  }) : preset = ScrollHeaderPreset.parallax,
+       flexibleSpace = null,
+       image = null,
+       gradient = null,
+       scrolledGradient = null,
+       overlayGradient = null,
+       overlayColor = null,
+       name = null,
+       handleOrRole = null,
+       avatar = null,
+       stats = null,
+       onAvatarTap = null,
+       greeting = null,
+       userName = null,
+       dateOrSubtitle = null,
+       metricsRow = null,
+       searchController = null,
+       searchHint = 'Search...',
+       onSearchChanged = null,
+       onSearchSubmitted = null,
+       segments = null,
+       selectedSegment = null,
+       onSegmentSelected = null,
+       tabBar = null,
+       initialLeading = null,
+       scrolledLeading = null,
+       initialTrailing = null,
+       scrolledTrailing = null,
+       onLeadingTap = null,
+       onTrailingTap = null,
+       builder = null;
+
+  /// Preset 11: Gradient Header
+  const ScrollHeader.gradient({
+    super.key,
+    this.title,
+    this.subtitle,
+    this.leading,
+    this.actions,
+    this.gradient,
+    this.scrolledGradient,
+    this.style,
+    this.safeArea = true,
+  }) : preset = ScrollHeaderPreset.gradient,
+       expandedHeight = null,
+       collapsedHeight = null,
+       flexibleSpace = null,
+       background = null,
+       image = null,
+       overlayGradient = null,
+       overlayColor = null,
+       speedFactor = 0.5,
+       name = null,
+       handleOrRole = null,
+       avatar = null,
+       stats = null,
+       onAvatarTap = null,
+       greeting = null,
+       userName = null,
+       dateOrSubtitle = null,
+       metricsRow = null,
+       searchController = null,
+       searchHint = 'Search...',
+       onSearchChanged = null,
+       onSearchSubmitted = null,
+       segments = null,
+       selectedSegment = null,
+       onSegmentSelected = null,
+       tabBar = null,
+       initialLeading = null,
+       scrolledLeading = null,
+       initialTrailing = null,
+       scrolledTrailing = null,
+       onLeadingTap = null,
+       onTrailingTap = null,
+       builder = null;
+
+  /// Preset 12: Image Background Header
+  const ScrollHeader.image({
+    super.key,
+    this.title,
+    this.subtitle,
+    this.leading,
+    this.actions,
+    required this.image,
+    this.overlayGradient,
+    this.overlayColor,
+    this.style,
+    this.safeArea = true,
+  }) : preset = ScrollHeaderPreset.image,
+       expandedHeight = null,
+       collapsedHeight = null,
+       flexibleSpace = null,
+       background = null,
+       gradient = null,
+       scrolledGradient = null,
+       speedFactor = 0.5,
+       name = null,
+       handleOrRole = null,
+       avatar = null,
+       stats = null,
+       onAvatarTap = null,
+       greeting = null,
+       userName = null,
+       dateOrSubtitle = null,
+       metricsRow = null,
+       searchController = null,
+       searchHint = 'Search...',
+       onSearchChanged = null,
+       onSearchSubmitted = null,
+       segments = null,
+       selectedSegment = null,
+       onSegmentSelected = null,
+       tabBar = null,
+       initialLeading = null,
+       scrolledLeading = null,
+       initialTrailing = null,
+       scrolledTrailing = null,
+       onLeadingTap = null,
+       onTrailingTap = null,
+       builder = null;
+
+  /// Preset 13: Profile Header
+  const ScrollHeader.profile({
+    super.key,
+    required this.name,
+    this.handleOrRole,
+    this.avatar,
+    this.stats,
+    this.actions,
+    this.leading,
+    this.onAvatarTap,
+    this.style,
+    this.safeArea = true,
+  }) : preset = ScrollHeaderPreset.profile,
+       title = null,
+       subtitle = null,
+       expandedHeight = null,
+       collapsedHeight = null,
+       flexibleSpace = null,
+       background = null,
+       image = null,
+       gradient = null,
+       scrolledGradient = null,
+       overlayGradient = null,
+       overlayColor = null,
+       speedFactor = 0.5,
+       greeting = null,
+       userName = null,
+       dateOrSubtitle = null,
+       metricsRow = null,
+       searchController = null,
+       searchHint = 'Search...',
+       onSearchChanged = null,
+       onSearchSubmitted = null,
+       segments = null,
+       selectedSegment = null,
+       onSegmentSelected = null,
+       tabBar = null,
+       initialLeading = null,
+       scrolledLeading = null,
+       initialTrailing = null,
+       scrolledTrailing = null,
+       onLeadingTap = null,
+       onTrailingTap = null,
+       builder = null;
+
+  /// Preset 14: Dashboard Header
+  const ScrollHeader.dashboard({
+    super.key,
+    required this.greeting,
+    this.userName,
+    this.dateOrSubtitle,
+    this.avatar,
+    this.metricsRow,
+    this.actions,
+    this.style,
+    this.safeArea = true,
+  }) : preset = ScrollHeaderPreset.dashboard,
+       title = null,
+       subtitle = null,
+       leading = null,
+       expandedHeight = null,
+       collapsedHeight = null,
+       flexibleSpace = null,
+       background = null,
+       image = null,
+       gradient = null,
+       scrolledGradient = null,
+       overlayGradient = null,
+       overlayColor = null,
+       speedFactor = 0.5,
+       name = null,
+       handleOrRole = null,
+       stats = null,
+       onAvatarTap = null,
+       searchController = null,
+       searchHint = 'Search...',
+       onSearchChanged = null,
+       onSearchSubmitted = null,
+       segments = null,
+       selectedSegment = null,
+       onSegmentSelected = null,
+       tabBar = null,
+       initialLeading = null,
+       scrolledLeading = null,
+       initialTrailing = null,
+       scrolledTrailing = null,
+       onLeadingTap = null,
+       onTrailingTap = null,
+       builder = null;
+
+  /// Preset 15: Search Header
+  const ScrollHeader.search({
+    super.key,
+    this.title,
+    this.searchController,
+    this.searchHint = 'Search...',
+    this.onSearchChanged,
+    this.onSearchSubmitted,
+    this.leading,
+    this.actions,
+    this.style,
+    this.safeArea = true,
+  }) : preset = ScrollHeaderPreset.search,
+       subtitle = null,
+       expandedHeight = null,
+       collapsedHeight = null,
+       flexibleSpace = null,
+       background = null,
+       image = null,
+       gradient = null,
+       scrolledGradient = null,
+       overlayGradient = null,
+       overlayColor = null,
+       speedFactor = 0.5,
+       name = null,
+       handleOrRole = null,
+       avatar = null,
+       stats = null,
+       onAvatarTap = null,
+       greeting = null,
+       userName = null,
+       dateOrSubtitle = null,
+       metricsRow = null,
+       segments = null,
+       selectedSegment = null,
+       onSegmentSelected = null,
+       tabBar = null,
+       initialLeading = null,
+       scrolledLeading = null,
+       initialTrailing = null,
+       scrolledTrailing = null,
+       onLeadingTap = null,
+       onTrailingTap = null,
+       builder = null;
+
+  /// Preset 16: Segmented Header
+  const ScrollHeader.segmented({
+    super.key,
+    this.title,
+    required this.segments,
+    this.selectedSegment,
+    this.onSegmentSelected,
+    this.leading,
+    this.actions,
+    this.style,
+    this.safeArea = true,
+  }) : preset = ScrollHeaderPreset.segmented,
+       subtitle = null,
+       expandedHeight = null,
+       collapsedHeight = null,
+       flexibleSpace = null,
+       background = null,
+       image = null,
+       gradient = null,
+       scrolledGradient = null,
+       overlayGradient = null,
+       overlayColor = null,
+       speedFactor = 0.5,
+       name = null,
+       handleOrRole = null,
+       avatar = null,
+       stats = null,
+       onAvatarTap = null,
+       greeting = null,
+       userName = null,
+       dateOrSubtitle = null,
+       metricsRow = null,
+       searchController = null,
+       searchHint = 'Search...',
+       onSearchChanged = null,
+       onSearchSubmitted = null,
+       tabBar = null,
+       initialLeading = null,
+       scrolledLeading = null,
+       initialTrailing = null,
+       scrolledTrailing = null,
+       onLeadingTap = null,
+       onTrailingTap = null,
+       builder = null;
+
+  /// Preset 17: Sticky Tab Header
+  const ScrollHeader.stickyTab({
+    super.key,
+    required this.tabBar,
+    this.title,
+    this.leading,
+    this.actions,
+    this.style,
+  }) : preset = ScrollHeaderPreset.stickyTab,
+       subtitle = null,
+       expandedHeight = null,
+       collapsedHeight = null,
+       flexibleSpace = null,
+       background = null,
+       image = null,
+       gradient = null,
+       scrolledGradient = null,
+       overlayGradient = null,
+       overlayColor = null,
+       speedFactor = 0.5,
+       name = null,
+       handleOrRole = null,
+       avatar = null,
+       stats = null,
+       onAvatarTap = null,
+       greeting = null,
+       userName = null,
+       dateOrSubtitle = null,
+       metricsRow = null,
+       searchController = null,
+       searchHint = 'Search...',
+       onSearchChanged = null,
+       onSearchSubmitted = null,
+       segments = null,
+       selectedSegment = null,
+       onSegmentSelected = null,
+       initialLeading = null,
+       scrolledLeading = null,
+       initialTrailing = null,
+       scrolledTrailing = null,
+       onLeadingTap = null,
+       onTrailingTap = null,
+       safeArea = true,
+       builder = null;
+
+  /// Preset 18: Compact Scroll Header
+  const ScrollHeader.compactScroll({
+    super.key,
+    this.title,
+    this.subtitle,
+    this.leading,
+    this.actions,
+    this.style,
+    this.expandedHeight = 90.0,
+    this.collapsedHeight = 48.0,
+    this.safeArea = true,
+  }) : preset = ScrollHeaderPreset.compactScroll,
+       flexibleSpace = null,
+       background = null,
+       image = null,
+       gradient = null,
+       scrolledGradient = null,
+       overlayGradient = null,
+       overlayColor = null,
+       speedFactor = 0.5,
+       name = null,
+       handleOrRole = null,
+       avatar = null,
+       stats = null,
+       onAvatarTap = null,
+       greeting = null,
+       userName = null,
+       dateOrSubtitle = null,
+       metricsRow = null,
+       searchController = null,
+       searchHint = 'Search...',
+       onSearchChanged = null,
+       onSearchSubmitted = null,
+       segments = null,
+       selectedSegment = null,
+       onSegmentSelected = null,
+       tabBar = null,
+       initialLeading = null,
+       scrolledLeading = null,
+       initialTrailing = null,
+       scrolledTrailing = null,
+       onLeadingTap = null,
+       onTrailingTap = null,
+       builder = null;
+
+  /// Preset 19: Side Action Transition Header
+  const ScrollHeader.sideActionTransition({
+    super.key,
+    this.title,
+    this.subtitle,
+    this.initialLeading,
+    this.scrolledLeading,
+    this.initialTrailing,
+    this.scrolledTrailing,
+    this.onLeadingTap,
+    this.onTrailingTap,
+    this.style,
+    this.safeArea = true,
+  }) : preset = ScrollHeaderPreset.sideActionTransition,
+       leading = null,
+       actions = null,
+       expandedHeight = null,
+       collapsedHeight = null,
+       flexibleSpace = null,
+       background = null,
+       image = null,
+       gradient = null,
+       scrolledGradient = null,
+       overlayGradient = null,
+       overlayColor = null,
+       speedFactor = 0.5,
+       name = null,
+       handleOrRole = null,
+       avatar = null,
+       stats = null,
+       onAvatarTap = null,
+       greeting = null,
+       userName = null,
+       dateOrSubtitle = null,
+       metricsRow = null,
+       searchController = null,
+       searchHint = 'Search...',
+       onSearchChanged = null,
+       onSearchSubmitted = null,
+       segments = null,
+       selectedSegment = null,
+       onSegmentSelected = null,
+       tabBar = null,
+       builder = null;
+
+  /// Preset 20: Custom Builder Header
+  const ScrollHeader.customBuilder({
+    super.key,
+    required Widget Function(
+      BuildContext context,
+      double progress,
+      bool overlapsContent,
+    )
+    this.builder,
+    this.expandedHeight = 200.0,
+    this.collapsedHeight = kToolbarHeight,
+  }) : preset = ScrollHeaderPreset.customBuilder,
+       title = null,
+       subtitle = null,
+       leading = null,
+       actions = null,
+       style = null,
+       safeArea = true,
+       flexibleSpace = null,
+       background = null,
+       image = null,
+       gradient = null,
+       scrolledGradient = null,
+       overlayGradient = null,
+       overlayColor = null,
+       speedFactor = 0.5,
+       name = null,
+       handleOrRole = null,
+       avatar = null,
+       stats = null,
+       onAvatarTap = null,
+       greeting = null,
+       userName = null,
+       dateOrSubtitle = null,
+       metricsRow = null,
+       searchController = null,
+       searchHint = 'Search...',
+       onSearchChanged = null,
+       onSearchSubmitted = null,
+       segments = null,
+       selectedSegment = null,
+       onSegmentSelected = null,
+       tabBar = null,
+       initialLeading = null,
+       scrolledLeading = null,
+       initialTrailing = null,
+       scrolledTrailing = null,
+       onLeadingTap = null,
+       onTrailingTap = null;
+
+  /// The active preset configuration.
+  final ScrollHeaderPreset preset;
+
+  /// Title widget (typically [Text]).
+  final Widget? title;
+
+  /// Subtitle widget.
+  final Widget? subtitle;
+
+  /// Leading widget.
+  final Widget? leading;
+
+  /// Trailing action widgets.
+  final List<Widget>? actions;
+
+  /// Optional style override.
+  final ScrollHeaderStyle? style;
+
+  /// Whether to pad for device top safe area. Defaults to `true`.
+  final bool safeArea;
+
+  /// Expanded height for collapsible presets.
+  final double? expandedHeight;
+
+  /// Collapsed height for collapsible presets.
+  final double? collapsedHeight;
+
+  /// Arbitrary flexible space widget.
+  final Widget? flexibleSpace;
+
+  /// Parallax background widget.
+  final Widget? background;
+
+  /// Background image provider.
+  final ImageProvider? image;
+
+  /// Background gradient.
+  final Gradient? gradient;
+
+  /// Scrolled background gradient.
+  final Gradient? scrolledGradient;
+
+  /// Scrim overlay gradient for image headers.
+  final Gradient? overlayGradient;
+
+  /// Solid scrim overlay color for image headers.
+  final Color? overlayColor;
+
+  /// Speed factor for parallax headers.
+  final double speedFactor;
+
+  /// Profile name widget.
+  final Widget? name;
+
+  /// Profile handle or role widget.
+  final Widget? handleOrRole;
+
+  /// Profile avatar widget.
+  final Widget? avatar;
+
+  /// Profile stats row.
+  final Widget? stats;
+
+  /// Avatar tap callback.
+  final VoidCallback? onAvatarTap;
+
+  /// Greeting headline for dashboard headers.
+  final Widget? greeting;
+
+  /// User name for dashboard headers.
+  final Widget? userName;
+
+  /// Date or status chip for dashboard headers.
+  final Widget? dateOrSubtitle;
+
+  /// Metrics row widget for dashboard headers.
+  final Widget? metricsRow;
+
+  /// Controller for search input.
+  final TextEditingController? searchController;
+
+  /// Placeholder search hint text.
+  final String searchHint;
+
+  /// Callback when search text changes.
+  final ValueChanged<String>? onSearchChanged;
+
+  /// Callback when search is submitted.
+  final ValueChanged<String>? onSearchSubmitted;
+
+  /// Segmented control widget.
+  final Widget? segments;
+
+  /// Selected segment value.
+  final String? selectedSegment;
+
+  /// Callback when segment changes.
+  final ValueChanged<String>? onSegmentSelected;
+
+  /// Tab bar widget for sticky tab headers.
+  final Widget? tabBar;
+
+  /// Initial leading icon for side action transitions.
+  final Widget? initialLeading;
+
+  /// Scrolled leading icon for side action transitions.
+  final Widget? scrolledLeading;
+
+  /// Initial trailing icon for side action transitions.
+  final Widget? initialTrailing;
+
+  /// Scrolled trailing icon for side action transitions.
+  final Widget? scrolledTrailing;
+
+  /// Tap callback for leading action.
+  final VoidCallback? onLeadingTap;
+
+  /// Tap callback for trailing action.
+  final VoidCallback? onTrailingTap;
+
+  /// Layout builder for dynamic or custom builder headers.
+  final Widget Function(
+    BuildContext context,
+    double progress,
+    bool overlapsContent,
+  )?
+  builder;
+
+  @override
+  bool get isSliver {
+    switch (preset) {
+      case ScrollHeaderPreset.largeTitle:
+      case ScrollHeaderPreset.flexibleSpace:
+      case ScrollHeaderPreset.collapsing:
+      case ScrollHeaderPreset.parallax:
+      case ScrollHeaderPreset.stickyTab:
+      case ScrollHeaderPreset.compactScroll:
+      case ScrollHeaderPreset.customBuilder:
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    switch (preset) {
+      case ScrollHeaderPreset.minimal:
+        return MinimalHeaderWidget(
+          title: title,
+          subtitle: subtitle,
+          leading: leading,
+          actions: actions,
+          style: style,
+          safeArea: safeArea,
+        );
+
+      case ScrollHeaderPreset.transparent:
+        return TransparentHeaderWidget(
+          title: title,
+          subtitle: subtitle,
+          leading: leading,
+          actions: actions,
+          style: style,
+          safeArea: safeArea,
+        );
+
+      case ScrollHeaderPreset.floating:
+        return FloatingHeaderWidget(
+          title: title,
+          subtitle: subtitle,
+          leading: leading,
+          actions: actions,
+          style: style,
+          safeArea: safeArea,
+        );
+
+      case ScrollHeaderPreset.material:
+        return MaterialHeaderWidget(
+          title: title,
+          subtitle: subtitle,
+          leading: leading,
+          actions: actions,
+          style: style,
+          safeArea: safeArea,
+        );
+
+      case ScrollHeaderPreset.ios:
+        return IOSHeaderWidget(
+          title: title,
+          subtitle: subtitle,
+          leading: leading,
+          actions: actions,
+          style: style,
+          safeArea: safeArea,
+        );
+
+      case ScrollHeaderPreset.centerTitle:
+        return CenterTitleHeaderWidget(
+          title: title,
+          subtitle: subtitle,
+          leading: leading,
+          actions: actions,
+          style: style,
+          safeArea: safeArea,
+        );
+
+      case ScrollHeaderPreset.largeTitle:
+        return LargeTitleHeaderWidget(
+          title: title,
+          leading: leading,
+          actions: actions,
+          style: style,
+          expandedHeight: expandedHeight ?? 140.0,
+          collapsedHeight: collapsedHeight ?? kToolbarHeight,
+          safeArea: safeArea,
+        );
+
+      case ScrollHeaderPreset.flexibleSpace:
+        return FlexibleSpaceHeaderWidget(
+          title: title,
+          flexibleSpace: flexibleSpace,
+          leading: leading,
+          actions: actions,
+          style: style,
+          expandedHeight: expandedHeight ?? 220.0,
+          collapsedHeight: collapsedHeight ?? kToolbarHeight,
+          safeArea: safeArea,
+        );
+
+      case ScrollHeaderPreset.collapsing:
+        return CollapsingHeaderPresetWidget(
+          title: title,
+          subtitle: subtitle,
+          leading: leading,
+          actions: actions,
+          builder: builder != null ? (c, p) => builder!(c, p, false) : null,
+          style: style,
+          expandedHeight: expandedHeight ?? 200.0,
+          collapsedHeight: collapsedHeight ?? kToolbarHeight,
+          safeArea: safeArea,
+        );
+
+      case ScrollHeaderPreset.parallax:
+        return ParallaxHeaderWidget(
+          background: background ?? const SizedBox.shrink(),
+          title: title,
+          subtitle: subtitle,
+          leading: leading,
+          actions: actions,
+          speedFactor: speedFactor,
+          expandedHeight: expandedHeight ?? 220.0,
+          collapsedHeight: collapsedHeight ?? kToolbarHeight,
+          style: style,
+          safeArea: safeArea,
+        );
+
+      case ScrollHeaderPreset.gradient:
+        return GradientHeaderWidget(
+          title: title,
+          subtitle: subtitle,
+          leading: leading,
+          actions: actions,
+          gradient: gradient,
+          scrolledGradient: scrolledGradient,
+          style: style,
+          safeArea: safeArea,
+        );
+
+      case ScrollHeaderPreset.image:
+        return ImageBackgroundHeaderWidget(
+          title: title,
+          subtitle: subtitle,
+          leading: leading,
+          actions: actions,
+          image: image,
+          overlayGradient: overlayGradient,
+          overlayColor: overlayColor,
+          style: style,
+          safeArea: safeArea,
+        );
+
+      case ScrollHeaderPreset.profile:
+        return ProfileHeaderWidget(
+          name: name ?? title ?? const Text('User Profile'),
+          handleOrRole: handleOrRole ?? subtitle,
+          avatar: avatar,
+          stats: stats,
+          actions: actions,
+          leading: leading,
+          onAvatarTap: onAvatarTap,
+          style: style,
+          safeArea: safeArea,
+        );
+
+      case ScrollHeaderPreset.dashboard:
+        return DashboardHeaderWidget(
+          greeting: greeting ?? const Text('Welcome Back 👋'),
+          userName: userName ?? title,
+          dateOrSubtitle: dateOrSubtitle ?? subtitle,
+          avatar: avatar,
+          metricsRow: metricsRow,
+          actions: actions,
+          style: style,
+          safeArea: safeArea,
+        );
+
+      case ScrollHeaderPreset.search:
+        return SearchHeaderWidget(
+          title: title,
+          searchController: searchController,
+          searchHint: searchHint,
+          onSearchChanged: onSearchChanged,
+          onSearchSubmitted: onSearchSubmitted,
+          leading: leading,
+          actions: actions,
+          style: style,
+          safeArea: safeArea,
+        );
+
+      case ScrollHeaderPreset.segmented:
+        return SegmentedHeaderWidget(
+          title: title,
+          segments: segments ?? const SizedBox.shrink(),
+          selectedSegment: selectedSegment,
+          onSegmentSelected: onSegmentSelected,
+          leading: leading,
+          actions: actions,
+          style: style,
+          safeArea: safeArea,
+        );
+
+      case ScrollHeaderPreset.stickyTab:
+        return StickyTabHeaderWidget(
+          tabBar: tabBar ?? const SizedBox.shrink(),
+          title: title,
+          leading: leading,
+          actions: actions,
+          style: style,
+        );
+
+      case ScrollHeaderPreset.compactScroll:
+        return CompactScrollHeaderWidget(
+          title: title,
+          subtitle: subtitle,
+          leading: leading,
+          actions: actions,
+          style: style,
+          expandedHeight: expandedHeight ?? 90.0,
+          collapsedHeight: collapsedHeight ?? 48.0,
+          safeArea: safeArea,
+        );
+
+      case ScrollHeaderPreset.sideActionTransition:
+        return SideActionTransitionHeaderWidget(
+          title: title,
+          subtitle: subtitle,
+          initialLeading: initialLeading,
+          scrolledLeading: scrolledLeading,
+          initialTrailing: initialTrailing,
+          scrolledTrailing: scrolledTrailing,
+          onLeadingTap: onLeadingTap,
+          onTrailingTap: onTrailingTap,
+          style: style,
+          safeArea: safeArea,
+        );
+
+      case ScrollHeaderPreset.customBuilder:
+        return CustomBuilderHeaderWidget(
+          builder:
+              builder ??
+              (context, progress, overlaps) => const SizedBox.shrink(),
+          expandedHeight: expandedHeight ?? 200.0,
+          collapsedHeight: collapsedHeight ?? kToolbarHeight,
+        );
+    }
+  }
+}

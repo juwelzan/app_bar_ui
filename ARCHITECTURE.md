@@ -231,3 +231,45 @@ stateDiagram-v2
 - **Single Owner Principle**: Controllers created internally by widgets are disposed internally; controllers passed externally by developers are left for the developer to dispose.
 - **Listener Unsubscription**: All `RouteObserver`, `WidgetsBindingObserver`, and `ValueNotifier` listeners are unsubscribed inside `State.dispose()`.
 - **Zero Leak Guarantee**: Comprehensive automated tests verify that widget disposal leaves zero dangling references or unfinished platform channel futures.
+
+---
+
+## 9. 20 AppBar & Header Presets Architecture (`ScrollHeader`)
+
+```mermaid
+flowchart TD
+    ScrollHeader["ScrollHeader Entrypoint (with SliverWidgetMarker)"] --> RouteCheck{"isSliver?"}
+    
+    RouteCheck -->|false: Box Header| BoxDelegate["Wrap in SliverToBoxAdapter"]
+    RouteCheck -->|true: Sliver Header| DirectSliver["Place Directly in CustomScrollView slivers"]
+    
+    subgraph PresetModules["Modular Preset Subsystems"]
+        direction TB
+        Minimal["minimal_headers.dart: Minimal, Transparent, Floating, CenterTitle"]
+        Standard["standard_headers.dart: Material, iOS (Blur), Gradient, Image (Scrim)"]
+        Collapsing["collapsing_headers.dart: LargeTitle, FlexibleSpace, Collapsing, CompactScroll"]
+        Specialized["specialized_headers.dart: Profile, Dashboard, Search, Segmented, StickyTab"]
+        Dynamic["dynamic_headers.dart: Parallax, SideActionTransition, CustomBuilder"]
+    end
+    
+    ScrollHeader -.-> PresetModules
+```
+
+### 9.1 The Sliver vs. Box Invariant Dilemma & Solution
+Inside a `CustomScrollView`, passing a `RenderSliver` wrapped inside a `SliverToBoxAdapter` causes Flutter to crash with:
+`A RenderSliver was added to a RenderBox`.
+Conversely, placing a standard `RenderBox` widget directly into `slivers: [...]` without a `SliverToBoxAdapter` causes an equivalent type mismatch.
+
+To completely shield developers from this complexity:
+1. **`SliverWidgetMarker` Protocol**: All sliver headers (`Collapsing`, `LargeTitle`, `Parallax`, `StickyTab`, `CompactScroll`, `CustomBuilder`) implement the `SliverWidgetMarker` mixin returning `isSliver = true`.
+2. **Scaffold Auto-Detection**: `ScrollResponsiveScaffold._buildScrollableContent` evaluates `isSliverWidget(widget.header!)`. If `true`, the header is inserted directly into the viewport's sliver hierarchy; if `false`, it is automatically wrapped in a `SliverToBoxAdapter`.
+
+### 9.2 Zero-Rebuild Persistent Header Delegate
+Collapsing headers utilize `PresetSliverHeaderDelegate` extending `SliverPersistentHeaderDelegate`.
+- Calculates normalized shrink ratio: `progress = (shrinkOffset / (expandedHeight - collapsedHeight)).clamp(0.0, 1.0)`.
+- Updates only leaf visual properties (`Opacity`, `DefaultTextStyle`, `NavigationToolbar`) during layout.
+- Ancestor scaffold and descendant body widgets experience **zero rebuilds** during header compression.
+
+### 9.3 Developer Override Guarantee
+All 20 presets accept raw widgets for `title`, `subtitle`, `leading`, `actions`, and `flexibleSpace`. When custom widgets are provided, the preset renders them as first-class citizens without overriding them with unwanted card containers, unexpected elevation shadows, or forced borders.
+

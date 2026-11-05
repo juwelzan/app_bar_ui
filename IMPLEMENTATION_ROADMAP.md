@@ -22,7 +22,8 @@ This roadmap tracks the development of the **Scroll-Driven UI Framework for Flut
 | **Phase 12** | Platform Compatibility | 🟢 Verified & Fallbacks in Place | Android, iOS, iPadOS, macOS, Windows, Linux, Web compatibility verified |
 | **Phase 13** | Testing & Performance Validation | 🟢 117/117 Tests Passing | Unit, widget, integration, reverse scroll, route observer, reduced motion, and lifecycle test suites |
 | **Phase 14** | Example Application Expansion | 🟡 In Progress | Expand `example/lib/main.dart` into an interactive multi-tab showcase demonstrating all components and presets |
-| **Phase 15** | Documentation & Release Readiness | 🟡 In Progress | Complete `README.md`, `CHANGELOG.md`, API documentation, `dart pub publish --dry-run` |
+| **Phase 15** | Documentation & Release Readiness | 🟢 Completed | Complete `README.md`, `CHANGELOG.md`, API documentation, `dart pub publish --dry-run` |
+| **Phase 16** | 20 Ready-to-Use AppBar & Header Presets | 🟢 Completed & Tested | `ScrollHeader` master entrypoint, `ScrollHeaderPreset`, `ScrollHeaderStyle`, `SliverWidgetMarker`, 20 distinct design presets, interactive gallery demo, dedicated test suite (27 tests) |
 
 ---
 
@@ -152,3 +153,31 @@ This roadmap tracks the development of the **Scroll-Driven UI Framework for Flut
 - [x] Validate `pubspec.yaml` metadata.
 - [x] Execute `dart pub publish --dry-run` and verify 0 warnings.
 - [x] Deliver final release readiness report.
+
+### PHASE 16 — 20 Ready-To-Use AppBar & Header Presets
+- [x] Architect unified `ScrollHeader` entrypoint supporting enum constructor (`ScrollHeader(preset: ...)`) and 20 ergonomic named constructors (e.g. `ScrollHeader.collapsing(...)`).
+- [x] Implement `SliverWidgetMarker` mixin allowing `ScrollResponsiveScaffold` to automatically differentiate Box headers from persistent Sliver headers without developer boilerplate.
+- [x] Implement all 20 distinct design presets:
+  1. `ScrollHeader.minimal` (Clean, flat, low visual weight)
+  2. `ScrollHeader.transparent` (100% transparent header overlaid above content)
+  3. `ScrollHeader.floating` (Rounded floating island with configurable elevation)
+  4. `ScrollHeader.material` (Material Design 3 layout with tonal elevation)
+  5. `ScrollHeader.ios` (Cupertino style with backdrop blur filter)
+  6. `ScrollHeader.centerTitle` (Symmetrically balanced centered title)
+  7. `ScrollHeader.largeTitle` (Collapsing typography display title)
+  8. `ScrollHeader.flexibleSpace` (Expandable header with arbitrary flexible space)
+  9. `ScrollHeader.collapsing` (Persistent hero-to-toolbar collapse)
+  10. `ScrollHeader.parallax` (60/120 FPS background parallax via FlowDelegate)
+  11. `ScrollHeader.gradient` (Multi-stop linear or radial gradient with scroll shift)
+  12. `ScrollHeader.image` (Image background with contrast scrim gradient)
+  13. `ScrollHeader.profile` (Avatar, name, handle/role, stats row, actions)
+  14. `ScrollHeader.dashboard` (Greeting, user info, metrics row, actions)
+  15. `ScrollHeader.search` (Integrated search field with real-time callbacks)
+  16. `ScrollHeader.segmented` (Header with embedded category selector)
+  17. `ScrollHeader.stickyTab` (Header with persistent pinned tab bar)
+  18. `ScrollHeader.compactScroll` (Collapsing into a 48px micro-bar on scroll)
+  19. `ScrollHeader.sideActionTransition` (Dual-state icon swapping on scroll)
+  20. `ScrollHeader.customBuilder` (100% developer custom builder receiving real-time progress)
+- [x] Author dedicated test suite `test/header_presets_test.dart` (27 tests asserting layout, scroll collapse, custom widget preservation, accessibility, and safe area).
+- [x] Expand example application with interactive 20-Preset Showcase Gallery and `PresetDetailScreen` with live scroll telemetry.
+- [x] Verify static analysis (`flutter analyze` with 0 issues) and package tests (`flutter test` with 198/198 passing).

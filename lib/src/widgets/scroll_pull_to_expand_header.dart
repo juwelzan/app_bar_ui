@@ -4,11 +4,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
+import 'sliver_widget_marker.dart';
+
 /// A sliver header that stretches and expands dynamically when pulled down at the top of a scroll view.
 ///
 /// Provides the classic iOS-style rubber-band cover image expansion, profile header zoom,
 /// and pull-to-expand visual feedback.
-class ScrollPullToExpandHeader extends StatelessWidget {
+class ScrollPullToExpandHeader extends StatelessWidget with SliverWidgetMarker {
   /// Creates a [ScrollPullToExpandHeader] widget.
   const ScrollPullToExpandHeader({
     super.key,

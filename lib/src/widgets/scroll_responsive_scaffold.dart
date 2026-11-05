@@ -12,6 +12,7 @@ import 'scroll_auto_hide_bottom_bar.dart';
 import 'scroll_aware_fab.dart';
 import 'scroll_responsive_header.dart';
 import 'scroll_sticky_tab_bar.dart';
+import 'sliver_widget_marker.dart';
 import '../engine/scroll_responsive_controller.dart';
 import '../engine/scroll_responsive_scope.dart';
 
@@ -727,7 +728,11 @@ class _ScrollResponsiveScaffoldState extends State<ScrollResponsiveScaffold>
 
     // Header sliver
     if (widget.header != null) {
-      sliverList.add(SliverToBoxAdapter(child: widget.header!));
+      if (isSliverWidget(widget.header!)) {
+        sliverList.add(widget.header!);
+      } else {
+        sliverList.add(SliverToBoxAdapter(child: widget.header!));
+      }
     } else if (widget.headerTitle != null || widget.headerSubtitle != null) {
       sliverList.add(
         SliverToBoxAdapter(

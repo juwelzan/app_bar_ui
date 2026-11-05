@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
+import 'sliver_widget_marker.dart';
+
 /// A persistent sticky navigation bar sliver that scrolls with the content and
 /// remains pinned at the top once reached.
 ///
 /// Supports standard Flutter [TabBar] instances, [PreferredSizeWidget]s, segmented controls,
 /// and custom builder functions that adapt when pinned.
-class ScrollStickyTabBar extends StatelessWidget {
+class ScrollStickyTabBar extends StatelessWidget with SliverWidgetMarker {
   /// Creates a [ScrollStickyTabBar] wrapping a child widget.
   const ScrollStickyTabBar({
     super.key,

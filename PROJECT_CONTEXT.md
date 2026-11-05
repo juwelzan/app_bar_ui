@@ -72,7 +72,19 @@ lib/
 │   │   ├── scroll_driven_animation.dart      # ScrollRange<T>, ScrollTransform (opacity, scale, slide, rotation)
 │   │   ├── scroll_color_tween.dart           # ScrollColorTransition (colors & gradients)
 │   │   └── scroll_morph_builder.dart         # ScrollMorphBuilder (midpoint switching & cross-fade)
+│   ├── presets/                      # 20 Ready-To-Use AppBar & Header Presets
+│   │   ├── scroll_header.dart                # Master unified ScrollHeader entrypoint
+│   │   ├── scroll_header_preset.dart         # Enum of all 20 presets with metadata
+│   │   ├── scroll_header_style.dart          # Styling, padding, and geometry model
+│   │   └── headers/                          # Modular preset implementations
+│   │       ├── base_header.dart              # Base delegate & HeaderContainer
+│   │       ├── minimal_headers.dart          # Minimal, Transparent, Floating, CenterTitle
+│   │       ├── standard_headers.dart         # Material, iOS, Gradient, ImageBackground
+│   │       ├── collapsing_headers.dart       # LargeTitle, FlexibleSpace, Collapsing, CompactScroll
+│   │       ├── specialized_headers.dart      # Profile, Dashboard, Search, Segmented, StickyTab
+│   │       └── dynamic_headers.dart          # Parallax, SideActionTransition, CustomBuilder
 │   └── widgets/                      # Reusable public components
+│       ├── sliver_widget_marker.dart         # Sliver marker mixin for auto Box/Sliver routing
 │       ├── scroll_responsive_scaffold.dart   # Master orchestrator scaffold
 │       ├── scroll_responsive_header.dart     # Scroll-away content header
 │       ├── pinned_action_button.dart         # Pinned left/right dual-state buttons

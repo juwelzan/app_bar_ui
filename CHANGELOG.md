@@ -5,6 +5,40 @@ All notable changes to `app_bar_ui` will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-11-06
+
+### Added
+- **20 Ready-to-Use AppBar & Header Design Presets**:
+  - `ScrollHeader` master widget with 20 named constructors and `ScrollHeaderPreset` enumeration:
+    1. `ScrollHeader.minimal`: Flat, clean, low visual weight header with subtle divider.
+    2. `ScrollHeader.transparent`: Fully transparent header overlaying hero content.
+    3. `ScrollHeader.floating`: Rounded "island" card floating above content with margin and shadow.
+    4. `ScrollHeader.material`: Material Design 3 style with tonal surface colors and elevation tint.
+    5. `ScrollHeader.ios`: Cupertino navigation style with backdrop blur, hairline divider, and SF-inspired layout.
+    6. `ScrollHeader.centerTitle`: Symmetrically balanced header with centered title and action slots.
+    7. `ScrollHeader.largeTitle`: Collapsing typography header transitioning from large display title to inline title.
+    8. `ScrollHeader.flexibleSpace`: Expandable header accommodating arbitrary custom widgets in flexible space.
+    9. `ScrollHeader.collapsing`: Smooth collapsing persistent header transitioning from hero banner down to toolbar.
+    10. `ScrollHeader.parallax`: 60/120 FPS background parallax moving at configurable speed factor via `FlowDelegate` with zero rebuilds.
+    11. `ScrollHeader.gradient`: Multi-stop linear or radial gradient background with scroll-under shift.
+    12. `ScrollHeader.image`: High-resolution image background with configurable dark/light scrim overlay gradient.
+    13. `ScrollHeader.profile`: Profile cover with avatar, user name, role/handle badge, stats row, and actions.
+    14. `ScrollHeader.dashboard`: High-density dashboard with greeting, user info, metrics row, and quick actions.
+    15. `ScrollHeader.search`: Integrated search field with search icon, clear button, and real-time query callbacks.
+    16. `ScrollHeader.segmented`: Header with an embedded segmented button or pill category selector.
+    17. `ScrollHeader.stickyTab`: Persistent tab bar pinned beneath header with tab indicator and border transition.
+    18. `ScrollHeader.compactScroll`: Space-saving header collapsing into a micro-bar at the slightest scroll.
+    19. `ScrollHeader.sideActionTransition`: Dual-state synchronized icon swapping based on scroll state with independent thresholds.
+    20. `ScrollHeader.customBuilder`: 100% developer-controlled custom layout using a builder callback receiving real-time progress.
+- **Sliver vs Box Invariant Detection (`SliverWidgetMarker`)**:
+  - `SliverWidgetMarker` mixin allowing `ScrollResponsiveScaffold` to automatically differentiate Box headers (requiring `SliverToBoxAdapter`) from Sliver headers (e.g. `Collapsing`, `LargeTitle`, `Parallax`, `StickyTab`), eliminating runtime `RenderSliver was added to RenderBox` crashes.
+- **Header Customization Model (`ScrollHeaderStyle`)**:
+  - Comprehensive styling model controlling background colors, elevations, typography, border radii, blur sigma, padding, margin, divider colors, and animation transitions.
+- **Interactive 20-Preset Gallery in Example Application**:
+  - Tab 5 expanded with interactive cards for all 20 presets and full-screen `PresetDetailScreen` with live scroll telemetry.
+- **Comprehensive Preset Test Suite (`test/header_presets_test.dart`)**:
+  - 27 dedicated tests verifying layout correctness, scroll collapse/expansion, custom widget preservation, and accessibility across all 20 presets.
+
 ## [1.0.0] - 2026-11-05
 
 ### Added

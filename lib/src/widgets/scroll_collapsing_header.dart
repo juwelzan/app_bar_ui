@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'sliver_widget_marker.dart';
+
 /// A customizable collapsing sliver header that smoothly transitions from
 /// [expandedHeight] down to [collapsedHeight] as the user scrolls.
 ///
@@ -9,7 +11,7 @@ import 'package:flutter/material.dart';
 /// - Smooth content cross-fading from flexible space to collapsed toolbar
 /// - Custom builder functions for complete layout control
 /// - Transparent floating headers with zero elevation
-class ScrollCollapsingHeader extends StatelessWidget {
+class ScrollCollapsingHeader extends StatelessWidget with SliverWidgetMarker {
   /// Creates a standard [ScrollCollapsingHeader] widget.
   const ScrollCollapsingHeader({
     super.key,

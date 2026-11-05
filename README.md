@@ -1,9 +1,9 @@
 # app_bar_ui
 
-[![pub package](https://img.shields.io/badge/pub-v1.0.0-blue.svg)](https://pub.dev/packages/app_bar_ui)
+[![pub package](https://img.shields.io/badge/pub-v1.1.0-blue.svg)](https://pub.dev/packages/app_bar_ui)
 [![Flutter](https://img.shields.io/badge/Flutter-3.3+-02569B?logo=flutter)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/Dart-3.0+-0175C2?logo=dart)](https://dart.dev)
-[![Tests Passing](https://img.shields.io/badge/tests-173%20passed-success.svg)](https://github.com/example/app_bar_ui)
+[![Tests Passing](https://img.shields.io/badge/tests-201%20passed-success.svg)](https://github.com/example/app_bar_ui)
 [![License: MIT](https://img.shields.io/badge/license-MIT-purple.svg)](https://opensource.org/licenses/MIT)
 [![Platforms](https://img.shields.io/badge/platforms-Android%20%7C%20iOS%20%7C%20iPadOS%20%7C%20macOS%20%7C%20Windows%20%7C%20Linux%20%7C%20Web-brightgreen.svg)](https://flutter.dev)
 
@@ -132,6 +132,138 @@ ScrollResponsiveScaffold.dashboard(
   initialTrailing: const Icon(Icons.notifications_none),
   body: const MetricsDashboard(),
 );
+```
+
+---
+
+## 20 Ready-To-Use AppBar & Header Presets (`ScrollHeader`)
+
+`app_bar_ui` provides **20 professionally designed header presets** out of the box. Whether you need a minimal flat header, an iOS Cupertino bar with blur, a collapsing hero banner, an image background with contrast scrim, or a custom builder with live scroll progress, simply pass `ScrollHeader` into `ScrollResponsiveScaffold.header`:
+
+```dart
+ScrollResponsiveScaffold(
+  header: ScrollHeader.collapsing(
+    title: const Text('Store Showcase'),
+    subtitle: const Text('New season arrivals'),
+    leading: const BackButton(),
+    actions: const [
+      IconButton(icon: Icon(Icons.tune), onPressed: null),
+    ],
+  ),
+  body: const ProductCatalog(),
+);
+```
+
+### The 20 Header Styles Overview
+
+| # | Preset Name | Architecture | Key Characteristics & Behavior |
+|:---:|:---|:---:|:---|
+| **1** | `ScrollHeader.minimal` | Box | Clean, simple, low visual weight with optional divider on scroll. |
+| **2** | `ScrollHeader.transparent` | Box | 100% transparent header overlaid above scrollable content. |
+| **3** | `ScrollHeader.floating` | Box | Rounded floating card with configurable elevation, margin, and border radius. |
+| **4** | `ScrollHeader.material` | Box | Material Design 3 layout with surface tint and scroll-under elevation. |
+| **5** | `ScrollHeader.ios` | Box | iOS Cupertino compact navigation style with backdrop blur (`BackdropFilter`). |
+| **6** | `ScrollHeader.centerTitle` | Box | Symmetrically balanced header with centered title and leading/trailing actions. |
+| **7** | `ScrollHeader.largeTitle` | Sliver | Large typography display title that collapses smoothly into an inline title. |
+| **8** | `ScrollHeader.flexibleSpace` | Sliver | Expandable header accommodating arbitrary custom widgets in flexible space. |
+| **9** | `ScrollHeader.collapsing` | Sliver | Smooth persistent collapse from hero height down to toolbar height. |
+| **10** | `ScrollHeader.parallax` | Sliver | Background moves at fractional scroll speed (e.g. 0.5x) via `FlowDelegate`. |
+| **11** | `ScrollHeader.gradient` | Box | Multi-stop vibrant linear or radial gradient with scroll-under shift. |
+| **12** | `ScrollHeader.image` | Box | High-resolution image background with configurable dark/light scrim overlay. |
+| **13** | `ScrollHeader.profile` | Box | Avatar, profile name, role/handle badge, stats row, and actions. |
+| **14** | `ScrollHeader.dashboard` | Box | Greeting, user name, date/status chip, metrics row, and quick actions. |
+| **15** | `ScrollHeader.search` | Box | Integrated search field with query callbacks (`onSearchChanged`, `onSearchSubmitted`). |
+| **16** | `ScrollHeader.segmented` | Box | Embedded segmented control or category pill selector. |
+| **17** | `ScrollHeader.stickyTab` | Sliver | Pinned tab bar navigation pinned directly under the header on scroll. |
+| **18** | `ScrollHeader.compactScroll` | Sliver | Ultra-compact space-saving header collapsing into a 48px micro-bar on scroll. |
+| **19** | `ScrollHeader.sideActionTransition` | Box | Side action icons transform based on scroll state with dual tap callbacks. |
+| **20** | `ScrollHeader.customBuilder` | Sliver | Fully custom layout using developer callback receiving real-time `progress` (0.0 to 1.0). |
+
+---
+
+### Preset Usage Examples
+
+#### Profile Header (`ScrollHeader.profile`)
+```dart
+ScrollHeader.profile(
+  name: const Text('Elena Rostova'),
+  handleOrRole: const Text('@elena • Principal Architect'),
+  avatar: const CircleAvatar(
+    radius: 28,
+    child: Text('ER'),
+  ),
+  stats: const Row(
+    children: [
+      Text('24.5K Followers', style: TextStyle(fontWeight: FontWeight.bold)),
+      SizedBox(width: 16),
+      Text('612 Following', style: TextStyle(fontWeight: FontWeight.bold)),
+    ],
+  ),
+  leading: const BackButton(),
+  actions: [
+    IconButton(icon: const Icon(Icons.share), onPressed: () {}),
+  ],
+)
+```
+
+#### Parallax Background Header (`ScrollHeader.parallax`)
+```dart
+ScrollHeader.parallax(
+  title: const Text('Mount Rainier'),
+  subtitle: const Text('National Park, Washington'),
+  speedFactor: 0.5, // Background moves at half scroll speed
+  expandedHeight: 260.0,
+  background: Image.asset('assets/rainier.jpg', fit: BoxFit.cover),
+  leading: const BackButton(color: Colors.white),
+)
+```
+
+#### Search Header (`ScrollHeader.search`)
+```dart
+ScrollHeader.search(
+  title: const Text('Discover'),
+  searchHint: 'Search articles, topics, and authors...',
+  onSearchChanged: (query) => filterResults(query),
+  onSearchSubmitted: (query) => performSearch(query),
+  actions: [
+    IconButton(icon: const Icon(Icons.tune), onPressed: openFilters),
+  ],
+)
+```
+
+#### Custom Builder Header (`ScrollHeader.customBuilder`)
+```dart
+ScrollHeader.customBuilder(
+  expandedHeight: 200.0,
+  collapsedHeight: 64.0,
+  builder: (context, progress, overlapsContent) {
+    return Container(
+      color: Color.lerp(Colors.blue, Colors.purple, progress),
+      child: Center(
+        child: Text(
+          'Scroll Progress: ${(progress * 100).toInt()}%',
+          style: const TextStyle(color: Colors.white, fontSize: 18.0),
+        ),
+      ),
+    );
+  },
+)
+```
+
+### Preset Customization (`ScrollHeaderStyle`)
+
+All presets accept an optional `style: ScrollHeaderStyle(...)` allowing you to customize colors, elevation, border radius, margins, blur filters, and transitions without losing the preset's inherent layout:
+
+```dart
+ScrollHeader.floating(
+  title: const Text('Customized Floating Island'),
+  style: const ScrollHeaderStyle(
+    elevation: 8.0,
+    backgroundColor: Colors.white,
+    borderRadius: BorderRadius.all(Radius.circular(20.0)),
+    margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+  ),
+)
 ```
 
 ---

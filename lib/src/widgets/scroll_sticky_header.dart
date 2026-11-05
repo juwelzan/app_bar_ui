@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
+import 'sliver_widget_marker.dart';
+
 /// A persistent sticky header sliver that anchors any arbitrary widget
 /// (e.g., search bars, category filters, section headers) to the top of the viewport.
 ///
 /// Supports dynamic builder functions with `isPinned` awareness, elevation shifts,
 /// and smooth background color transitions.
-class ScrollStickyHeader extends StatelessWidget {
+class ScrollStickyHeader extends StatelessWidget with SliverWidgetMarker {
   /// Creates a [ScrollStickyHeader] wrapping a child widget.
   const ScrollStickyHeader({
     super.key,
