@@ -5,8 +5,8 @@ import 'package:flutter/rendering.dart';
 
 import '../models/scroll_responsive_config.dart';
 
-/// A reusable engine managing scroll tracking, direction detection, threshold
-/// calculation, reverse scroll detection, and controller lifecycles.
+/// A reusable engine managing scroll tracking, velocity calculation, direction detection,
+/// threshold calculation, reverse scroll detection, and controller lifecycles.
 ///
 /// Designed to be decoupled from the widget tree and fully unit-testable.
 class ScrollResponsiveEngine {
@@ -14,14 +14,21 @@ class ScrollResponsiveEngine {
   ScrollResponsiveEngine({
     required this.config,
     ScrollController? customController,
+    this.targetDepth,
     this.onProgressChanged,
     this.onDirectionChanged,
+    this.onScrollStart,
+    this.onScrollEnd,
   }) {
     _initController(customController);
   }
 
   /// The active configuration.
   ScrollResponsiveConfig config;
+
+  /// Optional depth filter for nested scrolling scenarios.
+  /// When non-null, only notifications with [ScrollNotification.depth] matching [targetDepth] are processed.
+  final int? targetDepth;
 
   /// Updates the configuration and recalculates progress.
   void updateConfig(ScrollResponsiveConfig newConfig) {
@@ -57,6 +64,7 @@ class ScrollResponsiveEngine {
           trailingProgress: 0.0,
           isStatusBarHidden: false,
           scrollDirection: ScrollDirection.idle,
+          velocity: 0.0,
         ),
       );
 
@@ -66,8 +74,16 @@ class ScrollResponsiveEngine {
   /// Optional callback invoked whenever scroll direction changes.
   final ValueChanged<ScrollDirection>? onDirectionChanged;
 
+  /// Optional callback invoked when scrolling initiates.
+  final ValueChanged<ScrollStartNotification>? onScrollStart;
+
+  /// Optional callback invoked when scrolling concludes.
+  final ValueChanged<ScrollEndNotification>? onScrollEnd;
+
   double _currentOffset = 0.0;
   double _lastOffset = 0.0;
+  double _velocity = 0.0;
+  int _lastTimestamp = 0;
   ScrollDirection _currentDirection = ScrollDirection.idle;
   bool _isReverseScroll = false;
   bool _isDisposed = false;
@@ -75,6 +91,9 @@ class ScrollResponsiveEngine {
 
   /// Current scroll offset in logical pixels (clamped to non-negative for calculations).
   double get currentOffset => _currentOffset;
+
+  /// Current estimated scroll velocity in logical pixels per second.
+  double get velocity => _velocity;
 
   /// Current user scroll direction.
   ScrollDirection get currentDirection => _currentDirection;
@@ -128,13 +147,24 @@ class ScrollResponsiveEngine {
   ///
   /// Automatically detects reverse scrolling, calculates normalized progress
   /// across independent thresholds, and notifies listeners.
-  void updateScrollOffset(double offset) {
+  void updateScrollOffset(double offset, {double? explicitVelocity}) {
     if (_isDisposed) return;
     if (_currentOffset == offset && _hasEvaluatedInitial) return;
 
     _hasEvaluatedInitial = true;
     _lastOffset = _currentOffset;
     _currentOffset = offset;
+
+    final int now = DateTime.now().microsecondsSinceEpoch;
+    if (explicitVelocity != null) {
+      _velocity = explicitVelocity;
+    } else if (_lastTimestamp > 0) {
+      final double dt = (now - _lastTimestamp) / 1000000.0;
+      if (dt > 0.001) {
+        _velocity = (_currentOffset - _lastOffset) / dt;
+      }
+    }
+    _lastTimestamp = now;
 
     // Detect reverse scrolling (scrolling up toward top)
     if (_currentOffset < _lastOffset) {
@@ -152,6 +182,17 @@ class ScrollResponsiveEngine {
   bool handleScrollNotification(ScrollNotification notification) {
     if (_isDisposed) return false;
     if (notification.metrics.axis != Axis.vertical) return false;
+    if (targetDepth != null && notification.depth != targetDepth) return false;
+
+    if (notification is ScrollStartNotification) {
+      onScrollStart?.call(notification);
+    } else if (notification is ScrollEndNotification) {
+      if (notification.dragDetails?.primaryVelocity != null) {
+        _velocity = notification.dragDetails!.primaryVelocity!;
+      }
+      onScrollEnd?.call(notification);
+    }
+
     updateScrollOffset(notification.metrics.pixels);
     return false;
   }
@@ -162,6 +203,8 @@ class ScrollResponsiveEngine {
   bool handleUserScrollNotification(UserScrollNotification notification) {
     if (_isDisposed) return false;
     if (notification.metrics.axis != Axis.vertical) return false;
+    if (targetDepth != null && notification.depth != targetDepth) return false;
+
     if (notification.direction != _currentDirection) {
       _currentDirection = notification.direction;
       onDirectionChanged?.call(_currentDirection);
@@ -207,6 +250,7 @@ class ScrollResponsiveEngine {
       trailingProgress: newTrailingProgress,
       isStatusBarHidden: isStatusBarHidden,
       scrollDirection: _currentDirection,
+      velocity: _velocity,
     );
 
     progressDetailsNotifier.value = details;

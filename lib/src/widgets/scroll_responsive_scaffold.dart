@@ -58,6 +58,8 @@ class ScrollResponsiveScaffold extends StatefulWidget {
     this.semanticLabelTrailingScrolled,
     this.onScrollUpdate,
     this.onScrollDirectionChanged,
+    this.onScrollStart,
+    this.onScrollEnd,
     this.routeObserver,
   }) : assert(
          body != null || slivers != null,
@@ -161,6 +163,12 @@ class ScrollResponsiveScaffold extends StatefulWidget {
   /// Callback triggered when the user scroll direction changes.
   final ValueChanged<ScrollDirection>? onScrollDirectionChanged;
 
+  /// Optional callback invoked when scrolling initiates.
+  final ValueChanged<ScrollStartNotification>? onScrollStart;
+
+  /// Optional callback invoked when scrolling concludes.
+  final ValueChanged<ScrollEndNotification>? onScrollEnd;
+
   /// Optional [RouteObserver] to automatically manage status bar visibility across route transitions.
   final RouteObserver<ModalRoute<void>>? routeObserver;
 
@@ -223,6 +231,8 @@ class _ScrollResponsiveScaffoldState extends State<ScrollResponsiveScaffold>
               );
         }
       },
+      onScrollStart: widget.onScrollStart,
+      onScrollEnd: widget.onScrollEnd,
     );
   }
 

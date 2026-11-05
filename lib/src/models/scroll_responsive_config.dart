@@ -360,6 +360,7 @@ class ScrollProgressDetails {
     required this.trailingProgress,
     required this.isStatusBarHidden,
     required this.scrollDirection,
+    this.velocity = 0.0,
   });
 
   /// Current scroll offset in logical pixels.
@@ -376,6 +377,28 @@ class ScrollProgressDetails {
 
   /// Current scroll direction.
   final ScrollDirection scrollDirection;
+
+  /// Current estimated scroll velocity in logical pixels per second.
+  final double velocity;
+
+  /// Creates a copy of this progress details object with given fields replaced.
+  ScrollProgressDetails copyWith({
+    double? offset,
+    double? leadingProgress,
+    double? trailingProgress,
+    bool? isStatusBarHidden,
+    ScrollDirection? scrollDirection,
+    double? velocity,
+  }) {
+    return ScrollProgressDetails(
+      offset: offset ?? this.offset,
+      leadingProgress: leadingProgress ?? this.leadingProgress,
+      trailingProgress: trailingProgress ?? this.trailingProgress,
+      isStatusBarHidden: isStatusBarHidden ?? this.isStatusBarHidden,
+      scrollDirection: scrollDirection ?? this.scrollDirection,
+      velocity: velocity ?? this.velocity,
+    );
+  }
 }
 
 /// Master configuration for [ScrollResponsiveScaffold].
