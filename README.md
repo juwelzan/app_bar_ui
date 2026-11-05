@@ -136,9 +136,9 @@ ScrollResponsiveScaffold.dashboard(
 
 ---
 
-## 20 Ready-To-Use AppBar & Header Presets (`ScrollHeader`)
+## 50 Ready-To-Use AppBar & Header Presets (`ScrollHeader`)
 
-`app_bar_ui` provides **20 professionally designed header presets** out of the box. Whether you need a minimal flat header, an iOS Cupertino bar with blur, a collapsing hero banner, an image background with contrast scrim, or a custom builder with live scroll progress, simply pass `ScrollHeader` into `ScrollResponsiveScaffold.header`:
+`app_bar_ui` provides **50 professionally designed header presets** out of the box spanning four distinct categories: **Core & Foundation**, **Navigation & Layout**, **Visual & Creative**, and **Specialized AppBars**. Whether you need a minimal flat header, an iOS Cupertino bar with blur, a collapsing hero banner, an image background with contrast scrim, a shopping header with live cart badges, or a custom builder with live scroll progress, simply pass `ScrollHeader` into `ScrollResponsiveScaffold.header`:
 
 ```dart
 ScrollResponsiveScaffold(
@@ -154,30 +154,60 @@ ScrollResponsiveScaffold(
 );
 ```
 
-### The 20 Header Styles Overview
+### The 50 Header Styles Overview
 
-| # | Preset Name | Architecture | Key Characteristics & Behavior |
-|:---:|:---|:---:|:---|
-| **1** | `ScrollHeader.minimal` | Box | Clean, simple, low visual weight with optional divider on scroll. |
-| **2** | `ScrollHeader.transparent` | Box | 100% transparent header overlaid above scrollable content. |
-| **3** | `ScrollHeader.floating` | Box | Rounded floating card with configurable elevation, margin, and border radius. |
-| **4** | `ScrollHeader.material` | Box | Material Design 3 layout with surface tint and scroll-under elevation. |
-| **5** | `ScrollHeader.ios` | Box | iOS Cupertino compact navigation style with backdrop blur (`BackdropFilter`). |
-| **6** | `ScrollHeader.centerTitle` | Box | Symmetrically balanced header with centered title and leading/trailing actions. |
-| **7** | `ScrollHeader.largeTitle` | Sliver | Large typography display title that collapses smoothly into an inline title. |
-| **8** | `ScrollHeader.flexibleSpace` | Sliver | Expandable header accommodating arbitrary custom widgets in flexible space. |
-| **9** | `ScrollHeader.collapsing` | Sliver | Smooth persistent collapse from hero height down to toolbar height. |
-| **10** | `ScrollHeader.parallax` | Sliver | Background moves at fractional scroll speed (e.g. 0.5x) via `FlowDelegate`. |
-| **11** | `ScrollHeader.gradient` | Box | Multi-stop vibrant linear or radial gradient with scroll-under shift. |
-| **12** | `ScrollHeader.image` | Box | High-resolution image background with configurable dark/light scrim overlay. |
-| **13** | `ScrollHeader.profile` | Box | Avatar, profile name, role/handle badge, stats row, and actions. |
-| **14** | `ScrollHeader.dashboard` | Box | Greeting, user name, date/status chip, metrics row, and quick actions. |
-| **15** | `ScrollHeader.search` | Box | Integrated search field with query callbacks (`onSearchChanged`, `onSearchSubmitted`). |
-| **16** | `ScrollHeader.segmented` | Box | Embedded segmented control or category pill selector. |
-| **17** | `ScrollHeader.stickyTab` | Sliver | Pinned tab bar navigation pinned directly under the header on scroll. |
-| **18** | `ScrollHeader.compactScroll` | Sliver | Ultra-compact space-saving header collapsing into a 48px micro-bar on scroll. |
-| **19** | `ScrollHeader.sideActionTransition` | Box | Side action icons transform based on scroll state with dual tap callbacks. |
-| **20** | `ScrollHeader.customBuilder` | Sliver | Fully custom layout using developer callback receiving real-time `progress` (0.0 to 1.0). |
+| # | Preset Name | Architecture | Category | Key Characteristics & Behavior |
+|:---:|:---|:---:|:---:|:---|
+| **1** | `ScrollHeader.minimal` | Box | Core | Clean, simple, low visual weight with optional divider on scroll. |
+| **2** | `ScrollHeader.transparent` | Box | Core | 100% transparent header overlaid above scrollable content. |
+| **3** | `ScrollHeader.floating` | Box | Core | Rounded floating card with configurable elevation, margin, and border radius. |
+| **4** | `ScrollHeader.material` | Box | Core | Material Design 3 layout with surface tint and scroll-under elevation. |
+| **5** | `ScrollHeader.ios` | Box | Core | iOS Cupertino compact navigation style with backdrop blur (`BackdropFilter`). |
+| **6** | `ScrollHeader.centerTitle` | Box | Core | Symmetrically balanced header with centered title and leading/trailing actions. |
+| **7** | `ScrollHeader.largeTitle` | Sliver | Core | Large typography display title that collapses smoothly into an inline title. |
+| **8** | `ScrollHeader.flexibleSpace` | Sliver | Core | Expandable header accommodating arbitrary custom widgets in flexible space. |
+| **9** | `ScrollHeader.collapsing` | Sliver | Core | Smooth persistent collapse from hero height down to toolbar height. |
+| **10** | `ScrollHeader.parallax` | Sliver | Core | Background moves at fractional scroll speed (e.g. 0.5x) via `FlowDelegate`. |
+| **11** | `ScrollHeader.gradient` | Box | Core | Multi-stop vibrant linear or radial gradient with scroll-under shift. |
+| **12** | `ScrollHeader.image` | Box | Core | High-resolution image background with configurable dark/light scrim overlay. |
+| **13** | `ScrollHeader.profile` | Box | Core | Avatar, profile name, role/handle badge, stats row, and actions. |
+| **14** | `ScrollHeader.dashboard` | Box | Core | Greeting, user name, date/status chip, metrics row, and quick actions. |
+| **15** | `ScrollHeader.search` | Box | Core | Integrated search field with query callbacks (`onSearchChanged`, `onSearchSubmitted`). |
+| **16** | `ScrollHeader.segmented` | Box | Core | Embedded segmented control or category pill selector. |
+| **17** | `ScrollHeader.stickyTab` | Sliver | Core | Pinned tab bar navigation pinned directly under the header on scroll. |
+| **18** | `ScrollHeader.compactScroll` | Sliver | Core | Ultra-compact space-saving header collapsing into a 48px micro-bar on scroll. |
+| **19** | `ScrollHeader.sideActionTransition` | Box | Core | Side action icons transform based on scroll state with dual tap callbacks. |
+| **20** | `ScrollHeader.customBuilder` | Sliver | Core | Fully custom layout using developer callback receiving real-time `progress` (0.0 to 1.0). |
+| **21** | `ScrollHeader.bottomAlignedTitle` | Box | Navigation | Title pinned to bottom edge with top-aligned navigation buttons. |
+| **22** | `ScrollHeader.asymmetric` | Box | Navigation | Asymmetric layout with unequal leading, expanded title, and trailing action weight. |
+| **23** | `ScrollHeader.split` | Box | Navigation | Distinct two-section visual separation between navigation/title and actions. |
+| **24** | `ScrollHeader.twoRow` | Box | Navigation | Dual-row layout: upper primary toolbar with lower secondary control/filter row. |
+| **25** | `ScrollHeader.multiAction` | Box | Navigation | Priority actions with automatic overflow popup menu (`maxVisibleActions`). |
+| **26** | `ScrollHeader.compactIcon` | Box | Navigation | Ultra-minimal icon-centric toolbar for high spatial efficiency. |
+| **27** | `ScrollHeader.breadcrumb` | Box | Navigation | Hierarchical navigation breadcrumb trail with horizontal overflow scrolling. |
+| **28** | `ScrollHeader.backTitle` | Box | Navigation | Seamless inline back button joined directly with page title. |
+| **29** | `ScrollHeader.contextualSelection` | Box | Navigation | Multi-select mode bar showing active selection count, close, and batch actions. |
+| **30** | `ScrollHeader.adaptiveNavigation` | Box | Navigation | Responsive layout switching automatically between compact and expanded desktop bars. |
+| **31** | `ScrollHeader.glass` | Box | Visual | Translucent frosted glass effect with platform-safe fallback and blur. |
+| **32** | `ScrollHeader.blurredBackground` | Box | Visual | Performance-isolated backdrop blur header with configurable `blurSigma`. |
+| **33** | `ScrollHeader.bordered` | Box | Visual | Flat elevation-free aesthetic framed with clean hairline borders. |
+| **34** | `ScrollHeader.shadowElevated` | Box | Visual | High-depth multi-stop drop shadow header with configurable elevation. |
+| **35** | `ScrollHeader.layered` | Box | Visual | Tri-layer depth header featuring decorative back, middle, and front cards. |
+| **36** | `ScrollHeader.shapeMorphing` | Sliver | Visual | Dynamic border radius and shape transformation driven by scroll offset. |
+| **37** | `ScrollHeader.animatedGradient` | Box | Visual | Ambient continuously shifting gradient background animation. |
+| **38** | `ScrollHeader.colorTransition` | Sliver | Visual | Continuous background and foreground color interpolation on scroll. |
+| **39** | `ScrollHeader.illustrated` | Sliver | Visual | Collapsing banner with custom illustration, scale, and fade animations. |
+| **40** | `ScrollHeader.edgeToEdge` | Box | Visual | Margin-free full bleed layout extending cleanly behind status and navigation bars. |
+| **41** | `ScrollHeader.mediaPlayer` | Box | Specialized | Media playback header with album art, track details, and embedded play/skip controls. |
+| **42** | `ScrollHeader.shopping` | Box | Specialized | Storefront header with live shopping cart badge counter and quick search. |
+| **43** | `ScrollHeader.chat` | Box | Specialized | Messaging conversation header with contact avatar, online presence dot, and call actions. |
+| **44** | `ScrollHeader.detailPage` | Sliver | Specialized | Article/media detail header with Hero animation transition, contrast scrim, and floating pills. |
+| **45** | `ScrollHeader.reading` | Box | Specialized | Editorial reader header with integrated horizontal reading progress indicator. |
+| **46** | `ScrollHeader.map` | Box | Specialized | Interactive location preview header with floating search card and location chips. |
+| **47** | `ScrollHeader.form` | Box | Specialized | State-aware form/editor header with cancel button and reactive Save action (`isDirty`). |
+| **48** | `ScrollHeader.wizard` | Box | Specialized | Multi-step setup header with segmented step progress indicators and step counter. |
+| **49** | `ScrollHeader.notificationCenter` | Box | Specialized | Notification inbox header with unread badge counter, "Mark all read", and filter pills. |
+| **50** | `ScrollHeader.customScrollLayout` | Sliver | Specialized | Completely customizable sliver persistent header layout delegate or builder. |
 
 ---
 
@@ -247,6 +277,54 @@ ScrollHeader.customBuilder(
       ),
     );
   },
+)
+```
+
+#### Glass Header (`ScrollHeader.glass`)
+```dart
+ScrollHeader.glass(
+  title: const Text('Translucent Atmosphere'),
+  blurSigma: 12.0,
+  leading: const BackButton(),
+  actions: [
+    IconButton(icon: const Icon(Icons.tune), onPressed: () {}),
+  ],
+)
+```
+
+#### Multi-Action Header with Auto-Overflow (`ScrollHeader.multiAction`)
+```dart
+ScrollHeader.multiAction(
+  title: const Text('Document Actions'),
+  maxVisibleActions: 2,
+  leading: const BackButton(),
+  actions: [
+    IconButton(icon: const Icon(Icons.share), onPressed: () {}),
+    IconButton(icon: const Icon(Icons.edit), onPressed: () {}),
+    IconButton(icon: const Icon(Icons.copy), onPressed: () {}),
+    IconButton(icon: const Icon(Icons.delete), onPressed: () {}),
+  ],
+)
+```
+
+#### Form Header with Reactive State (`ScrollHeader.form`)
+```dart
+ScrollHeader.form(
+  title: const Text('Edit Account Profile'),
+  subtitle: const Text('Unsaved modifications'),
+  isDirty: true,
+  onSave: () => submitForm(),
+  leading: const CloseButton(),
+)
+```
+
+#### Shopping Header (`ScrollHeader.shopping`)
+```dart
+ScrollHeader.shopping(
+  title: const Text('Fresh Direct Marketplace'),
+  cartItemCount: 4,
+  onCartTap: () => openCart(),
+  leading: const BackButton(),
 )
 ```
 

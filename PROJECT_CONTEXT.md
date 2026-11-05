@@ -72,9 +72,9 @@ lib/
 │   │   ├── scroll_driven_animation.dart      # ScrollRange<T>, ScrollTransform (opacity, scale, slide, rotation)
 │   │   ├── scroll_color_tween.dart           # ScrollColorTransition (colors & gradients)
 │   │   └── scroll_morph_builder.dart         # ScrollMorphBuilder (midpoint switching & cross-fade)
-│   ├── presets/                      # 20 Ready-To-Use AppBar & Header Presets
-│   │   ├── scroll_header.dart                # Master unified ScrollHeader entrypoint
-│   │   ├── scroll_header_preset.dart         # Enum of all 20 presets with metadata
+│   ├── presets/                      # 50 Ready-To-Use AppBar & Header Presets
+│   │   ├── scroll_header.dart                # Master unified ScrollHeader entrypoint (50 constructors)
+│   │   ├── scroll_header_preset.dart         # Enum of all 50 presets with metadata
 │   │   ├── scroll_header_style.dart          # Styling, padding, and geometry model
 │   │   └── headers/                          # Modular preset implementations
 │   │       ├── base_header.dart              # Base delegate & HeaderContainer
@@ -82,7 +82,10 @@ lib/
 │   │       ├── standard_headers.dart         # Material, iOS, Gradient, ImageBackground
 │   │       ├── collapsing_headers.dart       # LargeTitle, FlexibleSpace, Collapsing, CompactScroll
 │   │       ├── specialized_headers.dart      # Profile, Dashboard, Search, Segmented, StickyTab
-│   │       └── dynamic_headers.dart          # Parallax, SideActionTransition, CustomBuilder
+│   │       ├── dynamic_headers.dart          # Parallax, SideActionTransition, CustomBuilder
+│   │       ├── navigation_headers.dart       # Navigation & Layout styles (Presets 21–30)
+│   │       ├── visual_headers.dart           # Visual & Creative styles (Presets 31–40)
+│   │       └── specialized_appbar_headers.dart # Specialized AppBars (Presets 41–50)
 │   └── widgets/                      # Reusable public components
 │       ├── sliver_widget_marker.dart         # Sliver marker mixin for auto Box/Sliver routing
 │       ├── scroll_responsive_scaffold.dart   # Master orchestrator scaffold

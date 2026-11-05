@@ -5,6 +5,57 @@ All notable changes to `app_bar_ui` will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-11-06
+
+### Added
+- **Expanded Preset Catalog to 50 Ready-to-Use AppBar & Header Styles**:
+  - Added 30 unique, battle-tested header design presets across three distinct new categories:
+  - **Category B: Navigation & Layout Styles (Presets 21–30)**:
+    - 21. `ScrollHeader.bottomAlignedTitle`: Bottom-aligned title layout with top-anchored navigation and actions.
+    - 22. `ScrollHeader.asymmetric`: Asymmetric layout with unequal leading, expanded title, and compact trailing action cluster.
+    - 23. `ScrollHeader.split`: Distinct visual separation dividing navigation/title from actions.
+    - 24. `ScrollHeader.twoRow`: Dual-tier header with upper primary toolbar and lower secondary control/filter row.
+    - 25. `ScrollHeader.multiAction`: Multi-action navigation header with automated overflow popup menu (`maxVisibleActions`).
+    - 26. `ScrollHeader.compactIcon`: Ultra-minimal icon-centric toolbar for high spatial efficiency.
+    - 27. `ScrollHeader.breadcrumb`: Deep hierarchical navigation breadcrumb trail with horizontal overflow scrolling.
+    - 28. `ScrollHeader.backTitle`: Seamless inline back button joined directly with page title.
+    - 29. `ScrollHeader.contextualSelection`: Multi-select contextual mode bar showing active selection count, close, and batch actions.
+    - 30. `ScrollHeader.adaptiveNavigation`: Responsive layout switching automatically between compact mobile and expanded desktop bars.
+  - **Category C: Visual & Creative Styles (Presets 31–40)**:
+    - 31. `ScrollHeader.glass`: Translucent frosted glass effect with platform-safe fallback and blur.
+    - 32. `ScrollHeader.blurredBackground`: Performance-isolated backdrop blur header with configurable `blurSigma`.
+    - 33. `ScrollHeader.bordered`: Flat elevation-free aesthetic framed with clean hairline borders.
+    - 34. `ScrollHeader.shadowElevated`: High-depth multi-stop drop shadow header with configurable elevation.
+    - 35. `ScrollHeader.layered`: Tri-layer depth header featuring decorative back, middle, and front cards.
+    - 36. `ScrollHeader.shapeMorphing`: Dynamic border radius and shape transformation driven by scroll offset (`isSliver = true`).
+    - 37. `ScrollHeader.animatedGradient`: Ambient continuously shifting gradient background animation.
+    - 38. `ScrollHeader.colorTransition`: Continuous background and foreground color interpolation on scroll (`isSliver = true`).
+    - 39. `ScrollHeader.illustrated`: Collapsing banner with custom illustration, scale, and fade animations (`isSliver = true`).
+    - 40. `ScrollHeader.edgeToEdge`: Margin-free full bleed layout extending cleanly behind status and navigation bars.
+  - **Category D: Specialized AppBar Styles (Presets 41–50)**:
+    - 41. `ScrollHeader.mediaPlayer`: Media playback header with album art, track details, and embedded play/skip controls.
+    - 42. `ScrollHeader.shopping`: Storefront header with live shopping cart badge counter and quick search.
+    - 43. `ScrollHeader.chat`: Messaging conversation header with contact avatar, online presence dot, and call actions.
+    - 44. `ScrollHeader.detailPage`: Article/media detail header with Hero animation transition, contrast scrim, and floating pills (`isSliver = true`).
+    - 45. `ScrollHeader.reading`: Editorial reader header with integrated horizontal reading progress indicator.
+    - 46. `ScrollHeader.map`: Interactive location preview header with floating search card and location chips.
+    - 47. `ScrollHeader.form`: State-aware form/editor header with cancel button and reactive Save action (`isDirty`).
+    - 48. `ScrollHeader.wizard`: Multi-step setup header with segmented step progress indicators and step counter.
+    - 49. `ScrollHeader.notificationCenter`: Notification inbox header with unread badge counter, "Mark all read", and filter pills.
+    - 50. `ScrollHeader.customScrollLayout`: Completely customizable sliver persistent header layout delegate or builder (`isSliver = true`).
+- **Dedicated Test Suites for All 6 Batches**:
+  - `test/batch1_navigation_presets_test.dart`
+  - `test/batch2_navigation_presets_test.dart`
+  - `test/batch3_visual_presets_test.dart`
+  - `test/batch4_visual_presets_test.dart`
+  - `test/batch5_specialized_presets_test.dart`
+  - `test/batch6_specialized_presets_test.dart`
+  - Total package test count increased to 242 tests passing 100%.
+
+### Fixed
+- Fixed `ScrollResponsiveEngine` velocity preservation during drag end notifications.
+- Resolved edge-case sub-pixel RenderFlex overflow in reading and custom builder headers on high-DPI displays.
+
 ## [1.1.0] - 2026-11-06
 
 ### Added

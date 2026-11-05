@@ -234,7 +234,7 @@ stateDiagram-v2
 
 ---
 
-## 9. 20 AppBar & Header Presets Architecture (`ScrollHeader`)
+## 9. 50 AppBar & Header Presets Architecture (`ScrollHeader`)
 
 ```mermaid
 flowchart TD
@@ -243,13 +243,16 @@ flowchart TD
     RouteCheck -->|false: Box Header| BoxDelegate["Wrap in SliverToBoxAdapter"]
     RouteCheck -->|true: Sliver Header| DirectSliver["Place Directly in CustomScrollView slivers"]
     
-    subgraph PresetModules["Modular Preset Subsystems"]
+    subgraph PresetModules["Modular Preset Subsystems (50 Styles)"]
         direction TB
         Minimal["minimal_headers.dart: Minimal, Transparent, Floating, CenterTitle"]
         Standard["standard_headers.dart: Material, iOS (Blur), Gradient, Image (Scrim)"]
         Collapsing["collapsing_headers.dart: LargeTitle, FlexibleSpace, Collapsing, CompactScroll"]
         Specialized["specialized_headers.dart: Profile, Dashboard, Search, Segmented, StickyTab"]
         Dynamic["dynamic_headers.dart: Parallax, SideActionTransition, CustomBuilder"]
+        NavHeaders["navigation_headers.dart: BottomAlignedTitle, Asymmetric, Split, TwoRow, MultiAction, CompactIcon, Breadcrumb, BackTitle, ContextualSelection, AdaptiveNavigation"]
+        VisualHeaders["visual_headers.dart: Glass, BlurredBackground, Bordered, ShadowElevated, Layered, ShapeMorphing, AnimatedGradient, ColorTransition, Illustrated, EdgeToEdge"]
+        SpecAppBar["specialized_appbar_headers.dart: MediaPlayer, Shopping, Chat, DetailPage, Reading, Map, Form, Wizard, NotificationCenter, CustomScrollLayout"]
     end
     
     ScrollHeader -.-> PresetModules
@@ -261,7 +264,7 @@ Inside a `CustomScrollView`, passing a `RenderSliver` wrapped inside a `SliverTo
 Conversely, placing a standard `RenderBox` widget directly into `slivers: [...]` without a `SliverToBoxAdapter` causes an equivalent type mismatch.
 
 To completely shield developers from this complexity:
-1. **`SliverWidgetMarker` Protocol**: All sliver headers (`Collapsing`, `LargeTitle`, `Parallax`, `StickyTab`, `CompactScroll`, `CustomBuilder`) implement the `SliverWidgetMarker` mixin returning `isSliver = true`.
+1. **`SliverWidgetMarker` Protocol**: All sliver headers (`LargeTitle`, `FlexibleSpace`, `Collapsing`, `Parallax`, `StickyTab`, `CompactScroll`, `CustomBuilder`, `ShapeMorphing`, `ColorTransition`, `Illustrated`, `DetailPage`, `CustomScrollLayout`) implement the `SliverWidgetMarker` mixin returning `isSliver = true`.
 2. **Scaffold Auto-Detection**: `ScrollResponsiveScaffold._buildScrollableContent` evaluates `isSliverWidget(widget.header!)`. If `true`, the header is inserted directly into the viewport's sliver hierarchy; if `false`, it is automatically wrapped in a `SliverToBoxAdapter`.
 
 ### 9.2 Zero-Rebuild Persistent Header Delegate
@@ -271,5 +274,5 @@ Collapsing headers utilize `PresetSliverHeaderDelegate` extending `SliverPersist
 - Ancestor scaffold and descendant body widgets experience **zero rebuilds** during header compression.
 
 ### 9.3 Developer Override Guarantee
-All 20 presets accept raw widgets for `title`, `subtitle`, `leading`, `actions`, and `flexibleSpace`. When custom widgets are provided, the preset renders them as first-class citizens without overriding them with unwanted card containers, unexpected elevation shadows, or forced borders.
+All 50 presets accept raw widgets for `title`, `subtitle`, `leading`, `actions`, and `flexibleSpace`. When custom widgets are provided, the preset renders them as first-class citizens without overriding them with unwanted card containers, unexpected elevation shadows, or forced borders.
 

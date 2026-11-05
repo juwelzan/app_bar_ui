@@ -181,3 +181,52 @@ This roadmap tracks the development of the **Scroll-Driven UI Framework for Flut
 - [x] Author dedicated test suite `test/header_presets_test.dart` (27 tests asserting layout, scroll collapse, custom widget preservation, accessibility, and safe area).
 - [x] Expand example application with interactive 20-Preset Showcase Gallery and `PresetDetailScreen` with live scroll telemetry.
 - [x] Verify static analysis (`flutter analyze` with 0 issues) and package tests (`flutter test` with 198/198 passing).
+
+### PHASE 17 — Advanced AppBar Expansion: 50 Total Presets & Quality Fixes
+- [x] Implement Batch 1 (Navigation & Layout Presets 21–25):
+  - 21. `ScrollHeader.bottomAlignedTitle`
+  - 22. `ScrollHeader.asymmetric`
+  - 23. `ScrollHeader.split`
+  - 24. `ScrollHeader.twoRow`
+  - 25. `ScrollHeader.multiAction`
+  - Dedicated test suite `test/batch1_navigation_presets_test.dart` passing 100%.
+- [x] Implement Batch 2 (Navigation & Layout Presets 26–30):
+  - 26. `ScrollHeader.compactIcon`
+  - 27. `ScrollHeader.breadcrumb`
+  - 28. `ScrollHeader.backTitle`
+  - 29. `ScrollHeader.contextualSelection`
+  - 30. `ScrollHeader.adaptiveNavigation`
+  - Dedicated test suite `test/batch2_navigation_presets_test.dart` passing 100%.
+  - Quality Fix: Fixed `ScrollResponsiveEngine` velocity preservation during drag end notifications.
+- [x] Implement Batch 3 (Visual & Creative Presets 31–35):
+  - 31. `ScrollHeader.glass`
+  - 32. `ScrollHeader.blurredBackground`
+  - 33. `ScrollHeader.bordered`
+  - 34. `ScrollHeader.shadowElevated`
+  - 35. `ScrollHeader.layered`
+  - Dedicated test suite `test/batch3_visual_presets_test.dart` passing 100%.
+- [x] Implement Batch 4 (Visual & Creative Presets 36–40):
+  - 36. `ScrollHeader.shapeMorphing` (`isSliver = true`)
+  - 37. `ScrollHeader.animatedGradient`
+  - 38. `ScrollHeader.colorTransition` (`isSliver = true`)
+  - 39. `ScrollHeader.illustrated` (`isSliver = true`)
+  - 40. `ScrollHeader.edgeToEdge`
+  - Dedicated test suite `test/batch4_visual_presets_test.dart` passing 100%.
+- [x] Implement Batch 5 (Specialized AppBar Presets 41–45):
+  - 41. `ScrollHeader.mediaPlayer`
+  - 42. `ScrollHeader.shopping`
+  - 43. `ScrollHeader.chat`
+  - 44. `ScrollHeader.detailPage` (`isSliver = true`)
+  - 45. `ScrollHeader.reading`
+  - Dedicated test suite `test/batch5_specialized_presets_test.dart` passing 100%.
+  - Quality Fix: Sized `ReadingHeaderWidget` to eliminate sub-pixel overflow on high-DPI viewports.
+- [x] Implement Batch 6 (Specialized AppBar Presets 46–50):
+  - 46. `ScrollHeader.map`
+  - 47. `ScrollHeader.form`
+  - 48. `ScrollHeader.wizard`
+  - 49. `ScrollHeader.notificationCenter`
+  - 50. `ScrollHeader.customScrollLayout` (`isSliver = true`)
+  - Dedicated test suite `test/batch6_specialized_presets_test.dart` passing 100%.
+- [x] Synchronized `example/lib/main.dart` with categories, icons, and builders for all 50 presets.
+- [x] Updated all documentation: `README.md`, `CHANGELOG.md`, `ARCHITECTURE.md`, `PROJECT_CONTEXT.md`, `pubspec.yaml` (v1.2.0).
+- [x] Run full verification: 242/242 package tests pass, 5/5 example tests pass, 0 analysis issues across workspace.
