@@ -283,6 +283,41 @@ ScrollResponsiveScaffold(
 | `iosHiddenOverlayStyle` | `SystemUiOverlayStyle?` | `null` | iOS-specific style applied when status bar is hidden. |
 | `iosVisibleOverlayStyle` | `SystemUiOverlayStyle?` | `null` | iOS-specific style applied when status bar is visible. |
 
+### `PinnedActionsConfig`
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| `pinned` | `bool` | `true` | Whether the side actions remain pinned during scrolling. |
+| `transparentBackground` | `bool` | `true` | Enforces transparent container background. |
+| `height` | `double` | `56.0` | Header action row bounding height. |
+| `padding` | `EdgeInsetsGeometry` | `EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0)` | Margin around the pinned action icons. |
+| `touchTargetSize` | `Size` | `Size(48.0, 48.0)` | Touch target dimensions (minimum 48x48 for WCAG a11y). |
+| `safeArea` | `bool` | `true` | Whether pinned actions automatically account for device top safe insets. |
+
+### `ScrollResponsiveScaffold` Parameters
+
+| Parameter | Type | Description |
+|---|---|---|
+| `initialLeading` | `Widget?` | Widget displayed on the left in the initial unscroll state (e.g. Profile Avatar). |
+| `scrolledLeading` | `Widget?` | Widget displayed on the left in the scrolled state (e.g. Drawer Hamburger icon). |
+| `initialTrailing` | `Widget?` | Widget displayed on the right in the initial unscroll state (e.g. Notification Bell). |
+| `scrolledTrailing` | `Widget?` | Widget displayed on the right in the scrolled state (e.g. Profile Avatar). |
+| `header` | `Widget?` | Rich scrollable header widget (such as `ScrollResponsiveHeader`). |
+| `headerTitle` | `Widget?` | Convenience title widget when `header` is not explicitly provided. |
+| `headerSubtitle` | `Widget?` | Convenience subtitle widget when `header` is not explicitly provided. |
+| `body` | `Widget?` | Scrollable body content (either `body` or `slivers` must be provided). |
+| `slivers` | `List<Widget>?` | Direct sliver list for advanced multi-sliver viewport layouts. |
+| `controller` | `ScrollController?` | External scroll controller (managed internally if omitted). |
+| `config` | `ScrollResponsiveConfig` | Master configuration for thresholds, animation, status bar, and pins. |
+| `drawer` | `Widget?` | Navigation drawer opened automatically when tapping scrolled leading action. |
+| `routeObserver` | `RouteObserver?` | Route observer to automatically manage status bar transitions across screens. |
+| `onLeadingInitialTap` | `VoidCallback?` | Tap callback for initial leading action. |
+| `onLeadingScrolledTap` | `VoidCallback?` | Tap callback for scrolled leading action (defaults to opening `drawer`). |
+| `onTrailingInitialTap` | `VoidCallback?` | Tap callback for initial trailing action. |
+| `onTrailingScrolledTap` | `VoidCallback?` | Tap callback for scrolled trailing action. |
+| `onScrollUpdate` | `ValueChanged<ScrollProgressDetails>?` | Real-time scroll telemetry callback. |
+| `onScrollDirectionChanged` | `ValueChanged<ScrollDirection>?` | Scroll direction change callback. |
+
 ---
 
 ## Platform Support & Native Limitations
