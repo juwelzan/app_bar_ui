@@ -1,0 +1,19 @@
+import Flutter
+import UIKit
+
+public class AppBarUiPlugin: NSObject, FlutterPlugin {
+  public static func register(with registrar: FlutterPluginRegistrar) {
+    let channel = FlutterMethodChannel(name: "app_bar_ui", binaryMessenger: registrar.messenger())
+    let instance = AppBarUiPlugin()
+    registrar.addMethodCallDelegate(instance, channel: channel)
+  }
+
+  public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+    switch call.method {
+    case "getPlatformVersion":
+      result("iOS " + UIDevice.current.systemVersion)
+    default:
+      result(FlutterMethodNotImplemented)
+    }
+  }
+}
