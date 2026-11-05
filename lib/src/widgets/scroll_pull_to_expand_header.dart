@@ -158,6 +158,10 @@ class _ScrollPullToExpandHeaderDelegate extends SliverPersistentHeaderDelegate {
             ? 1.0 + (curvedProgress * 0.3 * stretchFactor)
             : 1.0;
 
+        final double contentOpacity = expandedHeight > 0
+            ? (1.0 - (shrinkOffset / (expandedHeight * 0.7))).clamp(0.0, 1.0)
+            : 1.0;
+
         return ClipRect(
           child: Stack(
             fit: StackFit.expand,
@@ -168,7 +172,13 @@ class _ScrollPullToExpandHeaderDelegate extends SliverPersistentHeaderDelegate {
                   alignment: Alignment.center,
                   child: child!,
                 ),
-              ?content,
+              if (content != null && contentOpacity > 0.0)
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  child: Opacity(opacity: contentOpacity, child: content!),
+                ),
             ],
           ),
         );

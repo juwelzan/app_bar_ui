@@ -603,21 +603,25 @@ class PullToExpandTab extends StatelessWidget {
           expandedHeight: 240.0,
           stretchTriggerOffset: 120.0,
           content: Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20.0,
+              vertical: 16.0,
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 const CircleAvatar(
-                  radius: 32.0,
+                  radius: 28.0,
                   backgroundColor: Colors.white,
                   child: Icon(
                     Icons.person,
-                    size: 40.0,
+                    size: 36.0,
                     color: Color(0xFF2C3E50),
                   ),
                 ),
-                const SizedBox(height: 8.0),
+                const SizedBox(height: 6.0),
                 const Text(
                   'Eleanor Vance',
                   style: TextStyle(
@@ -1653,4 +1657,4 @@ class _PresetDetailScreenState extends State<PresetDetailScreen> {
       ),
     );
   }
-}
+} 

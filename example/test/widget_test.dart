@@ -134,4 +134,28 @@ void main() {
       expect(find.byType(PresetDetailScreen), findsNothing);
     },
   );
+
+  testWidgets(
+    'PullToExpandTab scrolls and overscrolls without RenderFlex overflow',
+    (WidgetTester tester) async {
+      await tester.pumpWidget(const ScrollResponsiveDemoApp());
+      await tester.pumpAndSettle();
+
+      // Switch to Tab 3: Pull Expand
+      await tester.tap(find.text('Pull Expand'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Eleanor Vance'), findsOneWidget);
+
+      // Scroll up (compressing the header)
+      await tester.drag(find.byType(Scrollable).first, const Offset(0, -150));
+      await tester.pumpAndSettle();
+
+      // Overscroll down (pulling to expand)
+      await tester.drag(find.byType(Scrollable).first, const Offset(0, 300));
+      await tester.pumpAndSettle();
+
+      expect(tester.takeException(), isNull);
+    },
+  );
 }
