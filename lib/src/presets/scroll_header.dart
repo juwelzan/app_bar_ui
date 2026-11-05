@@ -4,6 +4,7 @@ import '../widgets/sliver_widget_marker.dart';
 import 'headers/collapsing_headers.dart';
 import 'headers/dynamic_headers.dart';
 import 'headers/minimal_headers.dart';
+import 'headers/navigation_headers.dart';
 import 'headers/specialized_headers.dart';
 import 'headers/standard_headers.dart';
 import 'scroll_header_preset.dart';
@@ -60,6 +61,9 @@ class ScrollHeader extends StatelessWidget with SliverWidgetMarker {
     this.onLeadingTap,
     this.onTrailingTap,
     this.builder,
+    this.bottomRow,
+    this.maxVisibleActions = 2,
+    this.overflowIcon,
   });
 
   /// Preset 1: Minimal Header
@@ -105,7 +109,10 @@ class ScrollHeader extends StatelessWidget with SliverWidgetMarker {
        scrolledTrailing = null,
        onLeadingTap = null,
        onTrailingTap = null,
-       builder = null;
+       builder = null,
+       bottomRow = null,
+       maxVisibleActions = 2,
+       overflowIcon = null;
 
   /// Preset 2: Transparent Header
   const ScrollHeader.transparent({
@@ -150,7 +157,10 @@ class ScrollHeader extends StatelessWidget with SliverWidgetMarker {
        scrolledTrailing = null,
        onLeadingTap = null,
        onTrailingTap = null,
-       builder = null;
+       builder = null,
+       bottomRow = null,
+       maxVisibleActions = 2,
+       overflowIcon = null;
 
   /// Preset 3: Floating Header
   const ScrollHeader.floating({
@@ -195,7 +205,10 @@ class ScrollHeader extends StatelessWidget with SliverWidgetMarker {
        scrolledTrailing = null,
        onLeadingTap = null,
        onTrailingTap = null,
-       builder = null;
+       builder = null,
+       bottomRow = null,
+       maxVisibleActions = 2,
+       overflowIcon = null;
 
   /// Preset 4: Material Inspired Header
   const ScrollHeader.material({
@@ -240,7 +253,10 @@ class ScrollHeader extends StatelessWidget with SliverWidgetMarker {
        scrolledTrailing = null,
        onLeadingTap = null,
        onTrailingTap = null,
-       builder = null;
+       builder = null,
+       bottomRow = null,
+       maxVisibleActions = 2,
+       overflowIcon = null;
 
   /// Preset 5: iOS Inspired Header
   const ScrollHeader.ios({
@@ -285,7 +301,10 @@ class ScrollHeader extends StatelessWidget with SliverWidgetMarker {
        scrolledTrailing = null,
        onLeadingTap = null,
        onTrailingTap = null,
-       builder = null;
+       builder = null,
+       bottomRow = null,
+       maxVisibleActions = 2,
+       overflowIcon = null;
 
   /// Preset 6: Center Title Header
   const ScrollHeader.centerTitle({
@@ -330,7 +349,10 @@ class ScrollHeader extends StatelessWidget with SliverWidgetMarker {
        scrolledTrailing = null,
        onLeadingTap = null,
        onTrailingTap = null,
-       builder = null;
+       builder = null,
+       bottomRow = null,
+       maxVisibleActions = 2,
+       overflowIcon = null;
 
   /// Preset 7: Large Title Header
   const ScrollHeader.largeTitle({
@@ -375,7 +397,10 @@ class ScrollHeader extends StatelessWidget with SliverWidgetMarker {
        scrolledTrailing = null,
        onLeadingTap = null,
        onTrailingTap = null,
-       builder = null;
+       builder = null,
+       bottomRow = null,
+       maxVisibleActions = 2,
+       overflowIcon = null;
 
   /// Preset 8: Flexible Space Header
   const ScrollHeader.flexibleSpace({
@@ -420,7 +445,10 @@ class ScrollHeader extends StatelessWidget with SliverWidgetMarker {
        scrolledTrailing = null,
        onLeadingTap = null,
        onTrailingTap = null,
-       builder = null;
+       builder = null,
+       bottomRow = null,
+       maxVisibleActions = 2,
+       overflowIcon = null;
 
   /// Preset 9: Collapsing Header
   const ScrollHeader.collapsing({
@@ -465,7 +493,10 @@ class ScrollHeader extends StatelessWidget with SliverWidgetMarker {
        initialTrailing = null,
        scrolledTrailing = null,
        onLeadingTap = null,
-       onTrailingTap = null;
+       onTrailingTap = null,
+       bottomRow = null,
+       maxVisibleActions = 2,
+       overflowIcon = null;
 
   /// Preset 10: Parallax Header
   const ScrollHeader.parallax({
@@ -510,7 +541,10 @@ class ScrollHeader extends StatelessWidget with SliverWidgetMarker {
        scrolledTrailing = null,
        onLeadingTap = null,
        onTrailingTap = null,
-       builder = null;
+       builder = null,
+       bottomRow = null,
+       maxVisibleActions = 2,
+       overflowIcon = null;
 
   /// Preset 11: Gradient Header
   const ScrollHeader.gradient({
@@ -555,7 +589,10 @@ class ScrollHeader extends StatelessWidget with SliverWidgetMarker {
        scrolledTrailing = null,
        onLeadingTap = null,
        onTrailingTap = null,
-       builder = null;
+       builder = null,
+       bottomRow = null,
+       maxVisibleActions = 2,
+       overflowIcon = null;
 
   /// Preset 12: Image Background Header
   const ScrollHeader.image({
@@ -600,7 +637,10 @@ class ScrollHeader extends StatelessWidget with SliverWidgetMarker {
        scrolledTrailing = null,
        onLeadingTap = null,
        onTrailingTap = null,
-       builder = null;
+       builder = null,
+       bottomRow = null,
+       maxVisibleActions = 2,
+       overflowIcon = null;
 
   /// Preset 13: Profile Header
   const ScrollHeader.profile({
@@ -645,7 +685,10 @@ class ScrollHeader extends StatelessWidget with SliverWidgetMarker {
        scrolledTrailing = null,
        onLeadingTap = null,
        onTrailingTap = null,
-       builder = null;
+       builder = null,
+       bottomRow = null,
+       maxVisibleActions = 2,
+       overflowIcon = null;
 
   /// Preset 14: Dashboard Header
   const ScrollHeader.dashboard({
@@ -690,7 +733,10 @@ class ScrollHeader extends StatelessWidget with SliverWidgetMarker {
        scrolledTrailing = null,
        onLeadingTap = null,
        onTrailingTap = null,
-       builder = null;
+       builder = null,
+       bottomRow = null,
+       maxVisibleActions = 2,
+       overflowIcon = null;
 
   /// Preset 15: Search Header
   const ScrollHeader.search({
@@ -735,7 +781,10 @@ class ScrollHeader extends StatelessWidget with SliverWidgetMarker {
        scrolledTrailing = null,
        onLeadingTap = null,
        onTrailingTap = null,
-       builder = null;
+       builder = null,
+       bottomRow = null,
+       maxVisibleActions = 2,
+       overflowIcon = null;
 
   /// Preset 16: Segmented Header
   const ScrollHeader.segmented({
@@ -780,7 +829,10 @@ class ScrollHeader extends StatelessWidget with SliverWidgetMarker {
        scrolledTrailing = null,
        onLeadingTap = null,
        onTrailingTap = null,
-       builder = null;
+       builder = null,
+       bottomRow = null,
+       maxVisibleActions = 2,
+       overflowIcon = null;
 
   /// Preset 17: Sticky Tab Header
   const ScrollHeader.stickyTab({
@@ -825,7 +877,10 @@ class ScrollHeader extends StatelessWidget with SliverWidgetMarker {
        onLeadingTap = null,
        onTrailingTap = null,
        safeArea = true,
-       builder = null;
+       builder = null,
+       bottomRow = null,
+       maxVisibleActions = 2,
+       overflowIcon = null;
 
   /// Preset 18: Compact Scroll Header
   const ScrollHeader.compactScroll({
@@ -870,7 +925,10 @@ class ScrollHeader extends StatelessWidget with SliverWidgetMarker {
        scrolledTrailing = null,
        onLeadingTap = null,
        onTrailingTap = null,
-       builder = null;
+       builder = null,
+       bottomRow = null,
+       maxVisibleActions = 2,
+       overflowIcon = null;
 
   /// Preset 19: Side Action Transition Header
   const ScrollHeader.sideActionTransition({
@@ -915,7 +973,10 @@ class ScrollHeader extends StatelessWidget with SliverWidgetMarker {
        selectedSegment = null,
        onSegmentSelected = null,
        tabBar = null,
-       builder = null;
+       builder = null,
+       bottomRow = null,
+       maxVisibleActions = 2,
+       overflowIcon = null;
 
   /// Preset 20: Custom Builder Header
   const ScrollHeader.customBuilder({
@@ -965,7 +1026,251 @@ class ScrollHeader extends StatelessWidget with SliverWidgetMarker {
        initialTrailing = null,
        scrolledTrailing = null,
        onLeadingTap = null,
-       onTrailingTap = null;
+       onTrailingTap = null,
+       bottomRow = null,
+       maxVisibleActions = 2,
+       overflowIcon = null;
+
+
+  /// Preset 21: Bottom-Aligned Title Header
+  const ScrollHeader.bottomAlignedTitle({
+    super.key,
+    this.title,
+    this.subtitle,
+    this.leading,
+    this.actions,
+    this.style,
+    this.safeArea = true,
+  }) : preset = ScrollHeaderPreset.bottomAlignedTitle,
+       expandedHeight = null,
+       collapsedHeight = null,
+       flexibleSpace = null,
+       background = null,
+       image = null,
+       gradient = null,
+       scrolledGradient = null,
+       overlayGradient = null,
+       overlayColor = null,
+       speedFactor = 0.5,
+       name = null,
+       handleOrRole = null,
+       avatar = null,
+       stats = null,
+       onAvatarTap = null,
+       greeting = null,
+       userName = null,
+       dateOrSubtitle = null,
+       metricsRow = null,
+       searchController = null,
+       searchHint = 'Search...',
+       onSearchChanged = null,
+       onSearchSubmitted = null,
+       segments = null,
+       selectedSegment = null,
+       onSegmentSelected = null,
+       tabBar = null,
+       initialLeading = null,
+       scrolledLeading = null,
+       initialTrailing = null,
+       scrolledTrailing = null,
+       onLeadingTap = null,
+       onTrailingTap = null,
+       builder = null,
+       bottomRow = null,
+       maxVisibleActions = 2,
+       overflowIcon = null;
+
+  /// Preset 22: Asymmetric Header
+  const ScrollHeader.asymmetric({
+    super.key,
+    this.title,
+    this.subtitle,
+    this.leading,
+    this.actions,
+    this.style,
+    this.safeArea = true,
+  }) : preset = ScrollHeaderPreset.asymmetric,
+       expandedHeight = null,
+       collapsedHeight = null,
+       flexibleSpace = null,
+       background = null,
+       image = null,
+       gradient = null,
+       scrolledGradient = null,
+       overlayGradient = null,
+       overlayColor = null,
+       speedFactor = 0.5,
+       name = null,
+       handleOrRole = null,
+       avatar = null,
+       stats = null,
+       onAvatarTap = null,
+       greeting = null,
+       userName = null,
+       dateOrSubtitle = null,
+       metricsRow = null,
+       searchController = null,
+       searchHint = 'Search...',
+       onSearchChanged = null,
+       onSearchSubmitted = null,
+       segments = null,
+       selectedSegment = null,
+       onSegmentSelected = null,
+       tabBar = null,
+       initialLeading = null,
+       scrolledLeading = null,
+       initialTrailing = null,
+       scrolledTrailing = null,
+       onLeadingTap = null,
+       onTrailingTap = null,
+       builder = null,
+       bottomRow = null,
+       maxVisibleActions = 2,
+       overflowIcon = null;
+
+  /// Preset 23: Split Header
+  const ScrollHeader.split({
+    super.key,
+    this.title,
+    this.subtitle,
+    this.leading,
+    this.actions,
+    this.style,
+    this.safeArea = true,
+  }) : preset = ScrollHeaderPreset.split,
+       expandedHeight = null,
+       collapsedHeight = null,
+       flexibleSpace = null,
+       background = null,
+       image = null,
+       gradient = null,
+       scrolledGradient = null,
+       overlayGradient = null,
+       overlayColor = null,
+       speedFactor = 0.5,
+       name = null,
+       handleOrRole = null,
+       avatar = null,
+       stats = null,
+       onAvatarTap = null,
+       greeting = null,
+       userName = null,
+       dateOrSubtitle = null,
+       metricsRow = null,
+       searchController = null,
+       searchHint = 'Search...',
+       onSearchChanged = null,
+       onSearchSubmitted = null,
+       segments = null,
+       selectedSegment = null,
+       onSegmentSelected = null,
+       tabBar = null,
+       initialLeading = null,
+       scrolledLeading = null,
+       initialTrailing = null,
+       scrolledTrailing = null,
+       onLeadingTap = null,
+       onTrailingTap = null,
+       builder = null,
+       bottomRow = null,
+       maxVisibleActions = 2,
+       overflowIcon = null;
+
+  /// Preset 24: Two-Row Header
+  const ScrollHeader.twoRow({
+    super.key,
+    this.title,
+    this.subtitle,
+    this.leading,
+    this.actions,
+    this.bottomRow,
+    this.style,
+    this.safeArea = true,
+  }) : preset = ScrollHeaderPreset.twoRow,
+       expandedHeight = null,
+       collapsedHeight = null,
+       flexibleSpace = null,
+       background = null,
+       image = null,
+       gradient = null,
+       scrolledGradient = null,
+       overlayGradient = null,
+       overlayColor = null,
+       speedFactor = 0.5,
+       name = null,
+       handleOrRole = null,
+       avatar = null,
+       stats = null,
+       onAvatarTap = null,
+       greeting = null,
+       userName = null,
+       dateOrSubtitle = null,
+       metricsRow = null,
+       searchController = null,
+       searchHint = 'Search...',
+       onSearchChanged = null,
+       onSearchSubmitted = null,
+       segments = null,
+       selectedSegment = null,
+       onSegmentSelected = null,
+       tabBar = null,
+       initialLeading = null,
+       scrolledLeading = null,
+       initialTrailing = null,
+       scrolledTrailing = null,
+       onLeadingTap = null,
+       onTrailingTap = null,
+       builder = null,
+       maxVisibleActions = 2,
+       overflowIcon = null;
+
+  /// Preset 25: Multi-Action Header
+  const ScrollHeader.multiAction({
+    super.key,
+    this.title,
+    this.subtitle,
+    this.leading,
+    this.actions,
+    this.maxVisibleActions = 2,
+    this.overflowIcon,
+    this.style,
+    this.safeArea = true,
+  }) : preset = ScrollHeaderPreset.multiAction,
+       expandedHeight = null,
+       collapsedHeight = null,
+       flexibleSpace = null,
+       background = null,
+       image = null,
+       gradient = null,
+       scrolledGradient = null,
+       overlayGradient = null,
+       overlayColor = null,
+       speedFactor = 0.5,
+       name = null,
+       handleOrRole = null,
+       avatar = null,
+       stats = null,
+       onAvatarTap = null,
+       greeting = null,
+       userName = null,
+       dateOrSubtitle = null,
+       metricsRow = null,
+       searchController = null,
+       searchHint = 'Search...',
+       onSearchChanged = null,
+       onSearchSubmitted = null,
+       segments = null,
+       selectedSegment = null,
+       onSegmentSelected = null,
+       tabBar = null,
+       initialLeading = null,
+       scrolledLeading = null,
+       initialTrailing = null,
+       scrolledTrailing = null,
+       onLeadingTap = null,
+       onTrailingTap = null,
+       builder = null,
+       bottomRow = null;
 
   /// The active preset configuration.
   final ScrollHeaderPreset preset;
@@ -1094,6 +1399,16 @@ class ScrollHeader extends StatelessWidget with SliverWidgetMarker {
     bool overlapsContent,
   )?
   builder;
+
+
+  /// Secondary row widget for two-row headers.
+  final Widget? bottomRow;
+
+  /// Maximum primary actions displayed in multi-action header before overflow.
+  final int maxVisibleActions;
+
+  /// Custom icon for the overflow menu button.
+  final Widget? overflowIcon;
 
   @override
   bool get isSliver {
@@ -1341,6 +1656,59 @@ class ScrollHeader extends StatelessWidget with SliverWidgetMarker {
               (context, progress, overlaps) => const SizedBox.shrink(),
           expandedHeight: expandedHeight ?? 200.0,
           collapsedHeight: collapsedHeight ?? kToolbarHeight,
+        );
+
+      case ScrollHeaderPreset.bottomAlignedTitle:
+        return BottomAlignedTitleHeaderWidget(
+          title: title,
+          subtitle: subtitle,
+          leading: leading,
+          actions: actions,
+          style: style,
+          safeArea: safeArea,
+        );
+
+      case ScrollHeaderPreset.asymmetric:
+        return AsymmetricHeaderWidget(
+          title: title,
+          subtitle: subtitle,
+          leading: leading,
+          actions: actions,
+          style: style,
+          safeArea: safeArea,
+        );
+
+      case ScrollHeaderPreset.split:
+        return SplitHeaderWidget(
+          title: title,
+          subtitle: subtitle,
+          leading: leading,
+          actions: actions,
+          style: style,
+          safeArea: safeArea,
+        );
+
+      case ScrollHeaderPreset.twoRow:
+        return TwoRowHeaderWidget(
+          title: title,
+          subtitle: subtitle,
+          leading: leading,
+          actions: actions,
+          bottomRow: bottomRow,
+          style: style,
+          safeArea: safeArea,
+        );
+
+      case ScrollHeaderPreset.multiAction:
+        return MultiActionHeaderWidget(
+          title: title,
+          subtitle: subtitle,
+          leading: leading,
+          actions: actions,
+          maxVisibleActions: maxVisibleActions,
+          overflowIcon: overflowIcon,
+          style: style,
+          safeArea: safeArea,
         );
     }
   }

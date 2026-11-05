@@ -76,8 +76,8 @@ final Uint8List _transparentPng = Uint8List.fromList(const <int>[
 
 void main() {
   group('ScrollHeaderPreset Enum & Model Verification', () {
-    test('ScrollHeaderPreset contains all 20 required presets', () {
-      expect(ScrollHeaderPreset.values.length, 20);
+    test('ScrollHeaderPreset contains all required presets', () {
+      expect(ScrollHeaderPreset.values.length, 25);
       expect(ScrollHeaderPreset.values, [
         ScrollHeaderPreset.minimal,
         ScrollHeaderPreset.transparent,
@@ -99,6 +99,11 @@ void main() {
         ScrollHeaderPreset.compactScroll,
         ScrollHeaderPreset.sideActionTransition,
         ScrollHeaderPreset.customBuilder,
+        ScrollHeaderPreset.bottomAlignedTitle,
+        ScrollHeaderPreset.asymmetric,
+        ScrollHeaderPreset.split,
+        ScrollHeaderPreset.twoRow,
+        ScrollHeaderPreset.multiAction,
       ]);
     });
 
@@ -114,7 +119,7 @@ void main() {
         );
         labels.add(preset.label);
       }
-      expect(labels.length, 20);
+      expect(labels.length, ScrollHeaderPreset.values.length);
     });
 
     test('ScrollHeaderStyle defaults and copyWith operate correctly', () {

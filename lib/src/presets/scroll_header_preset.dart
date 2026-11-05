@@ -59,7 +59,22 @@ enum ScrollHeaderPreset {
   sideActionTransition,
 
   /// 100% developer-controlled custom layout using a builder callback receiving real-time progress.
-  customBuilder;
+  customBuilder,
+
+  /// Title and subtitle anchored at the bottom edge with top or inline controls.
+  bottomAlignedTitle,
+
+  /// Asymmetric, dynamic weighting with prominent leading accent and compact action cluster.
+  asymmetric,
+
+  /// Split navigation with two separate compartments for title and actions.
+  split,
+
+  /// Two stacked rows of navigation: upper toolbar and lower secondary control bar.
+  twoRow,
+
+  /// Multi-action header displaying primary actions and an automatic overflow menu.
+  multiAction;
 
   /// User-friendly display label for this preset.
   String get label {
@@ -104,6 +119,16 @@ enum ScrollHeaderPreset {
         return 'Side Action Transition Header';
       case ScrollHeaderPreset.customBuilder:
         return 'Custom Builder Header';
+      case ScrollHeaderPreset.bottomAlignedTitle:
+        return 'Bottom-Aligned Title Header';
+      case ScrollHeaderPreset.asymmetric:
+        return 'Asymmetric Header';
+      case ScrollHeaderPreset.split:
+        return 'Split Header';
+      case ScrollHeaderPreset.twoRow:
+        return 'Two-Row Header';
+      case ScrollHeaderPreset.multiAction:
+        return 'Multi-Action Header';
     }
   }
 
@@ -150,6 +175,16 @@ enum ScrollHeaderPreset {
         return 'Action icons transforming based on scroll progress.';
       case ScrollHeaderPreset.customBuilder:
         return 'Fully custom layout with real-time scroll progress.';
+      case ScrollHeaderPreset.bottomAlignedTitle:
+        return 'Title anchored at the bottom edge with top controls.';
+      case ScrollHeaderPreset.asymmetric:
+        return 'Dynamic layout with accented focal leading section.';
+      case ScrollHeaderPreset.split:
+        return 'Two separate visual compartments for title and actions.';
+      case ScrollHeaderPreset.twoRow:
+        return 'Upper navigation bar with lower secondary control row.';
+      case ScrollHeaderPreset.multiAction:
+        return 'Primary actions with automatic overflow popup menu.';
     }
   }
 }

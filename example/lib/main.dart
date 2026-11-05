@@ -1055,6 +1055,12 @@ class PresetGalleryView extends StatelessWidget {
       case ScrollHeaderPreset.sideActionTransition:
       case ScrollHeaderPreset.customBuilder:
         return 'Dynamic & Custom';
+      case ScrollHeaderPreset.bottomAlignedTitle:
+      case ScrollHeaderPreset.asymmetric:
+      case ScrollHeaderPreset.split:
+      case ScrollHeaderPreset.twoRow:
+      case ScrollHeaderPreset.multiAction:
+        return 'Navigation & Layout';
     }
   }
 
@@ -1100,6 +1106,16 @@ class PresetGalleryView extends StatelessWidget {
         return Icons.transform;
       case ScrollHeaderPreset.customBuilder:
         return Icons.code;
+      case ScrollHeaderPreset.bottomAlignedTitle:
+        return Icons.vertical_align_bottom;
+      case ScrollHeaderPreset.asymmetric:
+        return Icons.align_horizontal_left;
+      case ScrollHeaderPreset.split:
+        return Icons.call_split;
+      case ScrollHeaderPreset.twoRow:
+        return Icons.table_rows;
+      case ScrollHeaderPreset.multiAction:
+        return Icons.more_horiz;
     }
   }
 
@@ -1619,6 +1635,100 @@ class _PresetDetailScreenState extends State<PresetDetailScreen> {
               ),
             );
           },
+        );
+
+      case ScrollHeaderPreset.bottomAlignedTitle:
+        return ScrollHeader.bottomAlignedTitle(
+          title: Text(preset.label),
+          subtitle: const Text('Title anchored at bottom edge'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          actions: const [
+            IconButton(icon: Icon(Icons.bookmark_border), onPressed: null),
+          ],
+        );
+
+      case ScrollHeaderPreset.asymmetric:
+        return ScrollHeader.asymmetric(
+          title: Text(preset.label),
+          subtitle: const Text('Dynamic accented weighting'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          actions: const [
+            IconButton(icon: Icon(Icons.tune), onPressed: null),
+          ],
+        );
+
+      case ScrollHeaderPreset.split:
+        return ScrollHeader.split(
+          title: Text(preset.label),
+          subtitle: const Text('Separate dual compartments'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          actions: const [
+            IconButton(icon: Icon(Icons.filter_list), onPressed: null),
+            IconButton(icon: Icon(Icons.search), onPressed: null),
+          ],
+        );
+
+      case ScrollHeaderPreset.twoRow:
+        return ScrollHeader.twoRow(
+          title: Text(preset.label),
+          subtitle: const Text('Two stacked control rows'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          actions: const [
+            IconButton(icon: Icon(Icons.settings), onPressed: null),
+          ],
+          bottomRow: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                FilterChip(
+                  label: const Text('All'),
+                  selected: true,
+                  onSelected: (_) {},
+                ),
+                const SizedBox(width: 8),
+                FilterChip(
+                  label: const Text('Popular'),
+                  selected: false,
+                  onSelected: (_) {},
+                ),
+                const SizedBox(width: 8),
+                FilterChip(
+                  label: const Text('Recent'),
+                  selected: false,
+                  onSelected: (_) {},
+                ),
+              ],
+            ),
+          ),
+        );
+
+      case ScrollHeaderPreset.multiAction:
+        return ScrollHeader.multiAction(
+          title: Text(preset.label),
+          subtitle: const Text('Auto-overflow menu for 3+ actions'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          maxVisibleActions: 2,
+          actions: const [
+            IconButton(icon: Icon(Icons.share), onPressed: null),
+            IconButton(icon: Icon(Icons.favorite_border), onPressed: null),
+            IconButton(icon: Icon(Icons.download), onPressed: null),
+            IconButton(icon: Icon(Icons.delete_outline), onPressed: null),
+          ],
         );
     }
   }
