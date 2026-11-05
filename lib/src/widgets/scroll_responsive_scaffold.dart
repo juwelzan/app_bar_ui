@@ -239,23 +239,17 @@ class _ScrollResponsiveScaffoldState extends State<ScrollResponsiveScaffold> {
       floatingActionButton: widget.floatingActionButton,
       floatingActionButtonLocation: widget.floatingActionButtonLocation,
       backgroundColor: widget.backgroundColor,
-      body: NotificationListener<ScrollNotification>(
-        onNotification: _engine.handleScrollNotification,
-        child: NotificationListener<UserScrollNotification>(
-          onNotification: _engine.handleUserScrollNotification,
-          child: Stack(
-            children: [
-              // Layer 1: Naturally scrollable CustomScrollView containing header and body
-              _buildScrollableContent(effectiveTopPadding),
+      body: NotificationListener<UserScrollNotification>(
+        onNotification: _engine.handleUserScrollNotification,
+        child: Stack(
+          children: [
+            // Layer 1: Naturally scrollable CustomScrollView containing header and body
+            _buildScrollableContent(effectiveTopPadding),
 
-              // Layer 2: Independently pinned left and right side action icons
-              if (pinnedConfig.pinned)
-                ..._buildPinnedActionOverlays(
-                  effectiveTopPadding,
-                  pinnedConfig,
-                ),
-            ],
-          ),
+            // Layer 2: Independently pinned left and right side action icons
+            if (pinnedConfig.pinned)
+              ..._buildPinnedActionOverlays(effectiveTopPadding, pinnedConfig),
+          ],
         ),
       ),
     );

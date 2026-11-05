@@ -43,12 +43,17 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  // Live telemetry
-  double _scrollOffset = 0.0;
-  double _leadingProgress = 0.0;
-  double _trailingProgress = 0.0;
-  bool _isStatusBarHidden = false;
-  ScrollDirection _scrollDirection = ScrollDirection.idle;
+  // Live telemetry notifier for high-performance zero-rebuild telemetry updates
+  final ValueNotifier<ScrollProgressDetails> _telemetryNotifier =
+      ValueNotifier<ScrollProgressDetails>(
+        const ScrollProgressDetails(
+          offset: 0.0,
+          leadingProgress: 0.0,
+          trailingProgress: 0.0,
+          isStatusBarHidden: false,
+          scrollDirection: ScrollDirection.idle,
+        ),
+      );
 
   // Configurable options
   ScrollTransitionType _transitionType = ScrollTransitionType.scrollProgress;
@@ -56,6 +61,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
   bool _enableScale = true;
   bool _enableSlide = true;
   bool _hideStatusBar = true;
+
+  @override
+  void dispose() {
+    _telemetryNotifier.dispose();
+    super.dispose();
+  }
 
   void _showNotificationSheet() {
     showModalBottomSheet<void>(
@@ -260,13 +271,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       onTrailingScrolledTap: _showProfileSheet,
 
       onScrollUpdate: (details) {
-        setState(() {
-          _scrollOffset = details.offset;
-          _leadingProgress = details.leadingProgress;
-          _trailingProgress = details.trailingProgress;
-          _isStatusBarHidden = details.isStatusBarHidden;
-          _scrollDirection = details.scrollDirection;
-        });
+        _telemetryNotifier.value = details;
       },
 
       // Navigation Drawer
@@ -354,51 +359,56 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
+                child: ValueListenableBuilder<ScrollProgressDetails>(
+                  valueListenable: _telemetryNotifier,
+                  builder: (context, details, child) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(Icons.speed, size: 20),
-                        const SizedBox(width: 8.0),
-                        Text(
-                          'Live Transition Telemetry',
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                        Row(
+                          children: [
+                            const Icon(Icons.speed, size: 20),
+                            const SizedBox(width: 8.0),
+                            Text(
+                              'Live Transition Telemetry',
+                              style: theme.textTheme.titleMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12.0),
+                        _buildTelemetryRow(
+                          'Scroll Offset',
+                          '${details.offset.toStringAsFixed(1)} px',
+                        ),
+                        const SizedBox(height: 6.0),
+                        _buildTelemetryRow(
+                          'Left Icon Progress (Avatar → Drawer)',
+                          '${(details.leadingProgress * 100).toInt()}%',
+                          progress: details.leadingProgress,
+                        ),
+                        const SizedBox(height: 6.0),
+                        _buildTelemetryRow(
+                          'Right Icon Progress (Bell → Avatar)',
+                          '${(details.trailingProgress * 100).toInt()}%',
+                          progress: details.trailingProgress,
+                        ),
+                        const SizedBox(height: 6.0),
+                        _buildTelemetryRow(
+                          'System Status Bar',
+                          details.isStatusBarHidden
+                              ? 'Hidden (Scrolled)'
+                              : 'Visible (Restored)',
+                        ),
+                        const SizedBox(height: 6.0),
+                        _buildTelemetryRow(
+                          'Scroll Direction',
+                          details.scrollDirection.name.toUpperCase(),
                         ),
                       ],
-                    ),
-                    const SizedBox(height: 12.0),
-                    _buildTelemetryRow(
-                      'Scroll Offset',
-                      '${_scrollOffset.toStringAsFixed(1)} px',
-                    ),
-                    const SizedBox(height: 6.0),
-                    _buildTelemetryRow(
-                      'Left Icon Progress (Avatar → Drawer)',
-                      '${(_leadingProgress * 100).toInt()}%',
-                      progress: _leadingProgress,
-                    ),
-                    const SizedBox(height: 6.0),
-                    _buildTelemetryRow(
-                      'Right Icon Progress (Bell → Avatar)',
-                      '${(_trailingProgress * 100).toInt()}%',
-                      progress: _trailingProgress,
-                    ),
-                    const SizedBox(height: 6.0),
-                    _buildTelemetryRow(
-                      'System Status Bar',
-                      _isStatusBarHidden
-                          ? 'Hidden (Scrolled)'
-                          : 'Visible (Restored)',
-                    ),
-                    const SizedBox(height: 6.0),
-                    _buildTelemetryRow(
-                      'Scroll Direction',
-                      _scrollDirection.name.toUpperCase(),
-                    ),
-                  ],
+                    );
+                  },
                 ),
               ),
             ),

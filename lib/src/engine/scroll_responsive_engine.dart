@@ -71,6 +71,7 @@ class ScrollResponsiveEngine {
   ScrollDirection _currentDirection = ScrollDirection.idle;
   bool _isReverseScroll = false;
   bool _isDisposed = false;
+  bool _hasEvaluatedInitial = false;
 
   /// Current scroll offset in logical pixels (clamped to non-negative for calculations).
   double get currentOffset => _currentOffset;
@@ -129,7 +130,9 @@ class ScrollResponsiveEngine {
   /// across independent thresholds, and notifies listeners.
   void updateScrollOffset(double offset) {
     if (_isDisposed) return;
+    if (_currentOffset == offset && _hasEvaluatedInitial) return;
 
+    _hasEvaluatedInitial = true;
     _lastOffset = _currentOffset;
     _currentOffset = offset;
 
@@ -160,7 +163,6 @@ class ScrollResponsiveEngine {
     if (notification.direction != _currentDirection) {
       _currentDirection = notification.direction;
       onDirectionChanged?.call(_currentDirection);
-      _evaluateProgress();
     }
     return false;
   }
