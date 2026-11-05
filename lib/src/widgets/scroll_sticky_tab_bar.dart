@@ -150,3 +150,4 @@ class _ScrollStickyTabBarDelegate extends SliverPersistentHeaderDelegate {
         oldDelegate.pinnedBorder != pinnedBorder;
   }
 }
+

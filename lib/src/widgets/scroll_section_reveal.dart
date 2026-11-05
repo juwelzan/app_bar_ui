@@ -168,3 +168,4 @@ class _ScrollSectionRevealState extends State<ScrollSectionReveal>
     );
   }
 }
+

@@ -1,6 +1,8 @@
 export 'src/models/scroll_responsive_config.dart';
+export 'src/models/scroll_responsive_presets.dart';
 export 'src/models/visibility_config.dart';
 export 'src/engine/scroll_responsive_engine.dart';
+export 'src/engine/scroll_responsive_controller.dart';
 export 'src/engine/status_bar_manager.dart';
 export 'src/engine/smart_visibility_controller.dart';
 export 'src/engine/scroll_snap_engine.dart';

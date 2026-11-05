@@ -165,3 +165,4 @@ class _ScrollProgressIndicatorState extends State<ScrollProgressIndicator> {
     );
   }
 }
+

@@ -7,7 +7,11 @@ import '../engine/scroll_responsive_engine.dart';
 import '../engine/status_bar_manager.dart';
 import '../models/scroll_responsive_config.dart';
 import 'pinned_action_button.dart';
+import 'scroll_auto_hide_bottom_bar.dart';
+import 'scroll_aware_fab.dart';
 import 'scroll_responsive_header.dart';
+import 'scroll_sticky_tab_bar.dart';
+import '../engine/scroll_responsive_controller.dart';
 
 /// The primary widget providing an advanced, configurable Scroll-Responsive UI system.
 ///
@@ -42,6 +46,10 @@ class ScrollResponsiveScaffold extends StatefulWidget {
     this.bottomNavigationBar,
     this.floatingActionButton,
     this.floatingActionButtonLocation,
+    this.stickyTabBar,
+    this.progressIndicator,
+    this.scrollAwareFab = false,
+    this.autoHideBottomBar = false,
     this.backgroundColor,
     this.physics,
     this.semanticLabelLeadingInitial,
@@ -117,6 +125,18 @@ class ScrollResponsiveScaffold extends StatefulWidget {
   /// Location of the floating action button.
   final FloatingActionButtonLocation? floatingActionButtonLocation;
 
+  /// Optional sticky tab bar widget pinned beneath the header when scrolling past.
+  final Widget? stickyTabBar;
+
+  /// Optional scroll/reading progress indicator pinned at the very top of the scaffold.
+  final Widget? progressIndicator;
+
+  /// Whether to automatically wrap [floatingActionButton] in a [ScrollAwareFab].
+  final bool scrollAwareFab;
+
+  /// Whether to automatically wrap [bottomNavigationBar] in a [ScrollAutoHideBottomBar].
+  final bool autoHideBottomBar;
+
   /// Background color of the underlying scaffold.
   final Color? backgroundColor;
 
@@ -183,9 +203,25 @@ class _ScrollResponsiveScaffoldState extends State<ScrollResponsiveScaffold>
       onProgressChanged: (details) {
         widget.onScrollUpdate?.call(details);
         _statusBarManager.updateScrollOffset(details.offset);
+        if (widget.controller is ScrollResponsiveController) {
+          (widget.controller! as ScrollResponsiveController)
+              .visibilityController
+              .updateScroll(
+                details.offset,
+                direction: details.scrollDirection,
+              );
+        }
       },
       onDirectionChanged: (direction) {
         widget.onScrollDirectionChanged?.call(direction);
+        if (widget.controller is ScrollResponsiveController) {
+          (widget.controller! as ScrollResponsiveController)
+              .visibilityController
+              .updateScroll(
+                _engine.currentOffset,
+                direction: direction,
+              );
+        }
       },
     );
   }
@@ -280,12 +316,28 @@ class _ScrollResponsiveScaffoldState extends State<ScrollResponsiveScaffold>
 
     final pinnedConfig = widget.config.effectivePinnedActions;
 
+    Widget? effectiveFab = widget.floatingActionButton;
+    if (effectiveFab != null && widget.scrollAwareFab) {
+      effectiveFab = ScrollAwareFab(
+        scrollController: _engine.controller,
+        child: effectiveFab,
+      );
+    }
+
+    Widget? effectiveBottomNav = widget.bottomNavigationBar;
+    if (effectiveBottomNav != null && widget.autoHideBottomBar) {
+      effectiveBottomNav = ScrollAutoHideBottomBar(
+        scrollController: _engine.controller,
+        child: effectiveBottomNav,
+      );
+    }
+
     return Scaffold(
       key: _scaffoldKey,
       drawer: widget.drawer,
       endDrawer: widget.endDrawer,
-      bottomNavigationBar: widget.bottomNavigationBar,
-      floatingActionButton: widget.floatingActionButton,
+      bottomNavigationBar: effectiveBottomNav,
+      floatingActionButton: effectiveFab,
       floatingActionButtonLocation: widget.floatingActionButtonLocation,
       backgroundColor: widget.backgroundColor,
       body: NotificationListener<ScrollNotification>(
@@ -302,6 +354,15 @@ class _ScrollResponsiveScaffoldState extends State<ScrollResponsiveScaffold>
                 ..._buildPinnedActionOverlays(
                   effectiveTopPadding,
                   pinnedConfig,
+                ),
+
+              // Layer 3: Reading / Scroll Progress Indicator
+              if (widget.progressIndicator != null)
+                Positioned(
+                  top: effectiveTopPadding,
+                  left: 0,
+                  right: 0,
+                  child: widget.progressIndicator!,
                 ),
             ],
           ),
@@ -325,6 +386,17 @@ class _ScrollResponsiveScaffoldState extends State<ScrollResponsiveScaffold>
           ),
         ),
       );
+    }
+
+    // Optional Sticky Tab Bar sliver (placed directly below header, before body)
+    if (widget.stickyTabBar != null) {
+      if (widget.stickyTabBar is ScrollStickyTabBar) {
+        sliverList.add(widget.stickyTabBar!);
+      } else {
+        sliverList.add(
+          ScrollStickyTabBar(child: widget.stickyTabBar!),
+        );
+      }
     }
 
     // Body slivers

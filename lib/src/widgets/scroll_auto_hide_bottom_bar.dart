@@ -161,3 +161,4 @@ class _ScrollAutoHideBottomBarState extends State<ScrollAutoHideBottomBar>
     );
   }
 }
+
