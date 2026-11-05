@@ -210,6 +210,24 @@ void main() {
       expect(engine.currentOffset, 30.0);
       expect(engine.leadingProgress, closeTo(0.5, 0.001));
 
+      // Horizontal notification should be ignored
+      final horizontalMetrics = FixedScrollMetrics(
+        minScrollExtent: 0.0,
+        maxScrollExtent: 1000.0,
+        pixels: 80.0,
+        viewportDimension: 400.0,
+        axisDirection: AxisDirection.right,
+        devicePixelRatio: 1.0,
+      );
+      final horizontalNotification = ScrollUpdateNotification(
+        metrics: horizontalMetrics,
+        context: element,
+        scrollDelta: 10.0,
+      );
+      engine.handleScrollNotification(horizontalNotification);
+      // Offset should still be 30.0, not 80.0
+      expect(engine.currentOffset, 30.0);
+
       engine.dispose();
     });
 

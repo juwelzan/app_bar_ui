@@ -151,6 +151,7 @@ class ScrollResponsiveEngine {
   /// Returns `false` to permit the notification to continue bubbling up the widget tree.
   bool handleScrollNotification(ScrollNotification notification) {
     if (_isDisposed) return false;
+    if (notification.metrics.axis != Axis.vertical) return false;
     updateScrollOffset(notification.metrics.pixels);
     return false;
   }
@@ -160,6 +161,7 @@ class ScrollResponsiveEngine {
   /// Returns `false` to permit bubbling.
   bool handleUserScrollNotification(UserScrollNotification notification) {
     if (_isDisposed) return false;
+    if (notification.metrics.axis != Axis.vertical) return false;
     if (notification.direction != _currentDirection) {
       _currentDirection = notification.direction;
       onDirectionChanged?.call(_currentDirection);
