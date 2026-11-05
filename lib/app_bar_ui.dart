@@ -3,6 +3,7 @@ export 'src/models/visibility_config.dart';
 export 'src/engine/scroll_responsive_engine.dart';
 export 'src/engine/status_bar_manager.dart';
 export 'src/engine/smart_visibility_controller.dart';
+export 'src/engine/scroll_snap_engine.dart';
 export 'src/animations/scroll_driven_animation.dart';
 export 'src/animations/scroll_color_tween.dart';
 export 'src/animations/scroll_morph_builder.dart';
@@ -14,6 +15,9 @@ export 'src/widgets/scroll_pull_to_expand_header.dart';
 export 'src/widgets/scroll_sticky_tab_bar.dart';
 export 'src/widgets/scroll_aware_fab.dart';
 export 'src/widgets/scroll_auto_hide_bottom_bar.dart';
+export 'src/widgets/scroll_parallax.dart';
+export 'src/widgets/scroll_progress_indicator.dart';
+export 'src/widgets/scroll_section_reveal.dart';
 
 import 'app_bar_ui_platform_interface.dart';
 
