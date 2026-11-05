@@ -20,13 +20,18 @@
 
 ---
 
-## Phase 3: Native Status Bar Management Engine
+## Phase 3 / Step 6: Native System UI Controller Engine
 - [x] Implement `StatusBarManager` with platform safety checks (`!kIsWeb && (Platform.isAndroid || Platform.isIOS)`).
 - [x] Implement threshold-based state transitions with hysteresis (`statusBarHideOffset` vs `statusBarShowOffset`).
-- [x] Protect against duplicate per-frame `SystemChrome` calls.
-- [x] Preserve bottom navigation controls (`SystemUiOverlay.bottom` / gesture navigation bar).
+- [x] Implement asynchronous serialization queue to prevent race conditions during rapid flings and scroll reversals.
+- [x] Protect against duplicate per-frame `SystemChrome` calls (zero redundant channel invocations).
+- [x] Preserve bottom navigation controls (`SystemUiOverlay.bottom` / gesture navigation pill / home indicator).
+- [x] Provide distinct platform styling: separate `androidHiddenOverlayStyle`/`androidVisibleOverlayStyle` and `iosHiddenOverlayStyle`/`iosVisibleOverlayStyle`.
+- [x] Provide predictable fallbacks for Web and Desktop without throwing exceptions.
+- [x] Implement route awareness (`RouteAware`) to temporarily restore the status bar on push and reapply on pop.
+- [x] Implement app lifecycle observer (`WidgetsBindingObserver`) to resynchronize status bar on app resume.
 - [x] Implement safe restoration on widget disposal.
-- [x] Unit test status bar manager hysteresis, thresholds, and fallback handling (`test/status_bar_manager_test.dart`).
+- [x] Comprehensive test suite covering platform channels, hysteresis, race conditions, Android vs iOS, and route transitions (`test/status_bar_manager_test.dart` & `test/scroll_responsive_scaffold_test.dart`).
 
 ---
 
