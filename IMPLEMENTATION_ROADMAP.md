@@ -122,6 +122,7 @@ This roadmap tracks the development of the **Scroll-Driven UI Framework for Flut
 - [x] Audit rebuild profiles: ensure zero whole-tree rebuilds during scroll updates.
 - [x] Enforce `FlowDelegate` for parallax to repaint without widget element rebuilds.
 - [x] Verify controller and ticker disposal to prevent memory and listener leaks.
+- [x] Authored `test/performance_audit_test.dart` asserting 0 rebuilds, Flow paint delegation, notifier cleanup, and controller safety.
 - [x] Publish `PERFORMANCE_GUIDELINES.md`.
 
 ### PHASE 12 — Platform Compatibility
@@ -129,7 +130,7 @@ This roadmap tracks the development of the **Scroll-Driven UI Framework for Flut
 - [x] Verify web mouse-wheel and touch gestures without platform channel crashes.
 
 ### PHASE 13 — Testing & Performance Validation
-- [x] Run full automated test suite: 117 tests passing across 8 test suites.
+- [x] Run full automated test suite: 162 tests passing across 9 test suites.
 - [x] Run `flutter analyze`: 0 errors, 0 warnings.
 - [x] Publish `TESTING_GUIDELINES.md`.
 
