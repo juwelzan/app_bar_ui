@@ -79,6 +79,9 @@ class PinnedActionButton extends StatelessWidget {
         ? semanticLabelScrolled
         : semanticLabelInitial;
 
+    final bool disableMotion =
+        MediaQuery.maybeDisableAnimationsOf(context) == true;
+
     return Semantics(
       button: true,
       label: activeSemanticLabel,
@@ -107,6 +110,7 @@ class PinnedActionButton extends StatelessWidget {
                     visibilityFactor: 1.0 - curvedProgress,
                     slideDirection: -1.0, // Slides slightly upward on exit
                     isHitTestable: !isScrolledActive,
+                    disableMotion: disableMotion,
                   ),
                 if (scrolledWidget != null)
                   _buildTransitionLayer(
@@ -114,6 +118,7 @@ class PinnedActionButton extends StatelessWidget {
                     visibilityFactor: curvedProgress,
                     slideDirection: 1.0, // Slides from slightly bottom on entry
                     isHitTestable: isScrolledActive,
+                    disableMotion: disableMotion,
                   ),
               ],
             ),
@@ -128,18 +133,19 @@ class PinnedActionButton extends StatelessWidget {
     required double visibilityFactor,
     required double slideDirection,
     required bool isHitTestable,
+    required bool disableMotion,
   }) {
     final double opacity = animationConfig.enableFade
         ? visibilityFactor.clamp(0.0, 1.0)
         : 1.0;
 
-    final double scale = animationConfig.enableScale
+    final double scale = (!disableMotion && animationConfig.enableScale)
         ? animationConfig.minScale +
               (animationConfig.maxScale - animationConfig.minScale) *
                   visibilityFactor
         : 1.0;
 
-    final Offset translation = animationConfig.enableSlide
+    final Offset translation = (!disableMotion && animationConfig.enableSlide)
         ? Offset(
             animationConfig.slideOffset.dx *
                 (1.0 - visibilityFactor) *

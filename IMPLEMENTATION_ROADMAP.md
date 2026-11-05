@@ -128,9 +128,11 @@ This roadmap tracks the development of the **Scroll-Driven UI Framework for Flut
 ### PHASE 12 — Platform Compatibility
 - [x] Validate cross-platform compatibility matrix across Android, iOS, iPadOS, macOS, Windows, Linux, and Web.
 - [x] Verify web mouse-wheel and touch gestures without platform channel crashes.
+- [x] Implement accessibility & reduced-motion awareness (`MediaQuery.disableAnimationsOf`) for `PinnedActionButton` and `ScrollTransform`.
+- [x] Authored `test/platform_compatibility_test.dart` verifying all 7 target platforms and accessibility preferences.
 
 ### PHASE 13 — Testing & Performance Validation
-- [x] Run full automated test suite: 162 tests passing across 9 test suites.
+- [x] Run full automated test suite: 171 tests passing across 10 test suites.
 - [x] Run `flutter analyze`: 0 errors, 0 warnings.
 - [x] Publish `TESTING_GUIDELINES.md`.
 
