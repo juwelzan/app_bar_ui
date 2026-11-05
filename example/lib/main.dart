@@ -72,52 +72,55 @@ class _DashboardScreenState extends State<DashboardScreen> {
     showModalBottomSheet<void>(
       context: context,
       showDragHandle: true,
-      builder: (context) => Padding(
-        padding: const EdgeInsets.fromLTRB(20.0, 8.0, 20.0, 28.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const Icon(Icons.notifications_active, color: Colors.amber),
-                const SizedBox(width: 8.0),
-                Text(
-                  'Notifications (3)',
-                  style: Theme.of(context).textTheme.titleLarge
-                      ?.copyWith(fontWeight: FontWeight.bold),
+      isScrollControlled: true,
+      builder: (context) => SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20.0, 8.0, 20.0, 28.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.notifications_active, color: Colors.amber),
+                  const SizedBox(width: 8.0),
+                  Text(
+                    'Notifications (3)',
+                    style: Theme.of(context).textTheme.titleLarge
+                        ?.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              const Divider(height: 24.0),
+              const ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: CircleAvatar(
+                  backgroundColor: Colors.blueAccent,
+                  child: Icon(Icons.cloud_done, color: Colors.white, size: 20),
                 ),
-              ],
-            ),
-            const Divider(height: 24.0),
-            const ListTile(
-              contentPadding: EdgeInsets.zero,
-              leading: CircleAvatar(
-                backgroundColor: Colors.blueAccent,
-                child: Icon(Icons.cloud_done, color: Colors.white, size: 20),
+                title: Text('Database sync completed'),
+                subtitle: Text('2 minutes ago'),
               ),
-              title: Text('Database sync completed'),
-              subtitle: Text('2 minutes ago'),
-            ),
-            const ListTile(
-              contentPadding: EdgeInsets.zero,
-              leading: CircleAvatar(
-                backgroundColor: Colors.green,
-                child: Icon(Icons.security, color: Colors.white, size: 20),
+              const ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: CircleAvatar(
+                  backgroundColor: Colors.green,
+                  child: Icon(Icons.security, color: Colors.white, size: 20),
+                ),
+                title: Text('Security audit passed'),
+                subtitle: Text('1 hour ago'),
               ),
-              title: Text('Security audit passed'),
-              subtitle: Text('1 hour ago'),
-            ),
-            const ListTile(
-              contentPadding: EdgeInsets.zero,
-              leading: CircleAvatar(
-                backgroundColor: Colors.orange,
-                child: Icon(Icons.bolt, color: Colors.white, size: 20),
+              const ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: CircleAvatar(
+                  backgroundColor: Colors.orange,
+                  child: Icon(Icons.bolt, color: Colors.white, size: 20),
+                ),
+                title: Text('High performance mode active'),
+                subtitle: Text('3 hours ago'),
               ),
-              title: Text('High performance mode active'),
-              subtitle: Text('3 hours ago'),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -127,47 +130,50 @@ class _DashboardScreenState extends State<DashboardScreen> {
     showModalBottomSheet<void>(
       context: context,
       showDragHandle: true,
-      builder: (context) => Padding(
-        padding: const EdgeInsets.fromLTRB(20.0, 8.0, 20.0, 28.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const CircleAvatar(
-              radius: 36,
-              backgroundColor: Color(0xFF3F51B5),
-              child: Text(
-                'AR',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+      isScrollControlled: true,
+      builder: (context) => SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20.0, 8.0, 20.0, 28.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const CircleAvatar(
+                radius: 36,
+                backgroundColor: Color(0xFF3F51B5),
+                child: Text(
+                  'AR',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 12.0),
-            Text(
-              'Alex Rivera',
-              style: Theme.of(context).textTheme.titleLarge
-                  ?.copyWith(fontWeight: FontWeight.bold),
-            ),
-            Text(
-              'Lead Architect & Developer',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              const SizedBox(height: 12.0),
+              Text(
+                'Alex Rivera',
+                style: Theme.of(context).textTheme.titleLarge
+                    ?.copyWith(fontWeight: FontWeight.bold),
               ),
-            ),
-            const SizedBox(height: 20.0),
-            ListTile(
-              leading: const Icon(Icons.email_outlined),
-              title: const Text('alex.rivera@example.com'),
-              dense: true,
-            ),
-            ListTile(
-              leading: const Icon(Icons.badge_outlined),
-              title: const Text('Employee ID #94821'),
-              dense: true,
-            ),
-          ],
+              Text(
+                'Lead Architect & Developer',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
+              const SizedBox(height: 20.0),
+              ListTile(
+                leading: const Icon(Icons.email_outlined),
+                title: const Text('alex.rivera@example.com'),
+                dense: true,
+              ),
+              ListTile(
+                leading: const Icon(Icons.badge_outlined),
+                title: const Text('Employee ID #94821'),
+                dense: true,
+              ),
+            ],
+          ),
         ),
       ),
     );
