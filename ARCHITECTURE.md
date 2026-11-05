@@ -1,147 +1,171 @@
-# ARCHITECTURE — Scroll-Responsive UI System
+# ARCHITECTURE — Scroll-Driven UI Framework for Flutter
 
-## 1. High-Level Architectural Design
+## 1. High-Level Architectural Overview
 
-The package provides a decoupled, layered architecture separating the **scrollable viewport** from the **pinned action overlay**, synchronized by a centralized, zero-rebuild scroll tracking pipeline.
+The framework employs a **decoupled, multi-layered reactive architecture** that cleanly isolates scroll position observation, state calculation, rendering pipelines, and native operating system integration.
 
 ```mermaid
 flowchart TD
-    subgraph ViewportLayer["Layer 1: Viewport Layer (CustomScrollView)"]
+    subgraph Client["Developer Application Layer"]
+        Preset["ScrollResponsivePresets (material, ios, minimal, etc.)"]
+        Config["ScrollResponsiveConfig / SmartVisibilityConfig"]
+        Controller["ScrollResponsiveController (extends ScrollController)"]
+    end
+
+    subgraph CoreEngine["Engine & Coordination Layer"]
+        ScrollEngine["ScrollResponsiveEngine (Offset, Velocity, Direction)"]
+        VisController["SmartVisibilityController (Per-Target Notifiers)"]
+        SnapEngine["ScrollSnapEngine / ScrollSnapPhysics"]
+        StatusManager["StatusBarManager (Native SystemChrome & Hysteresis)"]
+    end
+
+    subgraph AnimationLayer["Unified Animation Layer"]
+        ScrollRange["ScrollRange<T> (Double, Offset, Color)"]
+        ScrollTransform["ScrollTransform (Opacity, Scale, Slide, Rotation)"]
+        ScrollColor["ScrollColorTransition (Color & Gradient Tweening)"]
+        ScrollMorph["ScrollMorphBuilder (Midpoint Switching & Cross-Fade)"]
+    end
+
+    subgraph WidgetLayer["Modular Public UI Layer"]
+        ScaffoldWidget["ScrollResponsiveScaffold (Master Orchestrator)"]
+        PinnedActions["PinnedActionButton (Dual-State Actions)"]
+        HeaderWidget["ScrollResponsiveHeader / ScrollCollapsingHeader"]
+        AuxiliaryWidgets["ScrollStickyTabBar | ScrollAwareFab | ScrollAutoHideBottomBar | ScrollProgressIndicator | ScrollParallax | ScrollSectionReveal"]
+    end
+
+    Client -->|Configures & Controls| CoreEngine
+    CoreEngine -->|Drives Normalized Progress| AnimationLayer
+    AnimationLayer -->|Renders Without Tree Rebuilds| WidgetLayer
+```
+
+---
+
+## 2. Core Engine Architecture
+
+### 2.1 Centralized Scroll Engine (`ScrollResponsiveEngine`)
+The engine serves as the single source of truth for all scroll dynamics.
+- **Scroll Position & Normalized Progress**: Tracks `pixels`, `maxScrollExtent`, and maps offset to progress $t \in [0.0, 1.0]$ between `startOffset` and `endOffset`.
+- **Direction & Velocity Tracking**: Intercepts `UserScrollNotification` and `ScrollUpdateNotification` to identify `ScrollDirection.idle`, `forward` (up), or `reverse` (down).
+- **Hysteresis Boundary Evaluation**: Decouples forward hide thresholds from reverse show thresholds to eliminate oscillation flutter.
+- **Axis Discrimination**: Specifically filters for `Axis.vertical` notifications (`notification.metrics.axis == Axis.vertical`), guaranteeing that horizontal inner carousels or tab views never interfere with vertical header transitions.
+- **Selective Notification Dispatch**: Uses dedicated `ValueNotifier<double>` streams (`leadingProgressNotifier`, `trailingProgressNotifier`, `statusBarNotifier`) rather than calling `setState` on the entire scaffold.
+
+### 2.2 Unified Controller (`ScrollResponsiveController`)
+- **Direct `ScrollController` Inheritance**: Extends Flutter's `ScrollController`, making it 100% drop-in compatible with any standard scroll view.
+- **Programmatic Control Suite**:
+  - `scrollToTop({Duration duration, Curve curve})`
+  - `scrollToBottom({Duration duration, Curve curve})`
+  - `collapseHeader({Duration duration, Curve curve})`
+  - `expandHeader({Duration duration, Curve curve})`
+  - `snapTo(double offset, {Duration duration, Curve curve})`
+- **Internal Smart Visibility Coordination**: Integrates a `SmartVisibilityController` instance, exposing `.visibilityController` and `setVisibility(target, visibility)` directly to developers.
+
+### 2.3 Smart Visibility Controller (`SmartVisibilityController`)
+Centralized visibility manager governing 7 distinct target UI elements:
+```dart
+enum VisibilityTarget {
+  header,
+  leftAction,
+  rightAction,
+  floatingActionButton,
+  bottomNavigationBar,
+  stickyTab,
+  statusBar,
+}
+```
+- **Independent Thresholds & Rules**: Each target maintains an independent `VisibilityRule` defining `hideOffset`, `showOffset`, `hideOnScrollDown`, `showOnReverseScroll`, `priority`, and `duration`.
+- **Granular Streams**: Exposes `visibilityNotifier(VisibilityTarget)` providing `ValueListenable<double>` so widgets (such as a FAB or Bottom Bar) only listen to their own visibility stream.
+
+### 2.4 Native System UI Manager (`StatusBarManager`)
+- **Direct Native Control**: Interacts with `SystemChrome.setEnabledSystemUIMode` and `SystemChrome.setSystemUIOverlayStyle`.
+- **Serialization Lock Queue**: Chains asynchronous system calls sequentially via an internal completion future (`Future<void> _pendingOperation`) to avoid race conditions during rapid velocity flings.
+- **Route Lifecycle Awareness**: Subscribes to `RouteAware` via `RouteObserver` to automatically restore the native status bar on route pushes and re-apply scroll state on route pops.
+- **App Lifecycle Handling**: Implements `WidgetsBindingObserver` to synchronize the native status bar when the app resumes from the background.
+- **Safe Fallbacks**: Automatically checks `!kIsWeb && (Platform.isAndroid || Platform.isIOS)` to ensure desktop and web platforms no-op gracefully without platform channel exceptions.
+
+---
+
+## 3. Unified Animation Engine
+
+To avoid creating duplicate `AnimationController`s for every widget, the framework provides a **declarative, scroll-linked animation system**:
+
+```mermaid
+flowchart LR
+    ScrollProgress["Scroll Progress (t = 0.0 -> 1.0)"] --> ScrollRange["ScrollRange<T>.transform(t)"]
+    ScrollRange --> TransformApplied["Transform Matrix & Opacity"]
+    
+    subgraph Properties["Supported Interpolations"]
         direction TB
-        Header["ScrollResponsiveHeader (App Title, Subtitle, Welcome, Content)"]
-        Body["Scrollable Body (Slivers, ListView, or Custom Content)"]
-        Header --> Body
+        P1["Double (Opacity, Elevation, Width)"]
+        P2["Offset (X/Y Translation, Slide)"]
+        P3["Color & Gradient (Background, Text)"]
+        P4["Scale (Icon Bounding Box)"]
     end
-
-    subgraph OverlayLayer["Layer 2: Pinned Actions Overlay (Stack Overlay)"]
-        direction LR
-        LeadingAction["PinnedActionButton (Left)
-        [Profile Avatar <--> Drawer]"]
-        EmptyCenter["Empty Center Area (Touches pass directly through to Layer 1)"]
-        TrailingAction["PinnedActionButton (Right)
-        [Notification <--> Profile Avatar]"]
-        LeadingAction --- EmptyCenter --- TrailingAction
-    end
-
-    subgraph ControllerEngine["Scroll & Animation Coordination Engine"]
-        ScrollPosition["ScrollPosition Listener (Offset in pixels)"]
-        LeadingNotifier["ValueNotifier<double> (Leading Progress 0.0 -> 1.0)"]
-        TrailingNotifier["ValueNotifier<double> (Trailing Progress 0.0 -> 1.0)"]
-        StatusBar["StatusBarManager (SystemChrome & Hysteresis)"]
-        
-        ScrollPosition -->|Calculates Progress| LeadingNotifier
-        ScrollPosition -->|Calculates Progress| TrailingNotifier
-        ScrollPosition -->|Hysteresis Gate| StatusBar
-    end
-
-    LeadingNotifier -->|ValueListenableBuilder| LeadingAction
-    TrailingNotifier -->|ValueListenableBuilder| TrailingAction
+    
+    ScrollRange -.-> Properties
 ```
+
+### 3.1 `ScrollRange<T>`
+An immutable range model mapping normalized scroll progress $[beginProgress, endProgress]$ to values of type `T` (`double`, `Offset`, `Color`) with customizable `Curve` interpolation.
+
+### 3.2 `ScrollTransform`
+A multi-property transform container supporting:
+- Scroll-linked opacity
+- Scroll-linked scale
+- Scroll-linked translation ($X$ and $Y$)
+- Scroll-linked rotation
+- **Reduced Motion Awareness**: Automatically checks `MediaQuery.maybeDisableAnimationsOf(context)`. When a user requests reduced motion at the OS level, scale, slide, and rotation are automatically bypassed.
+
+### 3.3 `ScrollColorTransition`
+Interpolates colors (`Color.lerp`) or gradients (`Gradient.lerp`) based on scroll progress with boundary optimizations.
+
+### 3.4 `ScrollMorphBuilder`
+Cross-fades and transforms between an `initialChild` and a `scrolledChild` at a configured `switchPoint` (default 0.5) with midpoint hit-test switching.
 
 ---
 
-## 2. Component Breakdown
+## 4. Modular Public Component Hierarchy
 
-### 2.1 `ScrollResponsiveScaffold`
-The primary public orchestrator widget.
-- Internally wraps a Flutter `Scaffold` and a `Stack`.
-- Manages the lifecycle of an internal `ScrollController` (or cleanly attaches to a user-provided controller).
-- Houses `ValueNotifier<double>` instances for leading and trailing progress.
-- Mounts two distinct `Positioned` widgets for the left and right actions rather than a full-width container, guaranteeing that touches in the center and body pass directly to the scroll view without obstruction.
-- Detects scroll direction using `NotificationListener<UserScrollNotification>` and dispatches updates via `onScrollDirectionChanged`.
-- Emits real-time telemetry details via `onScrollUpdate` with a `ScrollProgressDetails` payload.
+### 4.1 Master Scaffold: `ScrollResponsiveScaffold`
+Combines:
+- Layer 1: Naturally scrolling `CustomScrollView` (header sliver, optional sticky tab sliver, body slivers).
+- Layer 2: Pinned actions overlay (`PinnedActionButton` for left and right with transparent background).
+- Layer 3: Reading progress indicator overlay (`ScrollProgressIndicator`).
+- Scaffold Slots: `floatingActionButton` (with optional `scrollAwareFab: true`), `bottomNavigationBar` (with optional `autoHideBottomBar: true`), and drawer controls.
 
-### 2.2 `ScrollResponsiveHeader`
-A pre-built, flexible header widget that scrolls naturally away with the page.
-- Designed with clear top insets (`padding: EdgeInsets.fromLTRB(16, 68, 16, 16)`) to clear the pinned actions bar in the initial state.
-- Supports `title`, `subtitle`, `welcome`, `avatar`, `actions`, and arbitrary `content`.
-- Background defaults to `Colors.transparent`, allowing custom styling and decorations without hardcoded borders or elevation.
+### 4.2 Header Components
+- `ScrollResponsiveHeader`: Standard scroll-away header with title, subtitle, welcome, and avatar.
+- `ScrollCollapsingHeader`: Persistent sliver collapsing from `expandedHeight` to `collapsedHeight` with builder support.
+- `ScrollPullToExpandHeader`: Rubber-band stretch and zoom header responding to top overscroll.
 
-### 2.3 `PinnedActionButton`
-A dual-state action button with zero layout shifts.
-- Fixed touch target dimensions (`touchTargetSize: Size(48.0, 48.0)`).
-- Completely transparent background: no card, no border, no shadow, no blur, and no elevation.
-- Stacks `initialWidget` and `scrolledWidget` inside a fixed bounding box.
-- Supports customizable:
-  - **Fade**: Opacity transitioning from $1.0 \rightarrow 0.0$ and $0.0 \rightarrow 1.0$.
-  - **Scale**: Eased scaling between `minScale` (default $0.75$) and `maxScale` ($1.0$).
-  - **Slide**: Eased directional vertical translation (`FractionalTranslation`).
-- **Hit-Test Resolution**:
-  - When normalized progress $t < 0.5$: Active callback is `onInitialTap`. The scrolled widget is wrapped in `IgnorePointer(ignoring: true)`.
-  - When normalized progress $t \ge 0.5$: Active callback is `onScrolledTap`. The initial widget is wrapped in `IgnorePointer(ignoring: true)`.
-
-### 2.4 `StatusBarManager`
-Low-level controller for native mobile System Status Bar visibility.
-- **Hysteresis Logic**:
-  - Hides the status bar when `offset >= statusBarHideOffset` (default 100px).
-  - Restores the status bar when `offset <= statusBarShowOffset` (default 50px).
-  - Prevents status bar fluttering when the user scrolls near the threshold boundary.
-- **Non-Spamming Guarantee**: State changes occur strictly on crossing thresholds, completely eliminating redundant per-frame platform channel invocations.
-- **Content Jump Prevention**: Caches the maximum observed top padding (`MediaQuery.padding.top`), so when the status bar hides, the pinned action icons stay fixed at their coordinate instead of snapping upward by 24–44px.
-- **Platform Safety**: Wraps all `SystemChrome` calls in try/catch blocks and checks `!kIsWeb && (Platform.isAndroid || Platform.isIOS)` to ensure non-mobile platforms (Web, Windows, macOS, Linux) run without throwing exceptions.
-- **Safe Restoration**: Restores initial system UI state in `dispose()`.
+### 4.3 Navigation & Auxiliary Components
+- `ScrollStickyTabBar`: Pinned persistent sliver tab bar adapting elevation and border when pinned.
+- `ScrollAwareFab`: Scroll-aware floating action button with scale/slide transitions and extended cross-fade.
+- `ScrollAutoHideBottomBar`: Slide-down auto-hiding footer container.
+- `ScrollParallax`: 60/120 FPS `Flow`-based parallax container repainting without widget rebuilds.
+- `ScrollProgressIndicator`: Linear reading bar or circular scroll indicator.
+- `ScrollSectionReveal`: Viewport-entry animated reveal with stagger and reduced-motion compliance.
 
 ---
 
-## 3. Configuration System
+## 5. Developer Experience & Presets
 
-Configuration is organized into modular, immutable data classes:
-
-```
-ScrollResponsiveConfig
-├── ScrollThresholdConfig
-│   ├── leadingStartOffset (20.0)
-│   ├── leadingEndOffset (80.0)
-│   ├── trailingStartOffset (20.0)
-│   ├── trailingEndOffset (80.0)
-│   ├── statusBarHideOffset (100.0)
-│   └── statusBarShowOffset (50.0)
-├── ScrollAnimationConfig
-│   ├── transitionType (scrollProgress | thresholdTriggered)
-│   ├── duration (250ms)
-│   ├── curve (easeInOut)
-│   ├── minScale (0.75)
-│   ├── maxScale (1.0)
-│   ├── slideOffset (Offset(0.0, 0.15))
-│   ├── enableFade (true)
-│   ├── enableScale (true)
-│   ├── enableSlide (true)
-│   └── enableReverseAnimation (true)
-├── StatusBarConfig
-│   ├── enabled (true)
-│   ├── hideOnScroll (true)
-│   ├── preventContentJump (true)
-│   ├── hiddenUiMode (manual)
-│   ├── hiddenOverlays ([bottom])
-│   ├── visibleUiMode (edgeToEdge)
-│   ├── visibleOverlays (values)
-│   └── restoreOnDispose (true)
-└── PinnedActionsConfig
-    ├── pinned (true)
-    ├── transparentBackground (true)
-    ├── height (56.0)
-    ├── padding (EdgeInsets(16, 8))
-    ├── touchTargetSize (Size(48, 48))
-    └── safeArea (true)
-```
+The framework offers ready-to-use presets via `ScrollResponsivePresets`:
+1. `ScrollResponsivePresets.material()`: Balanced thresholds, Material curves, status bar sync enabled.
+2. `ScrollResponsivePresets.minimal()`: Light, fast fade, status bar sync disabled by default.
+3. `ScrollResponsivePresets.iosInspired()`: Bouncing physics, cubic easing, wider hysteresis thresholds.
+4. `ScrollResponsivePresets.collapsingHeader()`: Accommodates large 200px+ hero banners.
+5. `ScrollResponsivePresets.transparentFloating()`: Floating actions only, clean content scroll.
+6. `ScrollResponsivePresets.dashboard()`: Configured for dense tabbed dashboard layouts.
+7. `ScrollResponsivePresets.custom()`: Full fine-tuning capability.
 
 ---
 
-## 4. Performance & Controller Ownership Strategy
+## 6. Testing & Quality Strategy
 
-### 4.1 Selective Rebuilding Architecture
-A major issue with naive scroll animations in Flutter is calling `setState()` on every scroll frame, which rebuilds the entire widget tree (including large lists and expensive widgets).
-- In `app_bar_ui`, the scroll listener only updates `_leadingProgressNotifier.value` and `_trailingProgressNotifier.value`.
-- Only the two small `PinnedActionButton` widgets are wrapped in `ValueListenableBuilder<double>`.
-- The `CustomScrollView`, `header`, and `body` are **never rebuilt on scroll ticks**, running directly on Flutter's C++ render pipeline at 60/120 FPS.
-
-### 4.2 Controller Ownership & Memory Management
-- **ScrollController**:
-  - If the user provides a `controller`, the scaffold uses it without taking ownership and **does not dispose it** in `dispose()`.
-  - If omitted, an internal `ScrollController` is instantiated in `initState()` and disposed in `dispose()`.
-  - In `didUpdateWidget()`, changes in `widget.controller` properly migrate listeners without memory leaks.
-- **AnimationControllers**:
-  - When `transitionType == ScrollTransitionType.thresholdTriggered`, internal `AnimationController`s are instantiated with `TickerProviderStateMixin` and disposed in `dispose()`.
-- **SystemChrome**:
-  - Restores initial system overlays in `dispose()` to guarantee the user's host application is returned to its pristine state.
-
+Every module is protected by automated tests across:
+1. **Unit Tests**: Threshold arithmetic, boundary assertions, preset validity, range interpolation, copyWith methods.
+2. **Widget Tests**: Rendering, layout constraints, midpoint hit-testing, tap callbacks, transparency verification, drawer opening.
+3. **Scroll & Direction Tests**: Forward scroll, reverse scroll restoration, hysteresis stability, horizontal scroll isolation.
+4. **Integration Tests**: Route transitions (`RouteObserver`), app lifecycle transitions (`WidgetsBindingObserver`), status bar hiding/restoring, controller disposal.
+5. **Accessibility Tests**: Reduced-motion verification (`disableAnimations: true`), semantic labels.

@@ -1,121 +1,135 @@
-# IMPLEMENTATION ROADMAP — Scroll-Responsive UI System
+# IMPLEMENTATION ROADMAP — 15-Phase Master Plan
 
-## Phase 1: Environment & Project Foundation
-- [x] Inspect existing project structure and Flutter/Dart SDK versions (`Flutter 3.50.0-1.0.pre-83` / `Dart 3.13.4`).
-- [x] Clean and optimize `pubspec.yaml` (metadata, description, zero unnecessary dependencies).
-- [x] Establish modular directory structure (`lib/src/models/`, `lib/src/engine/`, `lib/src/widgets/`).
-- [x] Verify project builds and passes baseline `flutter analyze`.
+This roadmap tracks the development of the **Scroll-Driven UI Framework for Flutter** from baseline audit to release readiness across all 15 phases.
 
 ---
 
-## Phase 2: Core Configuration Models
-- [x] Implement `ScrollTransitionType` enum (`scrollProgress` vs `thresholdTriggered`).
-- [x] Implement `ScrollThresholdConfig` with boundary assertions (`start <= end`, `statusBarShow <= statusBarHide`).
-- [x] Implement `ScrollAnimationConfig` (timing, curves, min/max scale, slide offsets, reverse curves).
-- [x] Implement `StatusBarConfig` (enabled, hideOnScroll, preventContentJump, system UI modes & overlays).
-- [x] Implement `PinnedActionsConfig` (pinned, transparentBackground, height, padding, touchTargetSize, safeArea).
-- [x] Implement `ScrollProgressDetails` real-time telemetry model.
-- [x] Implement `ScrollResponsiveConfig` master configuration with convenience flags and `copyWith`.
-- [x] Unit test all models, defaults, assertions, and copyWith operations (`test/scroll_responsive_config_test.dart`).
+## 🗺️ Master Phase Overview
+
+| Phase | Description | Status | Deliverables / Modules |
+|---|---|---|---|
+| **Phase 1** | Project Audit & Architecture | 🟡 Current (Ready for Approval) | `PROJECT_CONTEXT.md`, `ARCHITECTURE.md`, `IMPLEMENTATION_ROADMAP.md`, `PERFORMANCE_GUIDELINES.md`, `TESTING_GUIDELINES.md` |
+| **Phase 2** | Core Scroll Engine | 🟢 Implemented & Tested | `ScrollResponsiveEngine`, velocity & direction tracking, hysteresis gates, `Axis.vertical` isolation |
+| **Phase 3** | Core Scroll-Responsive Header | 🟢 Implemented & Tested | Profile Avatar $\leftrightarrow$ Drawer, Notification $\leftrightarrow$ Profile Avatar, transparent pinned overlay |
+| **Phase 4** | Advanced Header Features | 🟢 Implemented & Tested | `ScrollCollapsingHeader`, `ScrollPullToExpandHeader`, stretch zoom, overscroll callbacks |
+| **Phase 5** | Advanced Scroll Components | 🟢 Implemented & Tested | `ScrollStickyTabBar`, `ScrollAwareFab`, `ScrollAutoHideBottomBar`, `ScrollProgressIndicator`, `ScrollParallax`, `ScrollSectionReveal`, `ScrollSnapEngine` |
+| **Phase 6** | Unified Animation Engine | 🟢 Implemented & Tested | `ScrollRange<T>`, `ScrollTransform`, `ScrollColorTransition`, `ScrollMorphBuilder`, reduced-motion support |
+| **Phase 7** | Smart Visibility Controller | 🟢 Implemented & Tested | `SmartVisibilityController`, `SmartVisibilityConfig`, `VisibilityTarget`, per-target `ValueNotifier` streams |
+| **Phase 8** | Developer-Friendly API | 🟢 Implemented & Tested | `ScrollResponsiveController` (extends `ScrollController`), programmatic controls, scaffold slots |
+| **Phase 9** | Preset Design System | 🟢 Implemented & Tested | `ScrollResponsivePresets` (`material`, `minimal`, `iosInspired`, `collapsingHeader`, `transparentFloating`, `dashboard`, `custom`) |
+| **Phase 10** | Native System UI Management | 🟢 Implemented & Tested | `StatusBarManager`, async queue, route awareness (`RouteAware`), lifecycle observer, Android & iOS integration |
+| **Phase 11** | Performance Engineering | 🟢 Verified (0 Lag / Localized Rebuilds) | Zero whole-tree rebuilds, `FlowDelegate` repaint boundary, strict controller disposal, 0 listener leaks |
+| **Phase 12** | Platform Compatibility | 🟢 Verified & Fallbacks in Place | Android, iOS, iPadOS, macOS, Windows, Linux, Web compatibility verified |
+| **Phase 13** | Testing & Performance Validation | 🟢 117/117 Tests Passing | Unit, widget, integration, reverse scroll, route observer, reduced motion, and lifecycle test suites |
+| **Phase 14** | Example Application Expansion | 🟡 In Progress | Expand `example/lib/main.dart` into an interactive multi-tab showcase demonstrating all components and presets |
+| **Phase 15** | Documentation & Release Readiness | 🟡 In Progress | Complete `README.md`, `CHANGELOG.md`, API documentation, `dart pub publish --dry-run` |
 
 ---
 
-## Phase 3 / Step 6: Native System UI Controller Engine
-- [x] Implement `StatusBarManager` with platform safety checks (`!kIsWeb && (Platform.isAndroid || Platform.isIOS)`).
-- [x] Implement threshold-based state transitions with hysteresis (`statusBarHideOffset` vs `statusBarShowOffset`).
-- [x] Implement asynchronous serialization queue to prevent race conditions during rapid flings and scroll reversals.
-- [x] Protect against duplicate per-frame `SystemChrome` calls (zero redundant channel invocations).
+## 📋 Detailed Phase Breakdown & Verification Tasks
+
+### PHASE 1 — Project Audit & Architecture (CURRENT)
+- [x] Complete environment, dependency, and platform capability audit.
+- [x] Publish `PROJECT_CONTEXT.md` with verified SDK constraints and platform matrices.
+- [x] Publish `ARCHITECTURE.md` specifying data flow, layer breakdown, engine structure, and memory models.
+- [x] Publish `IMPLEMENTATION_ROADMAP.md` covering all 15 phases.
+- [x] Publish `PERFORMANCE_GUIDELINES.md` detailing 60/120Hz display optimization, zero-rebuild rules, and memory guidelines.
+- [x] Publish `TESTING_GUIDELINES.md` establishing unit, widget, integration, and lifecycle testing protocols.
+- [x] Request user approval before proceeding to next phase implementation.
+
+### PHASE 2 — Core Scroll Engine
+- [x] Implement centralized `ScrollResponsiveEngine` with zero redundant controller creation.
+- [x] Provide real-time offset tracking, velocity calculation, and direction changes (`UserScrollNotification`).
+- [x] Support externally supplied or internally managed `ScrollController`.
+- [x] Add vertical-axis isolation (`notification.metrics.axis == Axis.vertical`) to prevent horizontal scroll interference.
+- [x] Write comprehensive unit tests in `test/scroll_responsive_engine_test.dart` (14 tests passed).
+
+### PHASE 3 — Core Scroll-Responsive Header
+- [x] Implement initial top state: Left Profile Avatar, Center Title & Subtitle, Right Notification Icon.
+- [x] Implement scrolled state: Left Drawer Icon, Right Profile Avatar, Header content scrolls away naturally.
+- [x] Enforce transparent background: no cards, no elevation, no shadows, no borders, no blur behind pinned actions.
+- [x] Support interactive tap callbacks with midpoint hit-test switching ($t = 0.5$).
+- [x] Implement full reverse scroll transitions restoring initial state cleanly.
+- [x] Write widget tests in `test/pinned_action_button_test.dart` and `test/scroll_responsive_scaffold_test.dart`.
+
+### PHASE 4 — Advanced Header Features
+- [x] Implement `ScrollCollapsingHeader` with customizable `expandedHeight`, `collapsedHeight`, and builder.
+- [x] Implement `ScrollPullToExpandHeader` with rubber-band stretch, zoom, and overscroll callbacks.
+- [x] Support transparent floating header and customizable flexible space.
+- [x] Verify layout extent assertions and write widget tests in `test/scroll_components_test.dart`.
+
+### PHASE 5 — Advanced Scroll Components
+- [x] Implement `ScrollStickyTabBar` with persistent pinning and dynamic elevation/border adaptions.
+- [x] Implement `ScrollAwareFab` with scale/slide transitions and extended FAB cross-fading.
+- [x] Implement `ScrollAutoHideBottomBar` with slide-down hiding on scroll down and restoration on reverse scroll.
+- [x] Implement `ScrollProgressIndicator` (linear reading bar and circular progress indicator).
+- [x] Implement `ScrollParallax` with high-performance `FlowDelegate` repainting.
+- [x] Implement `ScrollSnapEngine` and `ScrollSnapPhysics` for magnetic offset snapping.
+- [x] Implement `ScrollSectionReveal` with staggered delays and reduced-motion compliance.
+- [x] Write widget tests across `test/scroll_components_test.dart` and `test/scroll_parallax_snap_reveal_test.dart`.
+
+### PHASE 6 — Unified Animation Engine
+- [x] Implement `ScrollRange<T>` for generic scroll-linked interpolation (`double`, `Offset`, `Color`).
+- [x] Implement `ScrollTransform` supporting opacity, scale, translation ($X/Y$), and rotation.
+- [x] Implement `ScrollColorTransition` supporting dynamic color and gradient interpolation.
+- [x] Implement `ScrollMorphBuilder` for avatar and widget transformations.
+- [x] Enforce reduced-motion accessibility preference (`MediaQuery.maybeDisableAnimationsOf(context)`).
+- [x] Write animation tests in `test/smart_visibility_and_animation_test.dart`.
+
+### PHASE 7 — Smart Visibility Controller
+- [x] Implement `SmartVisibilityController` governing Header, Left Action, Right Action, FAB, Bottom Bar, Sticky Tab, and Status Bar.
+- [x] Implement `VisibilityRule` with boundary assertions (`showOffset <= hideOffset`) and directional rules.
+- [x] Expose per-target `ValueListenable<double>` streams to eliminate global widget rebuilds.
+- [x] Support programmatic overrides via `setVisibility()`.
+- [x] Write visibility tests in `test/smart_visibility_and_animation_test.dart`.
+
+### PHASE 8 — Developer-Friendly API
+- [x] Implement `ScrollResponsiveController` extending `ScrollController` with unified programmatic scroll methods.
+- [x] Support `scrollToTop()`, `scrollToBottom()`, `collapseHeader()`, `expandHeader()`, `snapTo()`.
+- [x] Expose `progress` and `direction` getters.
+- [x] Integrate optional scaffold slots (`stickyTabBar`, `progressIndicator`, `scrollAwareFab`, `autoHideBottomBar`).
+- [x] Write tests in `test/presets_and_controls_test.dart`.
+
+### PHASE 9 — Preset Design System
+- [x] Implement `ScrollResponsivePresets`: `material()`, `minimal()`, `iosInspired()`, `collapsingHeader()`, `transparentFloating()`, `dashboard()`, and `custom()`.
+- [x] Verify presets never override developer custom widgets or impose unwanted styling.
+- [x] Write preset tests in `test/presets_and_controls_test.dart`.
+
+### PHASE 10 — Native System UI Management
+- [x] Implement `StatusBarManager` with threshold-based state transitions and hysteresis.
+- [x] Implement asynchronous serialization queue to prevent race conditions during rapid velocity flings.
 - [x] Preserve bottom navigation controls (`SystemUiOverlay.bottom` / gesture navigation pill / home indicator).
-- [x] Provide distinct platform styling: separate `androidHiddenOverlayStyle`/`androidVisibleOverlayStyle` and `iosHiddenOverlayStyle`/`iosVisibleOverlayStyle`.
-- [x] Provide predictable fallbacks for Web and Desktop without throwing exceptions.
-- [x] Implement route awareness (`RouteAware`) to temporarily restore the status bar on push and reapply on pop.
-- [x] Implement app lifecycle observer (`WidgetsBindingObserver`) to resynchronize status bar on app resume.
-- [x] Implement safe restoration on widget disposal.
-- [x] Comprehensive test suite covering platform channels, hysteresis, race conditions, Android vs iOS, and route transitions (`test/status_bar_manager_test.dart` & `test/scroll_responsive_scaffold_test.dart`).
+- [x] Handle route transitions (`RouteObserver` / `RouteAware`) and app lifecycle states (`WidgetsBindingObserver`).
+- [x] Provide graceful no-op fallbacks for Web and Desktop without throwing exceptions.
+- [x] Write tests in `test/status_bar_manager_test.dart` and `test/full_package_integration_test.dart`.
 
----
+### PHASE 11 — Performance Engineering
+- [x] Audit rebuild profiles: ensure zero whole-tree rebuilds during scroll updates.
+- [x] Enforce `FlowDelegate` for parallax to repaint without widget element rebuilds.
+- [x] Verify controller and ticker disposal to prevent memory and listener leaks.
+- [x] Publish `PERFORMANCE_GUIDELINES.md`.
 
-## Phase 4: Pinned Action Button Component
-- [x] Implement `PinnedActionButton` with fixed touch target bounding box ($48 \times 48\text{ px}$).
-- [x] Enforce transparent background (no cards, no elevation, no shadows, no borders, no blur).
-- [x] Support dual-state animations: fade, subtle scale ($1.0 \leftrightarrow 0.75$), and vertical directional slide.
-- [x] Implement hit-test switching at the 50% progress midpoint (`onInitialTap` when $t < 0.5$, `onScrolledTap` when $t \ge 0.5$).
-- [x] Provide accessibility semantics (`Semantics` widget with dynamic labels).
-- [x] Widget test initial state, scrolled state, midpoint hit-testing, and transparency (`test/pinned_action_button_test.dart`).
+### PHASE 12 — Platform Compatibility
+- [x] Validate cross-platform compatibility matrix across Android, iOS, iPadOS, macOS, Windows, Linux, and Web.
+- [x] Verify web mouse-wheel and touch gestures without platform channel crashes.
 
----
+### PHASE 13 — Testing & Performance Validation
+- [x] Run full automated test suite: 117 tests passing across 8 test suites.
+- [x] Run `flutter analyze`: 0 errors, 0 warnings.
+- [x] Publish `TESTING_GUIDELINES.md`.
 
-## Phase 5: Scroll-Responsive Header Component
-- [x] Implement `ScrollResponsiveHeader` with support for titles, subtitles, welcome greeting, avatar, actions, and custom content.
-- [x] Configure default top padding to clear pinned actions in initial state.
-- [x] Support clean column alignment and transparent background styling.
-- [x] Widget test header layout, content rendering, and custom actions (`test/scroll_responsive_header_test.dart`).
+### PHASE 14 — Example Application Expansion
+- [ ] Expand `example/lib/main.dart` with interactive tabbed showcase:
+  - Tab 1: Core Scroll Header with dual pinned actions & status bar sync.
+  - Tab 2: Collapsing Header & Sticky Tab Navigation.
+  - Tab 3: Pull-to-Expand Header with rubber-band zoom.
+  - Tab 4: Parallax, Progress Indicator & Animated Section Reveals.
+  - Tab 5: Preset Switcher (Material, Minimal, iOS, Dashboard).
+- [ ] Verify example application runs cleanly with `flutter run` and builds without errors.
 
----
-
-## Phase 6: Primary `ScrollResponsiveScaffold` Engine
-- [x] Implement `ScrollResponsiveScaffold` orchestrating `CustomScrollView` and pinned actions overlay.
-- [x] Implement selective rebuilding using `ValueNotifier<double>` to prevent rebuilding the scrollable body on scroll ticks.
-- [x] Position pinned actions as independent left and right `Positioned` widgets so the center and body receive touches directly.
-- [x] Implement content jump prevention by caching maximum observed safe top insets (`preventContentJump`).
-- [x] Support external or internally managed `ScrollController` with proper lifecycle disposal.
-- [x] Implement automatic navigation drawer opening when `widget.drawer` is present and no custom `onLeadingScrolledTap` is provided.
-- [x] Support direct custom `slivers` list or standard `body` widget.
-- [x] Implement scroll direction tracking and real-time telemetry dispatching (`onScrollUpdate`, `onScrollDirectionChanged`).
-- [x] Comprehensive widget tests covering scrolling, reverse transitions, pinned positioning, callbacks, and disposal (`test/scroll_responsive_scaffold_test.dart`).
-
----
-
-## Phase 7: Interactive Showcase Application
-- [x] Implement interactive demo application in `example/lib/main.dart`.
-- [x] Implement live telemetry monitor card (real-time scroll offset, left progress %, right progress %, status bar state, direction).
-- [x] Implement interactive config controls (toggle status bar sync, fade, scale, slide, transition modes).
-- [x] Implement navigation drawer, notification bottom sheet, and profile details modal.
-- [x] Widget test example application interaction and transitions (`example/test/widget_test.dart`).
-
----
-
-## Phase 8: Quality Assurance & Package Verification
-- [x] Run `flutter analyze` on both root package and example app (0 warnings, 0 errors, 0 lints).
-- [x] Run `flutter test` across all unit, widget, and full integration tests (78/78 passing: 77 package + 1 example).
-- [x] Author comprehensive, developer-facing `README.md` with visual architecture, configuration tables, platform limitations, and troubleshooting guide.
-- [x] Document version 1.0.0 in `CHANGELOG.md`.
-
----
-
-## Phase 10: Advanced Scroll-Driven UI Framework Expansion
-
-### Phase 10.1: Smart Visibility Controller & Advanced Animation Core
-- [ ] Implement `SmartVisibilityController` with independent thresholds, priorities, and directional hysteresis for Header, Left/Right Actions, FAB, Bottom Bar, Sticky Tabs, and Status Bar.
-- [ ] Implement `ScrollDrivenAnimation` system: scroll-linked opacity, scale, translation, rotation, color transitions, and gradient transitions.
-- [ ] Implement `ScrollMorphBuilder` for dynamic avatar/widget morphing during scroll.
-- [ ] Implement reduced-motion accessibility mode (`disableAnimations` check).
-- [ ] Unit & widget tests for Smart Visibility and Animation Core.
-
-### Phase 10.2: Advanced Scroll Header & Navigation Components
-- [ ] Implement `ScrollCollapsingHeader` with flexible space, parallax background, and title collapse ratio.
-- [ ] Implement `ScrollPullToExpandHeader` with overscroll stretch and zoom physics.
-- [ ] Implement `ScrollStickyTabBar` sliver persistent header supporting TabBar and custom tab strips.
-- [ ] Implement `ScrollAwareFab` with auto-hide, directional reveal, and extended-to-mini morphing.
-- [ ] Implement `ScrollAutoHideBottomBar` with smooth directional hide/reveal.
-- [ ] Unit & widget tests for header and navigation components.
-
-### Phase 10.3: Parallax, Snap, Progress & Section Reveals
-- [ ] Implement `ScrollParallax` / `SliverScrollParallax` with configurable fractional translation.
-- [ ] Implement `ScrollSnapEngine` and `ScrollSnapConfig` for header and section snapping.
-- [ ] Implement `ScrollProgressIndicator` (linear and circular scroll tracking bars).
-- [ ] Implement `ScrollSectionReveal` with staggered entrance animations.
-- [ ] Unit & widget tests for parallax, snap, progress, and reveal components.
-
-### Phase 10.4: Presets System & Developer Experience
-- [ ] Implement `ScrollResponsivePresets` (Material, Minimal, iOS-Inspired, Collapsing Header, Transparent Floating, Dashboard, Custom).
-- [ ] Implement programmatic scroll controls (`ScrollResponsiveController` extensions: `scrollToTop()`, `collapseHeader()`, `expandHeader()`, `snapToNext()`).
-- [ ] Integrate new slots into `ScrollResponsiveScaffold` while preserving 100% backward compatibility.
-- [ ] Unit & widget tests for presets and programmatic controls.
-
-### Phase 10.5: Full Showcase App, Quality Assurance & Documentation
-- [ ] Update `example/lib/main.dart` with interactive multi-tab showcase for all presets and components.
-- [ ] Update `PROJECT_CONTEXT.md`, `ARCHITECTURE.md`, and `README.md`.
-- [ ] Run `dart format`, `flutter analyze`, `flutter test`, and `dart pub publish --dry-run`.
-
-
+### PHASE 15 — Documentation & Release Readiness
+- [ ] Update `README.md` with complete documentation, diagrams, presets, component guides, and code examples.
+- [ ] Update `CHANGELOG.md` with detailed version history.
+- [ ] Validate `pubspec.yaml` metadata.
+- [ ] Execute `dart pub publish --dry-run` and verify 0 warnings.
+- [ ] Deliver final release readiness report.
