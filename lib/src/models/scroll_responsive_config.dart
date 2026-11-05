@@ -177,6 +177,11 @@ class StatusBarConfig {
     this.visibleOverlayStyle,
     this.hiddenOverlayStyle,
     this.restoreOnDispose = true,
+    this.restoreOnRouteTransition = true,
+    this.androidHiddenOverlayStyle,
+    this.androidVisibleOverlayStyle,
+    this.iosHiddenOverlayStyle,
+    this.iosVisibleOverlayStyle,
   });
 
   /// Whether status bar management is enabled.
@@ -203,14 +208,53 @@ class StatusBarConfig {
   /// System UI overlays restored when status bar is visible.
   final List<SystemUiOverlay>? visibleOverlays;
 
-  /// Style applied when status bar is visible.
+  /// Generic style applied when status bar is visible (fallback for platforms without specific styles).
   final SystemUiOverlayStyle? visibleOverlayStyle;
 
-  /// Style applied when status bar is hidden.
+  /// Generic style applied when status bar is hidden (fallback for platforms without specific styles).
   final SystemUiOverlayStyle? hiddenOverlayStyle;
 
   /// Whether to restore initial status bar configuration when widget is disposed.
   final bool restoreOnDispose;
+
+  /// Whether to restore the status bar when navigating to a new route and reapply on return.
+  final bool restoreOnRouteTransition;
+
+  /// Android-specific overlay style when status bar is hidden.
+  final SystemUiOverlayStyle? androidHiddenOverlayStyle;
+
+  /// Android-specific overlay style when status bar is visible.
+  final SystemUiOverlayStyle? androidVisibleOverlayStyle;
+
+  /// iOS-specific overlay style when status bar is hidden.
+  final SystemUiOverlayStyle? iosHiddenOverlayStyle;
+
+  /// iOS-specific overlay style when status bar is visible.
+  final SystemUiOverlayStyle? iosVisibleOverlayStyle;
+
+  /// Resolves the effective overlay style when status bar is hidden for the target [platform].
+  SystemUiOverlayStyle? resolveHiddenOverlayStyle(TargetPlatform platform) {
+    if (platform == TargetPlatform.android &&
+        androidHiddenOverlayStyle != null) {
+      return androidHiddenOverlayStyle;
+    }
+    if (platform == TargetPlatform.iOS && iosHiddenOverlayStyle != null) {
+      return iosHiddenOverlayStyle;
+    }
+    return hiddenOverlayStyle;
+  }
+
+  /// Resolves the effective overlay style when status bar is visible for the target [platform].
+  SystemUiOverlayStyle? resolveVisibleOverlayStyle(TargetPlatform platform) {
+    if (platform == TargetPlatform.android &&
+        androidVisibleOverlayStyle != null) {
+      return androidVisibleOverlayStyle;
+    }
+    if (platform == TargetPlatform.iOS && iosVisibleOverlayStyle != null) {
+      return iosVisibleOverlayStyle;
+    }
+    return visibleOverlayStyle;
+  }
 
   /// Creates a copy of this configuration with the given fields replaced.
   StatusBarConfig copyWith({
@@ -224,6 +268,11 @@ class StatusBarConfig {
     SystemUiOverlayStyle? visibleOverlayStyle,
     SystemUiOverlayStyle? hiddenOverlayStyle,
     bool? restoreOnDispose,
+    bool? restoreOnRouteTransition,
+    SystemUiOverlayStyle? androidHiddenOverlayStyle,
+    SystemUiOverlayStyle? androidVisibleOverlayStyle,
+    SystemUiOverlayStyle? iosHiddenOverlayStyle,
+    SystemUiOverlayStyle? iosVisibleOverlayStyle,
   }) {
     return StatusBarConfig(
       enabled: enabled ?? this.enabled,
@@ -236,6 +285,16 @@ class StatusBarConfig {
       visibleOverlayStyle: visibleOverlayStyle ?? this.visibleOverlayStyle,
       hiddenOverlayStyle: hiddenOverlayStyle ?? this.hiddenOverlayStyle,
       restoreOnDispose: restoreOnDispose ?? this.restoreOnDispose,
+      restoreOnRouteTransition:
+          restoreOnRouteTransition ?? this.restoreOnRouteTransition,
+      androidHiddenOverlayStyle:
+          androidHiddenOverlayStyle ?? this.androidHiddenOverlayStyle,
+      androidVisibleOverlayStyle:
+          androidVisibleOverlayStyle ?? this.androidVisibleOverlayStyle,
+      iosHiddenOverlayStyle:
+          iosHiddenOverlayStyle ?? this.iosHiddenOverlayStyle,
+      iosVisibleOverlayStyle:
+          iosVisibleOverlayStyle ?? this.iosVisibleOverlayStyle,
     );
   }
 }

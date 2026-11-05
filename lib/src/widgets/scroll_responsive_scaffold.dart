@@ -50,6 +50,7 @@ class ScrollResponsiveScaffold extends StatefulWidget {
     this.semanticLabelTrailingScrolled,
     this.onScrollUpdate,
     this.onScrollDirectionChanged,
+    this.routeObserver,
   }) : assert(
          body != null || slivers != null,
          'Either body or slivers must be provided.',
@@ -140,12 +141,16 @@ class ScrollResponsiveScaffold extends StatefulWidget {
   /// Callback triggered when the user scroll direction changes.
   final ValueChanged<ScrollDirection>? onScrollDirectionChanged;
 
+  /// Optional [RouteObserver] to automatically manage status bar visibility across route transitions.
+  final RouteObserver<ModalRoute<void>>? routeObserver;
+
   @override
   State<ScrollResponsiveScaffold> createState() =>
       _ScrollResponsiveScaffoldState();
 }
 
-class _ScrollResponsiveScaffoldState extends State<ScrollResponsiveScaffold> {
+class _ScrollResponsiveScaffoldState extends State<ScrollResponsiveScaffold>
+    with RouteAware, WidgetsBindingObserver {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   late ScrollResponsiveEngine _engine;
@@ -155,8 +160,20 @@ class _ScrollResponsiveScaffoldState extends State<ScrollResponsiveScaffold> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _initEngine();
     _initStatusBarManager();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (widget.routeObserver != null) {
+      final route = ModalRoute.of(context);
+      if (route != null) {
+        widget.routeObserver!.subscribe(this, route);
+      }
+    }
   }
 
   void _initEngine() {
@@ -184,6 +201,16 @@ class _ScrollResponsiveScaffoldState extends State<ScrollResponsiveScaffold> {
   void didUpdateWidget(ScrollResponsiveScaffold oldWidget) {
     super.didUpdateWidget(oldWidget);
 
+    if (widget.routeObserver != oldWidget.routeObserver) {
+      oldWidget.routeObserver?.unsubscribe(this);
+      if (widget.routeObserver != null) {
+        final route = ModalRoute.of(context);
+        if (route != null) {
+          widget.routeObserver!.subscribe(this, route);
+        }
+      }
+    }
+
     _engine.updateConfig(widget.config);
     if (widget.controller != oldWidget.controller) {
       _engine.updateController(widget.controller);
@@ -194,7 +221,29 @@ class _ScrollResponsiveScaffoldState extends State<ScrollResponsiveScaffold> {
   }
 
   @override
+  void didPushNext() {
+    // Temporarily restores status bar when another route is pushed on top
+    _statusBarManager.handleRoutePushed();
+  }
+
+  @override
+  void didPopNext() {
+    // Reapplies status bar state based on current scroll position when popped back
+    _statusBarManager.handleRoutePopped(_engine.currentOffset);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    _statusBarManager.handleAppLifecycleStateChanged(
+      state,
+      _engine.currentOffset,
+    );
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    widget.routeObserver?.unsubscribe(this);
     _engine.dispose();
     _statusBarManager.restore();
     super.dispose();

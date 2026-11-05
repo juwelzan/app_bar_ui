@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:app_bar_ui/app_bar_ui.dart';
 
@@ -35,8 +36,10 @@ void main() {
     Widget? drawer,
     ValueChanged<ScrollProgressDetails>? onScrollUpdate,
     ValueChanged<ScrollDirection>? onScrollDirectionChanged,
+    RouteObserver<ModalRoute<void>>? routeObserver,
   }) {
     return MaterialApp(
+      navigatorObservers: [?routeObserver],
       home: ScrollResponsiveScaffold(
         initialLeading: initialLeading,
         scrolledLeading: scrolledLeading,
@@ -64,6 +67,7 @@ void main() {
         drawer: drawer,
         onScrollUpdate: onScrollUpdate,
         onScrollDirectionChanged: onScrollDirectionChanged,
+        routeObserver: routeObserver,
       ),
     );
   }
@@ -461,5 +465,89 @@ void main() {
         expect(headerTapped, isTrue);
       },
     );
+
+    testWidgets('restores status bar on widget disposal', (tester) async {
+      StatusBarManager.debugOverrideSupportedPlatform = true;
+      final List<MethodCall> calls = <MethodCall>[];
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(SystemChannels.platform, (call) async {
+            calls.add(call);
+            return null;
+          });
+
+      await tester.pumpWidget(
+        buildTestScaffold(
+          config: const ScrollResponsiveConfig(
+            thresholds: ScrollThresholdConfig(statusBarHideOffset: 50.0),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      // Scroll down to hide status bar
+      await tester.drag(find.text('List item #0'), const Offset(0.0, -100.0));
+      await tester.pumpAndSettle();
+
+      calls.clear();
+
+      // Replace widget to trigger dispose()
+      await tester.pumpWidget(const MaterialApp(home: SizedBox()));
+      await tester.pumpAndSettle();
+
+      // Verify restore was called
+      expect(calls, isNotEmpty);
+
+      StatusBarManager.resetDebugOverrides();
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(SystemChannels.platform, null);
+    });
+
+    testWidgets('handles route transitions seamlessly via RouteObserver', (
+      tester,
+    ) async {
+      StatusBarManager.debugOverrideSupportedPlatform = true;
+      final routeObserver = RouteObserver<ModalRoute<void>>();
+
+      await tester.pumpWidget(
+        buildTestScaffold(
+          routeObserver: routeObserver,
+          config: const ScrollResponsiveConfig(
+            thresholds: ScrollThresholdConfig(
+              statusBarHideOffset: 50.0,
+              statusBarShowOffset: 20.0,
+            ),
+            statusBar: StatusBarConfig(restoreOnRouteTransition: true),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      // Scroll down past threshold
+      await tester.drag(find.text('List item #0'), const Offset(0.0, -100.0));
+      await tester.pumpAndSettle();
+
+      final BuildContext context = tester.element(
+        find.byType(ScrollResponsiveScaffold),
+      );
+
+      // Push a new route on top
+      Navigator.push<void>(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const Scaffold(body: Text('New Screen Route')),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('New Screen Route'), findsOneWidget);
+
+      // Pop back to original screen
+      Navigator.pop(tester.element(find.text('New Screen Route')));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ScrollResponsiveScaffold), findsOneWidget);
+
+      StatusBarManager.resetDebugOverrides();
+    });
   });
 }

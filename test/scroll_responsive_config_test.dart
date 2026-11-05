@@ -118,10 +118,20 @@ void main() {
       expect(config.hiddenOverlays, const [SystemUiOverlay.bottom]);
       expect(config.visibleUiMode, SystemUiMode.edgeToEdge);
       expect(config.restoreOnDispose, isTrue);
+      expect(config.restoreOnRouteTransition, isTrue);
+      expect(config.androidHiddenOverlayStyle, isNull);
+      expect(config.androidVisibleOverlayStyle, isNull);
+      expect(config.iosHiddenOverlayStyle, isNull);
+      expect(config.iosVisibleOverlayStyle, isNull);
     });
 
     test('copyWith updates specified fields', () {
       const original = StatusBarConfig();
+      const androidStyle = SystemUiOverlayStyle(statusBarColor: Colors.black);
+      const iosStyle = SystemUiOverlayStyle(
+        statusBarBrightness: Brightness.dark,
+      );
+
       final updated = original.copyWith(
         enabled: false,
         hideOnScroll: false,
@@ -129,6 +139,9 @@ void main() {
         hiddenUiMode: SystemUiMode.immersive,
         hiddenOverlays: [],
         restoreOnDispose: false,
+        restoreOnRouteTransition: false,
+        androidHiddenOverlayStyle: androidStyle,
+        iosHiddenOverlayStyle: iosStyle,
       );
 
       expect(updated.enabled, isFalse);
@@ -137,6 +150,14 @@ void main() {
       expect(updated.hiddenUiMode, SystemUiMode.immersive);
       expect(updated.hiddenOverlays, isEmpty);
       expect(updated.restoreOnDispose, isFalse);
+      expect(updated.restoreOnRouteTransition, isFalse);
+      expect(updated.androidHiddenOverlayStyle, androidStyle);
+      expect(updated.iosHiddenOverlayStyle, iosStyle);
+      expect(
+        updated.resolveHiddenOverlayStyle(TargetPlatform.android),
+        androidStyle,
+      );
+      expect(updated.resolveHiddenOverlayStyle(TargetPlatform.iOS), iosStyle);
     });
   });
 
