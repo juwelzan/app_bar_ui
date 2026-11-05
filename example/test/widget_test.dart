@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:app_bar_ui/app_bar_ui.dart';
 import 'package:app_bar_ui_example/main.dart';
 
 void main() {
@@ -156,6 +157,26 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
+    'CustomBuilder preset in PresetDetailScreen scrolls without RenderFlex overflow',
+    (WidgetTester tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: PresetDetailScreen(preset: ScrollHeaderPreset.customBuilder),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      // Scroll gradually across collapse states
+      final scrollable = find.byType(Scrollable).first;
+      for (int i = 0; i < 5; i++) {
+        await tester.drag(scrollable, const Offset(0, -50));
+        await tester.pump();
+        expect(tester.takeException(), isNull);
+      }
     },
   );
 }

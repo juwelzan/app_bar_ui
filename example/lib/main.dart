@@ -1565,6 +1565,8 @@ class _PresetDetailScreenState extends State<PresetDetailScreen> {
 
       case ScrollHeaderPreset.customBuilder:
         return ScrollHeader.customBuilder(
+          expandedHeight: 200.0,
+          collapsedHeight: kToolbarHeight,
           builder: (context, progress, overlaps) {
             final theme = Theme.of(context);
             return Container(
@@ -1574,25 +1576,44 @@ class _PresetDetailScreenState extends State<PresetDetailScreen> {
                 progress,
               ),
               child: SafeArea(
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Custom Builder: ${(progress * 100).toInt()}% Scrolled',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
+                bottom: false,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: NavigationToolbar(
+                    leading: IconButton(
+                      icon: const Icon(Icons.arrow_back, color: Colors.white),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                    middle: Text(
+                      'Custom Builder (${(progress * 100).toInt()}%)',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    trailing: Opacity(
+                      opacity: (1.0 - progress).clamp(0.0, 1.0),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8.0,
+                          vertical: 4.0,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white24,
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        child: Text(
+                          '${(progress * 100).toInt()}%',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                      const SizedBox(height: 8.0),
-                      ElevatedButton.icon(
-                        icon: const Icon(Icons.arrow_back, size: 16),
-                        label: const Text('Back to Gallery'),
-                        onPressed: () => Navigator.of(context).pop(),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ),
@@ -1657,4 +1678,4 @@ class _PresetDetailScreenState extends State<PresetDetailScreen> {
       ),
     );
   }
-} 
+}
