@@ -147,8 +147,8 @@ This roadmap tracks the development of the **Scroll-Driven UI Framework for Flut
 - [x] Verify example application runs cleanly and passes static analysis with 0 errors.
 
 ### PHASE 15 — Documentation & Release Readiness
-- [ ] Update `README.md` with complete documentation, diagrams, presets, component guides, and code examples.
-- [ ] Update `CHANGELOG.md` with detailed version history.
-- [ ] Validate `pubspec.yaml` metadata.
-- [ ] Execute `dart pub publish --dry-run` and verify 0 warnings.
-- [ ] Deliver final release readiness report.
+- [x] Update `README.md` with complete documentation, diagrams, presets, component guides, and code examples.
+- [x] Update `CHANGELOG.md` with detailed version history.
+- [x] Validate `pubspec.yaml` metadata.
+- [x] Execute `dart pub publish --dry-run` and verify 0 warnings.
+- [x] Deliver final release readiness report.
