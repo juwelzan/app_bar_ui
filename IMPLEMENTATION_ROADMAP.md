@@ -105,9 +105,10 @@ This roadmap tracks the development of the **Scroll-Driven UI Framework for Flut
 - [x] Write tests in `test/presets_and_controls_test.dart` (13 tests passed).
 
 ### PHASE 9 — Preset Design System
-- [x] Implement `ScrollResponsivePresets`: `material()`, `minimal()`, `iosInspired()`, `collapsingHeader()`, `transparentFloating()`, `dashboard()`, and `custom()`.
-- [x] Verify presets never override developer custom widgets or impose unwanted styling.
-- [x] Write preset tests in `test/presets_and_controls_test.dart`.
+- [x] Implement all 7 configurable presets: `material()`, `minimal()`, `iosInspired()`, `collapsingHeader()`, `transparentFloating()`, `dashboard()`, and `custom()`.
+- [x] Provide direct preset named constructors on `ScrollResponsiveScaffold` (`.material`, `.minimal`, `.iosInspired`, `.collapsingHeader`, `.transparentFloating`, `.dashboard`).
+- [x] Verify presets preserve and never override developer custom widgets or impose unwanted styling.
+- [x] Write preset tests in `test/presets_and_controls_test.dart` (15 tests passed).
 
 ### PHASE 10 — Native System UI Management
 - [x] Implement `StatusBarManager` with threshold-based state transitions and hysteresis.

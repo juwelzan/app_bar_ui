@@ -56,6 +56,85 @@ void main() {
       expect(config.thresholds.leadingEndOffset, 65.0);
       expect(config.effectiveStatusBar.enabled, isFalse);
     });
+
+    testWidgets(
+      'ScrollResponsiveScaffold preset constructors configure correct presets',
+      (tester) async {
+        // Material
+        final materialScaffold = ScrollResponsiveScaffold.material(
+          body: const Text('Material Content'),
+        );
+        expect(materialScaffold.config.thresholds.leadingStartOffset, 40.0);
+        expect(materialScaffold.config.effectiveStatusBar.enabled, isTrue);
+
+        // Minimal
+        final minimalScaffold = ScrollResponsiveScaffold.minimal(
+          body: const Text('Minimal Content'),
+        );
+        expect(minimalScaffold.config.thresholds.leadingEndOffset, 70.0);
+        expect(minimalScaffold.config.effectiveStatusBar.enabled, isFalse);
+
+        // iOS Inspired
+        final iosScaffold = ScrollResponsiveScaffold.iosInspired(
+          body: const Text('iOS Content'),
+        );
+        expect(iosScaffold.config.thresholds.leadingEndOffset, 140.0);
+
+        // Collapsing Header
+        final collapsingScaffold = ScrollResponsiveScaffold.collapsingHeader(
+          body: const Text('Collapsing Content'),
+        );
+        expect(collapsingScaffold.config.thresholds.leadingEndOffset, 200.0);
+
+        // Transparent Floating
+        final floatingScaffold = ScrollResponsiveScaffold.transparentFloating(
+          body: const Text('Floating Content'),
+        );
+        expect(floatingScaffold.config.thresholds.leadingEndOffset, 90.0);
+
+        // Dashboard
+        final dashboardScaffold = ScrollResponsiveScaffold.dashboard(
+          body: const Text('Dashboard Content'),
+        );
+        expect(dashboardScaffold.config.thresholds.leadingEndOffset, 100.0);
+      },
+    );
+
+    testWidgets(
+      'presets preserve and never override developer custom widgets',
+      (tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            home: ScrollResponsiveScaffold.minimal(
+              header: const Text('CUSTOM_HEADER_PRESERVED'),
+              initialLeading: const Text('CUSTOM_LEADING'),
+              scrolledLeading: const Text('CUSTOM_DRAWER'),
+              body: const Text('CUSTOM_BODY'),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        // Custom widgets must be rendered untouched
+        expect(find.text('CUSTOM_HEADER_PRESERVED'), findsOneWidget);
+        expect(find.text('CUSTOM_LEADING'), findsOneWidget);
+        expect(find.text('CUSTOM_BODY'), findsOneWidget);
+
+        // Pinned action buttons must have transparent backgrounds (no forced cards/elevations)
+        final pinnedActionFinder = find.byKey(
+          const ValueKey('pinned_leading_action'),
+        );
+        expect(pinnedActionFinder, findsOneWidget);
+        final materialFinder = find.descendant(
+          of: pinnedActionFinder,
+          matching: find.byType(Material),
+        );
+        expect(
+          tester.widget<Material>(materialFinder).type,
+          MaterialType.transparency,
+        );
+      },
+    );
   });
 
   group('Phase 10.4: ScrollResponsiveController Tests', () {
