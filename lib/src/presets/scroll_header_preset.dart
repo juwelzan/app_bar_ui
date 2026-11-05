@@ -74,7 +74,22 @@ enum ScrollHeaderPreset {
   twoRow,
 
   /// Multi-action header displaying primary actions and an automatic overflow menu.
-  multiAction;
+  multiAction,
+
+  /// Ultra-minimal, icon-centric navigation bar with compact height.
+  compactIcon,
+
+  /// Hierarchical breadcrumb navigation header for nested page traversal.
+  breadcrumb,
+
+  /// Focused back navigation header with prominent title and quick actions.
+  backTitle,
+
+  /// Contextual Action Bar (CAB) mode displaying selection count and batch actions.
+  contextualSelection,
+
+  /// Breakpoint-aware responsive header adapting between mobile and wide screen layouts.
+  adaptiveNavigation;
 
   /// User-friendly display label for this preset.
   String get label {
@@ -129,6 +144,16 @@ enum ScrollHeaderPreset {
         return 'Two-Row Header';
       case ScrollHeaderPreset.multiAction:
         return 'Multi-Action Header';
+      case ScrollHeaderPreset.compactIcon:
+        return 'Compact Icon Header';
+      case ScrollHeaderPreset.breadcrumb:
+        return 'Breadcrumb Header';
+      case ScrollHeaderPreset.backTitle:
+        return 'Back-Title Header';
+      case ScrollHeaderPreset.contextualSelection:
+        return 'Contextual Selection Header';
+      case ScrollHeaderPreset.adaptiveNavigation:
+        return 'Adaptive Navigation Header';
     }
   }
 
@@ -185,6 +210,16 @@ enum ScrollHeaderPreset {
         return 'Upper navigation bar with lower secondary control row.';
       case ScrollHeaderPreset.multiAction:
         return 'Primary actions with automatic overflow popup menu.';
+      case ScrollHeaderPreset.compactIcon:
+        return 'Ultra-minimal icon-focused navigation.';
+      case ScrollHeaderPreset.breadcrumb:
+        return 'Hierarchical navigation breadcrumbs.';
+      case ScrollHeaderPreset.backTitle:
+        return 'Back navigation with prominent title and quick actions.';
+      case ScrollHeaderPreset.contextualSelection:
+        return 'Selection mode toolbar with count and batch actions.';
+      case ScrollHeaderPreset.adaptiveNavigation:
+        return 'Breakpoint-aware responsive layout for compact and wide screens.';
     }
   }
 }

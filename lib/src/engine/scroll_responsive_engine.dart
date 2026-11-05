@@ -186,14 +186,20 @@ class ScrollResponsiveEngine {
 
     if (notification is ScrollStartNotification) {
       onScrollStart?.call(notification);
+      updateScrollOffset(notification.metrics.pixels);
     } else if (notification is ScrollEndNotification) {
-      if (notification.dragDetails?.primaryVelocity != null) {
-        _velocity = notification.dragDetails!.primaryVelocity!;
+      final double? endVelocity = notification.dragDetails?.primaryVelocity;
+      if (endVelocity != null) {
+        _velocity = endVelocity;
       }
       onScrollEnd?.call(notification);
+      updateScrollOffset(
+        notification.metrics.pixels,
+        explicitVelocity: endVelocity ?? _velocity,
+      );
+    } else {
+      updateScrollOffset(notification.metrics.pixels);
     }
-
-    updateScrollOffset(notification.metrics.pixels);
     return false;
   }
 

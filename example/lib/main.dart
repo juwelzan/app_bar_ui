@@ -1060,6 +1060,11 @@ class PresetGalleryView extends StatelessWidget {
       case ScrollHeaderPreset.split:
       case ScrollHeaderPreset.twoRow:
       case ScrollHeaderPreset.multiAction:
+      case ScrollHeaderPreset.compactIcon:
+      case ScrollHeaderPreset.breadcrumb:
+      case ScrollHeaderPreset.backTitle:
+      case ScrollHeaderPreset.contextualSelection:
+      case ScrollHeaderPreset.adaptiveNavigation:
         return 'Navigation & Layout';
     }
   }
@@ -1116,6 +1121,16 @@ class PresetGalleryView extends StatelessWidget {
         return Icons.table_rows;
       case ScrollHeaderPreset.multiAction:
         return Icons.more_horiz;
+      case ScrollHeaderPreset.compactIcon:
+        return Icons.widgets_outlined;
+      case ScrollHeaderPreset.breadcrumb:
+        return Icons.linear_scale;
+      case ScrollHeaderPreset.backTitle:
+        return Icons.arrow_back_ios_new;
+      case ScrollHeaderPreset.contextualSelection:
+        return Icons.checklist;
+      case ScrollHeaderPreset.adaptiveNavigation:
+        return Icons.devices;
     }
   }
 
@@ -1729,6 +1744,89 @@ class _PresetDetailScreenState extends State<PresetDetailScreen> {
             IconButton(icon: Icon(Icons.download), onPressed: null),
             IconButton(icon: Icon(Icons.delete_outline), onPressed: null),
           ],
+        );
+
+      case ScrollHeaderPreset.compactIcon:
+        return ScrollHeader.compactIcon(
+          title: Text(preset.label),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          actions: const [
+            IconButton(icon: Icon(Icons.search), onPressed: null),
+            IconButton(icon: Icon(Icons.favorite_border), onPressed: null),
+            IconButton(icon: Icon(Icons.share), onPressed: null),
+          ],
+        );
+
+      case ScrollHeaderPreset.breadcrumb:
+        return ScrollHeader.breadcrumb(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          breadcrumbs: const [
+            Text('Home'),
+            Text('Shop'),
+            Text('Electronics'),
+            Text('Audio'),
+          ],
+          actions: const [
+            IconButton(icon: Icon(Icons.search), onPressed: null),
+          ],
+        );
+
+      case ScrollHeaderPreset.backTitle:
+        return ScrollHeader.backTitle(
+          title: Text(preset.label),
+          subtitle: const Text('Back navigation with quick actions'),
+          onBackTap: () => Navigator.of(context).pop(),
+          actions: const [
+            IconButton(icon: Icon(Icons.bookmark_border), onPressed: null),
+            IconButton(icon: Icon(Icons.more_vert), onPressed: null),
+          ],
+        );
+
+      case ScrollHeaderPreset.contextualSelection:
+        return ScrollHeader.contextualSelection(
+          selectedCount: 4,
+          onClearSelection: () => Navigator.of(context).pop(),
+          selectionActions: const [
+            IconButton(icon: Icon(Icons.select_all), onPressed: null),
+            IconButton(icon: Icon(Icons.archive_outlined), onPressed: null),
+            IconButton(icon: Icon(Icons.delete_outline), onPressed: null),
+          ],
+        );
+
+      case ScrollHeaderPreset.adaptiveNavigation:
+        return ScrollHeader.adaptiveNavigation(
+          breakpoint: 600.0,
+          compactHeader: ScrollHeader.minimal(
+            title: const Text('Mobile Header (<600px)'),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            actions: const [
+              IconButton(icon: Icon(Icons.menu), onPressed: null),
+            ],
+          ),
+          expandedHeader: ScrollHeader.material(
+            title: const Text('Tablet/Desktop Header (≥600px)'),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            actions: [
+              TextButton.icon(
+                icon: const Icon(Icons.file_download),
+                label: const Text('Export'),
+                onPressed: null,
+              ),
+              const IconButton(icon: Icon(Icons.settings), onPressed: null),
+            ],
+          ),
         );
     }
   }

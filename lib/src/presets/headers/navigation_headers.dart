@@ -603,3 +603,413 @@ class MultiActionHeaderWidget extends StatelessWidget {
     );
   }
 }
+
+/// Preset 26: Compact Icon Header
+///
+/// Ultra-minimal, icon-centric navigation bar with reduced height (48px)
+/// and prominent touch targets for primary tool actions.
+class CompactIconHeaderWidget extends StatelessWidget {
+  /// Creates a [CompactIconHeaderWidget].
+  const CompactIconHeaderWidget({
+    super.key,
+    this.title,
+    this.leading,
+    this.actions,
+    this.style,
+    this.safeArea = true,
+  });
+
+  /// Optional compact title or badge widget.
+  final Widget? title;
+
+  /// Leading navigation icon.
+  final Widget? leading;
+
+  /// Icon actions displayed in the compact bar.
+  final List<Widget>? actions;
+
+  /// Style configurations.
+  final ScrollHeaderStyle? style;
+
+  /// Whether to pad for top safe insets.
+  final bool safeArea;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final s = (style ?? const ScrollHeaderStyle()).copyWith(
+      height: style?.height ?? 48.0,
+      backgroundColor: style?.backgroundColor ?? theme.colorScheme.surface,
+      scrolledBackgroundColor:
+          style?.scrolledBackgroundColor ?? theme.colorScheme.surfaceContainer,
+      elevation: style?.elevation ?? 0.0,
+      scrolledElevation: style?.scrolledElevation ?? 1.5,
+      showDivider: style?.showDivider ?? true,
+      padding:
+          style?.padding ?? const EdgeInsets.symmetric(horizontal: 8.0),
+    );
+
+    return HeaderContainer(
+      style: s,
+      safeArea: safeArea,
+      child: NavigationToolbar(
+        leading: leading,
+        middle: title != null
+            ? DefaultTextStyle(
+                style:
+                    s.titleStyle ??
+                    theme.textTheme.labelLarge!.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                child: title!,
+              )
+            : null,
+        trailing: actions != null && actions!.isNotEmpty
+            ? Row(mainAxisSize: MainAxisSize.min, children: actions!)
+            : null,
+        centerMiddle: s.centerTitle ?? true,
+      ),
+    );
+  }
+}
+
+/// Preset 27: Breadcrumb Header
+///
+/// Hierarchical breadcrumb navigation header allowing seamless traversal
+/// through nested page hierarchies with automatic horizontal scrolling on small screens.
+class BreadcrumbHeaderWidget extends StatelessWidget {
+  /// Creates a [BreadcrumbHeaderWidget].
+  const BreadcrumbHeaderWidget({
+    super.key,
+    required this.breadcrumbs,
+    this.separator,
+    this.leading,
+    this.actions,
+    this.onBreadcrumbTap,
+    this.style,
+    this.safeArea = true,
+  });
+
+  /// List of breadcrumb item widgets.
+  final List<Widget> breadcrumbs;
+
+  /// Separator between breadcrumb items. Defaults to a chevron right.
+  final Widget? separator;
+
+  /// Optional leading widget before breadcrumbs.
+  final Widget? leading;
+
+  /// Trailing actions.
+  final List<Widget>? actions;
+
+  /// Optional tap callback receiving the index of the tapped breadcrumb.
+  final ValueChanged<int>? onBreadcrumbTap;
+
+  /// Style configurations.
+  final ScrollHeaderStyle? style;
+
+  /// Whether to pad for top safe insets.
+  final bool safeArea;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final s = (style ?? const ScrollHeaderStyle()).copyWith(
+      height: style?.height ?? 54.0,
+      backgroundColor: style?.backgroundColor ?? theme.colorScheme.surface,
+      scrolledBackgroundColor:
+          style?.scrolledBackgroundColor ?? theme.colorScheme.surfaceContainer,
+      elevation: style?.elevation ?? 0.0,
+      scrolledElevation: style?.scrolledElevation ?? 1.5,
+      showDivider: style?.showDivider ?? true,
+    );
+
+    final sep = separator ??
+        Icon(
+          Icons.chevron_right,
+          size: 16.0,
+          color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
+        );
+
+    final items = <Widget>[];
+    for (int i = 0; i < breadcrumbs.length; i++) {
+      final isLast = i == breadcrumbs.length - 1;
+      Widget crumb = breadcrumbs[i];
+
+      if (onBreadcrumbTap != null && !isLast) {
+        crumb = InkWell(
+          borderRadius: BorderRadius.circular(6.0),
+          onTap: () => onBreadcrumbTap!(i),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
+            child: crumb,
+          ),
+        );
+      }
+
+      items.add(crumb);
+      if (!isLast) {
+        items.add(
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+            child: sep,
+          ),
+        );
+      }
+    }
+
+    return HeaderContainer(
+      style: s,
+      safeArea: safeArea,
+      child: Row(
+        children: [
+          if (leading != null) ...[
+            leading!,
+            const SizedBox(width: 8.0),
+          ],
+          Expanded(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: items,
+              ),
+            ),
+          ),
+          if (actions != null && actions!.isNotEmpty) ...[
+            const SizedBox(width: 8.0),
+            Row(mainAxisSize: MainAxisSize.min, children: actions!),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+/// Preset 28: Back-Title Header
+///
+/// Focused detail and edit page navigation bar with explicit back button,
+/// prominent page title, and contextual quick actions.
+class BackTitleHeaderWidget extends StatelessWidget {
+  /// Creates a [BackTitleHeaderWidget].
+  const BackTitleHeaderWidget({
+    super.key,
+    this.title,
+    this.subtitle,
+    this.backIcon,
+    this.onBackTap,
+    this.actions,
+    this.style,
+    this.safeArea = true,
+  });
+
+  /// Main page title.
+  final Widget? title;
+
+  /// Optional subtitle.
+  final Widget? subtitle;
+
+  /// Custom back icon. Defaults to [Icons.arrow_back].
+  final Widget? backIcon;
+
+  /// Callback when back button is pressed. Defaults to Navigator.maybePop.
+  final VoidCallback? onBackTap;
+
+  /// Trailing actions.
+  final List<Widget>? actions;
+
+  /// Style configurations.
+  final ScrollHeaderStyle? style;
+
+  /// Whether to pad for top safe insets.
+  final bool safeArea;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final s = (style ?? const ScrollHeaderStyle()).copyWith(
+      backgroundColor: style?.backgroundColor ?? theme.colorScheme.surface,
+      scrolledBackgroundColor:
+          style?.scrolledBackgroundColor ?? theme.colorScheme.surfaceContainer,
+      elevation: style?.elevation ?? 0.0,
+      scrolledElevation: style?.scrolledElevation ?? 2.0,
+      showDivider: style?.showDivider ?? true,
+    );
+
+    return HeaderContainer(
+      style: s,
+      safeArea: safeArea,
+      child: NavigationToolbar(
+        leading: IconButton(
+          icon: backIcon ?? const Icon(Icons.arrow_back),
+          tooltip: 'Back',
+          onPressed: onBackTap ?? () => Navigator.maybePop(context),
+        ),
+        middle: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: s.centerTitle == true
+              ? CrossAxisAlignment.center
+              : CrossAxisAlignment.start,
+          children: [
+            if (title != null)
+              DefaultTextStyle(
+                style:
+                    s.titleStyle ??
+                    theme.textTheme.titleMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                child: title!,
+              ),
+            if (subtitle != null) ...[
+              const SizedBox(height: 1.0),
+              DefaultTextStyle(
+                style:
+                    s.subtitleStyle ??
+                    theme.textTheme.bodySmall!.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                child: subtitle!,
+              ),
+            ],
+          ],
+        ),
+        trailing: actions != null && actions!.isNotEmpty
+            ? Row(mainAxisSize: MainAxisSize.min, children: actions!)
+            : null,
+        centerMiddle: s.centerTitle ?? false,
+      ),
+    );
+  }
+}
+
+/// Preset 29: Contextual Selection Header
+///
+/// Contextual Action Bar (CAB) header for item selection modes.
+/// Displays item selection count, clear/close button, and contextual batch action items.
+class ContextualSelectionHeaderWidget extends StatelessWidget {
+  /// Creates a [ContextualSelectionHeaderWidget].
+  const ContextualSelectionHeaderWidget({
+    super.key,
+    required this.selectedCount,
+    this.onClearSelection,
+    this.closeIcon,
+    this.selectionActions,
+    this.countBuilder,
+    this.style,
+    this.safeArea = true,
+  });
+
+  /// Number of currently selected items.
+  final int selectedCount;
+
+  /// Callback when close/cancel selection is tapped.
+  final VoidCallback? onClearSelection;
+
+  /// Custom icon for the close/dismiss button. Defaults to [Icons.close].
+  final Widget? closeIcon;
+
+  /// Batch action buttons (e.g. delete, archive, share).
+  final List<Widget>? selectionActions;
+
+  /// Custom builder for the selection count text.
+  final Widget Function(int count)? countBuilder;
+
+  /// Style configurations.
+  final ScrollHeaderStyle? style;
+
+  /// Whether to pad for top safe insets.
+  final bool safeArea;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final s = (style ?? const ScrollHeaderStyle()).copyWith(
+      backgroundColor:
+          style?.backgroundColor ?? theme.colorScheme.primaryContainer,
+      scrolledBackgroundColor:
+          style?.scrolledBackgroundColor ??
+          theme.colorScheme.primaryContainer,
+      foregroundColor:
+          style?.foregroundColor ?? theme.colorScheme.onPrimaryContainer,
+      elevation: style?.elevation ?? 2.0,
+      scrolledElevation: style?.scrolledElevation ?? 3.0,
+      showDivider: style?.showDivider ?? false,
+    );
+
+    return HeaderContainer(
+      style: s,
+      safeArea: safeArea,
+      child: NavigationToolbar(
+        leading: IconButton(
+          icon: closeIcon ?? const Icon(Icons.close),
+          tooltip: 'Clear selection',
+          color: s.foregroundColor,
+          onPressed: onClearSelection,
+        ),
+        middle: countBuilder != null
+            ? countBuilder!(selectedCount)
+            : Text(
+                '$selectedCount selected',
+                style: s.titleStyle ??
+                    theme.textTheme.titleMedium!.copyWith(
+                      color: s.foregroundColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+        trailing: selectionActions != null && selectionActions!.isNotEmpty
+            ? Row(mainAxisSize: MainAxisSize.min, children: selectionActions!)
+            : null,
+        centerMiddle: s.centerTitle ?? false,
+      ),
+    );
+  }
+}
+
+/// Preset 30: Adaptive Navigation Header
+///
+/// Screen-size adaptive navigation header that automatically switches between
+/// a compact mobile header layout and an expanded tablet/desktop layout at [breakpoint].
+class AdaptiveNavigationHeaderWidget extends StatelessWidget {
+  /// Creates an [AdaptiveNavigationHeaderWidget].
+  const AdaptiveNavigationHeaderWidget({
+    super.key,
+    required this.compactHeader,
+    required this.expandedHeader,
+    this.breakpoint = 600.0,
+    this.style,
+    this.safeArea = true,
+  });
+
+  /// Header widget rendered on screens narrower than [breakpoint].
+  final Widget compactHeader;
+
+  /// Header widget rendered on screens with width >= [breakpoint].
+  final Widget expandedHeader;
+
+  /// Width threshold separating compact and expanded modes. Defaults to 600.0.
+  final double breakpoint;
+
+  /// Style configurations.
+  final ScrollHeaderStyle? style;
+
+  /// Whether to pad for top safe insets.
+  final bool safeArea;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth < breakpoint) {
+          return compactHeader;
+        }
+        return expandedHeader;
+      },
+    );
+  }
+}
