@@ -277,6 +277,11 @@ ScrollResponsiveScaffold(
 | `visibleUiMode` | `SystemUiMode` | `SystemUiMode.edgeToEdge` | Mode applied when status bar is visible. |
 | `visibleOverlays` | `List<SystemUiOverlay>?` | `SystemUiOverlay.values` | Overlays restored on scroll up. |
 | `restoreOnDispose` | `bool` | `true` | Restores status bar to visible when navigating away or disposing. |
+| `restoreOnRouteTransition` | `bool` | `true` | Temporarily restores status bar when a new route is pushed, and reapplies on return. |
+| `androidHiddenOverlayStyle` | `SystemUiOverlayStyle?` | `null` | Android-specific style applied when status bar is hidden. |
+| `androidVisibleOverlayStyle` | `SystemUiOverlayStyle?` | `null` | Android-specific style applied when status bar is visible. |
+| `iosHiddenOverlayStyle` | `SystemUiOverlayStyle?` | `null` | iOS-specific style applied when status bar is hidden. |
+| `iosVisibleOverlayStyle` | `SystemUiOverlayStyle?` | `null` | iOS-specific style applied when status bar is visible. |
 
 ---
 
