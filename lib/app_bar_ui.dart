@@ -37,6 +37,7 @@ export 'src/presets/scroll_header_preset.dart';
 export 'src/presets/scroll_header_style.dart';
 export 'src/presets/headers/base_header.dart';
 export 'src/presets/headers/navigation_headers.dart';
+export 'src/presets/headers/visual_headers.dart';
 
 import 'app_bar_ui_platform_interface.dart';
 

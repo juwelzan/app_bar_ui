@@ -1066,6 +1066,12 @@ class PresetGalleryView extends StatelessWidget {
       case ScrollHeaderPreset.contextualSelection:
       case ScrollHeaderPreset.adaptiveNavigation:
         return 'Navigation & Layout';
+      case ScrollHeaderPreset.glass:
+      case ScrollHeaderPreset.blurredBackground:
+      case ScrollHeaderPreset.bordered:
+      case ScrollHeaderPreset.shadowElevated:
+      case ScrollHeaderPreset.layered:
+        return 'Visual & Creative';
     }
   }
 
@@ -1131,6 +1137,16 @@ class PresetGalleryView extends StatelessWidget {
         return Icons.checklist;
       case ScrollHeaderPreset.adaptiveNavigation:
         return Icons.devices;
+      case ScrollHeaderPreset.glass:
+        return Icons.blur_on;
+      case ScrollHeaderPreset.blurredBackground:
+        return Icons.lens_blur;
+      case ScrollHeaderPreset.bordered:
+        return Icons.border_bottom;
+      case ScrollHeaderPreset.shadowElevated:
+        return Icons.layers;
+      case ScrollHeaderPreset.layered:
+        return Icons.view_carousel;
     }
   }
 
@@ -1827,6 +1843,94 @@ class _PresetDetailScreenState extends State<PresetDetailScreen> {
               const IconButton(icon: Icon(Icons.settings), onPressed: null),
             ],
           ),
+        );
+
+      case ScrollHeaderPreset.glass:
+        return ScrollHeader.glass(
+          title: Text(preset.label),
+          subtitle: const Text('Translucent frosted blur glass'),
+          blurSigma: 12.0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          actions: const [
+            IconButton(icon: Icon(Icons.tune), onPressed: null),
+          ],
+        );
+
+      case ScrollHeaderPreset.blurredBackground:
+        return ScrollHeader.blurredBackground(
+          title: Text(preset.label),
+          subtitle: const Text('Performance-isolated backdrop blur'),
+          blurSigma: 10.0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          actions: const [
+            IconButton(icon: Icon(Icons.refresh), onPressed: null),
+          ],
+        );
+
+      case ScrollHeaderPreset.bordered:
+        return ScrollHeader.bordered(
+          title: Text(preset.label),
+          subtitle: const Text('Clean elevation-free hairline border'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          actions: const [
+            IconButton(icon: Icon(Icons.check), onPressed: null),
+          ],
+        );
+
+      case ScrollHeaderPreset.shadowElevated:
+        return ScrollHeader.shadowElevated(
+          title: Text(preset.label),
+          subtitle: const Text('Deep multi-layer drop shadow'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          actions: const [
+            IconButton(icon: Icon(Icons.star_border), onPressed: null),
+          ],
+        );
+
+      case ScrollHeaderPreset.layered:
+        return ScrollHeader.layered(
+          title: Text(preset.label),
+          subtitle: const Text('Three-layer depth architecture'),
+          backLayer: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Theme.of(context).colorScheme.primary.withValues(alpha: 0.15),
+                  Theme.of(context).colorScheme.tertiary.withValues(alpha: 0.15),
+                ],
+              ),
+            ),
+          ),
+          middleLayer: Align(
+            alignment: Alignment.bottomRight,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 16.0, bottom: 8.0),
+              child: Chip(
+                label: const Text('Layer 2'),
+                backgroundColor:
+                    Theme.of(context).colorScheme.secondaryContainer,
+              ),
+            ),
+          ),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          actions: const [
+            IconButton(icon: Icon(Icons.layers_outlined), onPressed: null),
+          ],
         );
     }
   }

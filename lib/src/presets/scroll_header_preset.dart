@@ -89,7 +89,22 @@ enum ScrollHeaderPreset {
   contextualSelection,
 
   /// Breakpoint-aware responsive header adapting between mobile and wide screen layouts.
-  adaptiveNavigation;
+  adaptiveNavigation,
+
+  /// Translucent frosted glass effect with blur, subtle tint, and hairline border.
+  glass,
+
+  /// Performance-safe blurred background header isolated with RepaintBoundary.
+  blurredBackground,
+
+  /// Flat, modern border-separated header using hairline outlines instead of shadows.
+  bordered,
+
+  /// Multi-stop elevated drop shadow header with configurable blur radius and spread.
+  shadowElevated,
+
+  /// Multi-layer visual depth header featuring back decorative layer, middle layer, and toolbar.
+  layered;
 
   /// User-friendly display label for this preset.
   String get label {
@@ -154,6 +169,16 @@ enum ScrollHeaderPreset {
         return 'Contextual Selection Header';
       case ScrollHeaderPreset.adaptiveNavigation:
         return 'Adaptive Navigation Header';
+      case ScrollHeaderPreset.glass:
+        return 'Glass Header';
+      case ScrollHeaderPreset.blurredBackground:
+        return 'Blurred Background Header';
+      case ScrollHeaderPreset.bordered:
+        return 'Bordered Header';
+      case ScrollHeaderPreset.shadowElevated:
+        return 'Shadow-Elevated Header';
+      case ScrollHeaderPreset.layered:
+        return 'Layered Header';
     }
   }
 
@@ -220,6 +245,16 @@ enum ScrollHeaderPreset {
         return 'Selection mode toolbar with count and batch actions.';
       case ScrollHeaderPreset.adaptiveNavigation:
         return 'Breakpoint-aware responsive layout for compact and wide screens.';
+      case ScrollHeaderPreset.glass:
+        return 'Translucent frosted glass with blur and hairline border.';
+      case ScrollHeaderPreset.blurredBackground:
+        return 'Performance-isolated backdrop blur header.';
+      case ScrollHeaderPreset.bordered:
+        return 'Flat elevation-free header separated by hairline border.';
+      case ScrollHeaderPreset.shadowElevated:
+        return 'Deep multi-stop drop shadow header with configurable elevation.';
+      case ScrollHeaderPreset.layered:
+        return 'Multi-layer visual depth header with decorative back layer.';
     }
   }
 }
