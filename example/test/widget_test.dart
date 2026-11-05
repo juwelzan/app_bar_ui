@@ -179,4 +179,63 @@ void main() {
       }
     },
   );
+
+  testWidgets(
+    'Animated Experiences Lab switches across Batch 1 styles and supports parameter tuning',
+    (WidgetTester tester) async {
+      await tester.pumpWidget(const ScrollResponsiveDemoApp());
+      await tester.pumpAndSettle();
+
+      // Navigate to Tab 6: Lab (50)
+      await tester.tap(find.text('Lab (50)'));
+      await tester.pumpAndSettle();
+
+      // Verify Batch 1 banner is visible
+      expect(
+        find.text('Batch 1 / 10: Morphing & Physics (Styles 1–5)'),
+        findsOneWidget,
+      );
+      expect(find.text('1. Morphing Split'), findsOneWidget);
+
+      // Select Style 2: Elastic Floating
+      final style2 = find.text('2. Elastic Floating');
+      await tester.ensureVisible(style2);
+      await tester.tap(style2);
+      await tester.pumpAndSettle();
+      expect(find.text('Elastic Dynamics Header'), findsOneWidget);
+
+      // Select Style 3: Disappearing & Floating Actions
+      final style3 = find.text('3. Disappearing & Floating Actions');
+      await tester.ensureVisible(style3);
+      await tester.tap(style3);
+      await tester.pumpAndSettle();
+      expect(find.text('Unpinned Header Canvas'), findsOneWidget);
+
+      // Select Style 4: Circular Morph
+      final style4 = find.text('4. Circular Morph');
+      await tester.ensureVisible(style4);
+      await tester.tap(style4);
+      await tester.pumpAndSettle();
+      expect(find.text('Sarah Connor'), findsWidgets);
+
+      // Select Style 5: Flip 3D Header
+      final style5 = find.text('5. Flip 3D Header');
+      await tester.ensureVisible(style5);
+      await tester.tap(style5);
+      await tester.pumpAndSettle();
+      expect(find.text('3D Flip Face A: Card'), findsOneWidget);
+
+      // Open View Code dialog
+      await tester.tap(find.text('View Code'));
+      await tester.pumpAndSettle();
+      expect(find.text('Flip 3D Header Integration Code'), findsOneWidget);
+      await tester.tap(find.text('Close'));
+      await tester.pumpAndSettle();
+
+      // Toggle Simulated Reduced Motion
+      await tester.tap(find.text('Simulate A11Y / Reduced Motion'));
+      await tester.pumpAndSettle();
+      expect(find.text('A11Y Fallback'), findsOneWidget);
+    },
+  );
 }

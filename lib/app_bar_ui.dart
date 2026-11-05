@@ -39,6 +39,16 @@ export 'src/presets/headers/base_header.dart';
 export 'src/presets/headers/navigation_headers.dart';
 export 'src/presets/headers/visual_headers.dart';
 export 'src/presets/headers/specialized_appbar_headers.dart';
+export 'src/motion/motion_timeline.dart';
+export 'src/motion/spring_coordinator.dart';
+export 'src/motion/perspective_transform.dart';
+export 'src/motion/motion_config.dart';
+export 'src/experiences/experience_configs.dart';
+export 'src/experiences/morphing_split_header.dart';
+export 'src/experiences/elastic_floating_header.dart';
+export 'src/experiences/disappearing_floating_actions_header.dart';
+export 'src/experiences/circular_morph_header.dart';
+export 'src/experiences/flip_3d_header.dart';
 
 import 'app_bar_ui_platform_interface.dart';
 
