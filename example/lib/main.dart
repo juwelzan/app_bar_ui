@@ -1077,6 +1077,12 @@ class PresetGalleryView extends StatelessWidget {
       case ScrollHeaderPreset.illustrated:
       case ScrollHeaderPreset.edgeToEdge:
         return 'Visual & Creative';
+      case ScrollHeaderPreset.mediaPlayer:
+      case ScrollHeaderPreset.shopping:
+      case ScrollHeaderPreset.chat:
+      case ScrollHeaderPreset.detailPage:
+      case ScrollHeaderPreset.reading:
+        return 'Specialized Layout';
     }
   }
 
@@ -1162,6 +1168,16 @@ class PresetGalleryView extends StatelessWidget {
         return Icons.draw;
       case ScrollHeaderPreset.edgeToEdge:
         return Icons.fullscreen;
+      case ScrollHeaderPreset.mediaPlayer:
+        return Icons.play_circle_outline;
+      case ScrollHeaderPreset.shopping:
+        return Icons.shopping_bag_outlined;
+      case ScrollHeaderPreset.chat:
+        return Icons.chat_bubble_outline;
+      case ScrollHeaderPreset.detailPage:
+        return Icons.photo_size_select_actual_outlined;
+      case ScrollHeaderPreset.reading:
+        return Icons.menu_book;
     }
   }
 
@@ -2024,6 +2040,112 @@ class _PresetDetailScreenState extends State<PresetDetailScreen> {
           ),
           actions: const [
             IconButton(icon: Icon(Icons.crop_free), onPressed: null),
+          ],
+        );
+
+      case ScrollHeaderPreset.mediaPlayer:
+        return ScrollHeader.mediaPlayer(
+          nowPlayingTitle: const Text('Midnight Jazz Vibes'),
+          artist: const Text('The Blue Note Quintet'),
+          albumArt: Container(
+            color: Colors.deepPurple,
+            child: const Icon(Icons.music_note, color: Colors.white),
+          ),
+          isPlaying: true,
+          onPlayPause: () {},
+          onPrevious: () {},
+          onNext: () {},
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          actions: const [
+            IconButton(icon: Icon(Icons.playlist_play), onPressed: null),
+          ],
+        );
+
+      case ScrollHeaderPreset.shopping:
+        return ScrollHeader.shopping(
+          title: const Text('MegaStore Express'),
+          cartItemCount: 3,
+          onCartTap: () {},
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          actions: const [
+            IconButton(icon: Icon(Icons.search), onPressed: null),
+          ],
+        );
+
+      case ScrollHeaderPreset.chat:
+        return ScrollHeader.chat(
+          chatUser: const Text('Sarah Jenkins'),
+          onlineStatus: const Text('Online • Typing...'),
+          avatar: const CircleAvatar(
+            radius: 18.0,
+            backgroundColor: Colors.teal,
+            child: Text(
+              'SJ',
+              style: TextStyle(color: Colors.white, fontSize: 13.0),
+            ),
+          ),
+          onCallTap: () {},
+          onVideoTap: () {},
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          actions: const [
+            IconButton(icon: Icon(Icons.more_vert), onPressed: null),
+          ],
+        );
+
+      case ScrollHeaderPreset.detailPage:
+        return ScrollHeader.detailPage(
+          title: const Text('Yosemite National Park'),
+          subtitle: const Text('Sierra Nevada Mountains, California'),
+          heroTag: 'destination-banner',
+          background: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Colors.teal, Colors.blueGrey],
+              ),
+            ),
+            child: const Center(
+              child: Icon(Icons.landscape, size: 72.0, color: Colors.white70),
+            ),
+          ),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          actions: const [
+            IconButton(
+              icon: Icon(Icons.share, color: Colors.white),
+              onPressed: null,
+            ),
+            IconButton(
+              icon: Icon(Icons.bookmark_border, color: Colors.white),
+              onPressed: null,
+            ),
+          ],
+        );
+
+      case ScrollHeaderPreset.reading:
+        return ScrollHeader.reading(
+          title: const Text('Understanding Reactive Architecture'),
+          estimatedReadTime: '5 min read',
+          readingProgress: 0.35,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          actions: const [
+            IconButton(icon: Icon(Icons.text_fields), onPressed: null),
+            IconButton(icon: Icon(Icons.bookmark_border), onPressed: null),
           ],
         );
     }

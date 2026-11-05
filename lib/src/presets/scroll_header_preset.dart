@@ -119,7 +119,22 @@ enum ScrollHeaderPreset {
   illustrated,
 
   /// Seamless margin-free header extending directly behind status bars with full bleed.
-  edgeToEdge;
+  edgeToEdge,
+
+  /// Media playback header with album art, track details, and embedded controls.
+  mediaPlayer,
+
+  /// E-commerce storefront header with search and live shopping cart item badge.
+  shopping,
+
+  /// Messaging conversation header with presence indicator and call actions.
+  chat,
+
+  /// Media/article detail header with Hero transition support and contrast scrim.
+  detailPage,
+
+  /// Editorial reader header with integrated horizontal reading progress bar.
+  reading;
 
   /// User-friendly display label for this preset.
   String get label {
@@ -204,6 +219,16 @@ enum ScrollHeaderPreset {
         return 'Illustrated Header';
       case ScrollHeaderPreset.edgeToEdge:
         return 'Edge-to-Edge Header';
+      case ScrollHeaderPreset.mediaPlayer:
+        return 'Media Player Header';
+      case ScrollHeaderPreset.shopping:
+        return 'Shopping Header';
+      case ScrollHeaderPreset.chat:
+        return 'Chat Header';
+      case ScrollHeaderPreset.detailPage:
+        return 'Detail Page Header';
+      case ScrollHeaderPreset.reading:
+        return 'Reading Header';
     }
   }
 
@@ -290,6 +315,16 @@ enum ScrollHeaderPreset {
         return 'Collapsing decorative illustration header.';
       case ScrollHeaderPreset.edgeToEdge:
         return 'Full-bleed edge-to-edge layout.';
+      case ScrollHeaderPreset.mediaPlayer:
+        return 'Media playback header with album art, track details, and controls.';
+      case ScrollHeaderPreset.shopping:
+        return 'E-commerce storefront header with live cart item counter.';
+      case ScrollHeaderPreset.chat:
+        return 'Conversation header with presence indicator and call buttons.';
+      case ScrollHeaderPreset.detailPage:
+        return 'Hero transition detail header with contrast scrim.';
+      case ScrollHeaderPreset.reading:
+        return 'Editorial reader header with horizontal progress indicator.';
     }
   }
 }
