@@ -53,10 +53,11 @@ This roadmap tracks the development of the **Scroll-Driven UI Framework for Flut
 - [x] Write widget tests in `test/pinned_action_button_test.dart` and `test/scroll_responsive_scaffold_test.dart`.
 
 ### PHASE 4 — Advanced Header Features
-- [x] Implement `ScrollCollapsingHeader` with customizable `expandedHeight`, `collapsedHeight`, and builder.
+- [x] Implement `ScrollCollapsingHeader` with customizable `expandedHeight`, `collapsedHeight`, `parallaxFactor`, and custom builder.
+- [x] Implement `ScrollCollapsingHeader.transparentFloating` and `ScrollCollapsingHeader.parallax` presets.
+- [x] Implement `ScrollStickyHeader` and `ScrollStickyHeader.builder` for persistent pinning of arbitrary slivers.
 - [x] Implement `ScrollPullToExpandHeader` with rubber-band stretch, zoom, and overscroll callbacks.
-- [x] Support transparent floating header and customizable flexible space.
-- [x] Verify layout extent assertions and write widget tests in `test/scroll_components_test.dart`.
+- [x] Write widget tests in `test/scroll_components_test.dart` (17 tests passed).
 
 ### PHASE 5 — Advanced Scroll Components
 - [x] Implement `ScrollStickyTabBar` with persistent pinning and dynamic elevation/border adaptions.

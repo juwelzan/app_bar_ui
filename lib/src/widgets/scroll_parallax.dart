@@ -55,12 +55,7 @@ class _ScrollParallaxState extends State<ScrollParallax> {
           speedFactor: widget.speedFactor,
           height: widget.height,
         ),
-        children: [
-          Container(
-            key: _backgroundImageKey,
-            child: widget.child,
-          ),
-        ],
+        children: [Container(key: _backgroundImageKey, child: widget.child)],
       ),
     );
   }
@@ -91,8 +86,9 @@ class _ParallaxFlowDelegate extends FlowDelegate {
 
   @override
   BoxConstraints getConstraintsForChild(int i, BoxConstraints constraints) {
-    final parentHeight =
-        constraints.hasBoundedHeight ? constraints.maxHeight : (height ?? 200.0);
+    final parentHeight = constraints.hasBoundedHeight
+        ? constraints.maxHeight
+        : (height ?? 200.0);
     return BoxConstraints.tightFor(
       width: constraints.maxWidth,
       height: parentHeight * (1.0 + speedFactor.abs()),
@@ -120,8 +116,10 @@ class _ParallaxFlowDelegate extends FlowDelegate {
       return;
     }
 
-    final double scrollFraction =
-        (itemOffset.dy / viewportDimension).clamp(-1.0, 1.0);
+    final double scrollFraction = (itemOffset.dy / viewportDimension).clamp(
+      -1.0,
+      1.0,
+    );
     final double maxOffsetY = context.size.height * speedFactor;
     final double yOffset = -scrollFraction * maxOffsetY;
 

@@ -82,7 +82,9 @@ class _ScrollProgressIndicatorState extends State<ScrollProgressIndicator> {
   void didUpdateWidget(covariant ScrollProgressIndicator oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.progressListenable != oldWidget.progressListenable) {
-      oldWidget.progressListenable?.removeListener(_onProgressListenableChanged);
+      oldWidget.progressListenable?.removeListener(
+        _onProgressListenableChanged,
+      );
       widget.progressListenable?.addListener(_onProgressListenableChanged);
     }
     if (widget.scrollController != oldWidget.scrollController) {
@@ -99,12 +101,16 @@ class _ScrollProgressIndicatorState extends State<ScrollProgressIndicator> {
   }
 
   void _onScrollControllerChanged() {
-    if (!mounted || widget.scrollController == null || !widget.scrollController!.hasClients) {
+    if (!mounted ||
+        widget.scrollController == null ||
+        !widget.scrollController!.hasClients) {
       return;
     }
     final position = widget.scrollController!.position;
     final max = position.maxScrollExtent;
-    final double rawProgress = max > 0 ? (position.pixels / max).clamp(0.0, 1.0) : 0.0;
+    final double rawProgress = max > 0
+        ? (position.pixels / max).clamp(0.0, 1.0)
+        : 0.0;
     setState(() {
       _progress = rawProgress;
     });
@@ -119,7 +125,8 @@ class _ScrollProgressIndicatorState extends State<ScrollProgressIndicator> {
 
   @override
   Widget build(BuildContext context) {
-    final effectiveColor = widget.color ?? Theme.of(context).colorScheme.primary;
+    final effectiveColor =
+        widget.color ?? Theme.of(context).colorScheme.primary;
     final effectiveBg = widget.backgroundColor ?? Colors.transparent;
     final curvedProgress = widget.curve.transform(_progress);
 
@@ -165,4 +172,3 @@ class _ScrollProgressIndicatorState extends State<ScrollProgressIndicator> {
     );
   }
 }
-

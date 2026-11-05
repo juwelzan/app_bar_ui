@@ -176,10 +176,11 @@ class SmartVisibilityConfig {
   }
 
   /// Creates a copy with specified rules updated.
-  SmartVisibilityConfig copyWith({Map<VisibilityTarget, VisibilityRule>? rules}) {
+  SmartVisibilityConfig copyWith({
+    Map<VisibilityTarget, VisibilityRule>? rules,
+  }) {
     return SmartVisibilityConfig(
       rules: rules ?? Map<VisibilityTarget, VisibilityRule>.from(this.rules),
     );
   }
 }
-

@@ -46,27 +46,30 @@ void main() {
   });
 
   group('Phase 10.3: ScrollSnap Tests', () {
-    test('ScrollSnapConfig calculates effective snap points and nearest target', () {
-      const config = ScrollSnapConfig(
-        snapOffsets: [300.0],
-        snapTolerance: 50.0,
-        snapToHeader: true,
-        headerExpandedOffset: 0.0,
-        headerCollapsedOffset: 120.0,
-      );
+    test(
+      'ScrollSnapConfig calculates effective snap points and nearest target',
+      () {
+        const config = ScrollSnapConfig(
+          snapOffsets: [300.0],
+          snapTolerance: 50.0,
+          snapToHeader: true,
+          headerExpandedOffset: 0.0,
+          headerCollapsedOffset: 120.0,
+        );
 
-      expect(config.effectiveSnapPoints, [0.0, 120.0, 300.0]);
+        expect(config.effectiveSnapPoints, [0.0, 120.0, 300.0]);
 
-      // Within tolerance of 120.0
-      expect(config.findNearestSnapTarget(105.0), 120.0);
-      expect(config.findNearestSnapTarget(135.0), 120.0);
+        // Within tolerance of 120.0
+        expect(config.findNearestSnapTarget(105.0), 120.0);
+        expect(config.findNearestSnapTarget(135.0), 120.0);
 
-      // Within tolerance of 0.0
-      expect(config.findNearestSnapTarget(30.0), 0.0);
+        // Within tolerance of 0.0
+        expect(config.findNearestSnapTarget(30.0), 0.0);
 
-      // Outside all tolerances
-      expect(config.findNearestSnapTarget(200.0), isNull);
-    });
+        // Outside all tolerances
+        expect(config.findNearestSnapTarget(200.0), isNull);
+      },
+    );
 
     testWidgets('ScrollSnapEngine animates to snap target when triggered', (
       tester,
@@ -87,10 +90,8 @@ void main() {
             body: ListView.builder(
               controller: scrollController,
               itemCount: 50,
-              itemBuilder: (context, index) => SizedBox(
-                height: 50.0,
-                child: Text('Row $index'),
-              ),
+              itemBuilder: (context, index) =>
+                  SizedBox(height: 50.0, child: Text('Row $index')),
             ),
           ),
         ),
@@ -108,41 +109,42 @@ void main() {
   });
 
   group('Phase 10.3: ScrollProgressIndicator Tests', () {
-    testWidgets('renders linear progress indicator and updates with progressListenable', (
-      tester,
-    ) async {
-      final progressNotifier = ValueNotifier<double>(0.0);
+    testWidgets(
+      'renders linear progress indicator and updates with progressListenable',
+      (tester) async {
+        final progressNotifier = ValueNotifier<double>(0.0);
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: Center(
-              child: SizedBox(
-                width: 200.0,
-                child: ScrollProgressIndicator(
-                  progressListenable: progressNotifier,
-                  height: 4.0,
-                  color: Colors.indigo,
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: Center(
+                child: SizedBox(
+                  width: 200.0,
+                  child: ScrollProgressIndicator(
+                    progressListenable: progressNotifier,
+                    height: 4.0,
+                    color: Colors.indigo,
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      );
-      await tester.pumpAndSettle();
+        );
+        await tester.pumpAndSettle();
 
-      expect(find.byType(ScrollProgressIndicator), findsOneWidget);
+        expect(find.byType(ScrollProgressIndicator), findsOneWidget);
 
-      // Advance progress to 50%
-      progressNotifier.value = 0.5;
-      await tester.pump();
+        // Advance progress to 50%
+        progressNotifier.value = 0.5;
+        await tester.pump();
 
-      // Advance progress to 100%
-      progressNotifier.value = 1.0;
-      await tester.pump();
+        // Advance progress to 100%
+        progressNotifier.value = 1.0;
+        await tester.pump();
 
-      expect(find.byType(ScrollProgressIndicator), findsOneWidget);
-    });
+        expect(find.byType(ScrollProgressIndicator), findsOneWidget);
+      },
+    );
 
     testWidgets('renders circular progress indicator style', (tester) async {
       final progressNotifier = ValueNotifier<double>(0.75);

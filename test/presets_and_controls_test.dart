@@ -9,7 +9,10 @@ void main() {
       expect(config.thresholds.leadingStartOffset, 40.0);
       expect(config.thresholds.leadingEndOffset, 120.0);
       expect(config.effectiveStatusBar.enabled, isTrue);
-      expect(config.effectiveAnimation.transitionType, ScrollTransitionType.scrollProgress);
+      expect(
+        config.effectiveAnimation.transitionType,
+        ScrollTransitionType.scrollProgress,
+      );
     });
 
     test('minimal preset disables status bar sync by default', () {
@@ -29,11 +32,14 @@ void main() {
       expect(config.thresholds.leadingEndOffset, 200.0);
     });
 
-    test('transparentFloating preset provides lightweight floating thresholds', () {
-      final config = ScrollResponsivePresets.transparentFloating();
-      expect(config.thresholds.leadingStartOffset, 30.0);
-      expect(config.thresholds.leadingEndOffset, 90.0);
-    });
+    test(
+      'transparentFloating preset provides lightweight floating thresholds',
+      () {
+        final config = ScrollResponsivePresets.transparentFloating();
+        expect(config.thresholds.leadingStartOffset, 30.0);
+        expect(config.thresholds.leadingEndOffset, 90.0);
+      },
+    );
 
     test('dashboard preset generates valid thresholds', () {
       final config = ScrollResponsivePresets.dashboard();
@@ -64,10 +70,8 @@ void main() {
             body: ListView.builder(
               controller: controller,
               itemCount: 100,
-              itemBuilder: (context, index) => SizedBox(
-                height: 50.0,
-                child: Text('Item $index'),
-              ),
+              itemBuilder: (context, index) =>
+                  SizedBox(height: 50.0, child: Text('Item $index')),
             ),
           ),
         ),
@@ -79,33 +83,25 @@ void main() {
 
       // Programmatic collapse header
       // ignore: unawaited_futures
-      controller.collapseHeader(
-        duration: const Duration(milliseconds: 50),
-      );
+      controller.collapseHeader(duration: const Duration(milliseconds: 50));
       await tester.pumpAndSettle();
       expect(controller.offset, closeTo(150.0, 1.0));
 
       // Programmatic scroll to top / expand header
       // ignore: unawaited_futures
-      controller.expandHeader(
-        duration: const Duration(milliseconds: 50),
-      );
+      controller.expandHeader(duration: const Duration(milliseconds: 50));
       await tester.pumpAndSettle();
       expect(controller.offset, 0.0);
 
       // Programmatic scroll to bottom
       // ignore: unawaited_futures
-      controller.scrollToBottom(
-        duration: const Duration(milliseconds: 50),
-      );
+      controller.scrollToBottom(duration: const Duration(milliseconds: 50));
       await tester.pumpAndSettle();
       expect(controller.offset, controller.position.maxScrollExtent);
 
       // Programmatic scroll to top
       // ignore: unawaited_futures
-      controller.scrollToTop(
-        duration: const Duration(milliseconds: 50),
-      );
+      controller.scrollToTop(duration: const Duration(milliseconds: 50));
       await tester.pumpAndSettle();
       expect(controller.offset, 0.0);
 
@@ -115,61 +111,67 @@ void main() {
     testWidgets('synchronizes with SmartVisibilityController', (tester) async {
       final controller = ScrollResponsiveController();
 
-      expect(controller.visibilityController.isVisible(VisibilityTarget.header), isTrue);
+      expect(
+        controller.visibilityController.isVisible(VisibilityTarget.header),
+        isTrue,
+      );
 
       controller.setVisibility(VisibilityTarget.header, 0.0);
-      expect(controller.visibilityController.isVisible(VisibilityTarget.header), isFalse);
+      expect(
+        controller.visibilityController.isVisible(VisibilityTarget.header),
+        isFalse,
+      );
 
       controller.dispose();
     });
   });
 
   group('Phase 10.4: Scaffold Slots & Advanced Integration Tests', () {
-    testWidgets('renders stickyTabBar, progressIndicator, scrollAwareFab, and autoHideBottomBar', (
-      tester,
-    ) async {
-      final controller = ScrollResponsiveController();
+    testWidgets(
+      'renders stickyTabBar, progressIndicator, scrollAwareFab, and autoHideBottomBar',
+      (tester) async {
+        final controller = ScrollResponsiveController();
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: ScrollResponsiveScaffold(
-            controller: controller,
-            stickyTabBar: const PreferredSize(
-              preferredSize: Size.fromHeight(48.0),
-              child: Text('Sticky Tab Header'),
-            ),
-            progressIndicator: const SizedBox(
-              height: 3.0,
-              child: Text('Progress Bar'),
-            ),
-            floatingActionButton: const FloatingActionButton(
-              onPressed: null,
-              child: Icon(Icons.add),
-            ),
-            scrollAwareFab: true,
-            bottomNavigationBar: const BottomAppBar(
-              child: Text('Bottom Navigation'),
-            ),
-            autoHideBottomBar: true,
-            body: Column(
-              children: List.generate(
-                30,
-                (i) => SizedBox(height: 60.0, child: Text('Row $i')),
+        await tester.pumpWidget(
+          MaterialApp(
+            home: ScrollResponsiveScaffold(
+              controller: controller,
+              stickyTabBar: const PreferredSize(
+                preferredSize: Size.fromHeight(48.0),
+                child: Text('Sticky Tab Header'),
+              ),
+              progressIndicator: const SizedBox(
+                height: 3.0,
+                child: Text('Progress Bar'),
+              ),
+              floatingActionButton: const FloatingActionButton(
+                onPressed: null,
+                child: Icon(Icons.add),
+              ),
+              scrollAwareFab: true,
+              bottomNavigationBar: const BottomAppBar(
+                child: Text('Bottom Navigation'),
+              ),
+              autoHideBottomBar: true,
+              body: Column(
+                children: List.generate(
+                  30,
+                  (i) => SizedBox(height: 60.0, child: Text('Row $i')),
+                ),
               ),
             ),
           ),
-        ),
-      );
-      await tester.pumpAndSettle();
+        );
+        await tester.pumpAndSettle();
 
-      expect(find.text('Sticky Tab Header'), findsOneWidget);
-      expect(find.text('Progress Bar'), findsOneWidget);
-      expect(find.text('Bottom Navigation'), findsOneWidget);
-      expect(find.byType(ScrollAwareFab), findsOneWidget);
-      expect(find.byType(ScrollAutoHideBottomBar), findsOneWidget);
+        expect(find.text('Sticky Tab Header'), findsOneWidget);
+        expect(find.text('Progress Bar'), findsOneWidget);
+        expect(find.text('Bottom Navigation'), findsOneWidget);
+        expect(find.byType(ScrollAwareFab), findsOneWidget);
+        expect(find.byType(ScrollAutoHideBottomBar), findsOneWidget);
 
-      controller.dispose();
-    });
+        controller.dispose();
+      },
+    );
   });
 }
-

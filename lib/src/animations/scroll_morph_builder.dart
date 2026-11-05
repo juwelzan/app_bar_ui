@@ -107,10 +107,7 @@ class ScrollMorphBuilder extends StatelessWidget {
         slideOffset.dx * (1.0 - visibility) * slideDirection,
         slideOffset.dy * (1.0 - visibility) * slideDirection,
       );
-      result = FractionalTranslation(
-        translation: translation,
-        child: result,
-      );
+      result = FractionalTranslation(translation: translation, child: result);
     }
 
     if (enableScale && !disableMotion) {
@@ -123,10 +120,7 @@ class ScrollMorphBuilder extends StatelessWidget {
     }
 
     if (enableFade) {
-      result = Opacity(
-        opacity: visibility.clamp(0.0, 1.0),
-        child: result,
-      );
+      result = Opacity(opacity: visibility.clamp(0.0, 1.0), child: result);
     }
 
     return result;

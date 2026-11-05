@@ -34,8 +34,14 @@ void main() {
       final controller = SmartVisibilityController();
       expect(controller.getVisibility(VisibilityTarget.header), 1.0);
       expect(controller.isVisible(VisibilityTarget.header), isTrue);
-      expect(controller.getVisibility(VisibilityTarget.floatingActionButton), 1.0);
-      expect(controller.getVisibility(VisibilityTarget.bottomNavigationBar), 1.0);
+      expect(
+        controller.getVisibility(VisibilityTarget.floatingActionButton),
+        1.0,
+      );
+      expect(
+        controller.getVisibility(VisibilityTarget.bottomNavigationBar),
+        1.0,
+      );
       controller.dispose();
     });
 
@@ -49,8 +55,14 @@ void main() {
         delta: 10.0,
       );
 
-      expect(controller.getVisibility(VisibilityTarget.floatingActionButton), 0.0);
-      expect(controller.isVisible(VisibilityTarget.floatingActionButton), isFalse);
+      expect(
+        controller.getVisibility(VisibilityTarget.floatingActionButton),
+        0.0,
+      );
+      expect(
+        controller.isVisible(VisibilityTarget.floatingActionButton),
+        isFalse,
+      );
       // Header has hideOffset 120, so at 90 it is still visible
       expect(controller.getVisibility(VisibilityTarget.header), 1.0);
 
@@ -66,36 +78,39 @@ void main() {
       controller.dispose();
     });
 
-    test('controller restores components on reverse scroll up below showOffset', () {
-      final controller = SmartVisibilityController();
+    test(
+      'controller restores components on reverse scroll up below showOffset',
+      () {
+        final controller = SmartVisibilityController();
 
-      // Scroll down
-      controller.updateScroll(
-        150.0,
-        direction: ScrollDirection.reverse,
-        delta: 10.0,
-      );
-      expect(controller.getVisibility(VisibilityTarget.header), 0.0);
+        // Scroll down
+        controller.updateScroll(
+          150.0,
+          direction: ScrollDirection.reverse,
+          delta: 10.0,
+        );
+        expect(controller.getVisibility(VisibilityTarget.header), 0.0);
 
-      // Scroll up into deadband (60px) - header showOffset is 40px, so still hidden
-      controller.updateScroll(
-        60.0,
-        direction: ScrollDirection.forward,
-        delta: -10.0,
-      );
-      expect(controller.getVisibility(VisibilityTarget.header), 0.0);
+        // Scroll up into deadband (60px) - header showOffset is 40px, so still hidden
+        controller.updateScroll(
+          60.0,
+          direction: ScrollDirection.forward,
+          delta: -10.0,
+        );
+        expect(controller.getVisibility(VisibilityTarget.header), 0.0);
 
-      // Scroll up below showOffset (30px) - restores to 1.0
-      controller.updateScroll(
-        30.0,
-        direction: ScrollDirection.forward,
-        delta: -10.0,
-      );
-      expect(controller.getVisibility(VisibilityTarget.header), 1.0);
-      expect(controller.isVisible(VisibilityTarget.header), isTrue);
+        // Scroll up below showOffset (30px) - restores to 1.0
+        controller.updateScroll(
+          30.0,
+          direction: ScrollDirection.forward,
+          delta: -10.0,
+        );
+        expect(controller.getVisibility(VisibilityTarget.header), 1.0);
+        expect(controller.isVisible(VisibilityTarget.header), isTrue);
 
-      controller.dispose();
-    });
+        controller.dispose();
+      },
+    );
 
     test('controller supports programmatic visibility override and reset', () {
       final controller = SmartVisibilityController();
@@ -198,40 +213,43 @@ void main() {
       expect(hasTranslation, isTrue);
     });
 
-    testWidgets('ScrollTransform respects reduced-motion accessibility preference', (
-      tester,
-    ) async {
-      final progressNotifier = ValueNotifier<double>(1.0);
+    testWidgets(
+      'ScrollTransform respects reduced-motion accessibility preference',
+      (tester) async {
+        final progressNotifier = ValueNotifier<double>(1.0);
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: MediaQuery(
-            data: const MediaQueryData(disableAnimations: true), // User requested reduced motion!
-            child: Scaffold(
-              body: ScrollTransform(
-                progressListenable: progressNotifier,
-                scale: const ScrollRange(begin: 1.0, end: 0.5),
-                translation: const ScrollRange(
-                  begin: Offset.zero,
-                  end: Offset(0.0, 50.0),
+        await tester.pumpWidget(
+          MaterialApp(
+            home: MediaQuery(
+              data: const MediaQueryData(
+                disableAnimations: true,
+              ), // User requested reduced motion!
+              child: Scaffold(
+                body: ScrollTransform(
+                  progressListenable: progressNotifier,
+                  scale: const ScrollRange(begin: 1.0, end: 0.5),
+                  translation: const ScrollRange(
+                    begin: Offset.zero,
+                    end: Offset(0.0, 50.0),
+                  ),
+                  child: const Text('Reduced Motion Target'),
                 ),
-                child: const Text('Reduced Motion Target'),
               ),
             ),
           ),
-        ),
-      );
-      await tester.pumpAndSettle();
+        );
+        await tester.pumpAndSettle();
 
-      // When disableAnimations is true, Transform.scale and Transform.translate are suppressed!
-      expect(
-        find.descendant(
-          of: find.byType(ScrollTransform),
-          matching: find.byType(Transform),
-        ),
-        findsNothing,
-      );
-    });
+        // When disableAnimations is true, Transform.scale and Transform.translate are suppressed!
+        expect(
+          find.descendant(
+            of: find.byType(ScrollTransform),
+            matching: find.byType(Transform),
+          ),
+          findsNothing,
+        );
+      },
+    );
 
     testWidgets('ScrollColorTransition dynamically interpolates colors', (
       tester,
@@ -257,7 +275,9 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      var box = tester.widget<Container>(find.byKey(const ValueKey('colored_box')));
+      var box = tester.widget<Container>(
+        find.byKey(const ValueKey('colored_box')),
+      );
       expect(box.color, Colors.red);
 
       // Advance progress
@@ -268,48 +288,49 @@ void main() {
       expect(box.color, Colors.blue);
     });
 
-    testWidgets('ScrollMorphBuilder switches hit testing and visibility at switchPoint', (
-      tester,
-    ) async {
-      final progressNotifier = ValueNotifier<double>(0.0);
-      bool initialTapped = false;
-      bool scrolledTapped = false;
+    testWidgets(
+      'ScrollMorphBuilder switches hit testing and visibility at switchPoint',
+      (tester) async {
+        final progressNotifier = ValueNotifier<double>(0.0);
+        bool initialTapped = false;
+        bool scrolledTapped = false;
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: ScrollMorphBuilder(
-              progressListenable: progressNotifier,
-              switchPoint: 0.5,
-              initialChild: GestureDetector(
-                onTap: () => initialTapped = true,
-                child: const Text('Initial Avatar Widget'),
-              ),
-              scrolledChild: GestureDetector(
-                onTap: () => scrolledTapped = true,
-                child: const Text('Scrolled Icon Widget'),
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: ScrollMorphBuilder(
+                progressListenable: progressNotifier,
+                switchPoint: 0.5,
+                initialChild: GestureDetector(
+                  onTap: () => initialTapped = true,
+                  child: const Text('Initial Avatar Widget'),
+                ),
+                scrolledChild: GestureDetector(
+                  onTap: () => scrolledTapped = true,
+                  child: const Text('Scrolled Icon Widget'),
+                ),
               ),
             ),
           ),
-        ),
-      );
-      await tester.pumpAndSettle();
+        );
+        await tester.pumpAndSettle();
 
-      // At progress 0.0: initial is hit testable
-      await tester.tap(find.text('Initial Avatar Widget'));
-      await tester.pump();
-      expect(initialTapped, isTrue);
-      expect(scrolledTapped, isFalse);
+        // At progress 0.0: initial is hit testable
+        await tester.tap(find.text('Initial Avatar Widget'));
+        await tester.pump();
+        expect(initialTapped, isTrue);
+        expect(scrolledTapped, isFalse);
 
-      // Progress past switch point (0.8)
-      progressNotifier.value = 0.8;
-      await tester.pump();
+        // Progress past switch point (0.8)
+        progressNotifier.value = 0.8;
+        await tester.pump();
 
-      initialTapped = false;
-      await tester.tap(find.text('Scrolled Icon Widget'));
-      await tester.pump();
-      expect(initialTapped, isFalse);
-      expect(scrolledTapped, isTrue);
-    });
+        initialTapped = false;
+        await tester.tap(find.text('Scrolled Icon Widget'));
+        await tester.pump();
+        expect(initialTapped, isFalse);
+        expect(scrolledTapped, isTrue);
+      },
+    );
   });
 }

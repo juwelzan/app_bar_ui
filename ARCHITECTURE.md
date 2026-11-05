@@ -32,7 +32,7 @@ flowchart TD
     subgraph ComponentLayer["4. Modular Component & Widget Layer"]
         direction TB
         MasterScaffold["ScrollResponsiveScaffold (Layered Viewport & Overlay)"]
-        HeaderModules["ScrollResponsiveHeader | ScrollCollapsingHeader | ScrollPullToExpandHeader"]
+        HeaderModules["ScrollResponsiveHeader | ScrollCollapsingHeader | ScrollStickyHeader | ScrollPullToExpandHeader"]
         ActionModules["PinnedActionButton (Left & Right Fixed Touch Targets)"]
         NavModules["ScrollStickyTabBar | ScrollAwareFab | ScrollAutoHideBottomBar"]
         ViewportModules["ScrollParallax (Flow-based) | ScrollProgressIndicator | ScrollSectionReveal"]

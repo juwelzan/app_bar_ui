@@ -3,16 +3,21 @@ import 'package:flutter/material.dart';
 /// A customizable collapsing sliver header that smoothly transitions from
 /// [expandedHeight] down to [collapsedHeight] as the user scrolls.
 ///
-/// Can be used as a sliver in any [CustomScrollView] or within
-/// [ScrollResponsiveScaffold.customSlivers].
+/// Supports:
+/// - Pinned sticky collapse or floating auto-reveal
+/// - Parallax background movement via [parallaxFactor]
+/// - Smooth content cross-fading from flexible space to collapsed toolbar
+/// - Custom builder functions for complete layout control
+/// - Transparent floating headers with zero elevation
 class ScrollCollapsingHeader extends StatelessWidget {
-  /// Creates a [ScrollCollapsingHeader] widget.
+  /// Creates a standard [ScrollCollapsingHeader] widget.
   const ScrollCollapsingHeader({
     super.key,
     this.expandedHeight = 200.0,
     this.collapsedHeight = kToolbarHeight,
     this.pinned = true,
     this.floating = false,
+    this.parallaxFactor = 0.0,
     this.builder,
     this.flexibleSpace,
     this.collapsedTitle,
@@ -28,6 +33,54 @@ class ScrollCollapsingHeader extends StatelessWidget {
          'expandedHeight ($expandedHeight) must be >= collapsedHeight ($collapsedHeight).',
        );
 
+  /// Creates a transparent floating header that floats back into view upon reverse scroll
+  /// without pinning permanently.
+  const ScrollCollapsingHeader.transparentFloating({
+    super.key,
+    this.expandedHeight = 180.0,
+    this.collapsedHeight = kToolbarHeight,
+    this.parallaxFactor = 0.0,
+    this.builder,
+    this.flexibleSpace,
+    this.collapsedTitle,
+    this.collapsedLeading,
+    this.collapsedActions,
+    this.curve = Curves.easeOut,
+  }) : pinned = false,
+       floating = true,
+       backgroundColor = Colors.transparent,
+       collapsedBackgroundColor = Colors.transparent,
+       elevation = 0.0,
+       scrolledElevation = 0.0,
+       assert(
+         expandedHeight >= collapsedHeight,
+         'expandedHeight ($expandedHeight) must be >= collapsedHeight ($collapsedHeight).',
+       );
+
+  /// Creates a collapsing header with built-in parallax background movement.
+  const ScrollCollapsingHeader.parallax({
+    super.key,
+    this.expandedHeight = 240.0,
+    this.collapsedHeight = kToolbarHeight,
+    this.pinned = true,
+    this.floating = false,
+    this.parallaxFactor = 0.5,
+    required Widget background,
+    this.collapsedTitle,
+    this.collapsedLeading,
+    this.collapsedActions,
+    this.backgroundColor,
+    this.collapsedBackgroundColor,
+    this.elevation = 0.0,
+    this.scrolledElevation = 4.0,
+    this.curve = Curves.easeInOut,
+  }) : builder = null,
+       flexibleSpace = background,
+       assert(
+         expandedHeight >= collapsedHeight,
+         'expandedHeight ($expandedHeight) must be >= collapsedHeight ($collapsedHeight).',
+       );
+
   /// Height when fully expanded. Defaults to 200.0.
   final double expandedHeight;
 
@@ -39,6 +92,9 @@ class ScrollCollapsingHeader extends StatelessWidget {
 
   /// Whether the header floats back into view immediately upon reverse scrolling. Defaults to `false`.
   final bool floating;
+
+  /// Parallax speed factor for [flexibleSpace] ($0.0$ = moves naturally, $0.5$ = moves at half speed).
+  final double parallaxFactor;
 
   /// Optional custom builder receiving the [collapseProgress] (0.0 = fully expanded, 1.0 = fully collapsed).
   final Widget Function(BuildContext context, double collapseProgress)? builder;
@@ -78,14 +134,18 @@ class ScrollCollapsingHeader extends StatelessWidget {
       delegate: _ScrollCollapsingHeaderDelegate(
         expandedHeight: expandedHeight,
         collapsedHeight: collapsedHeight,
+        parallaxFactor: parallaxFactor,
         builder: builder,
         flexibleSpace: flexibleSpace,
         collapsedTitle: collapsedTitle,
         collapsedLeading: collapsedLeading,
         collapsedActions: collapsedActions,
-        backgroundColor: backgroundColor ?? Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor:
+            backgroundColor ?? Theme.of(context).scaffoldBackgroundColor,
         collapsedBackgroundColor:
-            collapsedBackgroundColor ?? Theme.of(context).appBarTheme.backgroundColor ?? Theme.of(context).colorScheme.surface,
+            collapsedBackgroundColor ??
+            Theme.of(context).appBarTheme.backgroundColor ??
+            Theme.of(context).colorScheme.surface,
         elevation: elevation,
         scrolledElevation: scrolledElevation,
         curve: curve,
@@ -98,6 +158,7 @@ class _ScrollCollapsingHeaderDelegate extends SliverPersistentHeaderDelegate {
   _ScrollCollapsingHeaderDelegate({
     required this.expandedHeight,
     required this.collapsedHeight,
+    required this.parallaxFactor,
     this.builder,
     this.flexibleSpace,
     this.collapsedTitle,
@@ -112,6 +173,7 @@ class _ScrollCollapsingHeaderDelegate extends SliverPersistentHeaderDelegate {
 
   final double expandedHeight;
   final double collapsedHeight;
+  final double parallaxFactor;
   final Widget Function(BuildContext context, double collapseProgress)? builder;
   final Widget? flexibleSpace;
   final Widget? collapsedTitle;
@@ -142,18 +204,24 @@ class _ScrollCollapsingHeaderDelegate extends SliverPersistentHeaderDelegate {
 
     if (builder != null) {
       return Material(
-        elevation: overlapsContent || collapseProgress > 0.9 ? scrolledElevation : elevation,
-        color: Color.lerp(backgroundColor, collapsedBackgroundColor, collapseProgress),
-        child: SizedBox.expand(
-          child: builder!(context, collapseProgress),
+        elevation: overlapsContent || collapseProgress > 0.9
+            ? scrolledElevation
+            : elevation,
+        color: Color.lerp(
+          backgroundColor,
+          collapsedBackgroundColor,
+          collapseProgress,
         ),
+        child: SizedBox.expand(child: builder!(context, collapseProgress)),
       );
     }
 
-    final double effectiveElevation = (overlapsContent || collapseProgress > 0.9)
+    final double effectiveElevation =
+        (overlapsContent || collapseProgress > 0.9)
         ? scrolledElevation
         : elevation;
-    final Color effectiveBg = Color.lerp(
+    final Color effectiveBg =
+        Color.lerp(
           backgroundColor,
           collapsedBackgroundColor,
           collapseProgress,
@@ -163,38 +231,52 @@ class _ScrollCollapsingHeaderDelegate extends SliverPersistentHeaderDelegate {
     return Material(
       elevation: effectiveElevation,
       color: effectiveBg,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          // Flexible background (fades out as it collapses)
-          if (flexibleSpace != null)
-            Opacity(
-              opacity: (1.0 - collapseProgress).clamp(0.0, 1.0),
-              child: flexibleSpace,
-            ),
-
-          // Collapsed Toolbar (fades in as it approaches full collapse)
-          if (collapsedTitle != null || collapsedLeading != null || collapsedActions != null)
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              height: collapsedHeight,
-              child: Opacity(
-                opacity: collapseProgress.clamp(0.0, 1.0),
-                child: NavigationToolbar(
-                  leading: collapsedLeading,
-                  middle: collapsedTitle,
-                  trailing: collapsedActions != null
-                      ? Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: collapsedActions!,
+      child: ClipRect(
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            // Flexible background with optional parallax translation
+            if (flexibleSpace != null)
+              Positioned.fill(
+                child: Opacity(
+                  opacity: (1.0 - collapseProgress).clamp(0.0, 1.0),
+                  child: parallaxFactor > 0.0
+                      ? Transform.translate(
+                          offset: Offset(
+                            0.0,
+                            shrinkOffset * (1.0 - parallaxFactor),
+                          ),
+                          child: flexibleSpace,
                         )
-                      : null,
+                      : flexibleSpace,
                 ),
               ),
-            ),
-        ],
+
+            // Collapsed Toolbar (fades in as it approaches full collapse)
+            if (collapsedTitle != null ||
+                collapsedLeading != null ||
+                collapsedActions != null)
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                height: collapsedHeight,
+                child: Opacity(
+                  opacity: collapseProgress.clamp(0.0, 1.0),
+                  child: NavigationToolbar(
+                    leading: collapsedLeading,
+                    middle: collapsedTitle,
+                    trailing: collapsedActions != null
+                        ? Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: collapsedActions!,
+                          )
+                        : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -203,6 +285,7 @@ class _ScrollCollapsingHeaderDelegate extends SliverPersistentHeaderDelegate {
   bool shouldRebuild(covariant _ScrollCollapsingHeaderDelegate oldDelegate) {
     return oldDelegate.expandedHeight != expandedHeight ||
         oldDelegate.collapsedHeight != collapsedHeight ||
+        oldDelegate.parallaxFactor != parallaxFactor ||
         oldDelegate.builder != builder ||
         oldDelegate.flexibleSpace != flexibleSpace ||
         oldDelegate.collapsedTitle != collapsedTitle ||

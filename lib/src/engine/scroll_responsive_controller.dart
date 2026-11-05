@@ -58,11 +58,7 @@ class ScrollResponsiveController extends ScrollController {
     Curve curve = Curves.easeOutCubic,
   }) async {
     if (!hasClients) return;
-    await animateTo(
-      position.maxScrollExtent,
-      duration: duration,
-      curve: curve,
-    );
+    await animateTo(position.maxScrollExtent, duration: duration, curve: curve);
   }
 
   /// Smoothly animates scrolling past the header to [headerCollapsedOffset].

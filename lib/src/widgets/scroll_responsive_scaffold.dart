@@ -214,10 +214,7 @@ class _ScrollResponsiveScaffoldState extends State<ScrollResponsiveScaffold>
         if (widget.controller is ScrollResponsiveController) {
           (widget.controller! as ScrollResponsiveController)
               .visibilityController
-              .updateScroll(
-                details.offset,
-                direction: details.scrollDirection,
-              );
+              .updateScroll(details.offset, direction: details.scrollDirection);
         }
       },
       onDirectionChanged: (direction) {
@@ -225,10 +222,7 @@ class _ScrollResponsiveScaffoldState extends State<ScrollResponsiveScaffold>
         if (widget.controller is ScrollResponsiveController) {
           (widget.controller! as ScrollResponsiveController)
               .visibilityController
-              .updateScroll(
-                _engine.currentOffset,
-                direction: direction,
-              );
+              .updateScroll(_engine.currentOffset, direction: direction);
         }
       },
       onScrollStart: widget.onScrollStart,
@@ -403,9 +397,7 @@ class _ScrollResponsiveScaffoldState extends State<ScrollResponsiveScaffold>
       if (widget.stickyTabBar is ScrollStickyTabBar) {
         sliverList.add(widget.stickyTabBar!);
       } else {
-        sliverList.add(
-          ScrollStickyTabBar(child: widget.stickyTabBar!),
-        );
+        sliverList.add(ScrollStickyTabBar(child: widget.stickyTabBar!));
       }
     }
 

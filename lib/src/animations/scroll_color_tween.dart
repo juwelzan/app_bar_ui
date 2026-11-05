@@ -81,11 +81,7 @@ class ScrollColorTransition extends StatelessWidget {
         } else if (curvedT >= 1.0) {
           resolvedGradient = endGradient;
         } else if (beginGradient != null && endGradient != null) {
-          resolvedGradient = Gradient.lerp(
-            beginGradient,
-            endGradient,
-            curvedT,
-          );
+          resolvedGradient = Gradient.lerp(beginGradient, endGradient, curvedT);
         } else {
           resolvedGradient = beginGradient ?? endGradient;
         }

@@ -49,7 +49,8 @@ class ScrollAutoHideBottomBar extends StatefulWidget {
   final double showThreshold;
 
   @override
-  State<ScrollAutoHideBottomBar> createState() => _ScrollAutoHideBottomBarState();
+  State<ScrollAutoHideBottomBar> createState() =>
+      _ScrollAutoHideBottomBarState();
 }
 
 class _ScrollAutoHideBottomBarState extends State<ScrollAutoHideBottomBar>
@@ -70,12 +71,7 @@ class _ScrollAutoHideBottomBarState extends State<ScrollAutoHideBottomBar>
     _offsetAnimation = Tween<Offset>(
       begin: const Offset(0.0, 1.0), // Hidden below screen
       end: Offset.zero, // Visible at normal position
-    ).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: widget.curve,
-      ),
-    );
+    ).animate(CurvedAnimation(parent: _controller, curve: widget.curve));
 
     widget.visibilityListenable?.addListener(_onVisibilityListenableChanged);
     widget.scrollController?.addListener(_onScrollControllerChanged);
@@ -85,7 +81,9 @@ class _ScrollAutoHideBottomBarState extends State<ScrollAutoHideBottomBar>
   void didUpdateWidget(covariant ScrollAutoHideBottomBar oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.visibilityListenable != oldWidget.visibilityListenable) {
-      oldWidget.visibilityListenable?.removeListener(_onVisibilityListenableChanged);
+      oldWidget.visibilityListenable?.removeListener(
+        _onVisibilityListenableChanged,
+      );
       widget.visibilityListenable?.addListener(_onVisibilityListenableChanged);
     }
     if (widget.scrollController != oldWidget.scrollController) {
@@ -103,7 +101,8 @@ class _ScrollAutoHideBottomBarState extends State<ScrollAutoHideBottomBar>
   }
 
   void _onScrollControllerChanged() {
-    if (widget.scrollController == null || !widget.scrollController!.hasClients) {
+    if (widget.scrollController == null ||
+        !widget.scrollController!.hasClients) {
       return;
     }
     final offset = widget.scrollController!.offset;
@@ -137,7 +136,8 @@ class _ScrollAutoHideBottomBarState extends State<ScrollAutoHideBottomBar>
 
   @override
   Widget build(BuildContext context) {
-    final bool disableAnimations = MediaQuery.maybeDisableAnimationsOf(context) ?? false;
+    final bool disableAnimations =
+        MediaQuery.maybeDisableAnimationsOf(context) ?? false;
 
     if (disableAnimations) {
       return _controller.value > 0.0 ? widget.child : const SizedBox.shrink();
@@ -161,4 +161,3 @@ class _ScrollAutoHideBottomBarState extends State<ScrollAutoHideBottomBar>
     );
   }
 }
-

@@ -280,117 +280,113 @@ void main() {
       engine.dispose();
     });
 
-    testWidgets('tracks velocity and fires onScrollStart/onScrollEnd callbacks', (
-      tester,
-    ) async {
-      ScrollStartNotification? receivedStart;
-      ScrollEndNotification? receivedEnd;
+    testWidgets(
+      'tracks velocity and fires onScrollStart/onScrollEnd callbacks',
+      (tester) async {
+        ScrollStartNotification? receivedStart;
+        ScrollEndNotification? receivedEnd;
 
-      final engine = ScrollResponsiveEngine(
-        config: const ScrollResponsiveConfig(),
-        onScrollStart: (notification) => receivedStart = notification,
-        onScrollEnd: (notification) => receivedEnd = notification,
-      );
+        final engine = ScrollResponsiveEngine(
+          config: const ScrollResponsiveConfig(),
+          onScrollStart: (notification) => receivedStart = notification,
+          onScrollEnd: (notification) => receivedEnd = notification,
+        );
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: Builder(
-              builder: (context) {
-                return Container();
-              },
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: Builder(
+                builder: (context) {
+                  return Container();
+                },
+              ),
             ),
           ),
-        ),
-      );
+        );
 
-      final element = tester.element(find.byType(Container));
-      final metrics = FixedScrollMetrics(
-        minScrollExtent: 0.0,
-        maxScrollExtent: 500.0,
-        pixels: 50.0,
-        viewportDimension: 400.0,
-        axisDirection: AxisDirection.down,
-        devicePixelRatio: 1.0,
-      );
+        final element = tester.element(find.byType(Container));
+        final metrics = FixedScrollMetrics(
+          minScrollExtent: 0.0,
+          maxScrollExtent: 500.0,
+          pixels: 50.0,
+          viewportDimension: 400.0,
+          axisDirection: AxisDirection.down,
+          devicePixelRatio: 1.0,
+        );
 
-      // Fire Start Notification
-      final startNotification = ScrollStartNotification(
-        metrics: metrics,
-        context: element,
-      );
-      engine.handleScrollNotification(startNotification);
-      expect(receivedStart, isNotNull);
+        // Fire Start Notification
+        final startNotification = ScrollStartNotification(
+          metrics: metrics,
+          context: element,
+        );
+        engine.handleScrollNotification(startNotification);
+        expect(receivedStart, isNotNull);
 
-      // Fire Update with explicit velocity calculation
-      engine.updateScrollOffset(100.0, explicitVelocity: 450.0);
-      expect(engine.velocity, 450.0);
-      expect(engine.progressDetailsNotifier.value.velocity, 450.0);
+        // Fire Update with explicit velocity calculation
+        engine.updateScrollOffset(100.0, explicitVelocity: 450.0);
+        expect(engine.velocity, 450.0);
+        expect(engine.progressDetailsNotifier.value.velocity, 450.0);
 
-      // Fire End Notification with velocity
-      final endNotification = ScrollEndNotification(
-        metrics: metrics,
-        context: element,
-        dragDetails: DragEndDetails(
-          primaryVelocity: 300.0,
-          velocity: const Velocity(pixelsPerSecond: Offset(0, 300)),
-        ),
-      );
-      engine.handleScrollNotification(endNotification);
-      expect(receivedEnd, isNotNull);
-      expect(engine.velocity, 300.0);
-
-      engine.dispose();
-    });
-
-    testWidgets('filters nested scrolling depth when targetDepth is configured', (
-      tester,
-    ) async {
-      double? outerOffset;
-      final engine = ScrollResponsiveEngine(
-        config: const ScrollResponsiveConfig(),
-        targetDepth: 0, // Only primary scrollable at depth 0
-        onProgressChanged: (details) => outerOffset = details.offset,
-      );
-
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: Container(),
+        // Fire End Notification with velocity
+        final endNotification = ScrollEndNotification(
+          metrics: metrics,
+          context: element,
+          dragDetails: DragEndDetails(
+            primaryVelocity: 300.0,
+            velocity: const Velocity(pixelsPerSecond: Offset(0, 300)),
           ),
-        ),
-      );
+        );
+        engine.handleScrollNotification(endNotification);
+        expect(receivedEnd, isNotNull);
+        expect(engine.velocity, 300.0);
 
-      final element = tester.element(find.byType(Container));
-      final metrics = FixedScrollMetrics(
-        minScrollExtent: 0.0,
-        maxScrollExtent: 1000.0,
-        pixels: 75.0,
-        viewportDimension: 400.0,
-        axisDirection: AxisDirection.down,
-        devicePixelRatio: 1.0,
-      );
+        engine.dispose();
+      },
+    );
 
-      // Nested notification at depth 1 (should be ignored)
-      final nestedNotification = ScrollUpdateNotification(
-        metrics: metrics,
-        context: element,
-        depth: 1,
-      );
-      engine.handleScrollNotification(nestedNotification);
-      expect(outerOffset, isNull);
+    testWidgets(
+      'filters nested scrolling depth when targetDepth is configured',
+      (tester) async {
+        double? outerOffset;
+        final engine = ScrollResponsiveEngine(
+          config: const ScrollResponsiveConfig(),
+          targetDepth: 0, // Only primary scrollable at depth 0
+          onProgressChanged: (details) => outerOffset = details.offset,
+        );
 
-      // Primary notification at depth 0 (should be processed)
-      final primaryNotification = ScrollUpdateNotification(
-        metrics: metrics,
-        context: element,
-        depth: 0,
-      );
-      engine.handleScrollNotification(primaryNotification);
-      expect(outerOffset, 75.0);
+        await tester.pumpWidget(MaterialApp(home: Scaffold(body: Container())));
 
-      engine.dispose();
-    });
+        final element = tester.element(find.byType(Container));
+        final metrics = FixedScrollMetrics(
+          minScrollExtent: 0.0,
+          maxScrollExtent: 1000.0,
+          pixels: 75.0,
+          viewportDimension: 400.0,
+          axisDirection: AxisDirection.down,
+          devicePixelRatio: 1.0,
+        );
+
+        // Nested notification at depth 1 (should be ignored)
+        final nestedNotification = ScrollUpdateNotification(
+          metrics: metrics,
+          context: element,
+          depth: 1,
+        );
+        engine.handleScrollNotification(nestedNotification);
+        expect(outerOffset, isNull);
+
+        // Primary notification at depth 0 (should be processed)
+        final primaryNotification = ScrollUpdateNotification(
+          metrics: metrics,
+          context: element,
+          depth: 0,
+        );
+        engine.handleScrollNotification(primaryNotification);
+        expect(outerOffset, 75.0);
+
+        engine.dispose();
+      },
+    );
 
     test('avoids duplicate evaluations when offset is unchanged', () {
       int evaluationCount = 0;

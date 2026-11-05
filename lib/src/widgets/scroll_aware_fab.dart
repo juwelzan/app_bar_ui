@@ -88,10 +88,7 @@ class _ScrollAwareFabState extends State<ScrollAwareFab>
       duration: widget.animationDuration,
       value: (widget.visible ?? true) ? 1.0 : 0.0,
     );
-    _animation = CurvedAnimation(
-      parent: _controller,
-      curve: widget.curve,
-    );
+    _animation = CurvedAnimation(parent: _controller, curve: widget.curve);
 
     widget.visibilityListenable?.addListener(_onVisibilityListenableChanged);
     widget.scrollController?.addListener(_onScrollControllerChanged);
@@ -101,7 +98,9 @@ class _ScrollAwareFabState extends State<ScrollAwareFab>
   void didUpdateWidget(covariant ScrollAwareFab oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.visibilityListenable != oldWidget.visibilityListenable) {
-      oldWidget.visibilityListenable?.removeListener(_onVisibilityListenableChanged);
+      oldWidget.visibilityListenable?.removeListener(
+        _onVisibilityListenableChanged,
+      );
       widget.visibilityListenable?.addListener(_onVisibilityListenableChanged);
     }
     if (widget.scrollController != oldWidget.scrollController) {
@@ -119,7 +118,8 @@ class _ScrollAwareFabState extends State<ScrollAwareFab>
   }
 
   void _onScrollControllerChanged() {
-    if (widget.scrollController == null || !widget.scrollController!.hasClients) {
+    if (widget.scrollController == null ||
+        !widget.scrollController!.hasClients) {
       return;
     }
     final offset = widget.scrollController!.offset;
@@ -153,13 +153,16 @@ class _ScrollAwareFabState extends State<ScrollAwareFab>
 
   @override
   Widget build(BuildContext context) {
-    final bool disableAnimations = MediaQuery.maybeDisableAnimationsOf(context) ?? false;
+    final bool disableAnimations =
+        MediaQuery.maybeDisableAnimationsOf(context) ?? false;
 
     return AnimatedBuilder(
       animation: _animation,
       builder: (context, child) {
         if (disableAnimations) {
-          return _controller.value > 0.0 ? _buildFabContent() : const SizedBox.shrink();
+          return _controller.value > 0.0
+              ? _buildFabContent()
+              : const SizedBox.shrink();
         }
 
         Widget animatedWidget = _buildFabContent();

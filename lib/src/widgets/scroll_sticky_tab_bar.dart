@@ -123,7 +123,9 @@ class _ScrollStickyTabBarDelegate extends SliverPersistentHeaderDelegate {
   ) {
     final bool isPinned = overlapsContent;
     final double effectiveElevation = isPinned ? pinnedElevation : elevation;
-    final BoxBorder? effectiveBorder = isPinned ? (pinnedBorder ?? border) : border;
+    final BoxBorder? effectiveBorder = isPinned
+        ? (pinnedBorder ?? border)
+        : border;
 
     Widget content = child ?? builder!(context, isPinned);
 
@@ -132,7 +134,9 @@ class _ScrollStickyTabBarDelegate extends SliverPersistentHeaderDelegate {
       elevation: effectiveElevation,
       child: Container(
         height: height,
-        decoration: effectiveBorder != null ? BoxDecoration(border: effectiveBorder) : null,
+        decoration: effectiveBorder != null
+            ? BoxDecoration(border: effectiveBorder)
+            : null,
         child: content,
       ),
     );
@@ -150,4 +154,3 @@ class _ScrollStickyTabBarDelegate extends SliverPersistentHeaderDelegate {
         oldDelegate.pinnedBorder != pinnedBorder;
   }
 }
-

@@ -114,10 +114,7 @@ class ScrollTransform extends StatelessWidget {
         if (translation != null && !disableMotion) {
           final offset = translation!.transform(clampedProgress);
           if (offset != Offset.zero) {
-            result = Transform.translate(
-              offset: offset,
-              child: result,
-            );
+            result = Transform.translate(offset: offset, child: result);
           }
         }
 
@@ -147,15 +144,11 @@ class ScrollTransform extends StatelessWidget {
 
         // Opacity
         if (opacity != null) {
-          final opacityVal = opacity!.transform(clampedProgress).clamp(
-            0.0,
-            1.0,
-          );
+          final opacityVal = opacity!
+              .transform(clampedProgress)
+              .clamp(0.0, 1.0);
           if (opacityVal < 1.0) {
-            result = Opacity(
-              opacity: opacityVal,
-              child: result,
-            );
+            result = Opacity(opacity: opacityVal, child: result);
           }
         }
 

@@ -56,17 +56,17 @@ class _ScrollSectionRevealState extends State<ScrollSectionReveal>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: widget.duration,
-    );
+    _controller = AnimationController(vsync: this, duration: widget.duration);
 
     final curvedAnimation = CurvedAnimation(
       parent: _controller,
       curve: widget.curve,
     );
 
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(curvedAnimation);
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(curvedAnimation);
     _slideAnimation = Tween<Offset>(
       begin: widget.slideOffset,
       end: Offset.zero,
@@ -110,12 +110,17 @@ class _ScrollSectionRevealState extends State<ScrollSectionReveal>
 
     bool isVisibleInViewport = true;
     if (viewportBox != null && viewportBox.hasSize) {
-      final itemPosition = renderObject.localToGlobal(Offset.zero, ancestor: viewportBox);
+      final itemPosition = renderObject.localToGlobal(
+        Offset.zero,
+        ancestor: viewportBox,
+      );
       final itemHeight = renderObject.size.height;
       final viewportHeight = viewportBox.size.height;
 
       // Check if any portion of the item is within viewport
-      isVisibleInViewport = (itemPosition.dy + itemHeight > 0) && (itemPosition.dy < viewportHeight);
+      isVisibleInViewport =
+          (itemPosition.dy + itemHeight > 0) &&
+          (itemPosition.dy < viewportHeight);
     }
 
     if (isVisibleInViewport) {
@@ -144,7 +149,8 @@ class _ScrollSectionRevealState extends State<ScrollSectionReveal>
 
   @override
   Widget build(BuildContext context) {
-    final bool disableAnimations = MediaQuery.maybeDisableAnimationsOf(context) ?? false;
+    final bool disableAnimations =
+        MediaQuery.maybeDisableAnimationsOf(context) ?? false;
 
     if (disableAnimations) {
       return widget.child;
@@ -157,10 +163,7 @@ class _ScrollSectionRevealState extends State<ScrollSectionReveal>
           opacity: _fadeAnimation.value,
           child: Transform.translate(
             offset: _slideAnimation.value,
-            child: Transform.scale(
-              scale: _scaleAnimation.value,
-              child: child,
-            ),
+            child: Transform.scale(scale: _scaleAnimation.value, child: child),
           ),
         );
       },
@@ -168,4 +171,3 @@ class _ScrollSectionRevealState extends State<ScrollSectionReveal>
     );
   }
 }
-

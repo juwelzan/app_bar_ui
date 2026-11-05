@@ -75,10 +75,7 @@ class ScrollSnapPhysics extends ScrollPhysics {
 
   @override
   ScrollSnapPhysics applyTo(ScrollPhysics? ancestor) {
-    return ScrollSnapPhysics(
-      parent: buildParent(ancestor),
-      config: config,
-    );
+    return ScrollSnapPhysics(parent: buildParent(ancestor), config: config);
   }
 
   @override
