@@ -1071,6 +1071,11 @@ class PresetGalleryView extends StatelessWidget {
       case ScrollHeaderPreset.bordered:
       case ScrollHeaderPreset.shadowElevated:
       case ScrollHeaderPreset.layered:
+      case ScrollHeaderPreset.shapeMorphing:
+      case ScrollHeaderPreset.animatedGradient:
+      case ScrollHeaderPreset.colorTransition:
+      case ScrollHeaderPreset.illustrated:
+      case ScrollHeaderPreset.edgeToEdge:
         return 'Visual & Creative';
     }
   }
@@ -1147,6 +1152,16 @@ class PresetGalleryView extends StatelessWidget {
         return Icons.layers;
       case ScrollHeaderPreset.layered:
         return Icons.view_carousel;
+      case ScrollHeaderPreset.shapeMorphing:
+        return Icons.rounded_corner;
+      case ScrollHeaderPreset.animatedGradient:
+        return Icons.animation;
+      case ScrollHeaderPreset.colorTransition:
+        return Icons.color_lens;
+      case ScrollHeaderPreset.illustrated:
+        return Icons.draw;
+      case ScrollHeaderPreset.edgeToEdge:
+        return Icons.fullscreen;
     }
   }
 
@@ -1930,6 +1945,85 @@ class _PresetDetailScreenState extends State<PresetDetailScreen> {
           ),
           actions: const [
             IconButton(icon: Icon(Icons.layers_outlined), onPressed: null),
+          ],
+        );
+
+      case ScrollHeaderPreset.shapeMorphing:
+        return ScrollHeader.shapeMorphing(
+          title: Text(preset.label),
+          subtitle: const Text('Shape & radius morph on scroll'),
+          initialBorderRadius: BorderRadius.circular(24.0),
+          scrolledBorderRadius: BorderRadius.zero,
+          expandedHeight: 120.0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          actions: const [
+            IconButton(icon: Icon(Icons.transform), onPressed: null),
+          ],
+        );
+
+      case ScrollHeaderPreset.animatedGradient:
+        return ScrollHeader.animatedGradient(
+          title: Text(preset.label),
+          subtitle: const Text('Ambient shifting gradient'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          actions: const [
+            IconButton(icon: Icon(Icons.auto_awesome), onPressed: null),
+          ],
+        );
+
+      case ScrollHeaderPreset.colorTransition:
+        return ScrollHeader.colorTransition(
+          title: Text(preset.label),
+          subtitle: const Text('Continuous color transition'),
+          startBackgroundColor: Theme.of(context).colorScheme.primary,
+          endBackgroundColor: Theme.of(context).colorScheme.surface,
+          startForegroundColor: Colors.white,
+          endForegroundColor: Theme.of(context).colorScheme.onSurface,
+          expandedHeight: 120.0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          actions: const [
+            IconButton(icon: Icon(Icons.palette_outlined), onPressed: null),
+          ],
+        );
+
+      case ScrollHeaderPreset.illustrated:
+        return ScrollHeader.illustrated(
+          title: Text(preset.label),
+          subtitle: const Text('Collapsing illustration header'),
+          illustration: Icon(
+            Icons.rocket_launch,
+            size: 72.0,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          expandedHeight: 220.0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          actions: const [
+            IconButton(icon: Icon(Icons.favorite_border), onPressed: null),
+          ],
+        );
+
+      case ScrollHeaderPreset.edgeToEdge:
+        return ScrollHeader.edgeToEdge(
+          title: Text(preset.label),
+          subtitle: const Text('Full-bleed edge-to-edge layout'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          actions: const [
+            IconButton(icon: Icon(Icons.crop_free), onPressed: null),
           ],
         );
     }

@@ -104,7 +104,22 @@ enum ScrollHeaderPreset {
   shadowElevated,
 
   /// Multi-layer visual depth header featuring back decorative layer, middle layer, and toolbar.
-  layered;
+  layered,
+
+  /// Persistent header dynamically transforming its shape, corner radius, and margins on scroll.
+  shapeMorphing,
+
+  /// Header with a shifting linear gradient progression providing vibrant ambient depth.
+  animatedGradient,
+
+  /// Persistent header whose background and foreground typography interpolate across colors on scroll.
+  colorTransition,
+
+  /// Collapsing persistent header showcasing a prominent vector/image illustration.
+  illustrated,
+
+  /// Seamless margin-free header extending directly behind status bars with full bleed.
+  edgeToEdge;
 
   /// User-friendly display label for this preset.
   String get label {
@@ -179,6 +194,16 @@ enum ScrollHeaderPreset {
         return 'Shadow-Elevated Header';
       case ScrollHeaderPreset.layered:
         return 'Layered Header';
+      case ScrollHeaderPreset.shapeMorphing:
+        return 'Shape-Morphing Header';
+      case ScrollHeaderPreset.animatedGradient:
+        return 'Animated Gradient Header';
+      case ScrollHeaderPreset.colorTransition:
+        return 'Color-Transition Header';
+      case ScrollHeaderPreset.illustrated:
+        return 'Illustrated Header';
+      case ScrollHeaderPreset.edgeToEdge:
+        return 'Edge-to-Edge Header';
     }
   }
 
@@ -255,6 +280,16 @@ enum ScrollHeaderPreset {
         return 'Deep multi-stop drop shadow header with configurable elevation.';
       case ScrollHeaderPreset.layered:
         return 'Multi-layer visual depth header with decorative back layer.';
+      case ScrollHeaderPreset.shapeMorphing:
+        return 'Dynamic shape and radius morphing on scroll.';
+      case ScrollHeaderPreset.animatedGradient:
+        return 'Ambient shifting gradient animation.';
+      case ScrollHeaderPreset.colorTransition:
+        return 'Continuous color interpolation on scroll.';
+      case ScrollHeaderPreset.illustrated:
+        return 'Collapsing decorative illustration header.';
+      case ScrollHeaderPreset.edgeToEdge:
+        return 'Full-bleed edge-to-edge layout.';
     }
   }
 }
