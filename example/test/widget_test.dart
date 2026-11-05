@@ -57,8 +57,9 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Workspace Menu'), findsNothing);
 
-    // Scroll back up to the top
-    await tester.drag(find.byType(CustomScrollView), const Offset(0.0, 450.0));
+    // Scroll back up to the top using the floating action button
+    expect(find.byType(FloatingActionButton), findsOneWidget);
+    await tester.tap(find.byType(FloatingActionButton));
     await tester.pumpAndSettle();
 
     // Verify header restored
@@ -66,4 +67,33 @@ void main() {
     expect(find.byTooltip('View Profile'), findsOneWidget);
     expect(find.byTooltip('View Notifications'), findsOneWidget);
   });
+
+  testWidgets(
+    'Supports theme mode switching and config controls in real-time',
+    (WidgetTester tester) async {
+      await tester.pumpWidget(const ScrollResponsiveDemoApp());
+      await tester.pumpAndSettle();
+
+      // Toggle theme mode to Dark
+      themeModeNotifier.value = ThemeMode.dark;
+      await tester.pumpAndSettle();
+      expect(themeModeNotifier.value, ThemeMode.dark);
+
+      // Toggle theme mode to Light
+      themeModeNotifier.value = ThemeMode.light;
+      await tester.pumpAndSettle();
+      expect(themeModeNotifier.value, ThemeMode.light);
+
+      // Reset to system
+      themeModeNotifier.value = ThemeMode.system;
+      await tester.pumpAndSettle();
+
+      // Verify config controls card exists
+      expect(find.text('Interactive Config Controls'), findsOneWidget);
+      expect(find.text('Hide Status Bar on Scroll'), findsOneWidget);
+      expect(find.text('Fade Animation'), findsOneWidget);
+      expect(find.text('Scale Animation'), findsOneWidget);
+      expect(find.text('Slide Animation'), findsOneWidget);
+    },
+  );
 }

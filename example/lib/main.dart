@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:app_bar_ui/app_bar_ui.dart';
 
+/// Global theme mode notifier for interactive light and dark theme switching.
+final ValueNotifier<ThemeMode> themeModeNotifier = ValueNotifier<ThemeMode>(
+  ThemeMode.system,
+);
+
 void main() {
   runApp(const ScrollResponsiveDemoApp());
 }
@@ -12,24 +17,30 @@ class ScrollResponsiveDemoApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Scroll Responsive UI Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF3F51B5),
-          brightness: Brightness.light,
-        ),
-        useMaterial3: true,
-      ),
-      darkTheme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF3F51B5),
-          brightness: Brightness.dark,
-        ),
-        useMaterial3: true,
-      ),
-      home: const DashboardScreen(),
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: themeModeNotifier,
+      builder: (context, currentThemeMode, _) {
+        return MaterialApp(
+          title: 'Scroll Responsive UI Demo',
+          debugShowCheckedModeBanner: false,
+          themeMode: currentThemeMode,
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: const Color(0xFF3F51B5),
+              brightness: Brightness.light,
+            ),
+            useMaterial3: true,
+          ),
+          darkTheme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: const Color(0xFF3F51B5),
+              brightness: Brightness.dark,
+            ),
+            useMaterial3: true,
+          ),
+          home: const DashboardScreen(),
+        );
+      },
     );
   }
 }
@@ -43,6 +54,8 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  final ScrollController _scrollController = ScrollController();
+
   // Live telemetry notifier for high-performance zero-rebuild telemetry updates
   final ValueNotifier<ScrollProgressDetails> _telemetryNotifier =
       ValueNotifier<ScrollProgressDetails>(
@@ -61,11 +74,56 @@ class _DashboardScreenState extends State<DashboardScreen> {
   bool _enableScale = true;
   bool _enableSlide = true;
   bool _hideStatusBar = true;
+  String _thresholdPreset = 'Standard (20-80px)';
 
   @override
   void dispose() {
+    _scrollController.dispose();
     _telemetryNotifier.dispose();
     super.dispose();
+  }
+
+  ScrollThresholdConfig _getThresholdConfig() {
+    switch (_thresholdPreset) {
+      case 'Fast (10-40px)':
+        return const ScrollThresholdConfig(
+          leadingStartOffset: 10.0,
+          leadingEndOffset: 40.0,
+          trailingStartOffset: 10.0,
+          trailingEndOffset: 40.0,
+          statusBarHideOffset: 50.0,
+          statusBarShowOffset: 25.0,
+        );
+      case 'Delayed (40-120px)':
+        return const ScrollThresholdConfig(
+          leadingStartOffset: 40.0,
+          leadingEndOffset: 120.0,
+          trailingStartOffset: 40.0,
+          trailingEndOffset: 120.0,
+          statusBarHideOffset: 130.0,
+          statusBarShowOffset: 60.0,
+        );
+      case 'Standard (20-80px)':
+      default:
+        return const ScrollThresholdConfig(
+          leadingStartOffset: 20.0,
+          leadingEndOffset: 80.0,
+          trailingStartOffset: 20.0,
+          trailingEndOffset: 80.0,
+          statusBarHideOffset: 90.0,
+          statusBarShowOffset: 45.0,
+        );
+    }
+  }
+
+  void _scrollToTop() {
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        0.0,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeOutCubic,
+      );
+    }
   }
 
   void _showNotificationSheet() {
@@ -188,14 +246,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       transparentActions: true,
       hideStatusBarOnScroll: _hideStatusBar,
       enableReverseAnimation: true,
-      thresholds: const ScrollThresholdConfig(
-        leadingStartOffset: 20.0,
-        leadingEndOffset: 80.0,
-        trailingStartOffset: 20.0,
-        trailingEndOffset: 80.0,
-        statusBarHideOffset: 90.0,
-        statusBarShowOffset: 45.0,
-      ),
+      thresholds: _getThresholdConfig(),
       animation: ScrollAnimationConfig(
         transitionType: _transitionType,
         duration: const Duration(milliseconds: 250),
@@ -210,6 +261,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
 
     return ScrollResponsiveScaffold(
+      controller: _scrollController,
       config: config,
       // Left side action: Profile Avatar initially, Drawer icon when scrolled
       initialLeading: const Tooltip(
@@ -279,6 +331,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
       onScrollUpdate: (details) {
         _telemetryNotifier.value = details;
       },
+
+      // Floating Action Button to demonstrate reverse scroll animation
+      floatingActionButton: ValueListenableBuilder<ScrollProgressDetails>(
+        valueListenable: _telemetryNotifier,
+        builder: (context, details, child) {
+          final isScrolled = details.offset > 80.0;
+          return AnimatedOpacity(
+            opacity: isScrolled ? 1.0 : 0.0,
+            duration: const Duration(milliseconds: 200),
+            child: IgnorePointer(
+              ignoring: !isScrolled,
+              child: FloatingActionButton.extended(
+                onPressed: _scrollToTop,
+                icon: const Icon(Icons.arrow_upward),
+                label: const Text('Scroll to Top'),
+              ),
+            ),
+          );
+        },
+      ),
 
       // Navigation Drawer
       drawer: NavigationDrawer(
@@ -372,13 +444,40 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Icon(Icons.speed, size: 20),
-                            const SizedBox(width: 8.0),
-                            Text(
-                              'Live Transition Telemetry',
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
+                            Row(
+                              children: [
+                                const Icon(Icons.speed, size: 20),
+                                const SizedBox(width: 8.0),
+                                Text(
+                                  'Live Transition Telemetry',
+                                  style: theme.textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8.0,
+                                vertical: 2.0,
+                              ),
+                              decoration: BoxDecoration(
+                                color: details.offset > 0
+                                    ? Colors.green.withValues(alpha: 0.15)
+                                    : Colors.grey.withValues(alpha: 0.15),
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
+                              child: Text(
+                                details.offset > 0 ? 'SCROLLING' : 'IDLE',
+                                style: TextStyle(
+                                  fontSize: 10.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: details.offset > 0
+                                      ? Colors.green
+                                      : Colors.grey,
+                                ),
                               ),
                             ),
                           ],
@@ -444,6 +543,67 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                     ),
                     const SizedBox(height: 8.0),
+                    // Theme Mode Selector
+                    ValueListenableBuilder<ThemeMode>(
+                      valueListenable: themeModeNotifier,
+                      builder: (context, currentMode, _) {
+                        return ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          title: const Text('Theme Mode'),
+                          trailing: DropdownButton<ThemeMode>(
+                            value: currentMode,
+                            underline: const SizedBox(),
+                            items: const [
+                              DropdownMenuItem(
+                                value: ThemeMode.system,
+                                child: Text('System'),
+                              ),
+                              DropdownMenuItem(
+                                value: ThemeMode.light,
+                                child: Text('Light'),
+                              ),
+                              DropdownMenuItem(
+                                value: ThemeMode.dark,
+                                child: Text('Dark'),
+                              ),
+                            ],
+                            onChanged: (val) {
+                              if (val != null) {
+                                themeModeNotifier.value = val;
+                              }
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                    // Threshold Preset Selector
+                    ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      title: const Text('Threshold Preset'),
+                      trailing: DropdownButton<String>(
+                        value: _thresholdPreset,
+                        underline: const SizedBox(),
+                        items: const [
+                          DropdownMenuItem(
+                            value: 'Fast (10-40px)',
+                            child: Text('Fast (10-40px)'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'Standard (20-80px)',
+                            child: Text('Standard (20-80px)'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'Delayed (40-120px)',
+                            child: Text('Delayed (40-120px)'),
+                          ),
+                        ],
+                        onChanged: (val) {
+                          if (val != null) {
+                            setState(() => _thresholdPreset = val);
+                          }
+                        },
+                      ),
+                    ),
                     SwitchListTile.adaptive(
                       contentPadding: EdgeInsets.zero,
                       title: const Text('Hide Status Bar on Scroll'),
