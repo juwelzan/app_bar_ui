@@ -77,7 +77,7 @@ final Uint8List _transparentPng = Uint8List.fromList(const <int>[
 void main() {
   group('ScrollHeaderPreset Enum & Model Verification', () {
     test('ScrollHeaderPreset contains all required presets', () {
-      expect(ScrollHeaderPreset.values.length, 45);
+      expect(ScrollHeaderPreset.values.length, 50);
       expect(ScrollHeaderPreset.values, [
         ScrollHeaderPreset.minimal,
         ScrollHeaderPreset.transparent,
@@ -124,6 +124,11 @@ void main() {
         ScrollHeaderPreset.chat,
         ScrollHeaderPreset.detailPage,
         ScrollHeaderPreset.reading,
+        ScrollHeaderPreset.map,
+        ScrollHeaderPreset.form,
+        ScrollHeaderPreset.wizard,
+        ScrollHeaderPreset.notificationCenter,
+        ScrollHeaderPreset.customScrollLayout,
       ]);
     });
 

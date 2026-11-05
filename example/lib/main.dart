@@ -1082,6 +1082,11 @@ class PresetGalleryView extends StatelessWidget {
       case ScrollHeaderPreset.chat:
       case ScrollHeaderPreset.detailPage:
       case ScrollHeaderPreset.reading:
+      case ScrollHeaderPreset.map:
+      case ScrollHeaderPreset.form:
+      case ScrollHeaderPreset.wizard:
+      case ScrollHeaderPreset.notificationCenter:
+      case ScrollHeaderPreset.customScrollLayout:
         return 'Specialized Layout';
     }
   }
@@ -1178,6 +1183,16 @@ class PresetGalleryView extends StatelessWidget {
         return Icons.photo_size_select_actual_outlined;
       case ScrollHeaderPreset.reading:
         return Icons.menu_book;
+      case ScrollHeaderPreset.map:
+        return Icons.map_outlined;
+      case ScrollHeaderPreset.form:
+        return Icons.edit_note_outlined;
+      case ScrollHeaderPreset.wizard:
+        return Icons.linear_scale_outlined;
+      case ScrollHeaderPreset.notificationCenter:
+        return Icons.notifications_none_outlined;
+      case ScrollHeaderPreset.customScrollLayout:
+        return Icons.dashboard_customize_outlined;
     }
   }
 
@@ -2147,6 +2162,103 @@ class _PresetDetailScreenState extends State<PresetDetailScreen> {
             IconButton(icon: Icon(Icons.text_fields), onPressed: null),
             IconButton(icon: Icon(Icons.bookmark_border), onPressed: null),
           ],
+        );
+
+      case ScrollHeaderPreset.map:
+        return ScrollHeader.map(
+          title: const Text('Downtown San Francisco'),
+          searchHint: 'Search nearby cafes, restaurants...',
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          actions: const [
+            IconButton(icon: Icon(Icons.tune), onPressed: null),
+          ],
+        );
+
+      case ScrollHeaderPreset.form:
+        return ScrollHeader.form(
+          title: const Text('Edit User Profile'),
+          subtitle: const Text('Unsaved changes'),
+          isDirty: true,
+          onSave: () {},
+          leading: IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          actions: const [
+            IconButton(icon: Icon(Icons.more_vert), onPressed: null),
+          ],
+        );
+
+      case ScrollHeaderPreset.wizard:
+        return ScrollHeader.wizard(
+          currentStep: 2,
+          totalSteps: 4,
+          stepTitle: const Text('Shipping Address'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          actions: const [
+            IconButton(icon: Icon(Icons.help_outline), onPressed: null),
+          ],
+        );
+
+      case ScrollHeaderPreset.notificationCenter:
+        return ScrollHeader.notificationCenter(
+          title: const Text('Activity Feed'),
+          unreadCount: 4,
+          onMarkAllRead: () {},
+          segments: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ActionChip(label: const Text('All'), onPressed: () {}),
+              const SizedBox(width: 8.0),
+              ActionChip(label: const Text('Unread (4)'), onPressed: () {}),
+            ],
+          ),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          actions: const [
+            IconButton(icon: Icon(Icons.settings_outlined), onPressed: null),
+          ],
+        );
+
+      case ScrollHeaderPreset.customScrollLayout:
+        return ScrollHeader.customScrollLayout(
+          expandedHeight: 180.0,
+          collapsedHeight: 64.0,
+          builder: (context, progress, overlapsContent) {
+            final theme = Theme.of(context);
+            return Container(
+              color: Color.lerp(
+                theme.colorScheme.primaryContainer,
+                theme.colorScheme.surface,
+                progress,
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              alignment: Alignment.center,
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                  const SizedBox(width: 8.0),
+                  Text(
+                    'Custom Sliver Layout: ${(progress * 100).toInt()}%',
+                    style: theme.textTheme.titleMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
         );
     }
   }

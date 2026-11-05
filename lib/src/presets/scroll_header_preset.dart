@@ -134,7 +134,22 @@ enum ScrollHeaderPreset {
   detailPage,
 
   /// Editorial reader header with integrated horizontal reading progress bar.
-  reading;
+  reading,
+
+  /// Embedded map view with floating search bar and location chips.
+  map,
+
+  /// Form page header with title, cancel/back, and state-aware primary action.
+  form,
+
+  /// Multi-step setup header with step progress indicator.
+  wizard,
+
+  /// Unread badge counter, "Mark all as read" action, and filter tabs.
+  notificationCenter,
+
+  /// Flexible layout delegating to a custom sliver layout delegate or builder.
+  customScrollLayout;
 
   /// User-friendly display label for this preset.
   String get label {
@@ -229,6 +244,16 @@ enum ScrollHeaderPreset {
         return 'Detail Page Header';
       case ScrollHeaderPreset.reading:
         return 'Reading Header';
+      case ScrollHeaderPreset.map:
+        return 'Map Header';
+      case ScrollHeaderPreset.form:
+        return 'Form Header';
+      case ScrollHeaderPreset.wizard:
+        return 'Wizard Header';
+      case ScrollHeaderPreset.notificationCenter:
+        return 'Notification Center Header';
+      case ScrollHeaderPreset.customScrollLayout:
+        return 'Custom Scroll Layout Header';
     }
   }
 
@@ -325,6 +350,16 @@ enum ScrollHeaderPreset {
         return 'Hero transition detail header with contrast scrim.';
       case ScrollHeaderPreset.reading:
         return 'Editorial reader header with horizontal progress indicator.';
+      case ScrollHeaderPreset.map:
+        return 'Embedded interactive map preview header with floating search card.';
+      case ScrollHeaderPreset.form:
+        return 'State-aware form header with cancel and primary save actions.';
+      case ScrollHeaderPreset.wizard:
+        return 'Multi-step setup header with progress indicator.';
+      case ScrollHeaderPreset.notificationCenter:
+        return 'Notification center header with unread counter and filter tabs.';
+      case ScrollHeaderPreset.customScrollLayout:
+        return 'Customizable sliver layout delegate and builder header.';
     }
   }
 }
