@@ -9,6 +9,11 @@ export 'src/animations/scroll_morph_builder.dart';
 export 'src/widgets/pinned_action_button.dart';
 export 'src/widgets/scroll_responsive_header.dart';
 export 'src/widgets/scroll_responsive_scaffold.dart';
+export 'src/widgets/scroll_collapsing_header.dart';
+export 'src/widgets/scroll_pull_to_expand_header.dart';
+export 'src/widgets/scroll_sticky_tab_bar.dart';
+export 'src/widgets/scroll_aware_fab.dart';
+export 'src/widgets/scroll_auto_hide_bottom_bar.dart';
 
 import 'app_bar_ui_platform_interface.dart';
 
