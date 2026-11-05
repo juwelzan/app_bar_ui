@@ -176,7 +176,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(104.0),
+              preferredSize: const Size.fromHeight(116.0),
               child: NotificationCenterHeaderWidget(
                 title: const Text('Updates'),
                 unreadCount: 7,
@@ -199,6 +199,46 @@ void main() {
       await tester.tap(find.text('Mark all read'));
       await tester.pump();
       expect(markAllReadTapped, isTrue);
+    });
+
+    testWidgets('Preset 49: NotificationCenterHeaderWidget prevents overflow on narrow screens',
+        (tester) async {
+      tester.view.physicalSize = const Size(360, 640);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            appBar: PreferredSize(
+              preferredSize: const Size.fromHeight(116.0),
+              child: NotificationCenterHeaderWidget(
+                title: const Text('Activity Feed with Long Title Text'),
+                unreadCount: 4,
+                onMarkAllRead: () {},
+                segments: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    ActionChip(label: Text('All'), onPressed: null),
+                    SizedBox(width: 8.0),
+                    ActionChip(label: Text('Unread (4)'), onPressed: null),
+                  ],
+                ),
+                leading: const Icon(Icons.arrow_back),
+                actions: const [
+                  Icon(Icons.settings),
+                ],
+              ),
+            ),
+            body: const Center(child: Text('Content')),
+          ),
+        ),
+      );
+
+      // Asserts that no exception or overflow occurred on 360px viewport
+      expect(tester.takeException(), isNull);
+      expect(find.text('4'), findsWidgets);
     });
 
     testWidgets('Preset 50: CustomScrollLayoutHeaderWidget renders as sliver with custom delegate or builder',

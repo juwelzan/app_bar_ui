@@ -1221,7 +1221,7 @@ class NotificationCenterHeaderWidget extends StatelessWidget {
     final theme = Theme.of(context);
     final hasSegments = segments != null;
     final s = (style ?? const ScrollHeaderStyle()).copyWith(
-      height: style?.height ?? (hasSegments ? 104.0 : 60.0),
+      height: style?.height ?? (hasSegments ? 116.0 : 60.0),
       backgroundColor: style?.backgroundColor ?? theme.colorScheme.surface,
       scrolledBackgroundColor:
           style?.scrolledBackgroundColor ?? theme.colorScheme.surfaceContainer,
@@ -1234,23 +1234,25 @@ class NotificationCenterHeaderWidget extends StatelessWidget {
       style: s,
       safeArea: safeArea,
       child: Column(
-        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           SizedBox(
-            height: 56.0,
+            height: 52.0,
             child: NavigationToolbar(
               leading: leading,
               middle: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  DefaultTextStyle(
-                    style: s.titleStyle ??
-                        theme.textTheme.titleMedium!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    child: title ?? const Text('Notifications'),
+                  Flexible(
+                    child: DefaultTextStyle(
+                      style: s.titleStyle ??
+                          theme.textTheme.titleMedium!.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      child: title ?? const Text('Notifications'),
+                    ),
                   ),
                   if (unreadCount > 0) ...[
                     const SizedBox(width: 8.0),
@@ -1295,15 +1297,20 @@ class NotificationCenterHeaderWidget extends StatelessWidget {
             ),
           ),
           if (hasSegments)
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 16.0,
-                right: 16.0,
-                bottom: 8.0,
-              ),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: segments!,
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  left: 16.0,
+                  right: 16.0,
+                  bottom: 6.0,
+                ),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: segments!,
+                  ),
+                ),
               ),
             ),
         ],

@@ -2214,9 +2214,17 @@ class _PresetDetailScreenState extends State<PresetDetailScreen> {
           segments: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              ActionChip(label: const Text('All'), onPressed: () {}),
+              ActionChip(
+                visualDensity: VisualDensity.compact,
+                label: const Text('All'),
+                onPressed: () {},
+              ),
               const SizedBox(width: 8.0),
-              ActionChip(label: const Text('Unread (4)'), onPressed: () {}),
+              ActionChip(
+                visualDensity: VisualDensity.compact,
+                label: const Text('Unread (4)'),
+                onPressed: () {},
+              ),
             ],
           ),
           leading: IconButton(
