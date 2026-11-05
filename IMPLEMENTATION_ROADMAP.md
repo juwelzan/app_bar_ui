@@ -97,11 +97,12 @@ This roadmap tracks the development of the **Scroll-Driven UI Framework for Flut
 - [x] Write visibility tests in `test/smart_visibility_and_animation_test.dart` (18 tests passed).
 
 ### PHASE 8 — Developer-Friendly API
-- [x] Implement `ScrollResponsiveController` extending `ScrollController` with unified programmatic scroll methods.
-- [x] Support `scrollToTop()`, `scrollToBottom()`, `collapseHeader()`, `expandHeader()`, `snapTo()`.
-- [x] Expose `progress` and `direction` getters.
+- [x] Implement `ScrollResponsiveController` extending `ScrollController` with programmatic controls (`scrollToTop`, `scrollToBottom`, `collapseHeader`, `expandHeader`, `snapTo`, `scrollBy`, `scrollToItem`).
+- [x] Expose rich telemetry getters (`progress`, `direction`, `currentOffset`, `maxScrollExtent`, `isAtTop`, `isAtBottom`, `isHeaderCollapsed`, `isHeaderExpanded`).
+- [x] Implement `ScrollResponsiveScope` and `BuildContext.scrollResponsive` extension for ambient descendant access.
+- [x] Support scroll state restoration via `restorationId` on `ScrollResponsiveScaffold`.
 - [x] Integrate optional scaffold slots (`stickyTabBar`, `progressIndicator`, `scrollAwareFab`, `autoHideBottomBar`).
-- [x] Write tests in `test/presets_and_controls_test.dart`.
+- [x] Write tests in `test/presets_and_controls_test.dart` (13 tests passed).
 
 ### PHASE 9 — Preset Design System
 - [x] Implement `ScrollResponsivePresets`: `material()`, `minimal()`, `iosInspired()`, `collapsingHeader()`, `transparentFloating()`, `dashboard()`, and `custom()`.

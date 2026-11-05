@@ -188,6 +188,12 @@ For complex application architectures:
 - Dedicated widget slots: `stickyTabBar`, `progressIndicator`, `scrollAwareFab`, `autoHideBottomBar`.
 - Custom sliver pipelines via `slivers: [...]`.
 
+### 6.3 Ambient Scope & Context Extension
+- **`ScrollResponsiveScope`**: Inherited widget wrapping `ScrollResponsiveScaffold` providing real-time telemetry (`progress`, `offset`, `direction`, `isAtTop`).
+- **`BuildContext.scrollResponsive`**: Any descendant widget can programmatically trigger `scrollToTop()`, `scrollToBottom()`, `collapseHeader()`, or `expandHeader()` without manual controller drilling.
+- **Scroll State Restoration**: Native `restorationId` persistence across process death, route pushes, and tab switches.
+- **Extended Controller Telemetry**: `currentOffset`, `maxScrollExtent`, `isAtTop`, `isAtBottom`, `isHeaderCollapsed`, `isHeaderExpanded`, `scrollBy()`, `scrollToItem()`.
+
 ---
 
 ## 7. Modular Feature Components Architecture

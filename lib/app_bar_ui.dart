@@ -6,6 +6,7 @@ export 'src/engine/scroll_responsive_controller.dart';
 export 'src/engine/status_bar_manager.dart';
 export 'src/engine/smart_visibility_controller.dart';
 export 'src/engine/scroll_snap_engine.dart';
+export 'src/engine/scroll_responsive_scope.dart';
 export 'src/animations/scroll_driven_animation.dart';
 export 'src/animations/scroll_color_tween.dart';
 export 'src/animations/scroll_morph_builder.dart';

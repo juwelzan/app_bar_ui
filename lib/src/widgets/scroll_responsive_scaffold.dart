@@ -12,6 +12,7 @@ import 'scroll_aware_fab.dart';
 import 'scroll_responsive_header.dart';
 import 'scroll_sticky_tab_bar.dart';
 import '../engine/scroll_responsive_controller.dart';
+import '../engine/scroll_responsive_scope.dart';
 
 /// The primary widget providing an advanced, configurable Scroll-Responsive UI system.
 ///
@@ -61,6 +62,7 @@ class ScrollResponsiveScaffold extends StatefulWidget {
     this.onScrollStart,
     this.onScrollEnd,
     this.routeObserver,
+    this.restorationId,
   }) : assert(
          body != null || slivers != null,
          'Either body or slivers must be provided.',
@@ -171,6 +173,9 @@ class ScrollResponsiveScaffold extends StatefulWidget {
 
   /// Optional [RouteObserver] to automatically manage status bar visibility across route transitions.
   final RouteObserver<ModalRoute<void>>? routeObserver;
+
+  /// Optional restoration ID to save and restore the scroll position across the application lifecycle.
+  final String? restorationId;
 
   @override
   State<ScrollResponsiveScaffold> createState() =>
@@ -336,39 +341,50 @@ class _ScrollResponsiveScaffoldState extends State<ScrollResponsiveScaffold>
       );
     }
 
-    return Scaffold(
-      key: _scaffoldKey,
-      drawer: widget.drawer,
-      endDrawer: widget.endDrawer,
-      bottomNavigationBar: effectiveBottomNav,
-      floatingActionButton: effectiveFab,
-      floatingActionButtonLocation: widget.floatingActionButtonLocation,
-      backgroundColor: widget.backgroundColor,
-      body: NotificationListener<ScrollNotification>(
-        onNotification: _engine.handleScrollNotification,
-        child: NotificationListener<UserScrollNotification>(
-          onNotification: _engine.handleUserScrollNotification,
-          child: Stack(
-            children: [
-              // Layer 1: Naturally scrollable CustomScrollView containing header and body
-              _buildScrollableContent(effectiveTopPadding),
+    final ScrollResponsiveController? responsiveController =
+        widget.controller is ScrollResponsiveController
+        ? (widget.controller as ScrollResponsiveController)
+        : null;
 
-              // Layer 2: Independently pinned left and right side action icons
-              if (pinnedConfig.pinned)
-                ..._buildPinnedActionOverlays(
-                  effectiveTopPadding,
-                  pinnedConfig,
-                ),
+    return ScrollResponsiveScope(
+      engine: _engine,
+      config: widget.config,
+      controller: responsiveController,
+      child: Scaffold(
+        key: _scaffoldKey,
+        restorationId: widget.restorationId,
+        drawer: widget.drawer,
+        endDrawer: widget.endDrawer,
+        bottomNavigationBar: effectiveBottomNav,
+        floatingActionButton: effectiveFab,
+        floatingActionButtonLocation: widget.floatingActionButtonLocation,
+        backgroundColor: widget.backgroundColor,
+        body: NotificationListener<ScrollNotification>(
+          onNotification: _engine.handleScrollNotification,
+          child: NotificationListener<UserScrollNotification>(
+            onNotification: _engine.handleUserScrollNotification,
+            child: Stack(
+              children: [
+                // Layer 1: Naturally scrollable CustomScrollView containing header and body
+                _buildScrollableContent(effectiveTopPadding),
 
-              // Layer 3: Reading / Scroll Progress Indicator
-              if (widget.progressIndicator != null)
-                Positioned(
-                  top: effectiveTopPadding,
-                  left: 0,
-                  right: 0,
-                  child: widget.progressIndicator!,
-                ),
-            ],
+                // Layer 2: Independently pinned left and right side action icons
+                if (pinnedConfig.pinned)
+                  ..._buildPinnedActionOverlays(
+                    effectiveTopPadding,
+                    pinnedConfig,
+                  ),
+
+                // Layer 3: Reading / Scroll Progress Indicator
+                if (widget.progressIndicator != null)
+                  Positioned(
+                    top: effectiveTopPadding,
+                    left: 0,
+                    right: 0,
+                    child: widget.progressIndicator!,
+                  ),
+              ],
+            ),
           ),
         ),
       ),
@@ -410,6 +426,9 @@ class _ScrollResponsiveScaffoldState extends State<ScrollResponsiveScaffold>
 
     return CustomScrollView(
       controller: _engine.controller,
+      restorationId: widget.restorationId != null
+          ? '${widget.restorationId}_scroll'
+          : null,
       physics: widget.physics ?? const AlwaysScrollableScrollPhysics(),
       slivers: sliverList,
     );

@@ -108,6 +108,82 @@ void main() {
       controller.dispose();
     });
 
+    testWidgets(
+      'provides telemetry getters, relative scrollBy, and scrollToItem',
+      (tester) async {
+        final controller = ScrollResponsiveController(
+          headerCollapsedOffset: 100.0,
+        );
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: ListView.builder(
+                controller: controller,
+                itemCount: 40,
+                itemExtent: 50.0,
+                itemBuilder: (context, index) => Text('Item $index'),
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        expect(controller.isAtTop, isTrue);
+        expect(controller.isHeaderExpanded, isTrue);
+        expect(controller.isHeaderCollapsed, isFalse);
+        expect(controller.currentOffset, 0.0);
+        expect(controller.maxScrollExtent, greaterThan(0.0));
+
+        // scrollBy 120px
+        // ignore: unawaited_futures
+        controller.scrollBy(120.0, duration: const Duration(milliseconds: 50));
+        await tester.pumpAndSettle();
+
+        expect(controller.offset, closeTo(120.0, 1.0));
+        expect(controller.isAtTop, isFalse);
+        expect(controller.isHeaderCollapsed, isTrue);
+
+        // scrollToItem 5 (5 * 50 = 250px)
+        // ignore: unawaited_futures
+        controller.scrollToItem(
+          5,
+          itemExtent: 50.0,
+          duration: const Duration(milliseconds: 50),
+        );
+        await tester.pumpAndSettle();
+
+        expect(controller.offset, closeTo(250.0, 1.0));
+
+        // Test visibility forwarding methods
+        controller.hide(VisibilityTarget.header);
+        expect(
+          controller.visibilityController.isVisible(VisibilityTarget.header),
+          isFalse,
+        );
+
+        controller.show(VisibilityTarget.header);
+        expect(
+          controller.visibilityController.isVisible(VisibilityTarget.header),
+          isTrue,
+        );
+
+        controller.lock(VisibilityTarget.header);
+        expect(
+          controller.visibilityController.isLocked(VisibilityTarget.header),
+          isTrue,
+        );
+
+        controller.unlock(VisibilityTarget.header);
+        expect(
+          controller.visibilityController.isLocked(VisibilityTarget.header),
+          isFalse,
+        );
+
+        controller.dispose();
+      },
+    );
+
     testWidgets('synchronizes with SmartVisibilityController', (tester) async {
       final controller = ScrollResponsiveController();
 
@@ -173,5 +249,107 @@ void main() {
         controller.dispose();
       },
     );
+  });
+
+  group('Phase 8: ScrollResponsiveScope & Developer Experience Tests', () {
+    testWidgets('provides context.scrollResponsive to any descendant widget', (
+      tester,
+    ) async {
+      final controller = ScrollResponsiveController();
+      double? capturedOffset;
+      bool? capturedIsAtTop;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: ScrollResponsiveScaffold(
+            controller: controller,
+            headerTitle: const Text('Title'),
+            floatingActionButton: Builder(
+              builder: (context) => FloatingActionButton(
+                onPressed: () {
+                  // ignore: unawaited_futures
+                  context.scrollResponsive.scrollToTop(
+                    duration: const Duration(milliseconds: 50),
+                  );
+                },
+                child: const Icon(Icons.arrow_upward),
+              ),
+            ),
+            body: Builder(
+              builder: (context) {
+                // Access via BuildContext extension!
+                capturedOffset = context.scrollResponsive.offset;
+                capturedIsAtTop = context.scrollResponsive.isAtTop;
+
+                return Column(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        // ignore: unawaited_futures
+                        context.scrollResponsive.scrollToBottom(
+                          duration: const Duration(milliseconds: 50),
+                        );
+                      },
+                      child: const Text('Scroll to Bottom Button'),
+                    ),
+                    ...List.generate(
+                      40,
+                      (i) =>
+                          SizedBox(height: 50.0, child: Text('Descendant $i')),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(capturedOffset, 0.0);
+      expect(capturedIsAtTop, isTrue);
+
+      // Tap 'Scroll to Bottom Button' inside descendant widget
+      await tester.tap(find.text('Scroll to Bottom Button'));
+      await tester.pumpAndSettle();
+
+      expect(controller.offset, controller.position.maxScrollExtent);
+      expect(controller.isAtTop, isFalse);
+
+      // Tap 'Scroll to Top' FloatingActionButton via context.scrollResponsive
+      await tester.tap(find.byType(FloatingActionButton));
+      await tester.pumpAndSettle();
+
+      expect(controller.offset, 0.0);
+      expect(controller.isAtTop, isTrue);
+
+      controller.dispose();
+    });
+
+    testWidgets('supports scroll restorationId', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          restorationScopeId: 'test_scope',
+          home: ScrollResponsiveScaffold(
+            restorationId: 'main_scaffold',
+            body: Column(
+              children: List.generate(
+                30,
+                (i) => SizedBox(height: 60.0, child: Text('Row $i')),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ScrollResponsiveScaffold), findsOneWidget);
+      expect(find.byType(CustomScrollView), findsOneWidget);
+
+      final scrollView = tester.widget<CustomScrollView>(
+        find.byType(CustomScrollView),
+      );
+      expect(scrollView.restorationId, 'main_scaffold_scroll');
+    });
   });
 }
