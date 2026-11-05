@@ -87,10 +87,14 @@ This roadmap tracks the development of the **Scroll-Driven UI Framework for Flut
 
 ### PHASE 7 — Smart Visibility Controller
 - [x] Implement `SmartVisibilityController` governing Header, Left Action, Right Action, FAB, Bottom Bar, Sticky Tab, and Status Bar.
-- [x] Implement `VisibilityRule` with boundary assertions (`showOffset <= hideOffset`) and directional rules.
+- [x] Implement `VisibilityRule` with boundary assertions (`showOffset <= hideOffset`), directional rules, priority, duration, and curve.
 - [x] Expose per-target `ValueListenable<double>` streams to eliminate global widget rebuilds.
-- [x] Support programmatic overrides via `setVisibility()`.
-- [x] Write visibility tests in `test/smart_visibility_and_animation_test.dart`.
+- [x] Support manual override API: `show()`, `hide()`, `toggle()`, `showAll()`, and `hideAll()`.
+- [x] Support component locking (`lock()`, `unlock()`, `isLocked()`) to freeze elements during modals/search.
+- [x] Support priority-based target queries (`getTargetsByPriority()`).
+- [x] Implement filtered `onStateChanged` callbacks firing strictly on boolean visibility flips.
+- [x] Implement declarative `SmartVisibilityTransition` widget with automatic rule duration/curve resolution and reduced motion.
+- [x] Write visibility tests in `test/smart_visibility_and_animation_test.dart` (18 tests passed).
 
 ### PHASE 8 — Developer-Friendly API
 - [x] Implement `ScrollResponsiveController` extending `ScrollController` with unified programmatic scroll methods.

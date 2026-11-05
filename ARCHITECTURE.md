@@ -139,6 +139,13 @@ Each target is governed by an independent rule specifying:
 ### 4.3 Zero-Cross-Talk Guarantee
 Visibility updates to one target (e.g., hiding the FAB) are delivered solely to that target's dedicated `ValueNotifier<double>` stream. Sibling elements (e.g., sticky tabs or bottom navigation) do not rebuild or recalculate layout unless their own rules dictate.
 
+### 4.4 Manual Override, Locking & Declarative Transitions
+- **Granular Overrides**: `show(target)`, `hide(target)`, `toggle(target)`, `showAll()`, and `hideAll()`.
+- **Target Locking**: `lock(target, [visibility])` and `unlock(target)` freeze a component's visibility (e.g. during search mode, modal sheets, or dialogs) so background scrolling cannot alter it until explicitly unlocked.
+- **Priority Ordering**: `getTargetsByPriority({bool ascending = false})` sorts targets by priority to resolve layout precedence.
+- **Filtered State Callbacks**: `onStateChanged` fires only when a component flips between visible and hidden ($> 0.5$), avoiding redundant updates.
+- **Declarative Transition Widget**: `SmartVisibilityTransition` binds any widget to the controller with automatic rule duration/curve resolution, `IgnorePointer` protection when hidden, and reduced-motion accessibility.
+
 ---
 
 ## 5. Native System UI Management (`StatusBarManager`)

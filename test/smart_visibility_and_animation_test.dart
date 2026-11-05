@@ -122,6 +122,162 @@ void main() {
 
       controller.dispose();
     });
+
+    test('controller supports show, hide, toggle, showAll, and hideAll', () {
+      final controller = SmartVisibilityController();
+
+      // Show, hide, toggle
+      controller.hide(VisibilityTarget.floatingActionButton);
+      expect(
+        controller.getVisibility(VisibilityTarget.floatingActionButton),
+        0.0,
+      );
+      expect(
+        controller.isVisible(VisibilityTarget.floatingActionButton),
+        isFalse,
+      );
+
+      controller.show(VisibilityTarget.floatingActionButton);
+      expect(
+        controller.getVisibility(VisibilityTarget.floatingActionButton),
+        1.0,
+      );
+      expect(
+        controller.isVisible(VisibilityTarget.floatingActionButton),
+        isTrue,
+      );
+
+      controller.toggle(VisibilityTarget.floatingActionButton);
+      expect(
+        controller.getVisibility(VisibilityTarget.floatingActionButton),
+        0.0,
+      );
+
+      // showAll & hideAll
+      controller.showAll();
+      expect(controller.getVisibility(VisibilityTarget.header), 1.0);
+      expect(
+        controller.getVisibility(VisibilityTarget.floatingActionButton),
+        1.0,
+      );
+
+      controller.hideAll();
+      expect(controller.getVisibility(VisibilityTarget.header), 0.0);
+      expect(
+        controller.getVisibility(VisibilityTarget.floatingActionButton),
+        0.0,
+      );
+
+      controller.dispose();
+    });
+
+    test(
+      'controller lock prevents scroll updates from altering locked targets',
+      () {
+        final controller = SmartVisibilityController();
+
+        // Lock FAB at visible (1.0)
+        controller.lock(VisibilityTarget.floatingActionButton, 1.0);
+        expect(
+          controller.isLocked(VisibilityTarget.floatingActionButton),
+          isTrue,
+        );
+
+        // Scroll down past threshold (150px)
+        controller.updateScroll(
+          150.0,
+          direction: ScrollDirection.reverse,
+          delta: 10.0,
+        );
+
+        // Header is not locked, so it hides (0.0)
+        expect(controller.getVisibility(VisibilityTarget.header), 0.0);
+        // FAB IS locked, so it stays visible (1.0)
+        expect(
+          controller.getVisibility(VisibilityTarget.floatingActionButton),
+          1.0,
+        );
+
+        // Unlock FAB and update scroll
+        controller.unlock(VisibilityTarget.floatingActionButton);
+        expect(
+          controller.isLocked(VisibilityTarget.floatingActionButton),
+          isFalse,
+        );
+
+        controller.updateScroll(
+          150.0,
+          direction: ScrollDirection.reverse,
+          delta: 10.0,
+        );
+        expect(
+          controller.getVisibility(VisibilityTarget.floatingActionButton),
+          0.0,
+        );
+
+        controller.dispose();
+      },
+    );
+
+    test('controller notifies onStateChanged only when boolean visibility state flips', () {
+      final stateChanges = <VisibilityTarget, bool>{};
+      int callbackCount = 0;
+
+      final controller = SmartVisibilityController(
+        onStateChanged: (target, isVisible) {
+          stateChanges[target] = isVisible;
+          callbackCount++;
+        },
+      );
+
+      // Change from 1.0 to 0.8 (both > 0.5): should NOT trigger onStateChanged
+      controller.setVisibility(VisibilityTarget.header, 0.8);
+      expect(callbackCount, 0);
+
+      // Change from 0.8 to 0.2 (crosses 0.5): should trigger onStateChanged(false)
+      controller.setVisibility(VisibilityTarget.header, 0.2);
+      expect(callbackCount, 1);
+      expect(stateChanges[VisibilityTarget.header], isFalse);
+
+      // Change from 0.2 to 0.0: should NOT trigger again
+      controller.setVisibility(VisibilityTarget.header, 0.0);
+      expect(callbackCount, 1);
+
+      // Change from 0.0 to 1.0: should trigger onStateChanged(true)
+      controller.setVisibility(VisibilityTarget.header, 1.0);
+      expect(callbackCount, 2);
+      expect(stateChanges[VisibilityTarget.header], isTrue);
+
+      controller.dispose();
+    });
+
+    test('controller sorts targets by priority', () {
+      final config = SmartVisibilityConfig(
+        rules: {
+          VisibilityTarget.header: const VisibilityRule(
+            target: VisibilityTarget.header,
+            priority: 10,
+          ),
+          VisibilityTarget.floatingActionButton: const VisibilityRule(
+            target: VisibilityTarget.floatingActionButton,
+            priority: 5,
+          ),
+          VisibilityTarget.statusBar: const VisibilityRule(
+            target: VisibilityTarget.statusBar,
+            priority: 20,
+          ),
+        },
+      );
+      final controller = SmartVisibilityController(config: config);
+
+      final targetsDesc = controller.getTargetsByPriority(ascending: false);
+      expect(targetsDesc.first, VisibilityTarget.statusBar);
+
+      final targetsAsc = controller.getTargetsByPriority(ascending: true);
+      expect(targetsAsc.first, isNot(VisibilityTarget.statusBar));
+
+      controller.dispose();
+    });
   });
 
   group('Phase 10.1: Scroll Animation System', () {
@@ -332,5 +488,125 @@ void main() {
         expect(scrolledTapped, isTrue);
       },
     );
+  });
+
+  group('Phase 7: SmartVisibilityTransition Tests', () {
+    testWidgets('animates fade and disables pointer hits when hidden', (
+      tester,
+    ) async {
+      final controller = SmartVisibilityController();
+      bool tapped = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: SmartVisibilityTransition(
+                controller: controller,
+                target: VisibilityTarget.floatingActionButton,
+                transition: VisibilityTransitionType.fade,
+                child: GestureDetector(
+                  onTap: () => tapped = true,
+                  child: const Text('Visible FAB Target'),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('Visible FAB Target'), findsOneWidget);
+
+      // Tap when visible
+      await tester.tap(find.text('Visible FAB Target'));
+      await tester.pump();
+      expect(tapped, isTrue);
+
+      // Hide target
+      controller.hide(VisibilityTarget.floatingActionButton);
+      await tester.pumpAndSettle();
+
+      final ignoreFinder = find.descendant(
+        of: find.byType(SmartVisibilityTransition),
+        matching: find.byType(IgnorePointer),
+      );
+      expect(tester.widget<IgnorePointer>(ignoreFinder).ignoring, isTrue);
+
+      controller.dispose();
+    });
+
+    testWidgets('handles scaleAndFade transition cleanly', (tester) async {
+      final controller = SmartVisibilityController();
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: SmartVisibilityTransition(
+                controller: controller,
+                target: VisibilityTarget.header,
+                transition: VisibilityTransitionType.scaleAndFade,
+                child: const Text('Header Widget'),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('Header Widget'), findsOneWidget);
+
+      controller.hide(VisibilityTarget.header);
+      await tester.pumpAndSettle();
+
+      final scaleWidget = tester.widget<AnimatedScale>(
+        find.descendant(
+          of: find.byType(SmartVisibilityTransition),
+          matching: find.byType(AnimatedScale),
+        ),
+      );
+      expect(scaleWidget.scale, 0.0);
+
+      controller.dispose();
+    });
+
+    testWidgets('respects reduced-motion accessibility preference', (
+      tester,
+    ) async {
+      final controller = SmartVisibilityController();
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: MediaQuery(
+            data: const MediaQueryData(disableAnimations: true),
+            child: Scaffold(
+              body: Center(
+                child: SmartVisibilityTransition(
+                  controller: controller,
+                  target: VisibilityTarget.bottomNavigationBar,
+                  transition: VisibilityTransitionType.slideAndFade,
+                  child: const Text('Bottom Nav Bar'),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('Bottom Nav Bar'), findsOneWidget);
+
+      // In reduced motion, AnimatedSlide is bypassed in favor of basic Visibility
+      expect(
+        find.descendant(
+          of: find.byType(SmartVisibilityTransition),
+          matching: find.byType(AnimatedSlide),
+        ),
+        findsNothing,
+      );
+
+      controller.dispose();
+    });
   });
 }

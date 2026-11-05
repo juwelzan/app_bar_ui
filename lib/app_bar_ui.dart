@@ -29,6 +29,7 @@ export 'src/widgets/scroll_position_indicator.dart';
 export 'src/widgets/scroll_aware_side_actions.dart';
 export 'src/widgets/scroll_expandable_fab.dart';
 export 'src/widgets/scroll_page_indicator.dart';
+export 'src/widgets/smart_visibility_transition.dart';
 
 import 'app_bar_ui_platform_interface.dart';
 
