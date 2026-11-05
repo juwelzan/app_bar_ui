@@ -81,3 +81,41 @@
 - [x] Author comprehensive, developer-facing `README.md` with visual architecture, configuration tables, platform limitations, and troubleshooting guide.
 - [x] Document version 1.0.0 in `CHANGELOG.md`.
 
+---
+
+## Phase 10: Advanced Scroll-Driven UI Framework Expansion
+
+### Phase 10.1: Smart Visibility Controller & Advanced Animation Core
+- [ ] Implement `SmartVisibilityController` with independent thresholds, priorities, and directional hysteresis for Header, Left/Right Actions, FAB, Bottom Bar, Sticky Tabs, and Status Bar.
+- [ ] Implement `ScrollDrivenAnimation` system: scroll-linked opacity, scale, translation, rotation, color transitions, and gradient transitions.
+- [ ] Implement `ScrollMorphBuilder` for dynamic avatar/widget morphing during scroll.
+- [ ] Implement reduced-motion accessibility mode (`disableAnimations` check).
+- [ ] Unit & widget tests for Smart Visibility and Animation Core.
+
+### Phase 10.2: Advanced Scroll Header & Navigation Components
+- [ ] Implement `ScrollCollapsingHeader` with flexible space, parallax background, and title collapse ratio.
+- [ ] Implement `ScrollPullToExpandHeader` with overscroll stretch and zoom physics.
+- [ ] Implement `ScrollStickyTabBar` sliver persistent header supporting TabBar and custom tab strips.
+- [ ] Implement `ScrollAwareFab` with auto-hide, directional reveal, and extended-to-mini morphing.
+- [ ] Implement `ScrollAutoHideBottomBar` with smooth directional hide/reveal.
+- [ ] Unit & widget tests for header and navigation components.
+
+### Phase 10.3: Parallax, Snap, Progress & Section Reveals
+- [ ] Implement `ScrollParallax` / `SliverScrollParallax` with configurable fractional translation.
+- [ ] Implement `ScrollSnapEngine` and `ScrollSnapConfig` for header and section snapping.
+- [ ] Implement `ScrollProgressIndicator` (linear and circular scroll tracking bars).
+- [ ] Implement `ScrollSectionReveal` with staggered entrance animations.
+- [ ] Unit & widget tests for parallax, snap, progress, and reveal components.
+
+### Phase 10.4: Presets System & Developer Experience
+- [ ] Implement `ScrollResponsivePresets` (Material, Minimal, iOS-Inspired, Collapsing Header, Transparent Floating, Dashboard, Custom).
+- [ ] Implement programmatic scroll controls (`ScrollResponsiveController` extensions: `scrollToTop()`, `collapseHeader()`, `expandHeader()`, `snapToNext()`).
+- [ ] Integrate new slots into `ScrollResponsiveScaffold` while preserving 100% backward compatibility.
+- [ ] Unit & widget tests for presets and programmatic controls.
+
+### Phase 10.5: Full Showcase App, Quality Assurance & Documentation
+- [ ] Update `example/lib/main.dart` with interactive multi-tab showcase for all presets and components.
+- [ ] Update `PROJECT_CONTEXT.md`, `ARCHITECTURE.md`, and `README.md`.
+- [ ] Run `dart format`, `flutter analyze`, `flutter test`, and `dart pub publish --dry-run`.
+
+
