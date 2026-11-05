@@ -49,6 +49,17 @@ class ScrollRange<T> {
       return Offset.lerp(b, e, curvedT) as T;
     } else if (begin is Color && end is Color) {
       return Color.lerp(begin as Color, end as Color, curvedT) as T;
+    } else if (begin is Size && end is Size) {
+      return Size.lerp(begin as Size, end as Size, curvedT) as T;
+    } else if (begin is BorderRadius && end is BorderRadius) {
+      return BorderRadius.lerp(
+        begin as BorderRadius,
+        end as BorderRadius,
+        curvedT,
+      ) as T;
+    } else if (begin is EdgeInsets && end is EdgeInsets) {
+      return EdgeInsets.lerp(begin as EdgeInsets, end as EdgeInsets, curvedT)
+          as T;
     }
 
     return curvedT >= 0.5 ? end : begin;

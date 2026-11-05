@@ -75,12 +75,15 @@ This roadmap tracks the development of the **Scroll-Driven UI Framework for Flut
 - [x] Write widget tests across `test/scroll_components_test.dart`, `test/scroll_parallax_snap_reveal_test.dart`, and `test/advanced_scroll_components_test.dart` (36 component tests passed).
 
 ### PHASE 6 — Unified Animation Engine
-- [x] Implement `ScrollRange<T>` for generic scroll-linked interpolation (`double`, `Offset`, `Color`).
+- [x] Implement `ScrollRange<T>` for universal scroll-linked interpolation (`double`, `Offset`, `Color`, `Size`, `BorderRadius`, `EdgeInsets`).
 - [x] Implement `ScrollTransform` supporting opacity, scale, translation ($X/Y$), and rotation.
 - [x] Implement `ScrollColorTransition` supporting dynamic color and gradient interpolation.
-- [x] Implement `ScrollMorphBuilder` for avatar and widget transformations.
+- [x] Implement `ScrollMorphBuilder` for avatar and widget midpoint transitions.
+- [x] Implement `ScrollAvatarTransform` for circle-to-rounded-rect size, radius, elevation, and offset morphing.
+- [x] Implement `ScrollStaggeredBuilder` coordinating cascading delays and durations across item lists.
+- [x] Implement `ScrollAnimatedBuilder` for declarative multi-property animation snapshots.
 - [x] Enforce reduced-motion accessibility preference (`MediaQuery.maybeDisableAnimationsOf(context)`).
-- [x] Write animation tests in `test/smart_visibility_and_animation_test.dart`.
+- [x] Write animation tests in `test/smart_visibility_and_animation_test.dart` and `test/unified_animation_engine_test.dart` (14 animation tests passed).
 
 ### PHASE 7 — Smart Visibility Controller
 - [x] Implement `SmartVisibilityController` governing Header, Left Action, Right Action, FAB, Bottom Bar, Sticky Tab, and Status Bar.

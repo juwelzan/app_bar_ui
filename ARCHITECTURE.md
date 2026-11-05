@@ -23,10 +23,13 @@ flowchart TD
 
     subgraph AnimationLayer["3. Unified Shared Animation Engine"]
         direction TB
-        ScrollRange["ScrollRange<T> (Double, Offset, Color, Size, Border)"]
+        ScrollRange["ScrollRange<T> (Double, Offset, Color, Size, Border, EdgeInsets)"]
         ScrollTransform["ScrollTransform (Opacity, Scale, Slide, Rotation, Reduced-Motion)"]
         ColorTween["ScrollColorTransition (Color & Gradient Dynamic Interpolation)"]
         MorphBuilder["ScrollMorphBuilder (Midpoint Hit-Test Switching & Cross-Fade)"]
+        AvatarTransform["ScrollAvatarTransform (Size, Shape, Radius, Offset Morphing)"]
+        StaggeredAnim["ScrollStaggeredBuilder (Cascading Multi-Widget Staggers)"]
+        AnimatedBuilder["ScrollAnimatedBuilder (Multi-Property Declarative Coordinator)"]
     end
 
     subgraph ComponentLayer["4. Modular Component & Widget Layer"]
