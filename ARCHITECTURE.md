@@ -34,8 +34,8 @@ flowchart TD
         MasterScaffold["ScrollResponsiveScaffold (Layered Viewport & Overlay)"]
         HeaderModules["ScrollResponsiveHeader | ScrollCollapsingHeader | ScrollStickyHeader | ScrollPullToExpandHeader"]
         ActionModules["PinnedActionButton (Left & Right Fixed Touch Targets)"]
-        NavModules["ScrollStickyTabBar | ScrollAwareFab | ScrollAutoHideBottomBar"]
-        ViewportModules["ScrollParallax (Flow-based) | ScrollProgressIndicator | ScrollSectionReveal"]
+        NavModules["ScrollStickyTabBar | ScrollAwareFab | ScrollAutoHideBottomBar | ScrollToTopButton | ScrollExpandableFab"]
+        ViewportModules["ScrollParallax | ScrollProgressIndicator | ScrollPositionIndicator | ScrollPageIndicator | ScrollAwareSideActions | ScrollSectionReveal"]
     end
 
     subgraph PlatformLayer["5. Native Operating System & Fallback Layer"]

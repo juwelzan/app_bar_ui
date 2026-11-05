@@ -67,7 +67,12 @@ This roadmap tracks the development of the **Scroll-Driven UI Framework for Flut
 - [x] Implement `ScrollParallax` with high-performance `FlowDelegate` repainting.
 - [x] Implement `ScrollSnapEngine` and `ScrollSnapPhysics` for magnetic offset snapping.
 - [x] Implement `ScrollSectionReveal` with staggered delays and reduced-motion compliance.
-- [x] Write widget tests across `test/scroll_components_test.dart` and `test/scroll_parallax_snap_reveal_test.dart`.
+- [x] Implement `ScrollToTopButton` with threshold detection, smooth scroll-to-top, and scale/fade animation.
+- [x] Implement `ScrollPositionIndicator` supporting percentage, fraction, page pills, and custom metrics builders.
+- [x] Implement `ScrollAwareSideActions` floating dock with scroll-direction auto-hide and custom alignments.
+- [x] Implement `ScrollExpandableFab` speed-dial with staggered child action buttons and auto-collapse on scroll.
+- [x] Implement `ScrollPageIndicator` dynamic pagination dot expansion linked to `ScrollController` or `PageController`.
+- [x] Write widget tests across `test/scroll_components_test.dart`, `test/scroll_parallax_snap_reveal_test.dart`, and `test/advanced_scroll_components_test.dart` (36 component tests passed).
 
 ### PHASE 6 — Unified Animation Engine
 - [x] Implement `ScrollRange<T>` for generic scroll-linked interpolation (`double`, `Offset`, `Color`).

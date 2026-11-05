@@ -173,6 +173,171 @@ void main() {
         expect(header.elevation, 0.0);
       },
     );
+
+    testWidgets(
+      'ScrollCollapsingHeader.parallax applies parallax translation to flexible space',
+      (tester) async {
+        final scrollController = ScrollController();
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: CustomScrollView(
+                controller: scrollController,
+                slivers: [
+                  const ScrollCollapsingHeader.parallax(
+                    expandedHeight: 200.0,
+                    collapsedHeight: 60.0,
+                    parallaxFactor: 0.5,
+                    background: Text('Parallax Background'),
+                  ),
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) =>
+                          SizedBox(height: 50.0, child: Text('Item $index')),
+                      childCount: 30,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        expect(find.text('Parallax Background'), findsOneWidget);
+
+        // Scroll halfway: shrinkOffset = 70.0 (out of 140.0)
+        scrollController.jumpTo(70.0);
+        await tester.pumpAndSettle();
+
+        // Flexible space should have Transform.translate applied with offset: 70 * (1 - 0.5) = 35.0
+        final transformFinder = find.descendant(
+          of: find.byType(ScrollCollapsingHeader),
+          matching: find.byType(Transform),
+        );
+        expect(transformFinder, findsOneWidget);
+        final transformWidget = tester.widget<Transform>(transformFinder);
+        expect(
+          transformWidget.transform.getTranslation().y,
+          closeTo(35.0, 1.0),
+        );
+      },
+    );
+
+    testWidgets(
+      'ScrollCollapsingHeader.transparentFloating configures floating and unpinned state',
+      (tester) async {
+        const header = ScrollCollapsingHeader.transparentFloating(
+          expandedHeight: 180.0,
+          collapsedHeight: 60.0,
+          collapsedTitle: Text('Floating Title'),
+        );
+
+        expect(header.pinned, isFalse);
+        expect(header.floating, isTrue);
+        expect(header.backgroundColor, Colors.transparent);
+        expect(header.elevation, 0.0);
+      },
+    );
+  });
+
+  group('Phase 4: ScrollStickyHeader Tests', () {
+    testWidgets('renders child and stays pinned when scrolled', (tester) async {
+      final scrollController = ScrollController();
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: CustomScrollView(
+              controller: scrollController,
+              slivers: [
+                const SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 120.0,
+                    child: Text('Leading Sliver Content'),
+                  ),
+                ),
+                const ScrollStickyHeader(
+                  height: 56.0,
+                  child: Center(child: Text('Sticky Bar Child')),
+                ),
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) =>
+                        SizedBox(height: 40.0, child: Text('Row $index')),
+                    childCount: 40,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('Sticky Bar Child'), findsOneWidget);
+      expect(find.text('Leading Sliver Content'), findsOneWidget);
+
+      // Scroll past the 120px leading sliver
+      scrollController.jumpTo(200.0);
+      await tester.pumpAndSettle();
+
+      // Sticky header remains pinned and visible in viewport
+      expect(find.text('Sticky Bar Child'), findsOneWidget);
+    });
+
+    testWidgets('supports dynamic builder with isPinned state', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: CustomScrollView(
+              slivers: [
+                ScrollStickyHeader.builder(
+                  height: 50.0,
+                  builder: (context, isPinned) =>
+                      Text(isPinned ? 'HEADER_PINNED' : 'HEADER_UNPINNED'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('HEADER_UNPINNED'), findsOneWidget);
+    });
+
+    testWidgets(
+      'resolves height automatically from PreferredSizeWidget if omitted',
+      (tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: CustomScrollView(
+                slivers: [
+                  ScrollStickyHeader(
+                    child: PreferredSize(
+                      preferredSize: const Size.fromHeight(68.0),
+                      child: Container(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        final headerFinder = find.byType(SliverPersistentHeader);
+        expect(headerFinder, findsOneWidget);
+        final sliverHeader = tester.widget<SliverPersistentHeader>(
+          headerFinder,
+        );
+        expect(sliverHeader.delegate.maxExtent, 68.0);
+        expect(sliverHeader.delegate.minExtent, 68.0);
+      },
+    );
   });
 
   group('Phase 4: ScrollStickyHeader Tests', () {
