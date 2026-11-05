@@ -112,3 +112,4 @@ Before declaring any release ready, execute the following DevTools checklist:
    - Navigate away from the route and pop back 10 times.
    - Execute GC and take a second snapshot.
    - Confirm zero retained instances of `ScrollResponsiveEngine`, `StatusBarManager`, or `_ScrollResponsiveScaffoldState`.
+

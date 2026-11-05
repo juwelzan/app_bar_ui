@@ -97,3 +97,4 @@ flutter test test/scroll_parallax_snap_reveal_test.dart
 # 4. Validate dry run for publication
 dart pub publish --dry-run
 ```
+
