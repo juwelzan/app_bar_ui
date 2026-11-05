@@ -96,4 +96,32 @@ void main() {
       expect(find.text('Slide Animation'), findsOneWidget);
     },
   );
+
+  testWidgets('Supports theme mode switching and config controls in real-time', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(const ScrollResponsiveDemoApp());
+    await tester.pumpAndSettle();
+
+    // Toggle theme mode to Dark
+    themeModeNotifier.value = ThemeMode.dark;
+    await tester.pumpAndSettle();
+    expect(themeModeNotifier.value, ThemeMode.dark);
+
+    // Toggle theme mode to Light
+    themeModeNotifier.value = ThemeMode.light;
+    await tester.pumpAndSettle();
+    expect(themeModeNotifier.value, ThemeMode.light);
+
+    // Reset to system
+    themeModeNotifier.value = ThemeMode.system;
+    await tester.pumpAndSettle();
+
+    // Verify config controls card exists
+    expect(find.text('Interactive Config Controls'), findsOneWidget);
+    expect(find.text('Hide Status Bar on Scroll'), findsOneWidget);
+    expect(find.text('Fade Animation'), findsOneWidget);
+    expect(find.text('Scale Animation'), findsOneWidget);
+    expect(find.text('Slide Animation'), findsOneWidget);
+  });
 }
