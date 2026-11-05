@@ -405,5 +405,113 @@ void main() {
         findsOneWidget,
       );
     });
+
+    testWidgets(
+      'pinned side actions have completely transparent backgrounds with no elevation',
+      (tester) async {
+        await tester.pumpWidget(buildTestScaffold());
+        await tester.pumpAndSettle();
+
+        // Ensure no AppBar exists in the tree
+        expect(find.byType(AppBar), findsNothing);
+
+        // Verify each action button container has transparent background
+        final leadingContainer = tester.widget<Container>(
+          find.descendant(
+            of: find.byKey(const ValueKey('pinned_leading_action')),
+            matching: find.byType(Container),
+          ),
+        );
+        final leadingDecor = leadingContainer.decoration as BoxDecoration?;
+        expect(leadingDecor?.color, Colors.transparent);
+        expect(leadingDecor?.boxShadow, isEmpty);
+
+        final trailingContainer = tester.widget<Container>(
+          find.descendant(
+            of: find.byKey(const ValueKey('pinned_trailing_action')),
+            matching: find.byType(Container),
+          ),
+        );
+        final trailingDecor = trailingContainer.decoration as BoxDecoration?;
+        expect(trailingDecor?.color, Colors.transparent);
+        expect(trailingDecor?.boxShadow, isEmpty);
+      },
+    );
+
+    testWidgets(
+      'center header area passes taps directly to scrollable content',
+      (tester) async {
+        bool headerTapped = false;
+
+        await tester.pumpWidget(
+          buildTestScaffold(
+            headerTitle: GestureDetector(
+              key: const ValueKey('clickable_header_title'),
+              onTap: () => headerTapped = true,
+              child: const Text('Tappable Title'),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        // Tap header title in the center between the pinned actions
+        await tester.tap(find.byKey(const ValueKey('clickable_header_title')));
+        await tester.pump();
+
+        expect(headerTapped, isTrue);
+      },
+    );
+
+    testWidgets('pinned side actions have completely transparent backgrounds with no elevation',
+        (tester) async {
+      await tester.pumpWidget(buildTestScaffold());
+      await tester.pumpAndSettle();
+
+      // Ensure no AppBar exists in the tree
+      expect(find.byType(AppBar), findsNothing);
+
+      // Verify each action button container has transparent background
+      final leadingContainer = tester.widget<Container>(
+        find.descendant(
+          of: find.byKey(const ValueKey('pinned_leading_action')),
+          matching: find.byType(Container),
+        ),
+      );
+      final leadingDecor = leadingContainer.decoration as BoxDecoration?;
+      expect(leadingDecor?.color, Colors.transparent);
+      expect(leadingDecor?.boxShadow, isEmpty);
+
+      final trailingContainer = tester.widget<Container>(
+        find.descendant(
+          of: find.byKey(const ValueKey('pinned_trailing_action')),
+          matching: find.byType(Container),
+        ),
+      );
+      final trailingDecor = trailingContainer.decoration as BoxDecoration?;
+      expect(trailingDecor?.color, Colors.transparent);
+      expect(trailingDecor?.boxShadow, isEmpty);
+    });
+
+    testWidgets('center header area passes taps directly to scrollable content',
+        (tester) async {
+      bool headerTapped = false;
+
+      await tester.pumpWidget(
+        buildTestScaffold(
+          headerTitle: GestureDetector(
+            key: const ValueKey('clickable_header_title'),
+            onTap: () => headerTapped = true,
+            child: const Text('Tappable Title'),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      // Tap header title in the center between the pinned actions
+      await tester.tap(find.byKey(const ValueKey('clickable_header_title')));
+      await tester.pump();
+
+      expect(headerTapped, isTrue);
+    });
   });
 }

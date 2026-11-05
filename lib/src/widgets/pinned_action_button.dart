@@ -153,11 +153,16 @@ class PinnedActionButton extends StatelessWidget {
     Widget result = child;
 
     if (animationConfig.enableSlide && translation != Offset.zero) {
-      result = FractionalTranslation(translation: translation, child: result);
+      result = FractionalTranslation(
+        key: const ValueKey('pinned_action_slide'),
+        translation: translation,
+        child: result,
+      );
     }
 
     if (animationConfig.enableScale && scale != 1.0) {
       result = Transform.scale(
+        key: const ValueKey('pinned_action_scale'),
         scale: scale,
         alignment: alignment,
         child: result,
@@ -165,7 +170,11 @@ class PinnedActionButton extends StatelessWidget {
     }
 
     if (animationConfig.enableFade) {
-      result = Opacity(opacity: opacity, child: result);
+      result = Opacity(
+        key: const ValueKey('pinned_action_fade'),
+        opacity: opacity,
+        child: result,
+      );
     }
 
     return IgnorePointer(
