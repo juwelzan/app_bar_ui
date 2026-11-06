@@ -193,6 +193,19 @@ enum AppBarModel {
 
   /// Model 8: Polar arc dial distributing interactive nodes along a trigonometric circle.
   radialDial,
+
+  // --- Complete Design System: 20 Autonomous Models (Batch C) ---
+  /// Model 9: High-end publication masthead with dynamic tracking and reading progress.
+  editorialTypography,
+
+  /// Model 10: Stacked physical card deck fanning out and tucking into pinned toolbar.
+  cardDeckStacked,
+
+  /// Model 11: Ultra-compact content-first ribbon with monospace micro-breadcrumbs.
+  minimalistMicroBar,
+
+  /// Model 12: Prominent centered avatar and identity scale-morphing into toolbar.
+  profileIdentity,
 }
 
 /// Convenience display extensions on [AppBarModel].
@@ -216,6 +229,14 @@ extension AppBarModelDisplayName on AppBarModel {
         return 'Vertical Rail Transform';
       case AppBarModel.radialDial:
         return 'Radial Polar Dial';
+      case AppBarModel.editorialTypography:
+        return 'Editorial Typography';
+      case AppBarModel.cardDeckStacked:
+        return 'Card Deck Stacked';
+      case AppBarModel.minimalistMicroBar:
+        return 'Minimalist Micro-Bar';
+      case AppBarModel.profileIdentity:
+        return 'Profile Identity Centered';
       case AppBarModel.classic:
         return 'Classic Material';
       default:

@@ -20,6 +20,10 @@ import '../../design_system/models/split_curtain/split_curtain_renderer.dart';
 import '../../design_system/models/spatial_3d_flip/spatial_3d_flip_renderer.dart';
 import '../../design_system/models/vertical_rail_transform/vertical_rail_transform_renderer.dart';
 import '../../design_system/models/radial_dial/radial_dial_renderer.dart';
+import '../../design_system/models/editorial_typography/editorial_typography_renderer.dart';
+import '../../design_system/models/card_deck_stacked/card_deck_stacked_renderer.dart';
+import '../../design_system/models/minimalist_micro_bar/minimalist_micro_bar_renderer.dart';
+import '../../design_system/models/profile_identity/profile_identity_renderer.dart';
 
 /// Bootstraps all built-in model renderers into the registry.
 void bootstrapBuiltInRenderers(AppBarModelRegistry registry) {
@@ -334,6 +338,28 @@ void bootstrapBuiltInRenderers(AppBarModelRegistry registry) {
   registry.register(
     AppBarModel.radialDial,
     () => const RadialDialRenderer(),
+    capabilities: const ModelCapabilities(supportsShapeMorph: true, supportsSticky: true),
+  );
+
+  // --- Complete Design System: Batch C (Models 9–12) ---
+  registry.register(
+    AppBarModel.editorialTypography,
+    () => const EditorialTypographyRenderer(),
+    capabilities: const ModelCapabilities(supportsSticky: true, supportsMultiStage: true),
+  );
+  registry.register(
+    AppBarModel.cardDeckStacked,
+    () => const CardDeckStackedRenderer(),
+    capabilities: const ModelCapabilities(supportsSticky: true, supportsMultiStage: true),
+  );
+  registry.register(
+    AppBarModel.minimalistMicroBar,
+    () => const MinimalistMicroBarRenderer(),
+    capabilities: const ModelCapabilities(supportsSticky: true),
+  );
+  registry.register(
+    AppBarModel.profileIdentity,
+    () => const ProfileIdentityRenderer(),
     capabilities: const ModelCapabilities(supportsShapeMorph: true, supportsSticky: true),
   );
 }

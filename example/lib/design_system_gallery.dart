@@ -78,6 +78,32 @@ class _DesignSystemGalleryTabState extends State<DesignSystemGalleryTab> {
   double _dialRadius = 88.0;
   int _dialIndex = 0;
 
+  // --- Model 9: Editorial Typography Parameters ---
+  String _editorialHeadline = 'The Architecture of Thought';
+  String _editorialCategory = 'Systems Engineering';
+  bool _editorialSerif = true;
+  bool _editorialReadingBar = true;
+  double _editorialExpandedHeight = 220.0;
+
+  // --- Model 10: Card Deck Stacked Parameters ---
+  String _deckTitle = 'Card Wallet';
+  int _activeCardIndex = 0;
+  double _cardOverlap = 18.0;
+
+  // --- Model 11: Minimalist Micro-Bar Parameters ---
+  String _microBreadcrumb = 'packages / app_bar_ui / lib / engine.dart';
+  String _microEta = '4 min read';
+  String _microStatus = 'v2.4.0 • clean';
+  bool _microMonospace = true;
+  bool _microProgressDot = true;
+
+  // --- Model 12: Profile & Identity Centered Parameters ---
+  String _profileName = 'Dr. Eleanor Vance';
+  String _profileHandle = '@eleanor_vance';
+  String _profileBio = 'Principal Systems Architect';
+  bool _profileVerified = true;
+  double _profileAvatarSize = 72.0;
+
   // Telemetry
   int _switchCount = 0;
 
@@ -282,6 +308,65 @@ class _DesignSystemGalleryTabState extends State<DesignSystemGalleryTab> {
           body: _buildScrollableBody(context),
         );
 
+      case AppBarModel.editorialTypography:
+        return AppBarEngine.custom(
+          key: ValueKey('l2_editorial_${_editorialHeadline}_${_editorialCategory}_$_editorialSerif'),
+          controller: _appBarController,
+          model: AppBarModel.editorialTypography,
+          configuration: EditorialTypographyConfig(
+            headline: _editorialHeadline,
+            category: _editorialCategory,
+            serifFont: _editorialSerif,
+            showReadingProgressBar: _editorialReadingBar,
+            expandedHeight: _editorialExpandedHeight,
+          ),
+          body: _buildScrollableBody(context),
+        );
+
+      case AppBarModel.cardDeckStacked:
+        return AppBarEngine.custom(
+          key: ValueKey('l2_deck_${_deckTitle}_${_activeCardIndex}_$_cardOverlap'),
+          controller: _appBarController,
+          model: AppBarModel.cardDeckStacked,
+          configuration: CardDeckStackedConfig(
+            deckTitle: _deckTitle,
+            activeCardIndex: _activeCardIndex,
+            cardOverlap: _cardOverlap,
+            onCardSwiped: (idx) => setState(() => _activeCardIndex = idx),
+          ),
+          body: _buildScrollableBody(context),
+        );
+
+      case AppBarModel.minimalistMicroBar:
+        return AppBarEngine.custom(
+          key: ValueKey('l2_micro_${_microBreadcrumb}_${_microEta}_$_microMonospace'),
+          controller: _appBarController,
+          model: AppBarModel.minimalistMicroBar,
+          configuration: MinimalistMicroBarConfig(
+            pathBreadcrumb: _microBreadcrumb,
+            readingEta: _microEta,
+            documentStatus: _microStatus,
+            monospace: _microMonospace,
+            showProgressDot: _microProgressDot,
+          ),
+          body: _buildScrollableBody(context),
+        );
+
+      case AppBarModel.profileIdentity:
+        return AppBarEngine.custom(
+          key: ValueKey('l2_profile_${_profileName}_${_profileVerified}_$_profileAvatarSize'),
+          controller: _appBarController,
+          model: AppBarModel.profileIdentity,
+          configuration: ProfileIdentityConfig(
+            userName: _profileName,
+            userHandle: _profileHandle,
+            bio: _profileBio,
+            verified: _profileVerified,
+            expandedAvatarSize: _profileAvatarSize,
+          ),
+          body: _buildScrollableBody(context),
+        );
+
       default:
         return AppBarEngine(
           controller: _appBarController,
@@ -476,6 +561,11 @@ class _DesignSystemGalleryTabState extends State<DesignSystemGalleryTab> {
       (AppBarModel.spatial3DFlip, 'M6: 3D Perspective Flip', Icons.flip_camera_android_outlined),
       (AppBarModel.verticalRailTransform, 'M7: Vertical Rail Transform', Icons.view_sidebar_outlined),
       (AppBarModel.radialDial, 'M8: Radial Polar Dial', Icons.explore_outlined),
+      // Batch C (Models 9–12)
+      (AppBarModel.editorialTypography, 'M9: Editorial Typography', Icons.menu_book_outlined),
+      (AppBarModel.cardDeckStacked, 'M10: Card Deck Stacked', Icons.style_outlined),
+      (AppBarModel.minimalistMicroBar, 'M11: Minimalist Micro-Bar', Icons.code_outlined),
+      (AppBarModel.profileIdentity, 'M12: Profile & Identity Centered', Icons.account_circle_outlined),
     ];
 
     return Column(
@@ -735,6 +825,141 @@ class _DesignSystemGalleryTabState extends State<DesignSystemGalleryTab> {
           ],
         );
 
+      case AppBarModel.editorialTypography:
+        return Column(
+          children: [
+            TextField(
+              decoration: const InputDecoration(labelText: 'Display Headline', isDense: true),
+              controller: TextEditingController(text: _editorialHeadline)
+                ..selection = TextSelection.collapsed(offset: _editorialHeadline.length),
+              onChanged: (val) => setState(() => _editorialHeadline = val),
+            ),
+            const SizedBox(height: 10.0),
+            TextField(
+              decoration: const InputDecoration(labelText: 'Category Pill', isDense: true),
+              controller: TextEditingController(text: _editorialCategory)
+                ..selection = TextSelection.collapsed(offset: _editorialCategory.length),
+              onChanged: (val) => setState(() => _editorialCategory = val),
+            ),
+            const SizedBox(height: 10.0),
+            Row(
+              children: [
+                const Text('Serif Font:'),
+                Switch(
+                  value: _editorialSerif,
+                  onChanged: (val) => setState(() => _editorialSerif = val),
+                ),
+                const Spacer(),
+                const Text('Reading Bar:'),
+                Switch(
+                  value: _editorialReadingBar,
+                  onChanged: (val) => setState(() => _editorialReadingBar = val),
+                ),
+              ],
+            ),
+            _buildSliderRow('Expanded Height', _editorialExpandedHeight, 160.0, 300.0, (val) {
+              setState(() => _editorialExpandedHeight = val);
+            }),
+          ],
+        );
+
+      case AppBarModel.cardDeckStacked:
+        return Column(
+          children: [
+            TextField(
+              decoration: const InputDecoration(labelText: 'Deck Title', isDense: true),
+              controller: TextEditingController(text: _deckTitle)
+                ..selection = TextSelection.collapsed(offset: _deckTitle.length),
+              onChanged: (val) => setState(() => _deckTitle = val),
+            ),
+            const SizedBox(height: 10.0),
+            _buildSliderRow('Card Overlap', _cardOverlap, 10.0, 32.0, (val) {
+              setState(() => _cardOverlap = val);
+            }),
+          ],
+        );
+
+      case AppBarModel.minimalistMicroBar:
+        return Column(
+          children: [
+            TextField(
+              decoration: const InputDecoration(labelText: 'Breadcrumb Path', isDense: true),
+              controller: TextEditingController(text: _microBreadcrumb)
+                ..selection = TextSelection.collapsed(offset: _microBreadcrumb.length),
+              onChanged: (val) => setState(() => _microBreadcrumb = val),
+            ),
+            const SizedBox(height: 10.0),
+            TextField(
+              decoration: const InputDecoration(labelText: 'Reading ETA', isDense: true),
+              controller: TextEditingController(text: _microEta)
+                ..selection = TextSelection.collapsed(offset: _microEta.length),
+              onChanged: (val) => setState(() => _microEta = val),
+            ),
+            const SizedBox(height: 10.0),
+            TextField(
+              decoration: const InputDecoration(labelText: 'Document Status', isDense: true),
+              controller: TextEditingController(text: _microStatus)
+                ..selection = TextSelection.collapsed(offset: _microStatus.length),
+              onChanged: (val) => setState(() => _microStatus = val),
+            ),
+            const SizedBox(height: 10.0),
+            Row(
+              children: [
+                const Text('Monospace:'),
+                Switch(
+                  value: _microMonospace,
+                  onChanged: (val) => setState(() => _microMonospace = val),
+                ),
+                const Spacer(),
+                const Text('Progress Dot:'),
+                Switch(
+                  value: _microProgressDot,
+                  onChanged: (val) => setState(() => _microProgressDot = val),
+                ),
+              ],
+            ),
+          ],
+        );
+
+      case AppBarModel.profileIdentity:
+        return Column(
+          children: [
+            TextField(
+              decoration: const InputDecoration(labelText: 'User Full Name', isDense: true),
+              controller: TextEditingController(text: _profileName)
+                ..selection = TextSelection.collapsed(offset: _profileName.length),
+              onChanged: (val) => setState(() => _profileName = val),
+            ),
+            const SizedBox(height: 10.0),
+            TextField(
+              decoration: const InputDecoration(labelText: 'User Handle', isDense: true),
+              controller: TextEditingController(text: _profileHandle)
+                ..selection = TextSelection.collapsed(offset: _profileHandle.length),
+              onChanged: (val) => setState(() => _profileHandle = val),
+            ),
+            const SizedBox(height: 10.0),
+            TextField(
+              decoration: const InputDecoration(labelText: 'Short Bio', isDense: true),
+              controller: TextEditingController(text: _profileBio)
+                ..selection = TextSelection.collapsed(offset: _profileBio.length),
+              onChanged: (val) => setState(() => _profileBio = val),
+            ),
+            const SizedBox(height: 10.0),
+            Row(
+              children: [
+                const Text('Verified Check:'),
+                Switch(
+                  value: _profileVerified,
+                  onChanged: (val) => setState(() => _profileVerified = val),
+                ),
+              ],
+            ),
+            _buildSliderRow('Avatar Size', _profileAvatarSize, 48.0, 96.0, (val) {
+              setState(() => _profileAvatarSize = val);
+            }),
+          ],
+        );
+
       default:
         return const Text('Configure parameters in Level 2 mode.');
     }
@@ -977,6 +1202,60 @@ AppBarEngine.custom(
     dialCenterTitle: '$_dialTitle',
     arcRadius: ${_dialRadius.toStringAsFixed(1)},
     selectedDialIndex: $_dialIndex,
+  ),
+  body: const MyContentWidget(),
+)''';
+        } else if (_selectedModel == AppBarModel.editorialTypography) {
+          return '''
+// Level 2: Configurable Mode (Model 9)
+AppBarEngine.custom(
+  model: AppBarModel.editorialTypography,
+  configuration: EditorialTypographyConfig(
+    headline: '$_editorialHeadline',
+    category: '$_editorialCategory',
+    serifFont: $_editorialSerif,
+    showReadingProgressBar: $_editorialReadingBar,
+    expandedHeight: ${_editorialExpandedHeight.toStringAsFixed(1)},
+  ),
+  body: const MyContentWidget(),
+)''';
+        } else if (_selectedModel == AppBarModel.cardDeckStacked) {
+          return '''
+// Level 2: Configurable Mode (Model 10)
+AppBarEngine.custom(
+  model: AppBarModel.cardDeckStacked,
+  configuration: CardDeckStackedConfig(
+    deckTitle: '$_deckTitle',
+    activeCardIndex: $_activeCardIndex,
+    cardOverlap: ${_cardOverlap.toStringAsFixed(1)},
+  ),
+  body: const MyContentWidget(),
+)''';
+        } else if (_selectedModel == AppBarModel.minimalistMicroBar) {
+          return '''
+// Level 2: Configurable Mode (Model 11)
+AppBarEngine.custom(
+  model: AppBarModel.minimalistMicroBar,
+  configuration: MinimalistMicroBarConfig(
+    pathBreadcrumb: '$_microBreadcrumb',
+    readingEta: '$_microEta',
+    documentStatus: '$_microStatus',
+    monospace: $_microMonospace,
+    showProgressDot: $_microProgressDot,
+  ),
+  body: const MyContentWidget(),
+)''';
+        } else if (_selectedModel == AppBarModel.profileIdentity) {
+          return '''
+// Level 2: Configurable Mode (Model 12)
+AppBarEngine.custom(
+  model: AppBarModel.profileIdentity,
+  configuration: ProfileIdentityConfig(
+    userName: '$_profileName',
+    userHandle: '$_profileHandle',
+    bio: '$_profileBio',
+    verified: $_profileVerified,
+    expandedAvatarSize: ${_profileAvatarSize.toStringAsFixed(1)},
   ),
   body: const MyContentWidget(),
 )''';

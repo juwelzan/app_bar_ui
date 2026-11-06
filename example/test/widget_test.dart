@@ -341,6 +341,34 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('Radial Navigator'), findsWidgets);
 
+      // Switch to Model 9: Editorial Typography
+      final m9 = find.text('M9: Editorial Typography');
+      await Scrollable.ensureVisible(tester.element(m9), alignment: 0.5);
+      await tester.tap(m9);
+      await tester.pumpAndSettle();
+      expect(find.text('The Architecture of Thought'), findsWidgets);
+
+      // Switch to Model 10: Card Deck Stacked
+      final m10 = find.text('M10: Card Deck Stacked');
+      await Scrollable.ensureVisible(tester.element(m10), alignment: 0.5);
+      await tester.tap(m10);
+      await tester.pumpAndSettle();
+      expect(find.text('Card Wallet'), findsWidgets);
+
+      // Switch to Model 11: Minimalist Micro-Bar
+      final m11 = find.text('M11: Minimalist Micro-Bar');
+      await Scrollable.ensureVisible(tester.element(m11), alignment: 0.5);
+      await tester.tap(m11);
+      await tester.pumpAndSettle();
+      expect(find.text('packages / app_bar_ui / lib / engine.dart'), findsWidgets);
+
+      // Switch to Model 12: Profile & Identity Centered
+      final m12 = find.text('M12: Profile & Identity Centered');
+      await Scrollable.ensureVisible(tester.element(m12), alignment: 0.5);
+      await tester.tap(m12);
+      await tester.pumpAndSettle();
+      expect(find.text('Dr. Eleanor Vance'), findsWidgets);
+
       // Switch to Level 1: Preset Mode
       final presetChip = find.text('Preset');
       await Scrollable.ensureVisible(tester.element(presetChip), alignment: 0.5);
