@@ -514,9 +514,9 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('Elastic Dynamics Header', style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold)),
+                  Text('Elastic Dynamics Header', style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold), maxLines: 1, overflow: TextOverflow.ellipsis),
                   const SizedBox(height: 2.0),
-                  Text('Pull down to observe non-linear spring stretch', style: theme.textTheme.bodySmall),
+                  Text('Pull down to observe non-linear spring stretch', style: theme.textTheme.bodySmall, maxLines: 1, overflow: TextOverflow.ellipsis),
                 ],
               ),
             ),
@@ -557,10 +557,10 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const CircleAvatar(radius: 32.0, backgroundColor: Colors.indigo, child: Icon(Icons.person, size: 36.0, color: Colors.white)),
-                const SizedBox(height: 6.0),
-                Text('Sarah Connor', style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold)),
-                Text('Cybernetics Architect', style: theme.textTheme.bodySmall),
+                const CircleAvatar(radius: 28.0, backgroundColor: Colors.indigo, child: Icon(Icons.person, size: 30.0, color: Colors.white)),
+                const SizedBox(height: 4.0),
+                Text('Sarah Connor', style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold), maxLines: 1, overflow: TextOverflow.ellipsis),
+                Text('Cybernetics Architect', style: theme.textTheme.bodySmall, maxLines: 1, overflow: TextOverflow.ellipsis),
               ],
             ),
           ),
@@ -698,8 +698,8 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text('Tier 2: Collapsible Details', style: theme.textTheme.titleSmall!.copyWith(fontWeight: FontWeight.bold)),
-                      Text('Folds 90° along the top hinge with seam shading', style: theme.textTheme.bodySmall),
+                      Text('Tier 2: Collapsible Details', style: theme.textTheme.titleSmall!.copyWith(fontWeight: FontWeight.bold), maxLines: 1, overflow: TextOverflow.ellipsis),
+                      Text('Folds 90° along the top hinge with seam shading', style: theme.textTheme.bodySmall, maxLines: 1, overflow: TextOverflow.ellipsis),
                     ],
                   ),
                 ),
@@ -974,9 +974,9 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Top Header Canvas', style: theme.textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold)),
+                Text('Top Header Canvas', style: theme.textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold), maxLines: 1, overflow: TextOverflow.ellipsis),
                 const SizedBox(height: 2.0),
-                Text('Scroll down: header dissolves into floating bottom dock', style: theme.textTheme.bodySmall),
+                Text('Scroll down: header dissolves into floating bottom dock', style: theme.textTheme.bodySmall, maxLines: 1, overflow: TextOverflow.ellipsis),
               ],
             ),
           ),
@@ -1214,16 +1214,21 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
                                 'Batches 1–4 Active (Styles 1–20 of 50)',
                                 style: theme.textTheme.labelLarge!.copyWith(
                                   fontWeight: FontWeight.bold,
                                 ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
                               Text(
                                 'Autonomous visual structures, motion physics & interaction mechanics.',
                                 style: theme.textTheme.bodySmall,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ],
                           ),

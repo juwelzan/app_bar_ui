@@ -139,7 +139,13 @@ class _ElasticFloatingHeaderWidgetState
                   )
                 : KeyedSubtree(
                     key: const ValueKey('expanded'),
-                    child: widget.child,
+                    child: OverflowBox(
+                      minHeight: 0.0,
+                      maxHeight: widget.config.height +
+                          widget.config.maxOverscrollStretch,
+                      alignment: Alignment.center,
+                      child: widget.child,
+                    ),
                   ),
           ),
         ),

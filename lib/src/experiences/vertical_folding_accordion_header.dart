@@ -127,7 +127,7 @@ class _VerticalFoldingAccordionDelegate
                     top: config.collapsedHeight,
                     left: 0.0,
                     right: 0.0,
-                    bottom: 0.0,
+                    height: config.expandedHeight - config.collapsedHeight,
                     child: isReducedMotion
                         ? Opacity(
                             opacity: (1.0 - progress).clamp(0.0, 1.0),

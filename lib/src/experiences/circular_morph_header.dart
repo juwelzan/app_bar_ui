@@ -152,7 +152,13 @@ class _CircularMorphDelegate extends SliverPersistentHeaderDelegate {
                       )
                     : Center(
                         key: const ValueKey('expanded'),
-                        child: expandedChild,
+                        child: OverflowBox(
+                          minWidth: 0.0,
+                          maxWidth: expandedWidth,
+                          minHeight: 0.0,
+                          maxHeight: config.expandedHeight,
+                          child: expandedChild,
+                        ),
                       ),
               ),
             ),

@@ -130,7 +130,12 @@ class _MultiStageStagedRevealDelegate
                   Positioned.fill(
                     child: Opacity(
                       opacity: s1Opacity,
-                      child: stage1Hero,
+                      child: OverflowBox(
+                        minHeight: 0.0,
+                        maxHeight: config.expandedHeight,
+                        alignment: Alignment.center,
+                        child: stage1Hero,
+                      ),
                     ),
                   ),
 
@@ -139,7 +144,12 @@ class _MultiStageStagedRevealDelegate
                   Positioned.fill(
                     child: Opacity(
                       opacity: s2Opacity,
-                      child: stage2Meta,
+                      child: OverflowBox(
+                        minHeight: 0.0,
+                        maxHeight: config.expandedHeight,
+                        alignment: Alignment.center,
+                        child: stage2Meta,
+                      ),
                     ),
                   ),
 

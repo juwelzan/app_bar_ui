@@ -94,7 +94,12 @@ class _AnimatedDockDelegate extends SliverPersistentHeaderDelegate {
               opacity: (1.0 - t).clamp(0.0, 1.0),
               child: Transform.translate(
                 offset: Offset(0.0, headerOffset),
-                child: topHeaderContent,
+                child: OverflowBox(
+                  minHeight: 0.0,
+                  maxHeight: totalExpanded,
+                  alignment: Alignment.topLeft,
+                  child: topHeaderContent,
+                ),
               ),
             ),
           ),
