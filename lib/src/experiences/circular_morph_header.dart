@@ -172,3 +172,4 @@ class _CircularMorphDelegate extends SliverPersistentHeaderDelegate {
         oldDelegate.config != config;
   }
 }
+

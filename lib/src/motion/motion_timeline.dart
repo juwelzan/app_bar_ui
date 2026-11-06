@@ -72,3 +72,4 @@ class ScrollMotionTimeline {
     return Offset.lerp(beginOffset, endOffset, t) ?? beginOffset;
   }
 }
+

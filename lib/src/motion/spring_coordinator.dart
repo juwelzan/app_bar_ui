@@ -34,3 +34,4 @@ class ElasticSpringCoordinator {
     return SpringSimulation(spring, startDisplacement, 0.0, initialVelocity);
   }
 }
+

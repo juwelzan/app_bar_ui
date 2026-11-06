@@ -193,3 +193,4 @@ class Flip3DConfig extends AppBarMotionConfig {
   /// Back face compact bar elevation.
   final double backElevation;
 }
+
