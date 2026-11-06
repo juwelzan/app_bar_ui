@@ -156,15 +156,18 @@ class _SplitCurtainDelegate extends SliverPersistentHeaderDelegate {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(
-                                config.leftPanelTitle,
-                                style: theme.textTheme.titleMedium!.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: theme.colorScheme.onPrimaryContainer,
+                              if (title != null)
+                                title!
+                              else
+                                Text(
+                                  config.leftPanelTitle,
+                                  style: theme.textTheme.titleMedium!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: theme.colorScheme.onPrimaryContainer,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
                               if (config.leftPanelSubtitle != null) ...[
                                 const SizedBox(height: 2.0),
                                 Text(

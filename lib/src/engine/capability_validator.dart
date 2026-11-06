@@ -23,7 +23,7 @@ class CapabilityValidator {
       warnings.add(
         'dragToExpand is enabled in BehaviorConfiguration, but $model does not '
         'support direct downward touch drag expansion. '
-        'Consider using AppBarModel.gestureDrivenDrag or AppBarModel.pullDownDisclosure.',
+        'Consider using AppBarModel.gestureElasticCanvas or AppBarModel.floatingIsland.',
       );
     }
 
@@ -32,7 +32,7 @@ class CapabilityValidator {
       warnings.add(
         'directionAwareAutoHide is enabled in BehaviorConfiguration, but $model '
         'does not natively support velocity directional hiding. '
-        'Consider using AppBarModel.autoHidingVelocity or AppBarModel.revealFromEdge.',
+        'Consider using AppBarModel.minimalistMicroBar or AppBarModel.floatingIsland.',
       );
     }
 
@@ -41,7 +41,7 @@ class CapabilityValidator {
       warnings.add(
         'snap is enabled in BehaviorConfiguration, but $model does not have '
         'built-in magnetic detent snapping. '
-        'Consider using AppBarModel.magneticSnap or AppBarModel.magneticAnchorSnap.',
+        'Consider using AppBarModel.cardDeckStacked or AppBarModel.timelineScrubberNav.',
       );
     }
 
@@ -50,7 +50,7 @@ class CapabilityValidator {
       warnings.add(
         'sticky is enabled in BehaviorConfiguration, but $model does not support '
         'pinning secondary tabs/tiers independently. '
-        'Consider using AppBarModel.stickyDualTier or AppBarModel.cascadingProgressivePin.',
+        'Consider using AppBarModel.traditionalStructured or AppBarModel.expandableControlCenter.',
       );
     }
 

@@ -42,7 +42,7 @@ void main() {
             body: CustomScrollView(
               slivers: [
                 AppBarEngine.sliver(
-                  model: AppBarModel.morphingSplit,
+                  model: AppBarModel.multiPanelSplitCurtain,
                   configuration: AppBarConfiguration(
                     content: ContentConfiguration.text(
                       title: 'Split View',
@@ -73,22 +73,26 @@ void main() {
     testWidgets('3. Model Selection: Selects and builds distinct models through identical API', (tester) async {
       final modelsToTest = [
         AppBarModel.classic,
-        AppBarModel.morphingSplit,
-        AppBarModel.elasticFloating,
-        AppBarModel.disappearingActions,
-        AppBarModel.circularMorph,
-        AppBarModel.tabTransform,
-        AppBarModel.magneticAnchorSnap,
-        AppBarModel.perspectiveVelocityTilt,
-        AppBarModel.dispersingLetterScatter,
-        AppBarModel.polygonToRectangleMorph,
-        AppBarModel.detachedDampedIsland,
-        AppBarModel.fullBleedHeroScale,
-        AppBarModel.scrubberTimelineProgress,
-        AppBarModel.multiAnchorDock,
-        AppBarModel.sliverToRailTransform,
-        AppBarModel.contextAwareFocalSwap,
-        AppBarModel.splineCurvedMotionPath,
+        AppBarModel.traditionalStructured,
+        AppBarModel.fullScreenHero,
+        AppBarModel.floatingIsland,
+        AppBarModel.immersiveSpatial,
+        AppBarModel.multiPanelSplitCurtain,
+        AppBarModel.spatial3DFlip,
+        AppBarModel.verticalRailTransform,
+        AppBarModel.radialDial,
+        AppBarModel.editorialTypography,
+        AppBarModel.cardDeckStacked,
+        AppBarModel.minimalistMicroBar,
+        AppBarModel.profileIdentity,
+        AppBarModel.expandableControlCenter,
+        AppBarModel.timelineScrubberNav,
+        AppBarModel.searchSpotlight,
+        AppBarModel.gestureElasticCanvas,
+        AppBarModel.adaptiveBreakpointNav,
+        AppBarModel.contextFocalSwapNav,
+        AppBarModel.liquidWaveMorphNav,
+        AppBarModel.developerCustomCanvas,
       ];
 
       for (final model in modelsToTest) {
@@ -131,17 +135,17 @@ void main() {
       await tester.pumpAndSettle();
       expect(controller.currentModel, equals(AppBarModel.classic));
 
-      // Dynamically switch to elasticFloating
-      controller.changeModel(AppBarModel.elasticFloating);
+      // Dynamically switch to floatingIsland
+      controller.changeModel(AppBarModel.floatingIsland);
       await tester.pumpAndSettle();
 
-      expect(controller.currentModel, equals(AppBarModel.elasticFloating));
+      expect(controller.currentModel, equals(AppBarModel.floatingIsland));
 
-      // Dynamically switch to magneticAnchorSnap
-      controller.changeModel(AppBarModel.magneticAnchorSnap);
+      // Dynamically switch to developerCustomCanvas
+      controller.changeModel(AppBarModel.developerCustomCanvas);
       await tester.pumpAndSettle();
 
-      expect(controller.currentModel, equals(AppBarModel.magneticAnchorSnap));
+      expect(controller.currentModel, equals(AppBarModel.developerCustomCanvas));
     });
 
     testWidgets('5. Complete Element-Level Control: Custom builder, visibility, and overrides', (tester) async {
@@ -252,7 +256,7 @@ void main() {
           home: MediaQuery(
             data: MediaQueryData(disableAnimations: true),
             child: AppBarEngine(
-              model: AppBarModel.morphingSplit,
+              model: AppBarModel.multiPanelSplitCurtain,
               configuration: AppBarConfiguration(
                 content: ContentConfiguration(
                   title: Text('Accessible Universal Header'),
