@@ -1222,6 +1222,147 @@ class DynamicSineWaveCollapseConfig extends AppBarMotionConfig {
   final bool enableDynamicPhase;
 }
 
+// ---------------------------------------------------------------------------
+// Batch 8 (Styles 36–40)
+// ---------------------------------------------------------------------------
+
+/// Configuration for Style 36: Magnetic Anchor Snap Header.
+class MagneticAnchorSnapConfig extends AppBarMotionConfig {
+  /// Creates a [MagneticAnchorSnapConfig].
+  const MagneticAnchorSnapConfig({
+    super.curve = Curves.easeOutBack,
+    super.reducedMotionCurve = Curves.linear,
+    this.expandedHeight = 210.0,
+    this.collapsedHeight = 64.0,
+    this.magneticSnapDistance = 35.0,
+    this.snapThreshold = 100.0,
+    this.elevation = 3.0,
+  });
+
+  /// Height when resting at expanded anchor.
+  final double expandedHeight;
+
+  /// Height when docked at collapsed anchor.
+  final double collapsedHeight;
+
+  /// Distance threshold in pixels within which magnetic attraction pulls controls into anchor.
+  final double magneticSnapDistance;
+
+  /// Scroll distance at which magnetic transition completes.
+  final double snapThreshold;
+
+  /// Elevation of the docked header.
+  final double elevation;
+}
+
+/// Configuration for Style 37: Cascading Progressive Pin Header.
+class CascadingProgressivePinConfig extends AppBarMotionConfig {
+  /// Creates a [CascadingProgressivePinConfig].
+  const CascadingProgressivePinConfig({
+    super.curve = Curves.easeInOutCubic,
+    super.reducedMotionCurve = Curves.linear,
+    this.expandedHeight = 240.0,
+    this.collapsedHeight = 64.0,
+    this.titlePinOffset = 40.0,
+    this.searchPinOffset = 90.0,
+    this.actionsPinOffset = 140.0,
+  });
+
+  /// Total expanded canvas height.
+  final double expandedHeight;
+
+  /// Pinned toolbar height when all elements are locked into place.
+  final double collapsedHeight;
+
+  /// Scroll offset at which the main title locks into its pinned slot.
+  final double titlePinOffset;
+
+  /// Scroll offset at which the search bar locks into its pinned slot.
+  final double searchPinOffset;
+
+  /// Scroll offset at which action controls lock into their pinned slots.
+  final double actionsPinOffset;
+}
+
+/// Configuration for Style 38: Dual-Mode 3D Crossfade Header.
+class DualMode3DCrossfadeConfig extends AppBarMotionConfig {
+  /// Creates a [DualMode3DCrossfadeConfig].
+  const DualMode3DCrossfadeConfig({
+    super.curve = Curves.easeInOutCubic,
+    super.reducedMotionCurve = Curves.linear,
+    this.expandedHeight = 220.0,
+    this.collapsedHeight = 64.0,
+    this.transitionThreshold = 110.0,
+    this.perspective = 0.0015,
+  });
+
+  /// Height when showing primary mode canvas.
+  final double expandedHeight;
+
+  /// Height when showing secondary compact mode canvas.
+  final double collapsedHeight;
+
+  /// Scroll distance over which 3D flip rotation completes 180 degrees.
+  final double transitionThreshold;
+
+  /// Perspective factor for 3D matrix transform (setEntry(3, 2, perspective)).
+  final double perspective;
+}
+
+/// Configuration for Style 39: Radial Circular Reveal Header.
+class RadialCircularClipperRevealConfig extends AppBarMotionConfig {
+  /// Creates a [RadialCircularClipperRevealConfig].
+  const RadialCircularClipperRevealConfig({
+    super.curve = Curves.easeOutCubic,
+    super.reducedMotionCurve = Curves.linear,
+    this.expandedHeight = 220.0,
+    this.collapsedHeight = 60.0,
+    this.revealThreshold = 120.0,
+    this.minRadius = 24.0,
+  });
+
+  /// Height of the fully revealed expanded canvas.
+  final double expandedHeight;
+
+  /// Height of the collapsed origin bar.
+  final double collapsedHeight;
+
+  /// Scroll distance over which the circular mask expands to full viewport.
+  final double revealThreshold;
+
+  /// Starting radius of the clipping circle at focal origin.
+  final double minRadius;
+}
+
+/// Configuration for Style 40: Depth Overlap Stacked Panel Header.
+class DepthOverlapStackedPanelConfig extends AppBarMotionConfig {
+  /// Creates a [DepthOverlapStackedPanelConfig].
+  const DepthOverlapStackedPanelConfig({
+    super.curve = Curves.easeInOutCubic,
+    super.reducedMotionCurve = Curves.linear,
+    this.expandedHeight = 240.0,
+    this.collapsedHeight = 64.0,
+    this.panelOverlap = 28.0,
+    this.depthScaleFactor = 0.90,
+    this.slideSequenceThreshold = 140.0,
+  });
+
+  /// Expanded height accommodating all 3 stacked cards.
+  final double expandedHeight;
+
+  /// Collapsed toolbar height when top card is pinned.
+  final double collapsedHeight;
+
+  /// Vertical overlap offset between sequential panels.
+  final double panelOverlap;
+
+  /// Scale reduction factor for background stacked cards (e.g. 0.90).
+  final double depthScaleFactor;
+
+  /// Scroll offset threshold across which stacked panels slide forward sequentially.
+  final double slideSequenceThreshold;
+}
+
 
 
 

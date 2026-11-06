@@ -309,3 +309,4 @@ class _SineWaveBottomClipper extends CustomClipper<Path> {
         phase != oldClipper.phase;
   }
 }
+

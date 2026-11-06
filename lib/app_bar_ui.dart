@@ -80,6 +80,11 @@ export 'src/experiences/multi_slice_accordion_header.dart';
 export 'src/experiences/theater_curtain_reveal_header.dart';
 export 'src/experiences/divergent_vector_parallax_zoom_header.dart';
 export 'src/experiences/dynamic_sine_wave_collapse_header.dart';
+export 'src/experiences/magnetic_anchor_snap_header.dart';
+export 'src/experiences/cascading_progressive_pin_header.dart';
+export 'src/experiences/dual_mode_3d_crossfade_header.dart';
+export 'src/experiences/radial_circular_clipper_reveal_header.dart';
+export 'src/experiences/depth_overlap_stacked_panel_header.dart';
 
 import 'app_bar_ui_platform_interface.dart';
 

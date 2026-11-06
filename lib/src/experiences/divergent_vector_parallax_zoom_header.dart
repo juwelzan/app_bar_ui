@@ -288,3 +288,4 @@ class _DivergentVectorParallaxZoomDelegate extends SliverPersistentHeaderDelegat
         config != oldDelegate.config;
   }
 }
+

@@ -223,3 +223,4 @@ class _MultiSliceAccordionDelegate extends SliverPersistentHeaderDelegate {
         config != oldDelegate.config;
   }
 }
+
