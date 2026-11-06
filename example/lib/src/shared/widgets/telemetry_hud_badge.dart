@@ -130,3 +130,4 @@ class TelemetryHudBadge extends StatelessWidget {
     );
   }
 }
+
