@@ -60,6 +60,11 @@ export 'src/experiences/scroll_synchronized_progress_header.dart';
 export 'src/experiences/sticky_collapse_dual_tier_header.dart';
 export 'src/experiences/multi_stage_staged_reveal_header.dart';
 export 'src/experiences/animated_dock_header.dart';
+export 'src/experiences/radial_orbital_action_header.dart';
+export 'src/experiences/split_screen_lateral_reveal_header.dart';
+export 'src/experiences/magnetic_scroll_snap_header.dart';
+export 'src/experiences/parallax_zoom_hero_header.dart';
+export 'src/experiences/pull_down_disclosure_canvas_header.dart';
 
 import 'app_bar_ui_platform_interface.dart';
 

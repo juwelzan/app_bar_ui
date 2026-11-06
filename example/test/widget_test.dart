@@ -181,7 +181,7 @@ void main() {
   );
 
   testWidgets(
-    'Animated Experiences Lab switches across Batches 1, 2, and 3 styles',
+    'Animated Experiences Lab switches across Batches 1, 2, 3, and 4 styles',
     (WidgetTester tester) async {
       await tester.pumpWidget(const ScrollResponsiveDemoApp());
       await tester.pumpAndSettle();
@@ -192,7 +192,7 @@ void main() {
 
       // Verify active batches banner
       expect(
-        find.text('Batches 1, 2, & 3 Active (Styles 1–15 of 50)'),
+        find.text('Batches 1–4 Active (Styles 1–20 of 50)'),
         findsOneWidget,
       );
       expect(find.text('1. Morphing Split'), findsOneWidget);
@@ -223,44 +223,62 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('Auto-Hiding Velocity Bar'), findsOneWidget);
 
-      // Style 12: Scroll-Synchronized Progress
-      final style12 = find.text('12. Scroll-Synchronized Progress');
-      await tester.ensureVisible(style12);
-      await tester.tap(style12);
+      // Select Batch 4 filter pill
+      final batch4Filter = find.text('Batch 4 (16–20)');
+      await tester.ensureVisible(batch4Filter);
+      await tester.tap(batch4Filter);
       await tester.pumpAndSettle();
-      expect(find.text('Chapter 12: Quantum Computing'), findsOneWidget);
 
-      // Style 13: Sticky-Collapse Dual-Tier
-      final style13 = find.text('13. Sticky-Collapse Dual-Tier');
-      await tester.ensureVisible(style13);
-      await tester.tap(style13);
+      // Style 16: Radial Orbital Action Header
+      final style16 = find.text('16. Radial / Orbital Action Header');
+      await tester.ensureVisible(style16);
+      await tester.tap(style16);
       await tester.pumpAndSettle();
-      expect(find.text('Tier 1: Global Marketplace'), findsOneWidget);
+      expect(find.text('Dr. Emmett Brown'), findsOneWidget);
 
-      // Style 14: Multi-Stage Staged Reveal
-      final style14 = find.text('14. Multi-Stage Staged Reveal');
-      await tester.ensureVisible(style14);
-      await tester.tap(style14);
+      // Style 17: Split-Screen Lateral Reveal Header
+      final style17 = find.text('17. Split-Screen Lateral Reveal');
+      await tester.ensureVisible(style17);
+      await tester.tap(style17);
       await tester.pumpAndSettle();
-      expect(find.text('Stage 1: Hero Launchpad'), findsOneWidget);
+      expect(find.text('WEST\nWING'), findsOneWidget);
 
-      // Style 15: Animated Dock Header
-      final style15 = find.text('15. Animated Dock Header');
-      await tester.ensureVisible(style15);
-      await tester.tap(style15);
+      // Style 18: Magnetic Scroll-Snap Header
+      final style18 = find.text('18. Magnetic Scroll-Snap Header');
+      await tester.ensureVisible(style18);
+      await tester.tap(style18);
       await tester.pumpAndSettle();
-      expect(find.text('Top Header Canvas'), findsOneWidget);
+      expect(find.text('Magnetic Snap Header'), findsOneWidget);
 
-      // Drag to trigger bottom dock emergence
-      await tester.drag(find.byType(CustomScrollView), const Offset(0.0, -120.0));
+      // Style 19: Parallax Zoom Hero Header
+      final style19 = find.text('19. Parallax Zoom Hero Header');
+      await tester.ensureVisible(style19);
+      await tester.tap(style19);
       await tester.pumpAndSettle();
-      expect(find.byTooltip('Home'), findsOneWidget);
-      expect(find.byTooltip('Search'), findsOneWidget);
+      expect(find.text('Yosemite Valley Peak'), findsWidgets);
 
-      // Open View Code dialog for Animated Dock
+      // Drag CustomScrollView up so style chips are well above bottom navigation bar
+      await tester.drag(find.byType(CustomScrollView), const Offset(0.0, -200.0));
+      await tester.pumpAndSettle();
+
+      // Style 20: Pull-Down Disclosure Canvas
+      final chip20 = find.byKey(const ValueKey('style_chip_20'));
+      await tester.scrollUntilVisible(
+        chip20,
+        50.0,
+        scrollable: find.descendant(
+          of: find.byKey(const ValueKey('styles_choice_scroll')),
+          matching: find.byType(Scrollable),
+        ),
+      );
+      await tester.tap(chip20);
+      await tester.pumpAndSettle();
+      expect(find.text('Pull-Down Disclosure Header'), findsOneWidget);
+
+      // Open View Code dialog for Pull-Down Disclosure Canvas
       await tester.tap(find.text('View Code'));
       await tester.pumpAndSettle();
-      expect(find.text('Animated Dock Header Integration Code'), findsOneWidget);
+      expect(find.text('Pull-Down Disclosure Canvas Integration Code'), findsOneWidget);
       await tester.tap(find.text('Close'));
       await tester.pumpAndSettle();
 

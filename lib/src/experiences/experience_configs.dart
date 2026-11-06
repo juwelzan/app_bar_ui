@@ -540,5 +540,167 @@ class AnimatedDockConfig extends AppBarMotionConfig {
   final double dockElevation;
 }
 
+/// Configuration for Style 16: Radial / Orbital Action Header.
+class RadialOrbitalActionConfig extends AppBarMotionConfig {
+  /// Creates a [RadialOrbitalActionConfig].
+  const RadialOrbitalActionConfig({
+    super.curve = Curves.easeInOutCubic,
+    super.reducedMotionCurve = Curves.linear,
+    this.expandedHeight = 180.0,
+    this.collapsedHeight = kToolbarHeight,
+    this.orbitRadius = 65.0,
+    this.startAngle = -0.85,
+    this.endAngle = 0.85,
+    this.collapseThreshold = 95.0,
+    this.elevation = 2.0,
+  });
+
+  /// Height when fully expanded with orbiting actions.
+  final double expandedHeight;
+
+  /// Height when collapsed into compact docked bar.
+  final double collapsedHeight;
+
+  /// Distance in pixels from the central anchor to the orbiting action buttons.
+  final double orbitRadius;
+
+  /// Starting angle in radians for the orbital arc distribution.
+  final double startAngle;
+
+  /// Ending angle in radians for the orbital arc distribution.
+  final double endAngle;
+
+  /// Scroll distance required to complete orbital collapse into a linear row.
+  final double collapseThreshold;
+
+  /// Elevation in compact state.
+  final double elevation;
+}
+
+/// Configuration for Style 17: Split-Screen Lateral Reveal Header.
+class SplitScreenLateralRevealConfig extends AppBarMotionConfig {
+  /// Creates a [SplitScreenLateralRevealConfig].
+  const SplitScreenLateralRevealConfig({
+    super.curve = Curves.easeInOutCubic,
+    super.reducedMotionCurve = Curves.linear,
+    this.expandedHeight = 190.0,
+    this.collapsedHeight = kToolbarHeight,
+    this.partingDistance = 110.0,
+    this.revealThreshold = 85.0,
+    this.elevation = 3.0,
+  });
+
+  /// Height when completely expanded.
+  final double expandedHeight;
+
+  /// Height when collapsed into compact docked bar.
+  final double collapsedHeight;
+
+  /// Maximum lateral distance each curtain half slides outward to reveal the center panel.
+  final double partingDistance;
+
+  /// Scroll offset distance over which the lateral curtain separation completes.
+  final double revealThreshold;
+
+  /// Docked header elevation shadow.
+  final double elevation;
+}
+
+/// Configuration for Style 18: Magnetic Scroll-Snap Header.
+class MagneticScrollSnapConfig extends AppBarMotionConfig {
+  /// Creates a [MagneticScrollSnapConfig].
+  const MagneticScrollSnapConfig({
+    super.curve = Curves.easeOutBack,
+    super.reducedMotionCurve = Curves.linear,
+    this.expandedHeight = 180.0,
+    this.collapsedHeight = kToolbarHeight,
+    this.snapProximity = 32.0,
+    this.snapStiffness = 240.0,
+    this.snapDamping = 18.0,
+    this.elevation = 2.0,
+  });
+
+  /// Height when expanded at top.
+  final double expandedHeight;
+
+  /// Height when collapsed.
+  final double collapsedHeight;
+
+  /// Distance threshold in pixels within which magnetic snapping activates.
+  final double snapProximity;
+
+  /// Spring stiffness constant for magnetic snap settling.
+  final double snapStiffness;
+
+  /// Spring damping coefficient for magnetic snap settling.
+  final double snapDamping;
+
+  /// Elevation in compact collapsed state.
+  final double elevation;
+}
+
+/// Configuration for Style 19: Parallax Zoom Hero Header.
+class ParallaxZoomHeroConfig extends AppBarMotionConfig {
+  /// Creates a [ParallaxZoomHeroConfig].
+  const ParallaxZoomHeroConfig({
+    super.curve = Curves.easeOutQuad,
+    super.reducedMotionCurve = Curves.linear,
+    this.expandedHeight = 220.0,
+    this.collapsedHeight = kToolbarHeight,
+    this.maxOverscrollZoom = 1.45,
+    this.minCollapseZoom = 0.85,
+    this.focalPoint = Alignment.center,
+    this.darkeningOverlayAlpha = 0.35,
+    this.elevation = 3.0,
+  });
+
+  /// Maximum expanded canvas height.
+  final double expandedHeight;
+
+  /// Minimum collapsed docked toolbar height.
+  final double collapsedHeight;
+
+  /// Maximum zoom magnification factor during pull-down overscroll gestures.
+  final double maxOverscrollZoom;
+
+  /// Minimum scale factor applied to the hero visual during upward scroll collapse.
+  final double minCollapseZoom;
+
+  /// Anchor point around which zoom scaling occurs.
+  final Alignment focalPoint;
+
+  /// Maximum opacity of the progressive darkening scrim applied on collapse.
+  final double darkeningOverlayAlpha;
+
+  /// Docked header elevation.
+  final double elevation;
+}
+
+/// Configuration for Style 20: Pull-Down Disclosure Canvas Header.
+class PullDownDisclosureCanvasConfig extends AppBarMotionConfig {
+  /// Creates a [PullDownDisclosureCanvasConfig].
+  const PullDownDisclosureCanvasConfig({
+    super.curve = Curves.easeOutCubic,
+    super.reducedMotionCurve = Curves.linear,
+    this.restingHeight = 120.0,
+    this.disclosureCanvasHeight = 160.0,
+    this.pullUnlockThreshold = 80.0,
+    this.elevation = 4.0,
+  });
+
+  /// Normal resting height of the header.
+  final double restingHeight;
+
+  /// Height of the hidden utility disclosure canvas unlocked above the header.
+  final double disclosureCanvasHeight;
+
+  /// Downward pull overscroll distance in pixels required to latch the disclosure canvas open.
+  final double pullUnlockThreshold;
+
+  /// Header elevation shadow.
+  final double elevation;
+}
+
+
 
 
