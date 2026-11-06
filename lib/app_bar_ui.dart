@@ -55,6 +55,7 @@ export 'src/presets/headers/specialized_appbar_headers.dart';
 // Complete AppBar Design System: Architecture & Models (Batch A)
 export 'src/design_system/app_bar_model_configuration.dart';
 export 'src/design_system/model_transition_spec.dart';
+export 'src/design_system/responsive/app_bar_responsive_layout.dart';
 export 'src/design_system/models/traditional_structured/breadcrumb_node.dart';
 export 'src/design_system/models/traditional_structured/traditional_structured_config.dart';
 export 'src/design_system/models/traditional_structured/traditional_structured_header.dart';
