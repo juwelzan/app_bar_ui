@@ -1,91 +1,63 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:app_bar_ui/app_bar_ui.dart';
 import 'package:app_bar_ui_example/main.dart';
 
 void main() {
   testWidgets(
-    'Renders ShowcaseHomeScreen and navigates across all 5 showcase tabs',
+    '1. Renders ShowcaseHomeScreen and navigates across all 5 destinations',
     (WidgetTester tester) async {
+      tester.view.physicalSize = const Size(1200, 900);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(() => tester.view.resetPhysicalSize());
+
       await tester.pumpWidget(const ScrollResponsiveDemoApp());
       await tester.pumpAndSettle();
 
-      // Tab 1: Core Header
-      expect(find.text('Welcome Back,'), findsOneWidget);
-      expect(find.text('Alex Morgan'), findsOneWidget);
-      expect(find.text('Live Scroll Telemetry'), findsOneWidget);
+      // Destination 1: Dashboard
+      expect(find.text('app_bar_ui Studio'), findsWidgets);
+      expect(find.text('The Ultimate Universal Flutter AppBar Design System'), findsOneWidget);
+      expect(find.text('Explore Model Categories'), findsOneWidget);
 
-      // Switch to Tab 2: Collapsing Header & Sticky Tab Bar
-      await tester.tap(find.text('Collapsing'));
+      // Switch to Destination 2: Models (21)
+      await tester.tap(find.text('Models (21)'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Collapsing Header'), findsOneWidget);
-      expect(find.text('Overview'), findsOneWidget);
-      expect(find.text('Features'), findsOneWidget);
-      expect(find.text('Reviews'), findsOneWidget);
+      expect(find.textContaining('Model Gallery'), findsWidgets);
+      expect(find.text('All Categories (21)'), findsOneWidget);
 
-      // Switch to Tab 3: Pull Expand
-      await tester.tap(find.text('Pull Expand'));
+      // Switch to Destination 3: Studio
+      await tester.tap(find.text('Studio'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Eleanor Vance'), findsOneWidget);
-      expect(find.text('Senior Product Designer'), findsOneWidget);
-      expect(find.text('Posts'), findsOneWidget);
-      expect(find.text('Followers'), findsOneWidget);
+      expect(find.text('Playground Inspector'), findsOneWidget);
+      expect(find.textContaining('Customization Level'), findsOneWidget);
 
-      // Switch to Tab 4: Parallax
-      await tester.tap(find.text('Parallax'));
+      // Switch to Destination 4: Lab
+      await tester.tap(find.text('Lab'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Flow Parallax Container'), findsOneWidget);
-      expect(
-        find.text('Repaints via FlowDelegate with ZERO rebuilds'),
-        findsOneWidget,
-      );
+      expect(find.text('Responsive & Platform Lab'), findsOneWidget);
+      expect(find.text('Small Mobile'), findsOneWidget);
+      expect(find.text('Standard Mobile'), findsOneWidget);
 
-      // Switch to Tab 5: Presets Showcase
-      await tester.tap(find.text('Presets'));
+      // Switch to Destination 5: Motion
+      await tester.tap(find.text('Motion'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Material Preset'), findsWidgets);
-
-      // Switch dropdown to Minimal
-      await tester.tap(find.byKey(const ValueKey('preset_dropdown')));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Minimal Preset').last);
-      await tester.pumpAndSettle();
-      expect(find.text('Minimal Preset'), findsWidgets);
-
-      // Switch dropdown to iOS
-      await tester.tap(find.byKey(const ValueKey('preset_dropdown')));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('iOS Inspired Preset').last);
-      await tester.pumpAndSettle();
-      expect(find.text('iOS Inspired'), findsWidgets);
-
-      // Switch dropdown to Dashboard
-      await tester.tap(find.byKey(const ValueKey('preset_dropdown')));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Dashboard Preset').last);
-      await tester.pumpAndSettle();
-      expect(find.text('Dashboard Preset'), findsWidgets);
-
-      // Switch dropdown to Transparent
-      await tester.tap(find.byKey(const ValueKey('preset_dropdown')));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Transparent Floating Preset').last);
-      await tester.pumpAndSettle();
-      expect(find.text('Transparent Floating'), findsWidgets);
+      expect(find.text('Animation Playground'), findsOneWidget);
+      expect(find.text('Frame-by-Frame Motion Diagnostics'), findsOneWidget);
     },
   );
 
-  testWidgets('Supports theme mode toggle cleanly', (
-    WidgetTester tester,
-  ) async {
+  testWidgets('2. Supports theme mode toggle cleanly', (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(1200, 900);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(() => tester.view.resetPhysicalSize());
+
     await tester.pumpWidget(const ScrollResponsiveDemoApp());
     await tester.pumpAndSettle();
 
-    // Verify initial theme toggle button on Tab 1
+    // Verify initial theme toggle button on NavigationRail
     final toggleFinder = find.byType(IconButton);
     expect(toggleFinder, findsWidgets);
 
@@ -93,256 +65,131 @@ void main() {
     await tester.tap(toggleFinder.first);
     await tester.pumpAndSettle();
 
-    // Invariant holds cleanly with zero exceptions
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets(
-    'PresetGalleryView lists all 20 presets and opens PresetDetailScreen',
-    (WidgetTester tester) async {
-      await tester.pumpWidget(const ScrollResponsiveDemoApp());
+  testWidgets('3. ModelGalleryScreen filters models and launches into Studio', (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(1200, 900);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(() => tester.view.resetPhysicalSize());
+
+    await tester.pumpWidget(const ScrollResponsiveDemoApp());
+    await tester.pumpAndSettle();
+
+    // Jump to Models tab
+    await tester.tap(find.text('Models (21)'));
+    await tester.pumpAndSettle();
+
+    // Verify search field exists
+    final searchFinder = find.byType(TextField);
+    expect(searchFinder, findsOneWidget);
+
+    // Enter query "Island"
+    await tester.enterText(searchFinder, 'Island');
+    await tester.pumpAndSettle();
+
+    expect(find.text('Floating Dynamic Island'), findsOneWidget);
+
+    // Tap Live Studio on the filtered card
+    await tester.tap(find.text('Live Studio'));
+    await tester.pumpAndSettle();
+
+    // Should navigate into Studio with Floating Dynamic Island active
+    expect(find.text('Playground Inspector'), findsOneWidget);
+    expect(find.textContaining('Active Model (Floating Dynamic Island)'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('4. StudioScreen interacts with customization levels cleanly', (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(1200, 900);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(() => tester.view.resetPhysicalSize());
+
+    await tester.pumpWidget(const ScrollResponsiveDemoApp());
+    await tester.pumpAndSettle();
+
+    // Switch to Studio tab
+    await tester.tap(find.text('Studio'));
+    await tester.pumpAndSettle();
+
+    // Tap Preset chip
+    final presetChip = find.text('Preset');
+    expect(presetChip, findsOneWidget);
+    await tester.tap(presetChip);
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Preset Mode'), findsWidgets);
+
+    // Switch to Custom Builder Mode
+    final customChip = find.text('Custom');
+    expect(customChip, findsOneWidget);
+    await tester.tap(customChip);
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Level 3 Custom Title Override'), findsWidgets);
+
+    // Switch back to Configured Mode
+    final configuredChip = find.text('Configured');
+    expect(configuredChip, findsOneWidget);
+    await tester.tap(configuredChip);
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Configured Mode'), findsWidgets);
+
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('5. ResponsivePlatformLabScreen switches device viewports without overflow', (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(1200, 900);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(() => tester.view.resetPhysicalSize());
+
+    await tester.pumpWidget(const ScrollResponsiveDemoApp());
+    await tester.pumpAndSettle();
+
+    // Switch to Lab tab
+    await tester.tap(find.text('Lab'));
+    await tester.pumpAndSettle();
+
+    // Switch to Small Mobile
+    await tester.tap(find.text('Small Mobile'));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('320px'), findsWidgets);
+
+    // Toggle orientation icon
+    final orientationButton = find.byTooltip('Switch to Landscape');
+    if (orientationButton.evaluate().isNotEmpty) {
+      await tester.tap(orientationButton);
       await tester.pumpAndSettle();
+    }
 
-      // Navigate to Presets tab
-      await tester.tap(find.text('Presets'));
-      await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+  });
 
-      // Switch to '20 Presets Gallery' tab
-      await tester.tap(find.text('20 Presets Gallery'));
-      await tester.pumpAndSettle();
+  testWidgets('6. AnimationPlaygroundScreen scrubs progress slider cleanly', (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(1200, 900);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(() => tester.view.resetPhysicalSize());
 
-      // Verify presence of preset items in the gallery
-      expect(find.text('#1'), findsOneWidget);
-      expect(find.text('Minimal Header'), findsWidgets);
-      expect(find.text('Box Header'), findsWidgets);
+    await tester.pumpWidget(const ScrollResponsiveDemoApp());
+    await tester.pumpAndSettle();
 
-      // Tap on the first preset card to open PresetDetailScreen
-      await tester.tap(find.text('Minimal Header').first);
-      await tester.pumpAndSettle();
+    // Switch to Motion tab
+    await tester.tap(find.text('Motion'));
+    await tester.pumpAndSettle();
 
-      // Verify detail screen is active
-      expect(find.byType(PresetDetailScreen), findsOneWidget);
-      expect(find.text('Live Scroll Offset: 0.0 px'), findsOneWidget);
+    // Find progress slider
+    final sliderFinder = find.byType(Slider);
+    expect(sliderFinder, findsOneWidget);
 
-      // Scroll down inside PresetDetailScreen
-      await tester.drag(find.byType(Scrollable).last, const Offset(0, -150));
-      await tester.pumpAndSettle();
+    // Drag slider
+    await tester.drag(sliderFinder, const Offset(100, 0));
+    await tester.pumpAndSettle();
 
-      // Pop back to gallery
-      Navigator.of(tester.element(find.byType(PresetDetailScreen))).pop();
-      await tester.pumpAndSettle();
+    // Tap reset button
+    final resetFinder = find.byTooltip('Reset to Expanded');
+    expect(resetFinder, findsOneWidget);
+    await tester.tap(resetFinder);
+    await tester.pumpAndSettle();
 
-      expect(find.byType(PresetDetailScreen), findsNothing);
-    },
-  );
-
-  testWidgets(
-    'PullToExpandTab scrolls and overscrolls without RenderFlex overflow',
-    (WidgetTester tester) async {
-      await tester.pumpWidget(const ScrollResponsiveDemoApp());
-      await tester.pumpAndSettle();
-
-      // Switch to Tab 3: Pull Expand
-      await tester.tap(find.text('Pull Expand'));
-      await tester.pumpAndSettle();
-
-      expect(find.text('Eleanor Vance'), findsOneWidget);
-
-      // Scroll up (compressing the header)
-      await tester.drag(find.byType(Scrollable).first, const Offset(0, -150));
-      await tester.pumpAndSettle();
-
-      // Overscroll down (pulling to expand)
-      await tester.drag(find.byType(Scrollable).first, const Offset(0, 300));
-      await tester.pumpAndSettle();
-
-      expect(tester.takeException(), isNull);
-    },
-  );
-
-  testWidgets(
-    'CustomBuilder preset in PresetDetailScreen scrolls without RenderFlex overflow',
-    (WidgetTester tester) async {
-      await tester.pumpWidget(
-        const MaterialApp(
-          home: PresetDetailScreen(preset: ScrollHeaderPreset.customBuilder),
-        ),
-      );
-      await tester.pumpAndSettle();
-
-      // Scroll gradually across collapse states
-      final scrollable = find.byType(Scrollable).first;
-      for (int i = 0; i < 5; i++) {
-        await tester.drag(scrollable, const Offset(0, -50));
-        await tester.pump();
-        expect(tester.takeException(), isNull);
-      }
-    },
-  );
-
-  testWidgets(
-    'DesignSystemGalleryTab switches across Batch A Models (1–4) and customization levels cleanly',
-    (WidgetTester tester) async {
-      await tester.pumpWidget(const ScrollResponsiveDemoApp());
-      await tester.pumpAndSettle();
-
-      // Navigate to Tab 7: Models (20)
-      final modelsTab = find.text('Models (20)');
-      await Scrollable.ensureVisible(tester.element(modelsTab), alignment: 0.5);
-      await tester.tap(modelsTab);
-      await tester.pumpAndSettle();
-
-      // Verify gallery studio title
-      expect(find.text('Design System Studio'), findsOneWidget);
-
-      // Model 1 is active initially (Level 2: Configured)
-      expect(find.text('Enterprise Cloud Nexus'), findsWidgets);
-      expect(find.text('M1: Traditional Structured'), findsOneWidget);
-
-      // Switch to Model 2: Full-Screen Hero
-      await tester.tap(find.text('M2: Full-Screen Hero'));
-      await tester.pumpAndSettle();
-      expect(find.text('Cinematic Odyssey'), findsWidgets);
-
-      // Switch to Model 3: Floating Dynamic Island
-      await tester.tap(find.text('M3: Floating Dynamic Island'));
-      await tester.pumpAndSettle();
-      expect(find.text('Dynamic Flight Track'), findsWidgets);
-
-      // Switch to Model 4: Immersive Spatial
-      await tester.tap(find.text('M4: Immersive Spatial Parallax'));
-      await tester.pumpAndSettle();
-      expect(find.text('Spatial Reality Canvas'), findsWidgets);
-
-      // Switch to Model 5: Multi-Panel Split Curtain
-      final m5 = find.text('M5: Multi-Panel Split Curtain');
-      await Scrollable.ensureVisible(tester.element(m5), alignment: 0.5);
-      await tester.tap(m5);
-      await tester.pumpAndSettle();
-      expect(find.text('Enterprise Cloud'), findsWidgets);
-
-      // Switch to Model 6: 3D Perspective Flip
-      final m6 = find.text('M6: 3D Perspective Flip');
-      await Scrollable.ensureVisible(tester.element(m6), alignment: 0.5);
-      await tester.tap(m6);
-      await tester.pumpAndSettle();
-      expect(find.text('Portfolio Vault'), findsWidgets);
-
-      // Switch to Model 7: Vertical Rail Transform
-      final m7 = find.text('M7: Vertical Rail Transform');
-      await Scrollable.ensureVisible(tester.element(m7), alignment: 0.5);
-      await tester.tap(m7);
-      await tester.pumpAndSettle();
-      expect(find.text('Engineering Hub'), findsWidgets);
-
-      // Switch to Model 8: Radial Polar Dial
-      final m8 = find.text('M8: Radial Polar Dial');
-      await Scrollable.ensureVisible(tester.element(m8), alignment: 0.5);
-      await tester.tap(m8);
-      await tester.pumpAndSettle();
-      expect(find.text('Radial Navigator'), findsWidgets);
-
-      // Switch to Model 9: Editorial Typography
-      final m9 = find.text('M9: Editorial Typography');
-      await Scrollable.ensureVisible(tester.element(m9), alignment: 0.5);
-      await tester.tap(m9);
-      await tester.pumpAndSettle();
-      expect(find.text('The Architecture of Thought'), findsWidgets);
-
-      // Switch to Model 10: Card Deck Stacked
-      final m10 = find.text('M10: Card Deck Stacked');
-      await Scrollable.ensureVisible(tester.element(m10), alignment: 0.5);
-      await tester.tap(m10);
-      await tester.pumpAndSettle();
-      expect(find.text('Card Wallet'), findsWidgets);
-
-      // Switch to Model 11: Minimalist Micro-Bar
-      final m11 = find.text('M11: Minimalist Micro-Bar');
-      await Scrollable.ensureVisible(tester.element(m11), alignment: 0.5);
-      await tester.tap(m11);
-      await tester.pumpAndSettle();
-      expect(find.text('packages / app_bar_ui / lib / engine.dart'), findsWidgets);
-
-      // Switch to Model 12: Profile & Identity Centered
-      final m12 = find.text('M12: Profile & Identity Centered');
-      await Scrollable.ensureVisible(tester.element(m12), alignment: 0.5);
-      await tester.tap(m12);
-      await tester.pumpAndSettle();
-      expect(find.text('Dr. Eleanor Vance'), findsWidgets);
-
-      // Switch to Model 13: Expandable Control Center
-      final m13 = find.text('M13: Expandable Control Center');
-      await Scrollable.ensureVisible(tester.element(m13), alignment: 0.5);
-      await tester.tap(m13);
-      await tester.pumpAndSettle();
-      expect(find.text('Control Center Pro'), findsWidgets);
-
-      // Switch to Model 14: Timeline Scrubber Navigation
-      final m14 = find.text('M14: Timeline Scrubber Navigation');
-      await Scrollable.ensureVisible(tester.element(m14), alignment: 0.5);
-      await tester.tap(m14);
-      await tester.pumpAndSettle();
-      expect(find.text('Project Roadmap'), findsWidgets);
-
-      // Switch to Model 15: Search Spotlight First
-      final m15 = find.text('M15: Search Spotlight First');
-      await Scrollable.ensureVisible(tester.element(m15), alignment: 0.5);
-      await tester.tap(m15);
-      await tester.pumpAndSettle();
-      expect(find.text('Spotlight Search'), findsWidgets);
-
-      // Switch to Model 16: Gesture Elastic Canvas
-      final m16 = find.text('M16: Gesture Elastic Canvas');
-      await Scrollable.ensureVisible(tester.element(m16), alignment: 0.5);
-      await tester.tap(m16);
-      await tester.pumpAndSettle();
-      expect(find.text('Elastic Horizon'), findsWidgets);
-
-      // Switch to Model 17: Adaptive Breakpoint Nav
-      final m17 = find.text('M17: Adaptive Breakpoint Nav');
-      await Scrollable.ensureVisible(tester.element(m17), alignment: 0.5);
-      await tester.tap(m17);
-      await tester.pumpAndSettle();
-      expect(find.text('Enterprise Command Center'), findsWidgets);
-
-      // Switch to Model 18: Context Focal Swap Nav
-      final m18 = find.text('M18: Context Focal Swap Nav');
-      await Scrollable.ensureVisible(tester.element(m18), alignment: 0.5);
-      await tester.tap(m18);
-      await tester.pumpAndSettle();
-      expect(find.text('Financial Core'), findsWidgets);
-
-      // Switch to Model 19: Liquid Wave Morph Nav
-      final m19 = find.text('M19: Liquid Wave Morph Nav');
-      await Scrollable.ensureVisible(tester.element(m19), alignment: 0.5);
-      await tester.tap(m19);
-      await tester.pumpAndSettle();
-      expect(find.text('Fluid Organic Dynamics'), findsWidgets);
-
-      // Switch to Model 20: Developer Custom Canvas
-      final m20 = find.text('M20: Developer Custom Canvas');
-      await Scrollable.ensureVisible(tester.element(m20), alignment: 0.5);
-      await tester.tap(m20);
-      await tester.pumpAndSettle();
-      expect(find.text('Architectural Canvas 20'), findsWidgets);
-
-      // Switch to Level 1: Preset Mode
-      final presetChip = find.text('Preset');
-      await Scrollable.ensureVisible(tester.element(presetChip), alignment: 0.5);
-      await tester.pumpAndSettle();
-      await tester.tap(presetChip);
-      await tester.pumpAndSettle();
-      expect(find.textContaining('Level 1: Preset Mode'), findsWidgets);
-
-      // Switch to Level 3: Custom Builder Mode
-      final customChip = find.text('Custom');
-      await Scrollable.ensureVisible(tester.element(customChip), alignment: 0.5);
-      await tester.pumpAndSettle();
-      await tester.tap(customChip);
-      await tester.pumpAndSettle();
-      expect(find.textContaining('Level 3 Custom Override'), findsOneWidget);
-
-      expect(tester.takeException(), isNull);
-    },
-  );
+    expect(tester.takeException(), isNull);
+  });
 }
