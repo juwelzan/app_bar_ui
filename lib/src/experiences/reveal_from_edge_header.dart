@@ -134,3 +134,4 @@ class RevealFromEdgeHeaderWidgetState extends State<RevealFromEdgeHeaderWidget>
     );
   }
 }
+

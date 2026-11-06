@@ -171,3 +171,4 @@ class _CardToHeaderMorphDelegate extends SliverPersistentHeaderDelegate {
         oldDelegate.config != config;
   }
 }
+

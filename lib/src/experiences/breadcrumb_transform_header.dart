@@ -295,3 +295,4 @@ class _BreadcrumbTransformDelegate extends SliverPersistentHeaderDelegate {
         oldDelegate.config != config;
   }
 }
+
