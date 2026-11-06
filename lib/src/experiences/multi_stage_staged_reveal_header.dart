@@ -177,3 +177,4 @@ class _MultiStageStagedRevealDelegate
         oldDelegate.config != config;
   }
 }
+

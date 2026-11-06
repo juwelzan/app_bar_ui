@@ -180,3 +180,4 @@ class FloatingBottomDockCapsule extends StatelessWidget {
     );
   }
 }
+

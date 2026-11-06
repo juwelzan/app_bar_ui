@@ -152,3 +152,4 @@ class _StickyCollapseDualTierDelegate
         oldDelegate.config != config;
   }
 }
+
