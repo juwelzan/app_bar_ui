@@ -161,7 +161,8 @@ class _TimelineScrubberNavDelegate extends SliverPersistentHeaderDelegate {
                             Expanded(
                               child: LayoutBuilder(
                                 builder: (context, constraints) {
-                                  final trackWidth = constraints.maxWidth < 460.0 ? 460.0 : constraints.maxWidth;
+                                  final minTrack = config.nodes.length * 120.0;
+                                  final trackWidth = constraints.maxWidth < minTrack ? minTrack : constraints.maxWidth;
                                   return SingleChildScrollView(
                                     scrollDirection: Axis.horizontal,
                                     child: SizedBox(
@@ -198,8 +199,8 @@ class _TimelineScrubberNavDelegate extends SliverPersistentHeaderDelegate {
                                           config.onNodeSelected?.call(idx);
                                         },
                                         borderRadius: BorderRadius.circular(10.0),
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                        child: SizedBox(
+                                          width: 100.0,
                                           child: Column(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
@@ -247,6 +248,7 @@ class _TimelineScrubberNavDelegate extends SliverPersistentHeaderDelegate {
                                               // Node Label
                                               Text(
                                                 node.label,
+                                                textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                   fontSize: isSelected ? 11.0 : 10.0,
                                                   fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
