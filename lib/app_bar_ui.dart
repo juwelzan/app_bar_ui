@@ -1,3 +1,15 @@
+// --- Universal AppBar API (Single Unified Public Entry Point) ---
+export 'src/engine/app_bar_model.dart';
+export 'src/engine/model_capabilities.dart';
+export 'src/engine/element_configuration.dart';
+export 'src/engine/app_bar_configuration.dart';
+export 'src/engine/app_bar_controller.dart';
+export 'src/engine/app_bar_model_renderer.dart';
+export 'src/engine/app_bar_model_registry.dart';
+export 'src/engine/capability_validator.dart';
+export 'src/engine/element_resolver.dart';
+export 'src/engine/app_bar_engine.dart';
+
 export 'src/models/scroll_responsive_config.dart';
 export 'src/models/scroll_responsive_presets.dart';
 export 'src/models/visibility_config.dart';
