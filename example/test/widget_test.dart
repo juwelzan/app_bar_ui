@@ -181,7 +181,7 @@ void main() {
   );
 
   testWidgets(
-    'Animated Experiences Lab switches across Batch 1 styles and supports parameter tuning',
+    'Animated Experiences Lab switches across Batch 1 and Batch 2 styles',
     (WidgetTester tester) async {
       await tester.pumpWidget(const ScrollResponsiveDemoApp());
       await tester.pumpAndSettle();
@@ -190,9 +190,9 @@ void main() {
       await tester.tap(find.text('Lab (50)'));
       await tester.pumpAndSettle();
 
-      // Verify Batch 1 banner is visible
+      // Verify active batches banner
       expect(
-        find.text('Batch 1 / 10: Morphing & Physics (Styles 1–5)'),
+        find.text('Batches 1 & 2 Active (Styles 1–10 of 50)'),
         findsOneWidget,
       );
       expect(find.text('1. Morphing Split'), findsOneWidget);
@@ -204,36 +204,61 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('Elastic Dynamics Header'), findsOneWidget);
 
-      // Select Style 3: Disappearing & Floating Actions
-      final style3 = find.text('3. Disappearing & Floating Actions');
-      await tester.ensureVisible(style3);
-      await tester.tap(style3);
+      // Select Batch 2 filter pill
+      final batch2Filter = find.text('Batch 2: Layered & Geometric (6–10)');
+      await tester.ensureVisible(batch2Filter);
+      await tester.tap(batch2Filter);
       await tester.pumpAndSettle();
-      expect(find.text('Unpinned Header Canvas'), findsOneWidget);
 
-      // Select Style 4: Circular Morph
-      final style4 = find.text('4. Circular Morph');
-      await tester.ensureVisible(style4);
-      await tester.tap(style4);
+      // Style 6: Horizontal Sliding Panels
+      final style6 = find.text('6. Horizontal Sliding Panels');
+      await tester.ensureVisible(style6);
+      await tester.tap(style6);
       await tester.pumpAndSettle();
-      expect(find.text('Sarah Connor'), findsWidgets);
+      expect(find.text('Explore Catalogs'), findsOneWidget);
 
-      // Select Style 5: Flip 3D Header
-      final style5 = find.text('5. Flip 3D Header');
-      await tester.ensureVisible(style5);
-      await tester.tap(style5);
+      // Style 7: Vertical Folding Accordion
+      final style7 = find.text('7. Vertical Folding Accordion');
+      await tester.ensureVisible(style7);
+      await tester.tap(style7);
       await tester.pumpAndSettle();
-      expect(find.text('3D Flip Face A: Card'), findsOneWidget);
+      expect(find.text('Origami Accordion'), findsOneWidget);
 
-      // Open View Code dialog
+      // Style 8: Layered Depth Parallax
+      final style8 = find.text('8. Layered Depth Parallax');
+      await tester.ensureVisible(style8);
+      await tester.tap(style8);
+      await tester.pumpAndSettle();
+      expect(find.text('Glacier National Park'), findsOneWidget);
+
+      // Style 9: Expanding Hero Card
+      final style9 = find.text('9. Expanding Hero Card');
+      await tester.ensureVisible(style9);
+      await tester.tap(style9);
+      await tester.pumpAndSettle();
+      expect(find.text('\$24,580.00'), findsOneWidget);
+
+      // Style 10: Liquid Wave Morph
+      final style10 = find.text('10. Liquid Wave Morph');
+      await tester.ensureVisible(style10);
+      await tester.tap(style10);
+      await tester.pumpAndSettle();
+      expect(find.text('Oceanic Flow Wave'), findsOneWidget);
+
+      // Open View Code dialog for Liquid Wave
       await tester.tap(find.text('View Code'));
       await tester.pumpAndSettle();
-      expect(find.text('Flip 3D Header Integration Code'), findsOneWidget);
+      expect(find.text('Liquid Wave Morph Integration Code'), findsOneWidget);
       await tester.tap(find.text('Close'));
       await tester.pumpAndSettle();
 
+      // Scroll up to bring action bar into clear view above navigation bar
+      await tester.drag(find.byType(CustomScrollView), const Offset(0.0, -160.0));
+      await tester.pumpAndSettle();
+
       // Toggle Simulated Reduced Motion
-      await tester.tap(find.text('Simulate A11Y / Reduced Motion'));
+      final a11yChip = find.text('Simulate A11Y / Reduced Motion');
+      await tester.tap(a11yChip);
       await tester.pumpAndSettle();
       expect(find.text('A11Y Fallback'), findsOneWidget);
     },

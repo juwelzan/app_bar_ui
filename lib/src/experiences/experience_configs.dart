@@ -194,3 +194,185 @@ class Flip3DConfig extends AppBarMotionConfig {
   final double backElevation;
 }
 
+/// Configuration for Style 6: Horizontal Sliding Multi-Panel Header.
+class HorizontalSlidingPanelsConfig extends AppBarMotionConfig {
+  /// Creates a [HorizontalSlidingPanelsConfig].
+  const HorizontalSlidingPanelsConfig({
+    super.curve = Curves.easeInOutCubic,
+    super.reducedMotionCurve = Curves.linear,
+    this.expandedHeight = 150.0,
+    this.collapsedHeight = kToolbarHeight,
+    this.panel1SlideDistance = 120.0,
+    this.panel2SlideDistance = 80.0,
+    this.fadeThreshold = 0.7,
+    this.elevation = 2.0,
+  });
+
+  /// Height when completely expanded.
+  final double expandedHeight;
+
+  /// Height when collapsed into compact docked bar.
+  final double collapsedHeight;
+
+  /// Maximum horizontal travel for the top secondary panel (slides left).
+  final double panel1SlideDistance;
+
+  /// Maximum horizontal travel for the bottom secondary panel (slides right).
+  final double panel2SlideDistance;
+
+  /// Normalized scroll progress ratio ($0.0 \to 1.0$) where sliding panels fade away.
+  final double fadeThreshold;
+
+  /// Compact header elevation shadow.
+  final double elevation;
+}
+
+/// Configuration for Style 7: Vertical Folding Accordion Header.
+class VerticalFoldingAccordionConfig extends AppBarMotionConfig {
+  /// Creates a [VerticalFoldingAccordionConfig].
+  const VerticalFoldingAccordionConfig({
+    super.curve = Curves.easeInOut,
+    super.reducedMotionCurve = Curves.linear,
+    this.expandedHeight = 180.0,
+    this.collapsedHeight = kToolbarHeight,
+    this.perspective = 0.002,
+    this.foldThreshold = 100.0,
+    this.seamShadowIntensity = 0.45,
+    this.elevation = 2.0,
+  });
+
+  /// Height of the fully unfolded multi-tier header.
+  final double expandedHeight;
+
+  /// Height of the pinned primary toolbar when tiers are folded.
+  final double collapsedHeight;
+
+  /// 3D perspective distortion factor during accordion folding.
+  final double perspective;
+
+  /// Scroll distance in pixels to complete the $90^\circ$ origami fold.
+  final double foldThreshold;
+
+  /// Intensity multiplier for the shadow gradient at the origami folding seam.
+  final double seamShadowIntensity;
+
+  /// Resting elevation.
+  final double elevation;
+}
+
+/// Configuration for Style 8: Layered Depth Parallax Header.
+class LayeredDepthParallaxConfig extends AppBarMotionConfig {
+  /// Creates a [LayeredDepthParallaxConfig].
+  const LayeredDepthParallaxConfig({
+    super.curve = Curves.linear,
+    super.reducedMotionCurve = Curves.linear,
+    this.expandedHeight = 200.0,
+    this.collapsedHeight = kToolbarHeight + 8.0,
+    this.backgroundParallaxFactor = 0.25,
+    this.midgroundParallaxFactor = 0.6,
+    this.foregroundParallaxFactor = 1.0,
+    this.maxBlur = 8.0,
+    this.elevation = 3.0,
+  });
+
+  /// Height of the multi-plane parallax canvas when expanded.
+  final double expandedHeight;
+
+  /// Collapsed toolbar height.
+  final double collapsedHeight;
+
+  /// Relative velocity multiplier for the background depth layer ($0.0 \to 1.0$).
+  final double backgroundParallaxFactor;
+
+  /// Relative velocity multiplier for the midground graphic layer.
+  final double midgroundParallaxFactor;
+
+  /// Relative velocity multiplier for the foreground interactive controls.
+  final double foregroundParallaxFactor;
+
+  /// Maximum focal depth blur applied to the background as foreground collapses.
+  final double maxBlur;
+
+  /// Docked header elevation.
+  final double elevation;
+}
+
+/// Configuration for Style 9: Expanding Hero Card Header.
+class ExpandingHeroCardConfig extends AppBarMotionConfig {
+  /// Creates an [ExpandingHeroCardConfig].
+  const ExpandingHeroCardConfig({
+    super.curve = Curves.fastOutSlowIn,
+    super.reducedMotionCurve = Curves.linear,
+    this.expandedHeight = 180.0,
+    this.collapsedHeight = kToolbarHeight,
+    this.cardHorizontalMargin = 16.0,
+    this.cardVerticalMargin = 12.0,
+    this.cardBorderRadius = 20.0,
+    this.cardElevation = 4.0,
+    this.expandThreshold = 70.0,
+    this.dockElevation = 2.0,
+  });
+
+  /// Height of the inset card header when fully expanded.
+  final double expandedHeight;
+
+  /// Height of the docked pinned toolbar when fully collapsed.
+  final double collapsedHeight;
+
+  /// Horizontal margin around the floating card in resting state.
+  final double cardHorizontalMargin;
+
+  /// Vertical margin around the floating card in resting state.
+  final double cardVerticalMargin;
+
+  /// Corner radius of the resting card (interpolates to 0.0 at edge-to-edge).
+  final double cardBorderRadius;
+
+  /// Floating card shadow elevation.
+  final double cardElevation;
+
+  /// Scroll distance over which the card expands from inset island to edge-to-edge full bleed.
+  final double expandThreshold;
+
+  /// Docked toolbar elevation after completing expansion and collapse.
+  final double dockElevation;
+}
+
+/// Configuration for Style 10: Liquid Wave Morph Header.
+class LiquidWaveMorphConfig extends AppBarMotionConfig {
+  /// Creates a [LiquidWaveMorphConfig].
+  const LiquidWaveMorphConfig({
+    super.curve = Curves.easeOutCubic,
+    super.reducedMotionCurve = Curves.linear,
+    this.expandedHeight = 160.0,
+    this.collapsedHeight = kToolbarHeight,
+    this.waveAmplitude = 22.0,
+    this.waveFrequency = 1.4,
+    this.waveSpeed = 0.04,
+    this.flattenOffset = 85.0,
+    this.elevation = 2.0,
+  });
+
+  /// Maximum expanded height including wave crest.
+  final double expandedHeight;
+
+  /// Compact collapsed height with flattened edge.
+  final double collapsedHeight;
+
+  /// Amplitude of the liquid wave crest in pixels.
+  final double waveAmplitude;
+
+  /// Number of sine wave cycles across the screen width.
+  final double waveFrequency;
+
+  /// Phase shift multiplier per scroll pixel (controls dynamic fluid ripples on scroll).
+  final double waveSpeed;
+
+  /// Scroll offset in pixels at which the wave edge flattens into a straight border.
+  final double flattenOffset;
+
+  /// Header elevation.
+  final double elevation;
+}
+
+

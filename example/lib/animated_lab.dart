@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:app_bar_ui/app_bar_ui.dart';
 
 /// Interactive laboratory showcasing the 50 genuinely different animated
-/// AppBar experiences, beginning with Batch 1 (Styles 1–5).
+/// AppBar experiences across Batches 1 & 2 (Styles 1–10).
 class AnimatedExperiencesLabTab extends StatefulWidget {
   const AnimatedExperiencesLabTab({super.key});
 
@@ -13,8 +13,10 @@ class AnimatedExperiencesLabTab extends StatefulWidget {
 }
 
 enum ExperienceStyle {
+  // Batch 1 (Styles 1–5)
   morphingSplit(
     id: 1,
+    batch: 1,
     title: 'Morphing Split',
     description:
         'Counter-directional divergence with centered pill consolidation',
@@ -22,6 +24,7 @@ enum ExperienceStyle {
   ),
   elasticFloating(
     id: 2,
+    batch: 1,
     title: 'Elastic Floating',
     description:
         'Overscroll spring resistance settling into floating capsule',
@@ -29,6 +32,7 @@ enum ExperienceStyle {
   ),
   disappearingActions(
     id: 3,
+    batch: 1,
     title: 'Disappearing & Floating Actions',
     description:
         'Header scrolls away into content leaving detached action pills',
@@ -36,6 +40,7 @@ enum ExperienceStyle {
   ),
   circularMorph(
     id: 4,
+    batch: 1,
     title: 'Circular Morph',
     description:
         'Full-bleed rectangular header morphs into circular corner avatar',
@@ -43,20 +48,65 @@ enum ExperienceStyle {
   ),
   flip3D(
     id: 5,
+    batch: 1,
     title: 'Flip 3D Header',
     description:
         '180° perspective projection flipping card to compact toolbar',
     icon: Icons.flip_camera_android_outlined,
+  ),
+
+  // Batch 2 (Styles 6–10)
+  horizontalSliding(
+    id: 6,
+    batch: 2,
+    title: 'Horizontal Sliding Panels',
+    description:
+        'Panels slide laterally at differential velocities upon scrolling',
+    icon: Icons.view_column_outlined,
+  ),
+  verticalFolding(
+    id: 7,
+    batch: 2,
+    title: 'Vertical Folding Accordion',
+    description:
+        '3D origami hinge folding with seam depth shading on scroll',
+    icon: Icons.layers_outlined,
+  ),
+  layeredDepth(
+    id: 8,
+    batch: 2,
+    title: 'Layered Depth Parallax',
+    description:
+        '3 distinct z-index layers with dynamic focal depth blur on collapse',
+    icon: Icons.filter_none_outlined,
+  ),
+  expandingHero(
+    id: 9,
+    batch: 2,
+    title: 'Expanding Hero Card',
+    description:
+        'Inset card dynamically expands full-bleed into docked toolbar',
+    icon: Icons.aspect_ratio_outlined,
+  ),
+  liquidWave(
+    id: 10,
+    batch: 2,
+    title: 'Liquid Wave Morph',
+    description:
+        'Mathematical sine wave ripples flattening into straight edge',
+    icon: Icons.water_drop_outlined,
   );
 
   const ExperienceStyle({
     required this.id,
+    required this.batch,
     required this.title,
     required this.description,
     required this.icon,
   });
 
   final int id;
+  final int batch;
   final String title;
   final String description;
   final IconData icon;
@@ -64,6 +114,7 @@ enum ExperienceStyle {
 
 class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
   ExperienceStyle _selectedStyle = ExperienceStyle.morphingSplit;
+  int _selectedBatchFilter = 0; // 0 = All active, 1 = Batch 1, 2 = Batch 2
   final ScrollController _scrollController = ScrollController();
   final GlobalKey<dynamic> _elasticKey = GlobalKey();
 
@@ -102,6 +153,32 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
   double _flipBackElevation = 4.0;
   Axis _flipAxis = Axis.horizontal;
 
+  // Style 6 params (Horizontal Sliding Panels)
+  double _panel1SlideDistance = 100.0;
+  double _panel2SlideDistance = 80.0;
+  double _panelsFadeThreshold = 0.65;
+
+  // Style 7 params (Vertical Folding Accordion)
+  double _accordionFoldThreshold = 100.0;
+  double _accordionPerspective = 0.002;
+  double _accordionSeamShadow = 0.45;
+
+  // Style 8 params (Layered Depth Parallax)
+  double _parallaxBgFactor = 0.25;
+  double _parallaxMidFactor = 0.6;
+  double _parallaxMaxBlur = 8.0;
+
+  // Style 9 params (Expanding Hero Card)
+  double _cardHMargin = 16.0;
+  double _cardVMargin = 12.0;
+  double _cardRadius = 20.0;
+  double _cardExpandThreshold = 65.0;
+
+  // Style 10 params (Liquid Wave Morph)
+  double _waveAmplitude = 22.0;
+  double _waveFrequency = 1.4;
+  double _waveFlattenOffset = 85.0;
+
   @override
   void initState() {
     super.initState();
@@ -131,6 +208,15 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
         curve: Curves.easeOutCubic,
       );
     }
+  }
+
+  List<ExperienceStyle> get _filteredStyles {
+    if (_selectedBatchFilter == 1) {
+      return ExperienceStyle.values.where((s) => s.batch == 1).toList();
+    } else if (_selectedBatchFilter == 2) {
+      return ExperienceStyle.values.where((s) => s.batch == 2).toList();
+    }
+    return ExperienceStyle.values;
   }
 
   @override
@@ -193,6 +279,7 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
     final theme = Theme.of(context);
 
     switch (_selectedStyle) {
+      // 1. Morphing Split
       case ExperienceStyle.morphingSplit:
         return MorphingSplitHeaderWidget(
           config: MorphingSplitConfig(
@@ -245,6 +332,7 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
           ),
         );
 
+      // 2. Elastic Floating
       case ExperienceStyle.elasticFloating:
         return SliverToBoxAdapter(
           child: ElasticFloatingHeaderWidget(
@@ -298,6 +386,7 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
           ),
         );
 
+      // 3. Disappearing Floating Actions
       case ExperienceStyle.disappearingActions:
         return DisappearingFloatingActionsHeaderWidget(
           title: Text(
@@ -337,6 +426,7 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
           ),
         );
 
+      // 4. Circular Morph
       case ExperienceStyle.circularMorph:
         return CircularMorphHeaderWidget(
           config: CircularMorphConfig(
@@ -375,6 +465,7 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
           ),
         );
 
+      // 5. Flip 3D
       case ExperienceStyle.flip3D:
         return Flip3DHeaderWidget(
           config: Flip3DConfig(
@@ -448,6 +539,265 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
             ),
           ),
         );
+
+      // 6. Horizontal Sliding Multi-Panel
+      case ExperienceStyle.horizontalSliding:
+        return HorizontalSlidingPanelsHeaderWidget(
+          config: HorizontalSlidingPanelsConfig(
+            expandedHeight: 155.0,
+            collapsedHeight: 60.0,
+            panel1SlideDistance: _panel1SlideDistance,
+            panel2SlideDistance: _panel2SlideDistance,
+            fadeThreshold: _panelsFadeThreshold,
+          ),
+          pinnedBar: Row(
+            children: [
+              IconButton(icon: const Icon(Icons.menu), onPressed: () {}),
+              const SizedBox(width: 8.0),
+              Text(
+                'Explore Catalogs',
+                style: theme.textTheme.titleMedium!.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const Spacer(),
+              IconButton(icon: const Icon(Icons.search), onPressed: () {}),
+            ],
+          ),
+          slidingPanelLeft: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              children: [
+                FilterChip(selected: true, label: const Text('All Books'), onSelected: (_) {}),
+                const SizedBox(width: 8.0),
+                FilterChip(selected: false, label: const Text('Technology'), onSelected: (_) {}),
+                const SizedBox(width: 8.0),
+                FilterChip(selected: false, label: const Text('Science Fiction'), onSelected: (_) {}),
+              ],
+            ),
+          ),
+          slidingPanelRight: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              children: [
+                const Icon(Icons.bolt, size: 16.0, color: Colors.amber),
+                const SizedBox(width: 6.0),
+                Text(
+                  '48 new arrivals updated today',
+                  style: theme.textTheme.bodySmall,
+                ),
+              ],
+            ),
+          ),
+        );
+
+      // 7. Vertical Folding Accordion
+      case ExperienceStyle.verticalFolding:
+        return VerticalFoldingAccordionHeaderWidget(
+          config: VerticalFoldingAccordionConfig(
+            expandedHeight: 180.0,
+            collapsedHeight: 60.0,
+            foldThreshold: _accordionFoldThreshold,
+            perspective: _accordionPerspective,
+            seamShadowIntensity: _accordionSeamShadow,
+          ),
+          pinnedToolbar: Row(
+            children: [
+              IconButton(icon: const Icon(Icons.arrow_back), onPressed: () {}),
+              const SizedBox(width: 8.0),
+              Text(
+                'Origami Accordion',
+                style: theme.textTheme.titleMedium!.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const Spacer(),
+              IconButton(icon: const Icon(Icons.more_vert), onPressed: () {}),
+            ],
+          ),
+          foldingTier: Container(
+            color: theme.colorScheme.secondaryContainer.withValues(alpha: 0.6),
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              children: [
+                const Icon(Icons.auto_stories, size: 36.0, color: Colors.deepPurple),
+                const SizedBox(width: 12.0),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Tier 2: Collapsible Details',
+                        style: theme.textTheme.titleSmall!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        'Folds 90° along the top hinge with seam shading',
+                        style: theme.textTheme.bodySmall,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+
+      // 8. Layered Depth Parallax
+      case ExperienceStyle.layeredDepth:
+        return LayeredDepthParallaxHeaderWidget(
+          config: LayeredDepthParallaxConfig(
+            expandedHeight: 200.0,
+            collapsedHeight: 64.0,
+            backgroundParallaxFactor: _parallaxBgFactor,
+            midgroundParallaxFactor: _parallaxMidFactor,
+            maxBlur: _parallaxMaxBlur,
+          ),
+          backgroundLayer: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Color(0xFF0D47A1), Color(0xFF1976D2), Color(0xFF42A5F5)],
+              ),
+            ),
+            child: const Center(
+              child: Icon(Icons.landscape, size: 100.0, color: Colors.white24),
+            ),
+          ),
+          midgroundLayer: Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 24.0, top: 40.0),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.25),
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    child: const Text('FEATURED DESTINATION',
+                        style: TextStyle(color: Colors.white, fontSize: 11.0, fontWeight: FontWeight.bold)),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          foregroundLayer: Row(
+            children: [
+              IconButton(icon: const Icon(Icons.arrow_back, color: Colors.white), onPressed: () {}),
+              const SizedBox(width: 8.0),
+              const Text(
+                'Glacier National Park',
+                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18.0),
+              ),
+              const Spacer(),
+              IconButton(icon: const Icon(Icons.favorite_border, color: Colors.white), onPressed: () {}),
+            ],
+          ),
+        );
+
+      // 9. Expanding Hero Card
+      case ExperienceStyle.expandingHero:
+        return ExpandingHeroCardHeaderWidget(
+          config: ExpandingHeroCardConfig(
+            expandedHeight: 180.0,
+            collapsedHeight: 60.0,
+            cardHorizontalMargin: _cardHMargin,
+            cardVerticalMargin: _cardVMargin,
+            cardBorderRadius: _cardRadius,
+            expandThreshold: _cardExpandThreshold,
+          ),
+          heroCardContent: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              children: [
+                const CircleAvatar(
+                  radius: 30.0,
+                  backgroundColor: Colors.teal,
+                  child: Icon(Icons.wallet, color: Colors.white, size: 28.0),
+                ),
+                const SizedBox(width: 16.0),
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Total Balance',
+                        style: theme.textTheme.bodySmall,
+                      ),
+                      Text(
+                        '\$24,580.00',
+                        style: theme.textTheme.headlineSmall!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 2.0),
+                      Text(
+                        'Scroll to expand card full-bleed',
+                        style: theme.textTheme.bodySmall,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          dockedToolbarContent: Row(
+            children: [
+              IconButton(icon: const Icon(Icons.menu), onPressed: () {}),
+              const SizedBox(width: 8.0),
+              Text(
+                'Wallet: \$24,580.00',
+                style: theme.textTheme.titleMedium!.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const Spacer(),
+              IconButton(icon: const Icon(Icons.add), onPressed: () {}),
+            ],
+          ),
+        );
+
+      // 10. Liquid Wave Morph
+      case ExperienceStyle.liquidWave:
+        return LiquidWaveMorphHeaderWidget(
+          config: LiquidWaveMorphConfig(
+            expandedHeight: 160.0,
+            collapsedHeight: 60.0,
+            waveAmplitude: _waveAmplitude,
+            waveFrequency: _waveFrequency,
+            flattenOffset: _waveFlattenOffset,
+          ),
+          compactTitle: const Text(
+            'Liquid Horizon',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18.0),
+          ),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            alignment: Alignment.centerLeft,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Oceanic Flow Wave',
+                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20.0),
+                ),
+                const SizedBox(height: 4.0),
+                Text(
+                  'Sine wave bottom edge dynamically flattens into a straight bar',
+                  style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 13.0),
+                ),
+              ],
+            ),
+          ),
+        );
     }
   }
 
@@ -460,47 +810,78 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Batch Indicator Banner with interactive switch
             Card(
               color: theme.colorScheme.surfaceContainerHighest,
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: Row(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Icon(Icons.science, color: Colors.indigoAccent),
-                    const SizedBox(width: 10.0),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Batch 1 / 10: Morphing & Physics (Styles 1–5)',
-                            style: theme.textTheme.labelLarge!.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                    Row(
+                      children: [
+                        const Icon(Icons.science, color: Colors.indigoAccent),
+                        const SizedBox(width: 10.0),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Batches 1 & 2 Active (Styles 1–10 of 50)',
+                                style: theme.textTheme.labelLarge!.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                'Autonomous visual structure, motion physics & interaction models.',
+                                style: theme.textTheme.bodySmall,
+                              ),
+                            ],
                           ),
-                          Text(
-                            'Genuinely different visual identity, layout structure & motion physics.',
-                            style: theme.textTheme.bodySmall,
+                        ),
+                        FilledButton.tonal(
+                          onPressed: () => _openParameterSheet(context),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.tune, size: 16.0),
+                              SizedBox(width: 4.0),
+                              Text('Tune'),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    FilledButton.tonal(
-                      onPressed: () => _openParameterSheet(context),
-                      child: const Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.tune, size: 16.0),
-                          SizedBox(width: 4.0),
-                          Text('Tune'),
-                        ],
-                      ),
+                    const SizedBox(height: 10.0),
+                    // Batch filter pills
+                    Wrap(
+                      spacing: 6.0,
+                      runSpacing: 6.0,
+                      children: [
+                        FilterChip(
+                          label: const Text('All (1–10)'),
+                          selected: _selectedBatchFilter == 0,
+                          onSelected: (_) => setState(() => _selectedBatchFilter = 0),
+                        ),
+                        FilterChip(
+                          label: const Text('Batch 1: Morphing & Physics (1–5)'),
+                          selected: _selectedBatchFilter == 1,
+                          onSelected: (_) => setState(() => _selectedBatchFilter = 1),
+                        ),
+                        FilterChip(
+                          label: const Text('Batch 2: Layered & Geometric (6–10)'),
+                          selected: _selectedBatchFilter == 2,
+                          onSelected: (_) => setState(() => _selectedBatchFilter = 2),
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
             ),
             const SizedBox(height: 12.0),
+
+            // Style Selector Chips
             Text(
               'Select Animated Experience:',
               style: theme.textTheme.titleSmall!.copyWith(
@@ -511,7 +892,7 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
-                children: ExperienceStyle.values.map((style) {
+                children: _filteredStyles.map((style) {
                   final isSelected = _selectedStyle == style;
                   return Padding(
                     padding: const EdgeInsets.only(right: 8.0),
@@ -533,6 +914,8 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
               ),
             ),
             const SizedBox(height: 12.0),
+
+            // Quick Action Toolbar
             Wrap(
               spacing: 8.0,
               runSpacing: 8.0,
@@ -936,6 +1319,202 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
             ],
           ),
         ];
+
+      case ExperienceStyle.horizontalSliding:
+        return [
+          Text('Panel 1 Slide Distance: ${_panel1SlideDistance.toStringAsFixed(0)} px'),
+          Slider(
+            value: _panel1SlideDistance,
+            min: 40.0,
+            max: 160.0,
+            divisions: 12,
+            onChanged: (val) {
+              setSheetState(() => _panel1SlideDistance = val);
+              setState(() => _panel1SlideDistance = val);
+            },
+          ),
+          Text('Panel 2 Slide Distance: ${_panel2SlideDistance.toStringAsFixed(0)} px'),
+          Slider(
+            value: _panel2SlideDistance,
+            min: 40.0,
+            max: 140.0,
+            divisions: 10,
+            onChanged: (val) {
+              setSheetState(() => _panel2SlideDistance = val);
+              setState(() => _panel2SlideDistance = val);
+            },
+          ),
+          Text('Fade Threshold: ${(_panelsFadeThreshold * 100).toStringAsFixed(0)}%'),
+          Slider(
+            value: _panelsFadeThreshold,
+            min: 0.4,
+            max: 0.95,
+            divisions: 11,
+            onChanged: (val) {
+              setSheetState(() => _panelsFadeThreshold = val);
+              setState(() => _panelsFadeThreshold = val);
+            },
+          ),
+        ];
+
+      case ExperienceStyle.verticalFolding:
+        return [
+          Text('Fold Threshold: ${_accordionFoldThreshold.toStringAsFixed(0)} px'),
+          Slider(
+            value: _accordionFoldThreshold,
+            min: 60.0,
+            max: 160.0,
+            divisions: 10,
+            onChanged: (val) {
+              setSheetState(() => _accordionFoldThreshold = val);
+              setState(() => _accordionFoldThreshold = val);
+            },
+          ),
+          Text('Perspective: ${_accordionPerspective.toStringAsFixed(4)}'),
+          Slider(
+            value: _accordionPerspective,
+            min: 0.0005,
+            max: 0.004,
+            divisions: 7,
+            onChanged: (val) {
+              setSheetState(() => _accordionPerspective = val);
+              setState(() => _accordionPerspective = val);
+            },
+          ),
+          Text('Seam Shadow Intensity: ${(_accordionSeamShadow * 100).toStringAsFixed(0)}%'),
+          Slider(
+            value: _accordionSeamShadow,
+            min: 0.1,
+            max: 0.9,
+            divisions: 8,
+            onChanged: (val) {
+              setSheetState(() => _accordionSeamShadow = val);
+              setState(() => _accordionSeamShadow = val);
+            },
+          ),
+        ];
+
+      case ExperienceStyle.layeredDepth:
+        return [
+          Text('Background Parallax Factor: ${_parallaxBgFactor.toStringAsFixed(2)}x'),
+          Slider(
+            value: _parallaxBgFactor,
+            min: 0.1,
+            max: 0.5,
+            divisions: 8,
+            onChanged: (val) {
+              setSheetState(() => _parallaxBgFactor = val);
+              setState(() => _parallaxBgFactor = val);
+            },
+          ),
+          Text('Midground Parallax Factor: ${_parallaxMidFactor.toStringAsFixed(2)}x'),
+          Slider(
+            value: _parallaxMidFactor,
+            min: 0.3,
+            max: 0.85,
+            divisions: 11,
+            onChanged: (val) {
+              setSheetState(() => _parallaxMidFactor = val);
+              setState(() => _parallaxMidFactor = val);
+            },
+          ),
+          Text('Max Focal Depth Blur: ${_parallaxMaxBlur.toStringAsFixed(1)} px'),
+          Slider(
+            value: _parallaxMaxBlur,
+            min: 0.0,
+            max: 16.0,
+            divisions: 16,
+            onChanged: (val) {
+              setSheetState(() => _parallaxMaxBlur = val);
+              setState(() => _parallaxMaxBlur = val);
+            },
+          ),
+        ];
+
+      case ExperienceStyle.expandingHero:
+        return [
+          Text('Card Horizontal Margin: ${_cardHMargin.toStringAsFixed(0)} px'),
+          Slider(
+            value: _cardHMargin,
+            min: 8.0,
+            max: 32.0,
+            divisions: 12,
+            onChanged: (val) {
+              setSheetState(() => _cardHMargin = val);
+              setState(() => _cardHMargin = val);
+            },
+          ),
+          Text('Card Vertical Margin: ${_cardVMargin.toStringAsFixed(0)} px'),
+          Slider(
+            value: _cardVMargin,
+            min: 4.0,
+            max: 24.0,
+            divisions: 10,
+            onChanged: (val) {
+              setSheetState(() => _cardVMargin = val);
+              setState(() => _cardVMargin = val);
+            },
+          ),
+          Text('Card Border Radius: ${_cardRadius.toStringAsFixed(0)} px'),
+          Slider(
+            value: _cardRadius,
+            min: 8.0,
+            max: 32.0,
+            divisions: 12,
+            onChanged: (val) {
+              setSheetState(() => _cardRadius = val);
+              setState(() => _cardRadius = val);
+            },
+          ),
+          Text('Expand Threshold: ${_cardExpandThreshold.toStringAsFixed(0)} px'),
+          Slider(
+            value: _cardExpandThreshold,
+            min: 30.0,
+            max: 120.0,
+            divisions: 9,
+            onChanged: (val) {
+              setSheetState(() => _cardExpandThreshold = val);
+              setState(() => _cardExpandThreshold = val);
+            },
+          ),
+        ];
+
+      case ExperienceStyle.liquidWave:
+        return [
+          Text('Wave Amplitude: ${_waveAmplitude.toStringAsFixed(0)} px'),
+          Slider(
+            value: _waveAmplitude,
+            min: 8.0,
+            max: 40.0,
+            divisions: 16,
+            onChanged: (val) {
+              setSheetState(() => _waveAmplitude = val);
+              setState(() => _waveAmplitude = val);
+            },
+          ),
+          Text('Wave Frequency: ${_waveFrequency.toStringAsFixed(2)} cycles'),
+          Slider(
+            value: _waveFrequency,
+            min: 0.5,
+            max: 3.0,
+            divisions: 10,
+            onChanged: (val) {
+              setSheetState(() => _waveFrequency = val);
+              setState(() => _waveFrequency = val);
+            },
+          ),
+          Text('Wave Flatten Offset: ${_waveFlattenOffset.toStringAsFixed(0)} px'),
+          Slider(
+            value: _waveFlattenOffset,
+            min: 40.0,
+            max: 140.0,
+            divisions: 10,
+            onChanged: (val) {
+              setSheetState(() => _waveFlattenOffset = val);
+              setState(() => _waveFlattenOffset = val);
+            },
+          ),
+        ];
     }
   }
 
@@ -988,10 +1567,8 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
     switch (_selectedStyle) {
       case ExperienceStyle.morphingSplit:
         return '''
-// 1. Import the package
 import 'package:app_bar_ui/app_bar_ui.dart';
 
-// 2. Insert into CustomScrollView slivers:
 CustomScrollView(
   slivers: [
     MorphingSplitHeaderWidget(
@@ -1025,15 +1602,10 @@ CustomScrollView(
 
       case ExperienceStyle.elasticFloating:
         return '''
-// 1. Import the package
 import 'package:app_bar_ui/app_bar_ui.dart';
 
-// 2. Insert into your widget tree:
 NotificationListener<ScrollNotification>(
-  onNotification: (notification) {
-    // Forward scroll metrics to ElasticFloatingHeaderWidget key
-    return false;
-  },
+  onNotification: (notification) => false,
   child: CustomScrollView(
     physics: const BouncingScrollPhysics(),
     slivers: [
@@ -1060,10 +1632,8 @@ NotificationListener<ScrollNotification>(
 
       case ExperienceStyle.disappearingActions:
         return '''
-// 1. Import the package
 import 'package:app_bar_ui/app_bar_ui.dart';
 
-// 2. Insert into CustomScrollView slivers:
 CustomScrollView(
   slivers: [
     DisappearingFloatingActionsHeaderWidget(
@@ -1087,10 +1657,8 @@ CustomScrollView(
 
       case ExperienceStyle.circularMorph:
         return '''
-// 1. Import the package
 import 'package:app_bar_ui/app_bar_ui.dart';
 
-// 2. Insert into CustomScrollView slivers:
 CustomScrollView(
   slivers: [
     CircularMorphHeaderWidget(
@@ -1115,10 +1683,8 @@ CustomScrollView(
 
       case ExperienceStyle.flip3D:
         return '''
-// 1. Import the package
 import 'package:app_bar_ui/app_bar_ui.dart';
 
-// 2. Insert into CustomScrollView slivers:
 CustomScrollView(
   slivers: [
     Flip3DHeaderWidget(
@@ -1142,6 +1708,151 @@ CustomScrollView(
           SizedBox(width: 8),
           Text('Face B: Toolbar'),
         ],
+      ),
+    ),
+    // ... list slivers
+  ],
+)''';
+
+      case ExperienceStyle.horizontalSliding:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+CustomScrollView(
+  slivers: [
+    HorizontalSlidingPanelsHeaderWidget(
+      config: HorizontalSlidingPanelsConfig(
+        expandedHeight: 155.0,
+        collapsedHeight: 60.0,
+        panel1SlideDistance: $_panel1SlideDistance,
+        panel2SlideDistance: $_panel2SlideDistance,
+        fadeThreshold: $_panelsFadeThreshold,
+      ),
+      pinnedBar: Row(
+        children: const [
+          Icon(Icons.menu),
+          SizedBox(width: 8),
+          Text('Catalogs', style: TextStyle(fontWeight: FontWeight.bold)),
+        ],
+      ),
+      slidingPanelLeft: Row(
+        children: const [
+          Chip(label: Text('All Books')),
+          SizedBox(width: 8),
+          Chip(label: Text('Technology')),
+        ],
+      ),
+    ),
+    // ... list slivers
+  ],
+)''';
+
+      case ExperienceStyle.verticalFolding:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+CustomScrollView(
+  slivers: [
+    VerticalFoldingAccordionHeaderWidget(
+      config: VerticalFoldingAccordionConfig(
+        expandedHeight: 180.0,
+        collapsedHeight: 60.0,
+        foldThreshold: $_accordionFoldThreshold,
+        perspective: $_accordionPerspective,
+        seamShadowIntensity: $_accordionSeamShadow,
+      ),
+      pinnedToolbar: Row(
+        children: const [
+          Icon(Icons.arrow_back),
+          SizedBox(width: 8),
+          Text('Accordion Title', style: TextStyle(fontWeight: FontWeight.bold)),
+        ],
+      ),
+      foldingTier: Container(
+        padding: const EdgeInsets.all(16),
+        child: const Text('Origami folding tier content'),
+      ),
+    ),
+    // ... list slivers
+  ],
+)''';
+
+      case ExperienceStyle.layeredDepth:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+CustomScrollView(
+  slivers: [
+    LayeredDepthParallaxHeaderWidget(
+      config: LayeredDepthParallaxConfig(
+        expandedHeight: 200.0,
+        collapsedHeight: 64.0,
+        backgroundParallaxFactor: $_parallaxBgFactor,
+        midgroundParallaxFactor: $_parallaxMidFactor,
+        maxBlur: $_parallaxMaxBlur,
+      ),
+      backgroundLayer: Image.network('https://example.com/mountain.jpg', fit: BoxFit.cover),
+      midgroundLayer: const Text('Floating Badge', style: TextStyle(color: Colors.white)),
+      foregroundLayer: Row(
+        children: const [
+          Icon(Icons.arrow_back, color: Colors.white),
+          SizedBox(width: 8),
+          Text('Glacier Park', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        ],
+      ),
+    ),
+    // ... list slivers
+  ],
+)''';
+
+      case ExperienceStyle.expandingHero:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+CustomScrollView(
+  slivers: [
+    ExpandingHeroCardHeaderWidget(
+      config: ExpandingHeroCardConfig(
+        expandedHeight: 180.0,
+        collapsedHeight: 60.0,
+        cardHorizontalMargin: $_cardHMargin,
+        cardVerticalMargin: $_cardVMargin,
+        cardBorderRadius: $_cardRadius,
+        expandThreshold: $_cardExpandThreshold,
+      ),
+      heroCardContent: Padding(
+        padding: const EdgeInsets.all(16),
+        child: const Text('Card Presentation: Balance \$24,580'),
+      ),
+      dockedToolbarContent: Row(
+        children: const [
+          Icon(Icons.menu),
+          SizedBox(width: 8),
+          Text('Wallet Toolbar', style: TextStyle(fontWeight: FontWeight.bold)),
+        ],
+      ),
+    ),
+    // ... list slivers
+  ],
+)''';
+
+      case ExperienceStyle.liquidWave:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+CustomScrollView(
+  slivers: [
+    LiquidWaveMorphHeaderWidget(
+      config: LiquidWaveMorphConfig(
+        expandedHeight: 160.0,
+        collapsedHeight: 60.0,
+        waveAmplitude: $_waveAmplitude,
+        waveFrequency: $_waveFrequency,
+        flattenOffset: $_waveFlattenOffset,
+      ),
+      compactTitle: const Text('Liquid Title', style: TextStyle(color: Colors.white)),
+      child: const Center(
+        child: Text('Ocean Wave Canvas', style: TextStyle(color: Colors.white, fontSize: 20)),
       ),
     ),
     // ... list slivers
