@@ -181,7 +181,7 @@ void main() {
   );
 
   testWidgets(
-    'Animated Experiences Lab switches across Batches 1, 2, 3, 4, 5, and 6 styles',
+    'Animated Experiences Lab switches across Batches 1, 2, 3, 4, 5, 6, and 7 styles',
     (WidgetTester tester) async {
       await tester.pumpWidget(const ScrollResponsiveDemoApp());
       await tester.pumpAndSettle();
@@ -192,7 +192,7 @@ void main() {
 
       // Verify active batches banner
       expect(
-        find.text('Batches 1–6 Active (Styles 1–30 of 50)'),
+        find.text('Batches 1–7 Active (Styles 1–35 of 50)'),
         findsOneWidget,
       );
       expect(find.text('1. Morphing Split'), findsOneWidget);
@@ -210,73 +210,67 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('Explore Catalogs'), findsOneWidget);
 
-      // Select Batch 5 filter pill
-      final batch5Filter = find.text('Batch 5 (21–25)');
-      await tester.ensureVisible(batch5Filter);
-      await tester.tap(batch5Filter);
+      // Select Batch 7 filter pill
+      final batch7Filter = find.text('Batch 7 (31–35)');
+      await Scrollable.ensureVisible(tester.element(batch7Filter), alignment: 0.5);
+      await tester.pumpAndSettle();
+      await tester.tap(batch7Filter);
       await tester.pumpAndSettle();
 
-      // Style 25: Expanding Search Transformation
-      final style25 = find.text('25. Expanding Search Transformation');
-      await tester.ensureVisible(style25);
-      await tester.tap(style25);
+      // Style 31: Floating Orbit Header
+      final style31 = find.text('31. Floating Orbit Header');
+      await Scrollable.ensureVisible(tester.element(style31), alignment: 0.5);
       await tester.pumpAndSettle();
-      expect(find.text('Global Catalog Hub'), findsOneWidget);
+      await tester.tap(style31);
+      await tester.pumpAndSettle();
+      expect(find.text('Deep Space Observatory'), findsOneWidget);
 
-      // Select Batch 6 filter pill
-      final batch6Filter = find.text('Batch 6 (26–30)');
-      await tester.ensureVisible(batch6Filter);
-      await tester.tap(batch6Filter);
+      // Style 32: Accordion Multi-Tier Header
+      final style32 = find.text('32. Accordion Multi-Tier Header');
+      await Scrollable.ensureVisible(tester.element(style32), alignment: 0.5);
       await tester.pumpAndSettle();
+      await tester.tap(style32);
+      await tester.pumpAndSettle();
+      expect(find.text('Multi-Slice Operations Hub'), findsOneWidget);
 
-      // Style 26: Breadcrumb Transformation Header
-      final style26 = find.text('26. Breadcrumb Transformation Header');
-      await tester.ensureVisible(style26);
-      await tester.tap(style26);
+      // Style 33: Lateral Curtain Reveal Header
+      final style33 = find.text('33. Lateral Curtain Reveal Header');
+      await Scrollable.ensureVisible(tester.element(style33), alignment: 0.5);
       await tester.pumpAndSettle();
-      expect(find.text('Audio Gear Specs'), findsOneWidget);
+      await tester.tap(style33);
+      await tester.pumpAndSettle();
+      expect(find.text('Grand Philharmonic Auditorium'), findsOneWidget);
 
-      // Style 27: Card-to-Header Morph Header
-      final style27 = find.text('27. Card-to-Header Morph Header');
-      await tester.ensureVisible(style27);
-      await tester.tap(style27);
+      // Style 34: Parallax Zoom Hero Header
+      final style34 = find.text('34. Parallax Zoom Hero Header');
+      await Scrollable.ensureVisible(tester.element(style34), alignment: 0.5);
       await tester.pumpAndSettle();
-      expect(find.text('Enterprise Cloud Platform'), findsOneWidget);
+      await tester.tap(style34);
+      await tester.pumpAndSettle();
+      expect(find.text('Matterhorn Extreme Ridge'), findsOneWidget);
 
-      // Style 28: Reveal-From-Edge Header
-      final style28 = find.text('28. Reveal-From-Edge Header');
-      await tester.ensureVisible(style28);
-      await tester.tap(style28);
+      // Style 35: Dynamic Sine Wave Collapse Header
+      final style35 = find.text('35. Dynamic Sine Wave Collapse Header');
+      await Scrollable.ensureVisible(tester.element(style35), alignment: 0.5);
       await tester.pumpAndSettle();
-      expect(find.text('Edge-Revealed Toolbar'), findsOneWidget);
+      await tester.tap(style35);
+      await tester.pumpAndSettle();
+      expect(find.text('Maritime Tidal Wave Monitor'), findsOneWidget);
 
-      // Style 29: Gesture-Driven Drag Expansion Header
-      final style29 = find.text('29. Gesture-Driven Drag Expansion');
-      await tester.ensureVisible(style29);
-      await tester.tap(style29);
+      // Open View Code dialog for Dynamic Sine Wave Collapse Header
+      final viewCodeBtn = find.text('View Code');
+      await Scrollable.ensureVisible(tester.element(viewCodeBtn), alignment: 0.5);
       await tester.pumpAndSettle();
-      expect(find.text('Touch & Pull Expansion Header'), findsOneWidget);
-
-      // Style 30: Adaptive Multi-Device Header
-      final style30 = find.text('30. Adaptive Multi-Device Header');
-      await tester.ensureVisible(style30);
-      await tester.tap(style30);
+      await tester.tap(viewCodeBtn);
       await tester.pumpAndSettle();
-      expect(find.text('Responsive Cloud Hub'), findsOneWidget);
-
-      // Open View Code dialog for Adaptive Multi-Device Header
-      await tester.tap(find.text('View Code'));
-      await tester.pumpAndSettle();
-      expect(find.text('Adaptive Multi-Device Header Integration Code'), findsOneWidget);
+      expect(find.text('Dynamic Sine Wave Collapse Header Integration Code'), findsOneWidget);
       await tester.tap(find.text('Close'));
-      await tester.pumpAndSettle();
-
-      // Scroll up to bring action bar into clear view above navigation bar
-      await tester.drag(find.byType(CustomScrollView), const Offset(0.0, -160.0));
       await tester.pumpAndSettle();
 
       // Toggle Simulated Reduced Motion
       final a11yChip = find.text('Simulate A11Y / Reduced Motion');
+      await Scrollable.ensureVisible(tester.element(a11yChip), alignment: 0.5);
+      await tester.pumpAndSettle();
       await tester.tap(a11yChip);
       await tester.pumpAndSettle();
       expect(find.text('A11Y Fallback'), findsOneWidget);

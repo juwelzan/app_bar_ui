@@ -263,6 +263,48 @@ enum ExperienceStyle {
     description:
         'Reflows layout across mobile single-row, tablet split, and desktop 3-column',
     icon: Icons.devices_outlined,
+  ),
+
+  // Batch 7 (Styles 31–35)
+  floatingOrbit(
+    id: 31,
+    batch: 7,
+    title: 'Floating Orbit Header',
+    description:
+        'Action satellites orbit along a celestial trajectory and dock into a compact toolbar row',
+    icon: Icons.public_outlined,
+  ),
+  multiSliceAccordion(
+    id: 32,
+    batch: 7,
+    title: 'Accordion Multi-Tier Header',
+    description:
+        'Independent horizontal slices collapse at custom scroll bands with shutter motion',
+    icon: Icons.view_headline_outlined,
+  ),
+  theaterCurtainReveal(
+    id: 33,
+    batch: 7,
+    title: 'Lateral Curtain Reveal Header',
+    description:
+        'Realistic draped theater curtains part sideways to unveil background stage canvas',
+    icon: Icons.curtains_outlined,
+  ),
+  divergentVectorZoom(
+    id: 34,
+    batch: 7,
+    title: 'Parallax Zoom Hero Header',
+    description:
+        'Magnifies background while typography diverges along opposing 3D vectors',
+    icon: Icons.zoom_out_map_outlined,
+  ),
+  dynamicSineWaveCollapse(
+    id: 35,
+    batch: 7,
+    title: 'Dynamic Sine Wave Collapse Header',
+    description:
+        'Oscillatory sine wave bottom edge dampens amplitude to flat pinned toolbar',
+    icon: Icons.waves_outlined,
   );
 
   const ExperienceStyle({
@@ -437,6 +479,26 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
   double _adaptiveMobileBreakpoint = 600.0;
   double _adaptiveDesktopBreakpoint = 900.0;
 
+  // Style 31 params (Floating Orbit)
+  double _floatingOrbitExpandedHeight = 220.0;
+  double _floatingOrbitRadius = 72.0;
+
+  // Style 32 params (Accordion Multi-Tier)
+  double _accordionSlice1Height = 56.0;
+  double _accordionSlice2Height = 52.0;
+
+  // Style 33 params (Theater Curtain Reveal)
+  double _theaterCurtainExpandedHeight = 220.0;
+  double _theaterCurtainPartingThreshold = 130.0;
+
+  // Style 34 params (Parallax Zoom Hero)
+  double _divergentZoomScale = 1.45;
+  double _divergentDivergenceDistance = 36.0;
+
+  // Style 35 params (Dynamic Sine Wave)
+  double _dynamicWaveAmplitude = 18.0;
+  double _dynamicWaveFrequency = 2.0;
+
   @override
   void initState() {
     super.initState();
@@ -560,7 +622,7 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
               Positioned(
                 right: 16.0,
                 bottom: _selectedStyle == ExperienceStyle.animatedDock ? 88.0 : 16.0,
-                child: _buildTelemetryHUD(theme),
+                child: IgnorePointer(child: _buildTelemetryHUD(theme)),
               ),
             ],
           ),
@@ -1675,6 +1737,155 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
             ),
           ),
         );
+
+      // 31. Floating Orbit Header
+      case ExperienceStyle.floatingOrbit:
+        return FloatingOrbitSliverHeaderWidget(
+          centralTitle: Text('Deep Space Observatory', style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold)),
+          centralSubtitle: const Text('Kepler Field Sector 7G'),
+          centralAvatar: const CircleAvatar(radius: 18.0, child: Icon(Icons.public, size: 20.0)),
+          leading: IconButton(icon: const Icon(Icons.arrow_back), onPressed: () {}),
+          satellites: [
+            OrbitSatelliteItem(
+              icon: Icons.radar,
+              label: 'Telemetry',
+              onTap: () {},
+            ),
+            OrbitSatelliteItem(
+              icon: Icons.star_border,
+              label: 'Constellations',
+              onTap: () {},
+            ),
+            OrbitSatelliteItem(
+              icon: Icons.tune,
+              label: 'Parameters',
+              onTap: () => _openParameterSheet(context),
+            ),
+          ],
+          config: FloatingOrbitSliverConfig(
+            expandedHeight: _floatingOrbitExpandedHeight,
+            orbitRadius: _floatingOrbitRadius,
+          ),
+        );
+
+      // 32. Accordion Multi-Tier Header
+      case ExperienceStyle.multiSliceAccordion:
+        return MultiSliceAccordionHeaderWidget(
+          pinnedBar: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              children: [
+                const Icon(Icons.view_headline, color: Colors.blueAccent),
+                const SizedBox(width: 8.0),
+                Text('Multi-Slice Operations Hub', style: theme.textTheme.titleSmall!.copyWith(fontWeight: FontWeight.bold)),
+                const Spacer(),
+                IconButton(icon: const Icon(Icons.tune), onPressed: () => _openParameterSheet(context)),
+              ],
+            ),
+          ),
+          slices: [
+            AccordionSliceItem(
+              spec: AccordionSliceSpec(
+                id: 'summary',
+                height: _accordionSlice1Height,
+                collapseStartOffset: 0.0,
+                collapseEndOffset: 60.0,
+              ),
+              backgroundColor: theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
+              builder: (context, factor) => const Center(
+                child: Text('Slice 1: Cluster Health Summary (Collapses first)'),
+              ),
+            ),
+            AccordionSliceItem(
+              spec: AccordionSliceSpec(
+                id: 'metrics',
+                height: _accordionSlice2Height,
+                collapseStartOffset: 40.0,
+                collapseEndOffset: 110.0,
+              ),
+              backgroundColor: theme.colorScheme.secondaryContainer.withValues(alpha: 0.3),
+              builder: (context, factor) => const Center(
+                child: Text('Slice 2: CPU & Memory Throughput (Collapses second)'),
+              ),
+            ),
+          ],
+        );
+
+      // 33. Lateral Theater Curtain Reveal Header
+      case ExperienceStyle.theaterCurtainReveal:
+        return TheaterCurtainRevealHeaderWidget(
+          valenceTitle: const Text('Grand Philharmonic Auditorium'),
+          valenceActions: [
+            IconButton(icon: const Icon(Icons.tune, color: Colors.amber), onPressed: () => _openParameterSheet(context)),
+          ],
+          stageContent: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.theater_comedy, size: 48.0, color: Colors.amber),
+                const SizedBox(height: 8.0),
+                Text('Orchestral Master Stage Canvas', style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold)),
+                Text('Curtains part laterally as you scroll down', style: theme.textTheme.bodySmall),
+              ],
+            ),
+          ),
+          config: TheaterCurtainRevealConfig(
+            expandedHeight: _theaterCurtainExpandedHeight,
+            partingThreshold: _theaterCurtainPartingThreshold,
+          ),
+        );
+
+      // 34. Divergent Vector Parallax Zoom Header
+      case ExperienceStyle.divergentVectorZoom:
+        return DivergentVectorParallaxZoomHeaderWidget(
+          backgroundImage: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xFF1A237E), Color(0xFF0D47A1), Color(0xFF01579B)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+            child: const Center(
+              child: Icon(Icons.terrain, size: 100.0, color: Colors.white24),
+            ),
+          ),
+          title: const Text('Matterhorn Extreme Ridge'),
+          subtitle: const Text('4,478m • Northwest Zmutt Ridge'),
+          categoryTag: const Chip(
+            avatar: Icon(Icons.military_tech, size: 16.0),
+            label: Text('Grade VI Alpine'),
+          ),
+          actions: [
+            IconButton(icon: const Icon(Icons.tune, color: Colors.white), onPressed: () => _openParameterSheet(context)),
+          ],
+          config: DivergentVectorParallaxZoomConfig(
+            zoomScaleFactor: _divergentZoomScale,
+            divergenceDistance: _divergentDivergenceDistance,
+          ),
+        );
+
+      // 35. Dynamic Sine Wave Collapse Header
+      case ExperienceStyle.dynamicSineWaveCollapse:
+        return DynamicSineWaveCollapseHeaderWidget(
+          title: const Text('Maritime Tidal Wave Monitor'),
+          subtitle: const Text('Pacific Surface Buoy Station 42'),
+          expandedHero: const Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.waves, size: 44.0, color: Colors.white),
+              SizedBox(height: 4.0),
+              Text('Harmonic Fluid Dynamics Resonator', style: TextStyle(color: Colors.white70, fontSize: 12.0)),
+            ],
+          ),
+          actions: [
+            IconButton(icon: const Icon(Icons.tune), onPressed: () => _openParameterSheet(context)),
+          ],
+          config: DynamicSineWaveCollapseConfig(
+            waveAmplitude: _dynamicWaveAmplitude,
+            waveFrequency: _dynamicWaveFrequency,
+          ),
+        );
     }
   }
 
@@ -1705,7 +1916,7 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                'Batches 1–6 Active (Styles 1–30 of 50)',
+                                'Batches 1–7 Active (Styles 1–35 of 50)',
                                 style: theme.textTheme.labelLarge!.copyWith(
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -1741,7 +1952,7 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
                       runSpacing: 6.0,
                       children: [
                         FilterChip(
-                          label: const Text('All (1–30)'),
+                          label: const Text('All (1–35)'),
                           selected: _selectedBatchFilter == 0,
                           onSelected: (_) => setState(() => _selectedBatchFilter = 0),
                         ),
@@ -1774,6 +1985,11 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
                           label: const Text('Batch 6 (26–30)'),
                           selected: _selectedBatchFilter == 6,
                           onSelected: (_) => setState(() => _selectedBatchFilter = 6),
+                        ),
+                        FilterChip(
+                          label: const Text('Batch 7 (31–35)'),
+                          selected: _selectedBatchFilter == 7,
+                          onSelected: (_) => setState(() => _selectedBatchFilter = 7),
                         ),
                       ],
                     ),
@@ -2562,6 +2778,136 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
             },
           ),
         ];
+
+      case ExperienceStyle.floatingOrbit:
+        return [
+          Text('Expanded Height: ${_floatingOrbitExpandedHeight.toStringAsFixed(0)} px'),
+          Slider(
+            value: _floatingOrbitExpandedHeight,
+            min: 160.0,
+            max: 280.0,
+            divisions: 12,
+            onChanged: (val) {
+              setSheetState(() => _floatingOrbitExpandedHeight = val);
+              setState(() => _floatingOrbitExpandedHeight = val);
+            },
+          ),
+          Text('Orbit Radius: ${_floatingOrbitRadius.toStringAsFixed(0)} px'),
+          Slider(
+            value: _floatingOrbitRadius,
+            min: 40.0,
+            max: 120.0,
+            divisions: 8,
+            onChanged: (val) {
+              setSheetState(() => _floatingOrbitRadius = val);
+              setState(() => _floatingOrbitRadius = val);
+            },
+          ),
+        ];
+
+      case ExperienceStyle.multiSliceAccordion:
+        return [
+          Text('Slice 1 Height: ${_accordionSlice1Height.toStringAsFixed(0)} px'),
+          Slider(
+            value: _accordionSlice1Height,
+            min: 36.0,
+            max: 80.0,
+            divisions: 11,
+            onChanged: (val) {
+              setSheetState(() => _accordionSlice1Height = val);
+              setState(() => _accordionSlice1Height = val);
+            },
+          ),
+          Text('Slice 2 Height: ${_accordionSlice2Height.toStringAsFixed(0)} px'),
+          Slider(
+            value: _accordionSlice2Height,
+            min: 36.0,
+            max: 80.0,
+            divisions: 11,
+            onChanged: (val) {
+              setSheetState(() => _accordionSlice2Height = val);
+              setState(() => _accordionSlice2Height = val);
+            },
+          ),
+        ];
+
+      case ExperienceStyle.theaterCurtainReveal:
+        return [
+          Text('Curtain Height: ${_theaterCurtainExpandedHeight.toStringAsFixed(0)} px'),
+          Slider(
+            value: _theaterCurtainExpandedHeight,
+            min: 160.0,
+            max: 280.0,
+            divisions: 12,
+            onChanged: (val) {
+              setSheetState(() => _theaterCurtainExpandedHeight = val);
+              setState(() => _theaterCurtainExpandedHeight = val);
+            },
+          ),
+          Text('Parting Threshold: ${_theaterCurtainPartingThreshold.toStringAsFixed(0)} px'),
+          Slider(
+            value: _theaterCurtainPartingThreshold,
+            min: 80.0,
+            max: 200.0,
+            divisions: 12,
+            onChanged: (val) {
+              setSheetState(() => _theaterCurtainPartingThreshold = val);
+              setState(() => _theaterCurtainPartingThreshold = val);
+            },
+          ),
+        ];
+
+      case ExperienceStyle.divergentVectorZoom:
+        return [
+          Text('Zoom Scale: ${_divergentZoomScale.toStringAsFixed(2)}x'),
+          Slider(
+            value: _divergentZoomScale,
+            min: 1.1,
+            max: 2.0,
+            divisions: 9,
+            onChanged: (val) {
+              setSheetState(() => _divergentZoomScale = val);
+              setState(() => _divergentZoomScale = val);
+            },
+          ),
+          Text('Divergence Distance: ${_divergentDivergenceDistance.toStringAsFixed(0)} px'),
+          Slider(
+            value: _divergentDivergenceDistance,
+            min: 16.0,
+            max: 64.0,
+            divisions: 12,
+            onChanged: (val) {
+              setSheetState(() => _divergentDivergenceDistance = val);
+              setState(() => _divergentDivergenceDistance = val);
+            },
+          ),
+        ];
+
+      case ExperienceStyle.dynamicSineWaveCollapse:
+        return [
+          Text('Wave Amplitude: ${_dynamicWaveAmplitude.toStringAsFixed(0)} px'),
+          Slider(
+            value: _dynamicWaveAmplitude,
+            min: 8.0,
+            max: 32.0,
+            divisions: 12,
+            onChanged: (val) {
+              setSheetState(() => _dynamicWaveAmplitude = val);
+              setState(() => _dynamicWaveAmplitude = val);
+            },
+          ),
+          Text('Wave Frequency: ${_dynamicWaveFrequency.toStringAsFixed(1)} periods'),
+          Slider(
+            value: _dynamicWaveFrequency,
+            min: 1.0,
+            max: 4.0,
+            divisions: 6,
+            onChanged: (val) {
+              setSheetState(() => _dynamicWaveFrequency = val);
+              setState(() => _dynamicWaveFrequency = val);
+            },
+          ),
+        ];
     }
   }
 
@@ -3185,6 +3531,127 @@ AdaptiveMultiDeviceHeaderWidget(
     mobileBreakpoint: $_adaptiveMobileBreakpoint,
     desktopBreakpoint: $_adaptiveDesktopBreakpoint,
   ),
+)''';
+
+      case ExperienceStyle.floatingOrbit:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+CustomScrollView(
+  slivers: [
+    FloatingOrbitSliverHeaderWidget(
+      centralTitle: const Text('Deep Space Observatory'),
+      centralSubtitle: const Text('Kepler Field Sector 7G'),
+      centralAvatar: const CircleAvatar(child: Icon(Icons.public)),
+      satellites: [
+        OrbitSatelliteItem(
+          icon: Icons.radar,
+          label: 'Telemetry',
+          onTap: () {},
+        ),
+        OrbitSatelliteItem(
+          icon: Icons.star_border,
+          label: 'Constellations',
+          onTap: () {},
+        ),
+      ],
+      config: FloatingOrbitSliverConfig(
+        expandedHeight: $_floatingOrbitExpandedHeight,
+        orbitRadius: $_floatingOrbitRadius,
+      ),
+    ),
+    // ... list slivers
+  ],
+)''';
+
+      case ExperienceStyle.multiSliceAccordion:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+CustomScrollView(
+  slivers: [
+    MultiSliceAccordionHeaderWidget(
+      pinnedBar: const Text('Multi-Slice Operations Hub'),
+      slices: [
+        AccordionSliceItem(
+          spec: const AccordionSliceSpec(
+            id: 'summary',
+            height: $_accordionSlice1Height,
+            collapseStartOffset: 0.0,
+            collapseEndOffset: 60.0,
+          ),
+          builder: (context, factor) => const Text('Slice 1 Summary'),
+        ),
+        AccordionSliceItem(
+          spec: const AccordionSliceSpec(
+            id: 'metrics',
+            height: $_accordionSlice2Height,
+            collapseStartOffset: 40.0,
+            collapseEndOffset: 110.0,
+          ),
+          builder: (context, factor) => const Text('Slice 2 Metrics'),
+        ),
+      ],
+    ),
+    // ... list slivers
+  ],
+)''';
+
+      case ExperienceStyle.theaterCurtainReveal:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+CustomScrollView(
+  slivers: [
+    TheaterCurtainRevealHeaderWidget(
+      valenceTitle: const Text('Grand Philharmonic Auditorium'),
+      stageContent: const Center(
+        child: Text('Orchestral Master Stage Canvas'),
+      ),
+      config: TheaterCurtainRevealConfig(
+        expandedHeight: $_theaterCurtainExpandedHeight,
+        partingThreshold: $_theaterCurtainPartingThreshold,
+      ),
+    ),
+    // ... list slivers
+  ],
+)''';
+
+      case ExperienceStyle.divergentVectorZoom:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+CustomScrollView(
+  slivers: [
+    DivergentVectorParallaxZoomHeaderWidget(
+      backgroundImage: Container(color: Colors.blueGrey),
+      title: const Text('Matterhorn Extreme Ridge'),
+      subtitle: const Text('4,478m Northwest Ridge'),
+      config: DivergentVectorParallaxZoomConfig(
+        zoomScaleFactor: $_divergentZoomScale,
+        divergenceDistance: $_divergentDivergenceDistance,
+      ),
+    ),
+    // ... list slivers
+  ],
+)''';
+
+      case ExperienceStyle.dynamicSineWaveCollapse:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+CustomScrollView(
+  slivers: [
+    DynamicSineWaveCollapseHeaderWidget(
+      title: const Text('Maritime Tidal Wave Monitor'),
+      subtitle: const Text('Pacific Surface Buoy Station 42'),
+      config: DynamicSineWaveCollapseConfig(
+        waveAmplitude: $_dynamicWaveAmplitude,
+        waveFrequency: $_dynamicWaveFrequency,
+      ),
+    ),
+    // ... list slivers
+  ],
 )''';
     }
   }

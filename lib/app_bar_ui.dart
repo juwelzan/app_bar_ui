@@ -75,6 +75,11 @@ export 'src/experiences/card_to_header_morph_header.dart';
 export 'src/experiences/reveal_from_edge_header.dart';
 export 'src/experiences/gesture_driven_drag_expansion_header.dart';
 export 'src/experiences/adaptive_multi_device_header.dart';
+export 'src/experiences/floating_orbit_sliver_header.dart';
+export 'src/experiences/multi_slice_accordion_header.dart';
+export 'src/experiences/theater_curtain_reveal_header.dart';
+export 'src/experiences/divergent_vector_parallax_zoom_header.dart';
+export 'src/experiences/dynamic_sine_wave_collapse_header.dart';
 
 import 'app_bar_ui_platform_interface.dart';
 

@@ -1027,6 +1027,201 @@ class AdaptiveMultiDeviceConfig extends AppBarMotionConfig {
   final double elevation;
 }
 
+// ---------------------------------------------------------------------------
+// Batch 7 (Styles 31–35)
+// ---------------------------------------------------------------------------
+
+/// Configuration for Style 31: Floating Orbit Header.
+class FloatingOrbitSliverConfig extends AppBarMotionConfig {
+  /// Creates a [FloatingOrbitSliverConfig].
+  const FloatingOrbitSliverConfig({
+    super.curve = Curves.easeOutCubic,
+    super.reducedMotionCurve = Curves.linear,
+    this.expandedHeight = 220.0,
+    this.collapsedHeight = 64.0,
+    this.orbitRadius = 72.0,
+    this.orbitSpeedFactor = 1.0,
+    this.collapseThreshold = 120.0,
+    this.elevation = 2.0,
+  });
+
+  /// Height when fully expanded.
+  final double expandedHeight;
+
+  /// Height when collapsed into pinned toolbar.
+  final double collapsedHeight;
+
+  /// Radius in pixels for satellites orbiting around the central title.
+  final double orbitRadius;
+
+  /// Multiplier for angular orbital velocity.
+  final double orbitSpeedFactor;
+
+  /// Scroll offset at which satellites settle into docked horizontal row.
+  final double collapseThreshold;
+
+  /// Toolbar elevation.
+  final double elevation;
+}
+
+/// Specifications for a single horizontal slice in [MultiSliceAccordionHeaderWidget].
+class AccordionSliceSpec {
+  /// Creates an [AccordionSliceSpec].
+  const AccordionSliceSpec({
+    required this.id,
+    required this.height,
+    required this.collapseStartOffset,
+    required this.collapseEndOffset,
+  });
+
+  /// Unique identifier or label for this accordion slice.
+  final String id;
+
+  /// Natural height of this slice when fully unfolded.
+  final double height;
+
+  /// Scroll offset where this slice begins closing.
+  final double collapseStartOffset;
+
+  /// Scroll offset where this slice becomes completely flat.
+  final double collapseEndOffset;
+}
+
+/// Configuration for Style 32: Accordion Multi-Tier Header.
+class MultiSliceAccordionConfig extends AppBarMotionConfig {
+  /// Creates a [MultiSliceAccordionConfig].
+  const MultiSliceAccordionConfig({
+    super.curve = Curves.easeInOutCubic,
+    super.reducedMotionCurve = Curves.linear,
+    this.pinnedToolbarHeight = 56.0,
+    this.slices = const [
+      AccordionSliceSpec(
+        id: 'overview',
+        height: 60.0,
+        collapseStartOffset: 0.0,
+        collapseEndOffset: 60.0,
+      ),
+      AccordionSliceSpec(
+        id: 'metrics',
+        height: 52.0,
+        collapseStartOffset: 40.0,
+        collapseEndOffset: 110.0,
+      ),
+      AccordionSliceSpec(
+        id: 'controls',
+        height: 48.0,
+        collapseStartOffset: 90.0,
+        collapseEndOffset: 160.0,
+      ),
+    ],
+  });
+
+  /// Height of the permanently pinned top navigation bar.
+  final double pinnedToolbarHeight;
+
+  /// Ordered specifications for collapsible slices below the pinned bar.
+  final List<AccordionSliceSpec> slices;
+
+  /// Total expanded height computed from pinned bar and all slice heights.
+  double get totalExpandedHeight =>
+      pinnedToolbarHeight + slices.fold(0.0, (acc, s) => acc + s.height);
+}
+
+/// Configuration for Style 33: Lateral Theater Curtain Reveal Header.
+class TheaterCurtainRevealConfig extends AppBarMotionConfig {
+  /// Creates a [TheaterCurtainRevealConfig].
+  const TheaterCurtainRevealConfig({
+    super.curve = Curves.easeInOutCubic,
+    super.reducedMotionCurve = Curves.linear,
+    this.expandedHeight = 220.0,
+    this.collapsedHeight = 60.0,
+    this.pleatsCount = 6,
+    this.partingThreshold = 130.0,
+    this.curtainColor,
+  });
+
+  /// Height when curtains are closed.
+  final double expandedHeight;
+
+  /// Height of top valence/bar when collapsed.
+  final double collapsedHeight;
+
+  /// Number of vertical pleated drape segments per side.
+  final int pleatsCount;
+
+  /// Scroll distance over which curtains part sideways.
+  final double partingThreshold;
+
+  /// Background color or tint of the fabric curtains.
+  final Color? curtainColor;
+}
+
+/// Configuration for Style 34: Divergent Vector Parallax Zoom Header.
+class DivergentVectorParallaxZoomConfig extends AppBarMotionConfig {
+  /// Creates a [DivergentVectorParallaxZoomConfig].
+  const DivergentVectorParallaxZoomConfig({
+    super.curve = Curves.easeOutCubic,
+    super.reducedMotionCurve = Curves.linear,
+    this.expandedHeight = 240.0,
+    this.collapsedHeight = 64.0,
+    this.zoomScaleFactor = 1.45,
+    this.divergenceDistance = 36.0,
+    this.enableFocalBlur = true,
+    this.maxBlurSigma = 4.0,
+  });
+
+  /// Expanded height of the hero canvas.
+  final double expandedHeight;
+
+  /// Collapsed toolbar height.
+  final double collapsedHeight;
+
+  /// Maximum scale multiplier applied to the background image.
+  final double zoomScaleFactor;
+
+  /// Maximum distance in pixels foreground text elements diverge on opposite vectors.
+  final double divergenceDistance;
+
+  /// Whether to apply dynamic focal blur as scroll depth increases.
+  final bool enableFocalBlur;
+
+  /// Maximum blur sigma applied at maximum collapse.
+  final double maxBlurSigma;
+}
+
+/// Configuration for Style 35: Dynamic Sine Wave Collapse Header.
+class DynamicSineWaveCollapseConfig extends AppBarMotionConfig {
+  /// Creates a [DynamicSineWaveCollapseConfig].
+  const DynamicSineWaveCollapseConfig({
+    super.curve = Curves.easeInOutSine,
+    super.reducedMotionCurve = Curves.linear,
+    this.expandedHeight = 200.0,
+    this.collapsedHeight = 64.0,
+    this.waveAmplitude = 18.0,
+    this.waveFrequency = 2.0,
+    this.dampenThreshold = 120.0,
+    this.enableDynamicPhase = true,
+  });
+
+  /// Height when wave amplitude is fully resonant.
+  final double expandedHeight;
+
+  /// Collapsed pinned toolbar height where wave is completely flat.
+  final double collapsedHeight;
+
+  /// Maximum peak-to-trough amplitude in pixels.
+  final double waveAmplitude;
+
+  /// Number of wave periods across header width.
+  final double waveFrequency;
+
+  /// Scroll distance over which wave amplitude dampens to 0.0.
+  final double dampenThreshold;
+
+  /// Whether to dynamically shift wave phase angle with scroll offset.
+  final bool enableDynamicPhase;
+}
+
 
 
 
