@@ -1,4 +1,3 @@
-import 'dart:io' show Platform;
 import 'dart:ui' show AppLifecycleState;
 
 import 'package:flutter/foundation.dart';
@@ -53,11 +52,8 @@ class StatusBarManager {
       return debugOverrideSupportedPlatform!;
     }
     if (kIsWeb) return false;
-    try {
-      return Platform.isAndroid || Platform.isIOS;
-    } catch (_) {
-      return false;
-    }
+    return defaultTargetPlatform == TargetPlatform.android ||
+        defaultTargetPlatform == TargetPlatform.iOS;
   }
 
   /// Current target platform resolved safely across test and production environments.
