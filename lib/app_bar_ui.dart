@@ -65,6 +65,11 @@ export 'src/experiences/split_screen_lateral_reveal_header.dart';
 export 'src/experiences/magnetic_scroll_snap_header.dart';
 export 'src/experiences/parallax_zoom_hero_header.dart';
 export 'src/experiences/pull_down_disclosure_canvas_header.dart';
+export 'src/experiences/tab_transform_header.dart';
+export 'src/experiences/avatar_to_profile_header.dart';
+export 'src/experiences/progressive_disclosure_header.dart';
+export 'src/experiences/sideways_collapse_header.dart';
+export 'src/experiences/expanding_search_header.dart';
 
 import 'app_bar_ui_platform_interface.dart';
 

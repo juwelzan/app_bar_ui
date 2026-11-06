@@ -701,6 +701,172 @@ class PullDownDisclosureCanvasConfig extends AppBarMotionConfig {
   final double elevation;
 }
 
+/// Configuration for Style 21: Tab-Transform Header.
+class TabTransformConfig extends AppBarMotionConfig {
+  /// Creates a [TabTransformConfig].
+  const TabTransformConfig({
+    super.curve = Curves.easeOutCubic,
+    super.reducedMotionCurve = Curves.linear,
+    this.expandedHeight = 150.0,
+    this.collapsedHeight = 56.0,
+    this.expandedTabHeight = 64.0,
+    this.compactTabHeight = 40.0,
+    this.collapseThreshold = 90.0,
+    this.elevation = 3.0,
+  });
+
+  /// Maximum expanded header height.
+  final double expandedHeight;
+
+  /// Minimum collapsed docked header height.
+  final double collapsedHeight;
+
+  /// Height of the tab items in their expanded rich card state.
+  final double expandedTabHeight;
+
+  /// Height of the tab items in their slim compact pinned strip state.
+  final double compactTabHeight;
+
+  /// Scroll distance required to complete tab compression and docking.
+  final double collapseThreshold;
+
+  /// Docked header elevation.
+  final double elevation;
+}
+
+/// Configuration for Style 22: Avatar-to-Profile Header.
+class AvatarToProfileConfig extends AppBarMotionConfig {
+  /// Creates an [AvatarToProfileConfig].
+  const AvatarToProfileConfig({
+    super.curve = Curves.easeOutCubic,
+    super.reducedMotionCurve = Curves.linear,
+    this.expandedHeight = 190.0,
+    this.collapsedHeight = 60.0,
+    this.initialAvatarDiameter = 76.0,
+    this.compactAvatarDiameter = 36.0,
+    this.arcControlPointBias = 0.35,
+    this.collapseThreshold = 120.0,
+    this.elevation = 3.0,
+  });
+
+  /// Maximum expanded profile canvas height.
+  final double expandedHeight;
+
+  /// Minimum collapsed docked toolbar height.
+  final double collapsedHeight;
+
+  /// Initial diameter of the large centered profile avatar.
+  final double initialAvatarDiameter;
+
+  /// Compact diameter of the avatar when docked in the top-left navigation slot.
+  final double compactAvatarDiameter;
+
+  /// Curvature bias of the quadratic Bezier trajectory arc.
+  final double arcControlPointBias;
+
+  /// Scroll distance required to complete trajectory transit.
+  final double collapseThreshold;
+
+  /// Docked toolbar elevation.
+  final double elevation;
+}
+
+/// Configuration for Style 23: Progressive Disclosure Header.
+class ProgressiveDisclosureConfig extends AppBarMotionConfig {
+  /// Creates a [ProgressiveDisclosureConfig].
+  const ProgressiveDisclosureConfig({
+    super.curve = Curves.easeOutCubic,
+    super.reducedMotionCurve = Curves.linear,
+    this.expandedHeight = 165.0,
+    this.collapsedHeight = 56.0,
+    this.stage1Threshold = 45.0,
+    this.stage2Threshold = 95.0,
+    this.elevation = 3.0,
+  });
+
+  /// Maximum expanded height.
+  final double expandedHeight;
+
+  /// Minimum collapsed docked height.
+  final double collapsedHeight;
+
+  /// Scroll distance at which Stage 1 (Brand Title) reveals Stage 2 (Search Bar).
+  final double stage1Threshold;
+
+  /// Scroll distance at which Stage 2 reveals and pins Stage 3 (Filter Strip).
+  final double stage2Threshold;
+
+  /// Pinned toolbar elevation.
+  final double elevation;
+}
+
+/// Configuration for Style 24: Sideways-Collapse Header.
+class SidewaysCollapseConfig extends AppBarMotionConfig {
+  /// Creates a [SidewaysCollapseConfig].
+  const SidewaysCollapseConfig({
+    super.curve = Curves.easeOutCubic,
+    super.reducedMotionCurve = Curves.linear,
+    this.expandedHeight = 120.0,
+    this.collapsedHeight = 60.0,
+    this.compactRailWidth = 68.0,
+    this.collapseThreshold = 95.0,
+    this.anchorAlignment = Alignment.centerLeft,
+    this.elevation = 3.0,
+  });
+
+  /// Maximum expanded height.
+  final double expandedHeight;
+
+  /// Minimum collapsed docked height.
+  final double collapsedHeight;
+
+  /// Width of the anchored navigation rail/badge after horizontal collapse.
+  final double compactRailWidth;
+
+  /// Scroll distance required to complete horizontal collapse.
+  final double collapseThreshold;
+
+  /// Alignment anchor towards which the header collapses laterally.
+  final Alignment anchorAlignment;
+
+  /// Docked rail elevation.
+  final double elevation;
+}
+
+/// Configuration for Style 25: Expanding Search Transformation Header.
+class ExpandingSearchConfig extends AppBarMotionConfig {
+  /// Creates an [ExpandingSearchConfig].
+  const ExpandingSearchConfig({
+    super.curve = Curves.easeOutCubic,
+    super.reducedMotionCurve = Curves.linear,
+    this.expandedHeight = 130.0,
+    this.collapsedHeight = 60.0,
+    this.searchBarHeight = 46.0,
+    this.expandThreshold = 75.0,
+    this.autoFocus = false,
+    this.elevation = 3.0,
+  });
+
+  /// Maximum expanded canvas height.
+  final double expandedHeight;
+
+  /// Minimum collapsed docked toolbar height.
+  final double collapsedHeight;
+
+  /// Height of the search input field container.
+  final double searchBarHeight;
+
+  /// Scroll distance over which the search bar expands and transforms.
+  final double expandThreshold;
+
+  /// Whether the search field should request focus automatically upon expansion.
+  final bool autoFocus;
+
+  /// Docked toolbar elevation.
+  final double elevation;
+}
+
+
 
 
 
