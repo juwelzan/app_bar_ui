@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:ui' show lerpDouble;
 import 'package:flutter/material.dart';
 import 'experience_configs.dart';
@@ -137,7 +138,7 @@ class _AvatarToProfileDelegate extends SliverPersistentHeaderDelegate {
     // Quadratic Bezier Arc Trajectory Calculation
     // Start: Centered horizontally, vertically near expanded mid-lower
     // End: Docked in top-left leading slot (e.g. left: 56.0, top: (collapsedHeight - compactAvatarDiameter) / 2)
-    final startX = (screenWidth - config.initialAvatarDiameter) / 2;
+    final startX = (math.max(config.initialAvatarDiameter, screenWidth) - config.initialAvatarDiameter) / 2;
     final startY = config.expandedHeight - config.initialAvatarDiameter - 60.0;
 
     final targetLeftOffset = leading != null ? 56.0 : 16.0;
@@ -182,9 +183,9 @@ class _AvatarToProfileDelegate extends SliverPersistentHeaderDelegate {
                     padding: const EdgeInsets.symmetric(horizontal: 4.0),
                     child: Row(
                       children: [
-                        if (leading != null) leading!,
+                        ?leading,
                         const Spacer(),
-                        if (actions != null) ...actions!,
+                        ...?actions,
                       ],
                     ),
                   ),

@@ -172,7 +172,7 @@ class _TabTransformDelegate extends SliverPersistentHeaderDelegate {
                                   child: title!,
                                 ),
                               ),
-                            if (actions != null) ...actions!,
+                            ...?actions,
                           ],
                         ),
                       ),

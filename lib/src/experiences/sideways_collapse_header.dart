@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:ui' show lerpDouble;
 import 'package:flutter/material.dart';
 import 'experience_configs.dart';
@@ -94,7 +95,8 @@ class _SidewaysCollapseDelegate extends SliverPersistentHeaderDelegate {
     final progress = curve.transform(rawProgress);
 
     final screenWidth = MediaQuery.sizeOf(context).width;
-    final fullWidth = screenWidth - 32.0;
+    final fullWidth =
+        math.max(config.compactRailWidth, screenWidth > 32.0 ? screenWidth - 32.0 : config.compactRailWidth);
     final targetWidth = config.compactRailWidth;
 
     // Horizontal width interpolation

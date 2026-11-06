@@ -179,6 +179,48 @@ enum ExperienceStyle {
     description:
         'Downward pull overscroll gesture unlocks hidden utility drawer canvas',
     icon: Icons.unfold_more_double_outlined,
+  ),
+
+  // Batch 5 (Styles 21–25)
+  tabTransform(
+    id: 21,
+    batch: 5,
+    title: 'Animated Tab-Transform Header',
+    description:
+        'Full-sized tab cards compress into slim sticky pinned navigation strip',
+    icon: Icons.tab_outlined,
+  ),
+  avatarToProfile(
+    id: 22,
+    batch: 5,
+    title: 'Avatar-to-Profile Arc Header',
+    description:
+        'Large profile avatar glides along curved Bezier arc into leading toolbar slot',
+    icon: Icons.account_circle_outlined,
+  ),
+  progressiveDisclosure(
+    id: 23,
+    batch: 5,
+    title: 'Progressive Disclosure Header',
+    description:
+        'Stepwise cascade revealing Title -> Search Bar -> Sticky Pinned Filters',
+    icon: Icons.filter_list_outlined,
+  ),
+  sidewaysCollapse(
+    id: 24,
+    batch: 5,
+    title: 'Sideways-Collapse Header',
+    description:
+        'Horizontal width collapse shrinking into anchored compact navigation rail',
+    icon: Icons.view_sidebar_outlined,
+  ),
+  expandingSearch(
+    id: 25,
+    batch: 5,
+    title: 'Expanding Search Transformation',
+    description:
+        'Action search icon smoothly morphs into active full-bleed search bar',
+    icon: Icons.search_outlined,
   );
 
   const ExperienceStyle({
@@ -309,6 +351,28 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
   double _disclosureRestingHeight = 110.0;
   double _disclosureCanvasHeight = 150.0;
 
+  // Style 21 params (Tab-Transform)
+  int _selectedTabTransformIndex = 0;
+  double _tabExpandedHeight = 150.0;
+  double _tabCompactHeight = 40.0;
+
+  // Style 22 params (Avatar-to-Profile)
+  double _avatarInitialDiameter = 76.0;
+  double _avatarCompactDiameter = 36.0;
+  double _avatarArcBias = 0.35;
+
+  // Style 23 params (Progressive Disclosure)
+  double _progressiveStage1 = 45.0;
+  double _progressiveStage2 = 95.0;
+
+  // Style 24 params (Sideways-Collapse)
+  double _sidewaysCompactWidth = 85.0;
+  double _sidewaysCollapseThreshold = 95.0;
+
+  // Style 25 params (Expanding Search)
+  final GlobalKey<ExpandingSearchHeaderWidgetState> _expandingSearchKey = GlobalKey();
+  double _expandingSearchThreshold = 75.0;
+
   @override
   void initState() {
     super.initState();
@@ -341,14 +405,10 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
   }
 
   List<ExperienceStyle> get _filteredStyles {
-    if (_selectedBatchFilter == 1) {
-      return ExperienceStyle.values.where((s) => s.batch == 1).toList();
-    } else if (_selectedBatchFilter == 2) {
-      return ExperienceStyle.values.where((s) => s.batch == 2).toList();
-    } else if (_selectedBatchFilter == 3) {
-      return ExperienceStyle.values.where((s) => s.batch == 3).toList();
-    } else if (_selectedBatchFilter == 4) {
-      return ExperienceStyle.values.where((s) => s.batch == 4).toList();
+    if (_selectedBatchFilter > 0) {
+      return ExperienceStyle.values
+          .where((s) => s.batch == _selectedBatchFilter)
+          .toList();
     }
     return ExperienceStyle.values;
   }
@@ -1187,6 +1247,176 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
             ),
           ),
         );
+
+      // 21. Animated Tab-Transform Header
+      case ExperienceStyle.tabTransform:
+        return TabTransformHeaderWidget(
+          title: Text(
+            'Engineering Portal',
+            style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
+          ),
+          actions: [
+            IconButton(icon: const Icon(Icons.notifications_none), onPressed: () {}),
+            IconButton(icon: const Icon(Icons.tune), onPressed: () => _openParameterSheet(context)),
+          ],
+          tabs: const [
+            TabTransformItem(label: 'Architecture', icon: Icons.architecture, subtitle: 'System blue-prints'),
+            TabTransformItem(label: 'AI Models', icon: Icons.psychology, subtitle: 'Neural inference', badge: 'v2'),
+            TabTransformItem(label: 'Frameworks', icon: Icons.layers, subtitle: 'Flutter & Dart'),
+            TabTransformItem(label: 'Tooling', icon: Icons.build_circle, subtitle: 'DevOps & CI/CD'),
+          ],
+          selectedIndex: _selectedTabTransformIndex,
+          onTabSelected: (idx) {
+            setState(() {
+              _selectedTabTransformIndex = idx;
+            });
+          },
+          config: TabTransformConfig(
+            expandedHeight: _tabExpandedHeight,
+            compactTabHeight: _tabCompactHeight,
+          ),
+        );
+
+      // 22. Avatar-to-Profile Arc Header
+      case ExperienceStyle.avatarToProfile:
+        return AvatarToProfileHeaderWidget(
+          avatar: const CircleAvatar(
+            radius: 38.0,
+            backgroundColor: Colors.deepPurple,
+            child: Icon(Icons.person, color: Colors.white, size: 40.0),
+          ),
+          name: Text(
+            'Dr. Evelyn Cross',
+            style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
+          ),
+          handle: const Text('@evelyn_cross'),
+          bio: const Text('Principal Neural Systems Engineer • 14.2k followers'),
+          leading: IconButton(icon: const Icon(Icons.arrow_back), onPressed: () {}),
+          actions: [
+            IconButton(icon: const Icon(Icons.share), onPressed: () {}),
+            IconButton(icon: const Icon(Icons.tune), onPressed: () => _openParameterSheet(context)),
+          ],
+          config: AvatarToProfileConfig(
+            initialAvatarDiameter: _avatarInitialDiameter,
+            compactAvatarDiameter: _avatarCompactDiameter,
+            arcControlPointBias: _avatarArcBias,
+          ),
+        );
+
+      // 23. Progressive Disclosure Header
+      case ExperienceStyle.progressiveDisclosure:
+        return ProgressiveDisclosureHeaderWidget(
+          title: const Text('Market Discovery'),
+          actions: [
+            IconButton(icon: const Icon(Icons.tune), onPressed: () => _openParameterSheet(context)),
+          ],
+          searchBar: Container(
+            height: 42.0,
+            padding: const EdgeInsets.symmetric(horizontal: 14.0),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(24.0),
+            ),
+            child: const Row(
+              children: [
+                Icon(Icons.search, size: 20.0),
+                SizedBox(width: 8.0),
+                Expanded(
+                  child: Text(
+                    'Search components, plugins, templates...',
+                    style: TextStyle(fontSize: 13.0),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          filterRow: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              children: [
+                FilterChip(selected: true, label: const Text('All Items'), onSelected: (_) {}),
+                const SizedBox(width: 6.0),
+                FilterChip(selected: false, label: const Text('Verified'), onSelected: (_) {}),
+                const SizedBox(width: 6.0),
+                FilterChip(selected: false, label: const Text('Popular'), onSelected: (_) {}),
+                const SizedBox(width: 6.0),
+                FilterChip(selected: false, label: const Text('Open Source'), onSelected: (_) {}),
+              ],
+            ),
+          ),
+          config: ProgressiveDisclosureConfig(
+            stage1Threshold: _progressiveStage1,
+            stage2Threshold: _progressiveStage2,
+          ),
+        );
+
+      // 24. Sideways-Collapse Header
+      case ExperienceStyle.sidewaysCollapse:
+        return SidewaysCollapseHeaderWidget(
+          expandedContent: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              children: [
+                const Icon(Icons.hub, size: 36.0, color: Colors.indigoAccent),
+                const SizedBox(width: 12.0),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Global Workspace Hub',
+                        style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        '8 Active Repositories • 4 Teams Synchronized',
+                        style: theme.textTheme.bodySmall,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+                FilledButton.tonal(
+                  onPressed: () => _openParameterSheet(context),
+                  child: const Text('Config'),
+                ),
+              ],
+            ),
+          ),
+          compactRailContent: const Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.hub, size: 22.0, color: Colors.indigoAccent),
+              SizedBox(width: 6.0),
+              Text('Hub', style: TextStyle(fontWeight: FontWeight.bold)),
+            ],
+          ),
+          config: SidewaysCollapseConfig(
+            compactRailWidth: _sidewaysCompactWidth,
+            collapseThreshold: _sidewaysCollapseThreshold,
+          ),
+        );
+
+      // 25. Expanding Search Transformation Header
+      case ExperienceStyle.expandingSearch:
+        return ExpandingSearchHeaderWidget(
+          key: _expandingSearchKey,
+          title: const Text('Global Catalog Hub'),
+          subtitle: const Text('Search among 40,000 components'),
+          leading: IconButton(icon: const Icon(Icons.menu), onPressed: () {}),
+          actions: [
+            IconButton(icon: const Icon(Icons.favorite_border), onPressed: () {}),
+            IconButton(icon: const Icon(Icons.tune), onPressed: () => _openParameterSheet(context)),
+          ],
+          config: ExpandingSearchConfig(
+            expandThreshold: _expandingSearchThreshold,
+          ),
+        );
     }
   }
 
@@ -1217,7 +1447,7 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                'Batches 1–4 Active (Styles 1–20 of 50)',
+                                'Batches 1–5 Active (Styles 1–25 of 50)',
                                 style: theme.textTheme.labelLarge!.copyWith(
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -1253,7 +1483,7 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
                       runSpacing: 6.0,
                       children: [
                         FilterChip(
-                          label: const Text('All (1–20)'),
+                          label: const Text('All (1–25)'),
                           selected: _selectedBatchFilter == 0,
                           onSelected: (_) => setState(() => _selectedBatchFilter = 0),
                         ),
@@ -1276,6 +1506,11 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
                           label: const Text('Batch 4 (16–20)'),
                           selected: _selectedBatchFilter == 4,
                           onSelected: (_) => setState(() => _selectedBatchFilter = 4),
+                        ),
+                        FilterChip(
+                          label: const Text('Batch 5 (21–25)'),
+                          selected: _selectedBatchFilter == 5,
+                          onSelected: (_) => setState(() => _selectedBatchFilter = 5),
                         ),
                       ],
                     ),
@@ -1815,6 +2050,136 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
             },
           ),
         ];
+
+      case ExperienceStyle.tabTransform:
+        return [
+          Text('Expanded Tab Height: ${_tabExpandedHeight.toStringAsFixed(0)} px'),
+          Slider(
+            value: _tabExpandedHeight,
+            min: 120.0,
+            max: 200.0,
+            divisions: 8,
+            onChanged: (val) {
+              setSheetState(() => _tabExpandedHeight = val);
+              setState(() => _tabExpandedHeight = val);
+            },
+          ),
+          Text('Compact Tab Height: ${_tabCompactHeight.toStringAsFixed(0)} px'),
+          Slider(
+            value: _tabCompactHeight,
+            min: 32.0,
+            max: 56.0,
+            divisions: 6,
+            onChanged: (val) {
+              setSheetState(() => _tabCompactHeight = val);
+              setState(() => _tabCompactHeight = val);
+            },
+          ),
+        ];
+
+      case ExperienceStyle.avatarToProfile:
+        return [
+          Text('Initial Avatar Diameter: ${_avatarInitialDiameter.toStringAsFixed(0)} px'),
+          Slider(
+            value: _avatarInitialDiameter,
+            min: 56.0,
+            max: 96.0,
+            divisions: 8,
+            onChanged: (val) {
+              setSheetState(() => _avatarInitialDiameter = val);
+              setState(() => _avatarInitialDiameter = val);
+            },
+          ),
+          Text('Compact Avatar Diameter: ${_avatarCompactDiameter.toStringAsFixed(0)} px'),
+          Slider(
+            value: _avatarCompactDiameter,
+            min: 28.0,
+            max: 48.0,
+            divisions: 5,
+            onChanged: (val) {
+              setSheetState(() => _avatarCompactDiameter = val);
+              setState(() => _avatarCompactDiameter = val);
+            },
+          ),
+          Text('Arc Curvature Bias: ${_avatarArcBias.toStringAsFixed(2)}'),
+          Slider(
+            value: _avatarArcBias,
+            min: 0.1,
+            max: 0.7,
+            divisions: 6,
+            onChanged: (val) {
+              setSheetState(() => _avatarArcBias = val);
+              setState(() => _avatarArcBias = val);
+            },
+          ),
+        ];
+
+      case ExperienceStyle.progressiveDisclosure:
+        return [
+          Text('Stage 1 (Search Reveal): ${_progressiveStage1.toStringAsFixed(0)} px'),
+          Slider(
+            value: _progressiveStage1,
+            min: 30.0,
+            max: 80.0,
+            divisions: 5,
+            onChanged: (val) {
+              setSheetState(() => _progressiveStage1 = val);
+              setState(() => _progressiveStage1 = val);
+            },
+          ),
+          Text('Stage 2 (Filter Pin): ${_progressiveStage2.toStringAsFixed(0)} px'),
+          Slider(
+            value: _progressiveStage2,
+            min: 70.0,
+            max: 140.0,
+            divisions: 7,
+            onChanged: (val) {
+              setSheetState(() => _progressiveStage2 = val);
+              setState(() => _progressiveStage2 = val);
+            },
+          ),
+        ];
+
+      case ExperienceStyle.sidewaysCollapse:
+        return [
+          Text('Compact Rail Width: ${_sidewaysCompactWidth.toStringAsFixed(0)} px'),
+          Slider(
+            value: _sidewaysCompactWidth,
+            min: 60.0,
+            max: 120.0,
+            divisions: 6,
+            onChanged: (val) {
+              setSheetState(() => _sidewaysCompactWidth = val);
+              setState(() => _sidewaysCompactWidth = val);
+            },
+          ),
+          Text('Collapse Threshold: ${_sidewaysCollapseThreshold.toStringAsFixed(0)} px'),
+          Slider(
+            value: _sidewaysCollapseThreshold,
+            min: 60.0,
+            max: 150.0,
+            divisions: 9,
+            onChanged: (val) {
+              setSheetState(() => _sidewaysCollapseThreshold = val);
+              setState(() => _sidewaysCollapseThreshold = val);
+            },
+          ),
+        ];
+
+      case ExperienceStyle.expandingSearch:
+        return [
+          Text('Expand Threshold: ${_expandingSearchThreshold.toStringAsFixed(0)} px'),
+          Slider(
+            value: _expandingSearchThreshold,
+            min: 40.0,
+            max: 120.0,
+            divisions: 8,
+            onChanged: (val) {
+              setSheetState(() => _expandingSearchThreshold = val);
+              setState(() => _expandingSearchThreshold = val);
+            },
+          ),
+        ];
     }
   }
 
@@ -2205,6 +2570,106 @@ SliverToBoxAdapter(
       restingHeight: $_disclosureRestingHeight,
     ),
   ),
+)''';
+
+      case ExperienceStyle.tabTransform:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+CustomScrollView(
+  slivers: [
+    TabTransformHeaderWidget(
+      title: const Text('Engineering Portal'),
+      tabs: const [
+        TabTransformItem(label: 'Architecture', icon: Icons.architecture),
+        TabTransformItem(label: 'AI Models', icon: Icons.psychology, badge: 'v2'),
+      ],
+      selectedIndex: 0,
+      onTabSelected: (index) {},
+      config: TabTransformConfig(
+        expandedHeight: $_tabExpandedHeight,
+        compactTabHeight: $_tabCompactHeight,
+      ),
+    ),
+    // ... list slivers
+  ],
+)''';
+
+      case ExperienceStyle.avatarToProfile:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+CustomScrollView(
+  slivers: [
+    AvatarToProfileHeaderWidget(
+      avatar: const CircleAvatar(radius: 38.0, child: Icon(Icons.person)),
+      name: const Text('Dr. Evelyn Cross'),
+      handle: const Text('@evelyn_cross'),
+      bio: const Text('Principal Neural Systems Engineer'),
+      leading: IconButton(icon: const Icon(Icons.arrow_back), onPressed: () {}),
+      config: AvatarToProfileConfig(
+        initialAvatarDiameter: $_avatarInitialDiameter,
+        compactAvatarDiameter: $_avatarCompactDiameter,
+        arcControlPointBias: $_avatarArcBias,
+      ),
+    ),
+    // ... list slivers
+  ],
+)''';
+
+      case ExperienceStyle.progressiveDisclosure:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+CustomScrollView(
+  slivers: [
+    ProgressiveDisclosureHeaderWidget(
+      title: const Text('Market Discovery'),
+      searchBar: const TextField(decoration: InputDecoration(hintText: 'Search...')),
+      filterRow: const Row(children: [Chip(label: Text('All')), Chip(label: Text('Verified'))]),
+      config: ProgressiveDisclosureConfig(
+        stage1Threshold: $_progressiveStage1,
+        stage2Threshold: $_progressiveStage2,
+      ),
+    ),
+    // ... list slivers
+  ],
+)''';
+
+      case ExperienceStyle.sidewaysCollapse:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+CustomScrollView(
+  slivers: [
+    SidewaysCollapseHeaderWidget(
+      expandedContent: const Text('Global Workspace Hub (Full Width)'),
+      compactRailContent: const Row(children: [Icon(Icons.hub), Text('Hub')]),
+      config: SidewaysCollapseConfig(
+        compactRailWidth: $_sidewaysCompactWidth,
+        collapseThreshold: $_sidewaysCollapseThreshold,
+      ),
+    ),
+    // ... list slivers
+  ],
+)''';
+
+      case ExperienceStyle.expandingSearch:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+CustomScrollView(
+  slivers: [
+    ExpandingSearchHeaderWidget(
+      title: const Text('Global Catalog Hub'),
+      subtitle: const Text('Search among 40,000 components'),
+      hintText: 'Search...',
+      config: ExpandingSearchConfig(
+        expandThreshold: $_expandingSearchThreshold,
+      ),
+    ),
+    // ... list slivers
+  ],
 )''';
     }
   }

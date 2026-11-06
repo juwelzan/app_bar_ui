@@ -181,7 +181,7 @@ void main() {
   );
 
   testWidgets(
-    'Animated Experiences Lab switches across Batches 1, 2, 3, and 4 styles',
+    'Animated Experiences Lab switches across Batches 1, 2, 3, 4, and 5 styles',
     (WidgetTester tester) async {
       await tester.pumpWidget(const ScrollResponsiveDemoApp());
       await tester.pumpAndSettle();
@@ -192,7 +192,7 @@ void main() {
 
       // Verify active batches banner
       expect(
-        find.text('Batches 1–4 Active (Styles 1–20 of 50)'),
+        find.text('Batches 1–5 Active (Styles 1–25 of 50)'),
         findsOneWidget,
       );
       expect(find.text('1. Morphing Split'), findsOneWidget);
@@ -210,75 +210,51 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('Explore Catalogs'), findsOneWidget);
 
-      // Select Batch 3 filter pill
-      final batch3Filter = find.text('Batch 3 (11–15)');
-      await tester.ensureVisible(batch3Filter);
-      await tester.tap(batch3Filter);
+      // Select Batch 5 filter pill
+      final batch5Filter = find.text('Batch 5 (21–25)');
+      await tester.ensureVisible(batch5Filter);
+      await tester.tap(batch5Filter);
       await tester.pumpAndSettle();
 
-      // Style 11: Auto-Hiding Velocity Header
-      final style11 = find.text('11. Auto-Hiding Velocity Header');
-      await tester.ensureVisible(style11);
-      await tester.tap(style11);
+      // Style 21: Animated Tab-Transform Header
+      final style21 = find.text('21. Animated Tab-Transform Header');
+      await tester.ensureVisible(style21);
+      await tester.tap(style21);
       await tester.pumpAndSettle();
-      expect(find.text('Auto-Hiding Velocity Bar'), findsOneWidget);
+      expect(find.text('Engineering Portal'), findsOneWidget);
 
-      // Select Batch 4 filter pill
-      final batch4Filter = find.text('Batch 4 (16–20)');
-      await tester.ensureVisible(batch4Filter);
-      await tester.tap(batch4Filter);
+      // Style 22: Avatar-to-Profile Arc Header
+      final style22 = find.text('22. Avatar-to-Profile Arc Header');
+      await tester.ensureVisible(style22);
+      await tester.tap(style22);
       await tester.pumpAndSettle();
+      expect(find.text('Dr. Evelyn Cross'), findsOneWidget);
 
-      // Style 16: Radial Orbital Action Header
-      final style16 = find.text('16. Radial / Orbital Action Header');
-      await tester.ensureVisible(style16);
-      await tester.tap(style16);
+      // Style 23: Progressive Disclosure Header
+      final style23 = find.text('23. Progressive Disclosure Header');
+      await tester.ensureVisible(style23);
+      await tester.tap(style23);
       await tester.pumpAndSettle();
-      expect(find.text('Dr. Emmett Brown'), findsOneWidget);
+      expect(find.text('Market Discovery'), findsOneWidget);
 
-      // Style 17: Split-Screen Lateral Reveal Header
-      final style17 = find.text('17. Split-Screen Lateral Reveal');
-      await tester.ensureVisible(style17);
-      await tester.tap(style17);
+      // Style 24: Sideways-Collapse Header
+      final style24 = find.text('24. Sideways-Collapse Header');
+      await tester.ensureVisible(style24);
+      await tester.tap(style24);
       await tester.pumpAndSettle();
-      expect(find.text('WEST\nWING'), findsOneWidget);
+      expect(find.text('Global Workspace Hub'), findsOneWidget);
 
-      // Style 18: Magnetic Scroll-Snap Header
-      final style18 = find.text('18. Magnetic Scroll-Snap Header');
-      await tester.ensureVisible(style18);
-      await tester.tap(style18);
+      // Style 25: Expanding Search Transformation
+      final style25 = find.text('25. Expanding Search Transformation');
+      await tester.ensureVisible(style25);
+      await tester.tap(style25);
       await tester.pumpAndSettle();
-      expect(find.text('Magnetic Snap Header'), findsOneWidget);
+      expect(find.text('Global Catalog Hub'), findsOneWidget);
 
-      // Style 19: Parallax Zoom Hero Header
-      final style19 = find.text('19. Parallax Zoom Hero Header');
-      await tester.ensureVisible(style19);
-      await tester.tap(style19);
-      await tester.pumpAndSettle();
-      expect(find.text('Yosemite Valley Peak'), findsWidgets);
-
-      // Drag CustomScrollView up so style chips are well above bottom navigation bar
-      await tester.drag(find.byType(CustomScrollView), const Offset(0.0, -200.0));
-      await tester.pumpAndSettle();
-
-      // Style 20: Pull-Down Disclosure Canvas
-      final chip20 = find.byKey(const ValueKey('style_chip_20'));
-      await tester.scrollUntilVisible(
-        chip20,
-        50.0,
-        scrollable: find.descendant(
-          of: find.byKey(const ValueKey('styles_choice_scroll')),
-          matching: find.byType(Scrollable),
-        ),
-      );
-      await tester.tap(chip20);
-      await tester.pumpAndSettle();
-      expect(find.text('Pull-Down Disclosure Header'), findsOneWidget);
-
-      // Open View Code dialog for Pull-Down Disclosure Canvas
+      // Open View Code dialog for Expanding Search Transformation
       await tester.tap(find.text('View Code'));
       await tester.pumpAndSettle();
-      expect(find.text('Pull-Down Disclosure Canvas Integration Code'), findsOneWidget);
+      expect(find.text('Expanding Search Transformation Integration Code'), findsOneWidget);
       await tester.tap(find.text('Close'));
       await tester.pumpAndSettle();
 

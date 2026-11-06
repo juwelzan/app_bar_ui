@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:ui' show lerpDouble;
 import 'package:flutter/material.dart';
 import 'experience_configs.dart';
@@ -204,7 +205,8 @@ class _ExpandingSearchDelegate extends SliverPersistentHeaderDelegate {
         : (isReducedMotion ? (progress > 0.5 ? 1.0 : 0.0) : progress);
 
     final restingWidth = 44.0;
-    final activeWidth = screenWidth - 32.0;
+    final activeWidth =
+        math.max(restingWidth, screenWidth > 32.0 ? screenWidth - 32.0 : restingWidth);
     final currentSearchWidth =
         lerpDouble(restingWidth, activeWidth, expandFactor) ?? restingWidth;
 

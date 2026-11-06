@@ -138,7 +138,7 @@ class _ProgressiveDisclosureDelegate extends SliverPersistentHeaderDelegate {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      if (actions != null) ...actions!,
+                      ...?actions,
                     ],
                   ),
                 ),
@@ -181,14 +181,10 @@ class _ProgressiveDisclosureDelegate extends SliverPersistentHeaderDelegate {
                     bottom: 4.0,
                     left: 0.0,
                     right: 0.0,
+                    height: 44.0,
                     child: Opacity(
                       opacity: isReducedMotion ? (s3Raw > 0.5 ? 1.0 : 0.0) : t2,
-                      child: OverflowBox(
-                        minHeight: 0.0,
-                        maxHeight: 44.0,
-                        alignment: Alignment.centerLeft,
-                        child: filterRow,
-                      ),
+                      child: filterRow,
                     ),
                   ),
               ],
