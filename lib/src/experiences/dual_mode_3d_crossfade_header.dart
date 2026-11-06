@@ -162,3 +162,4 @@ class _DualMode3DCrossfadeDelegate extends SliverPersistentHeaderDelegate {
         config != oldDelegate.config;
   }
 }
+

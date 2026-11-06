@@ -261,3 +261,4 @@ class _DepthOverlapStackedPanelDelegate extends SliverPersistentHeaderDelegate {
         config != oldDelegate.config;
   }
 }
+

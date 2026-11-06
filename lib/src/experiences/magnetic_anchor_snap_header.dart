@@ -280,3 +280,4 @@ class _MagneticAnchorSnapDelegate extends SliverPersistentHeaderDelegate {
         config != oldDelegate.config;
   }
 }
+

@@ -191,3 +191,4 @@ class _CircularRevealClipper extends CustomClipper<Path> {
     return center != oldClipper.center || radius != oldClipper.radius;
   }
 }
+
