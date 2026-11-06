@@ -121,6 +121,18 @@ export 'src/design_system/models/floating_island/floating_island_header.dart';
 export 'src/design_system/models/immersive_spatial/immersive_spatial_config.dart';
 export 'src/design_system/models/immersive_spatial/immersive_spatial_header.dart';
 
+// Complete AppBar Design System: Models (Batch B)
+export 'src/design_system/models/split_curtain/split_curtain_config.dart';
+export 'src/design_system/models/split_curtain/split_curtain_header.dart';
+export 'src/design_system/models/spatial_3d_flip/spatial_3d_flip_config.dart';
+export 'src/design_system/models/spatial_3d_flip/spatial_3d_flip_header.dart';
+export 'src/design_system/models/vertical_rail_transform/rail_destination.dart';
+export 'src/design_system/models/vertical_rail_transform/vertical_rail_transform_config.dart';
+export 'src/design_system/models/vertical_rail_transform/vertical_rail_transform_header.dart';
+export 'src/design_system/models/radial_dial/radial_dial_item.dart';
+export 'src/design_system/models/radial_dial/radial_dial_config.dart';
+export 'src/design_system/models/radial_dial/radial_dial_header.dart';
+
 import 'app_bar_ui_platform_interface.dart';
 
 /// Legacy platform interface wrapper.

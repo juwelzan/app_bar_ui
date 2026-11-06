@@ -58,6 +58,26 @@ class _DesignSystemGalleryTabState extends State<DesignSystemGalleryTab> {
   double _spatialMgFactor = 0.60;
   double _spatialFocalBlur = 8.0;
 
+  // --- Model 5: Multi-Panel Split Curtain Parameters ---
+  String _curtainLeftTitle = 'Enterprise Cloud';
+  String _curtainLeftSubtitle = 'Multi-Region Ingress';
+  double _curtainSplitGap = 36.0;
+
+  // --- Model 6: 3D Spatial Perspective Flip Parameters ---
+  String _flipFrontTitle = 'Portfolio Vault';
+  String _flipFrontMetric = '\$142,850.00';
+  String _flipBackTitle = 'Instant Quick Actions';
+
+  // --- Model 7: Vertical Rail Transform Parameters ---
+  String _railTitle = 'Engineering Hub';
+  String _railSubtitle = 'Sprint 42 Active';
+  int _railIndex = 0;
+
+  // --- Model 8: Radial Polar Dial Parameters ---
+  String _dialTitle = 'Radial Navigator';
+  double _dialRadius = 88.0;
+  int _dialIndex = 0;
+
   // Telemetry
   int _switchCount = 0;
 
@@ -204,6 +224,60 @@ class _DesignSystemGalleryTabState extends State<DesignSystemGalleryTab> {
             backgroundParallaxFactor: _spatialBgFactor,
             midgroundParallaxFactor: _spatialMgFactor,
             focalDepthBlur: _spatialFocalBlur,
+          ),
+          body: _buildScrollableBody(context),
+        );
+
+      case AppBarModel.multiPanelSplitCurtain:
+        return AppBarEngine.custom(
+          key: ValueKey('l2_curtain_${_curtainLeftTitle}_$_curtainSplitGap'),
+          controller: _appBarController,
+          model: AppBarModel.multiPanelSplitCurtain,
+          configuration: MultiPanelSplitCurtainConfig(
+            leftPanelTitle: _curtainLeftTitle,
+            leftPanelSubtitle: _curtainLeftSubtitle,
+            splitGap: _curtainSplitGap,
+          ),
+          body: _buildScrollableBody(context),
+        );
+
+      case AppBarModel.spatial3DFlip:
+        return AppBarEngine.custom(
+          key: ValueKey('l2_flip_${_flipFrontTitle}_$_flipFrontMetric'),
+          controller: _appBarController,
+          model: AppBarModel.spatial3DFlip,
+          configuration: Spatial3DFlipConfig(
+            frontTitle: _flipFrontTitle,
+            frontMetricValue: _flipFrontMetric,
+            backTitle: _flipBackTitle,
+          ),
+          body: _buildScrollableBody(context),
+        );
+
+      case AppBarModel.verticalRailTransform:
+        return AppBarEngine.custom(
+          key: ValueKey('l2_rail_${_railTitle}_$_railIndex'),
+          controller: _appBarController,
+          model: AppBarModel.verticalRailTransform,
+          configuration: VerticalRailTransformConfig(
+            expandedTitle: _railTitle,
+            expandedSubtitle: _railSubtitle,
+            selectedIndex: _railIndex,
+            onDestinationSelected: (idx) => setState(() => _railIndex = idx),
+          ),
+          body: _buildScrollableBody(context),
+        );
+
+      case AppBarModel.radialDial:
+        return AppBarEngine.custom(
+          key: ValueKey('l2_dial_${_dialTitle}_${_dialRadius}_$_dialIndex'),
+          controller: _appBarController,
+          model: AppBarModel.radialDial,
+          configuration: RadialDialConfig(
+            dialCenterTitle: _dialTitle,
+            arcRadius: _dialRadius,
+            selectedDialIndex: _dialIndex,
+            onDialItemSelected: (idx) => setState(() => _dialIndex = idx),
           ),
           body: _buildScrollableBody(context),
         );
@@ -391,16 +465,22 @@ class _DesignSystemGalleryTabState extends State<DesignSystemGalleryTab> {
   }
 
   Widget _buildModelGrid(ThemeData theme) {
-    final batchAModels = [
+    final allModels = [
+      // Batch A (Models 1–4)
       (AppBarModel.traditionalStructured, 'M1: Traditional Structured', Icons.business_outlined),
       (AppBarModel.fullScreenHero, 'M2: Full-Screen Hero', Icons.movie_outlined),
       (AppBarModel.floatingIsland, 'M3: Floating Dynamic Island', Icons.bubble_chart_outlined),
       (AppBarModel.immersiveSpatial, 'M4: Immersive Spatial Parallax', Icons.view_in_ar_outlined),
+      // Batch B (Models 5–8)
+      (AppBarModel.multiPanelSplitCurtain, 'M5: Multi-Panel Split Curtain', Icons.splitscreen_outlined),
+      (AppBarModel.spatial3DFlip, 'M6: 3D Perspective Flip', Icons.flip_camera_android_outlined),
+      (AppBarModel.verticalRailTransform, 'M7: Vertical Rail Transform', Icons.view_sidebar_outlined),
+      (AppBarModel.radialDial, 'M8: Radial Polar Dial', Icons.explore_outlined),
     ];
 
     return Column(
       children: [
-        for (final item in batchAModels)
+        for (final item in allModels)
           Padding(
             padding: const EdgeInsets.only(bottom: 6.0),
             child: InkWell(
@@ -569,6 +649,88 @@ class _DesignSystemGalleryTabState extends State<DesignSystemGalleryTab> {
             }),
             _buildSliderRow('Focal Depth Blur', _spatialFocalBlur, 0.0, 16.0, (val) {
               setState(() => _spatialFocalBlur = val);
+            }),
+          ],
+        );
+
+      case AppBarModel.multiPanelSplitCurtain:
+        return Column(
+          children: [
+            TextField(
+              decoration: const InputDecoration(labelText: 'Left Panel Title', isDense: true),
+              controller: TextEditingController(text: _curtainLeftTitle)
+                ..selection = TextSelection.collapsed(offset: _curtainLeftTitle.length),
+              onChanged: (val) => setState(() => _curtainLeftTitle = val),
+            ),
+            const SizedBox(height: 10.0),
+            TextField(
+              decoration: const InputDecoration(labelText: 'Left Subtitle', isDense: true),
+              controller: TextEditingController(text: _curtainLeftSubtitle)
+                ..selection = TextSelection.collapsed(offset: _curtainLeftSubtitle.length),
+              onChanged: (val) => setState(() => _curtainLeftSubtitle = val),
+            ),
+            _buildSliderRow('Split Gap', _curtainSplitGap, 16.0, 64.0, (val) {
+              setState(() => _curtainSplitGap = val);
+            }),
+          ],
+        );
+
+      case AppBarModel.spatial3DFlip:
+        return Column(
+          children: [
+            TextField(
+              decoration: const InputDecoration(labelText: 'Front Card Title', isDense: true),
+              controller: TextEditingController(text: _flipFrontTitle)
+                ..selection = TextSelection.collapsed(offset: _flipFrontTitle.length),
+              onChanged: (val) => setState(() => _flipFrontTitle = val),
+            ),
+            const SizedBox(height: 10.0),
+            TextField(
+              decoration: const InputDecoration(labelText: 'Front Metric', isDense: true),
+              controller: TextEditingController(text: _flipFrontMetric)
+                ..selection = TextSelection.collapsed(offset: _flipFrontMetric.length),
+              onChanged: (val) => setState(() => _flipFrontMetric = val),
+            ),
+            const SizedBox(height: 10.0),
+            TextField(
+              decoration: const InputDecoration(labelText: 'Reverse Toolbar Title', isDense: true),
+              controller: TextEditingController(text: _flipBackTitle)
+                ..selection = TextSelection.collapsed(offset: _flipBackTitle.length),
+              onChanged: (val) => setState(() => _flipBackTitle = val),
+            ),
+          ],
+        );
+
+      case AppBarModel.verticalRailTransform:
+        return Column(
+          children: [
+            TextField(
+              decoration: const InputDecoration(labelText: 'Rail Title', isDense: true),
+              controller: TextEditingController(text: _railTitle)
+                ..selection = TextSelection.collapsed(offset: _railTitle.length),
+              onChanged: (val) => setState(() => _railTitle = val),
+            ),
+            const SizedBox(height: 10.0),
+            TextField(
+              decoration: const InputDecoration(labelText: 'Subtitle', isDense: true),
+              controller: TextEditingController(text: _railSubtitle)
+                ..selection = TextSelection.collapsed(offset: _railSubtitle.length),
+              onChanged: (val) => setState(() => _railSubtitle = val),
+            ),
+          ],
+        );
+
+      case AppBarModel.radialDial:
+        return Column(
+          children: [
+            TextField(
+              decoration: const InputDecoration(labelText: 'Dial Center Title', isDense: true),
+              controller: TextEditingController(text: _dialTitle)
+                ..selection = TextSelection.collapsed(offset: _dialTitle.length),
+              onChanged: (val) => setState(() => _dialTitle = val),
+            ),
+            _buildSliderRow('Arc Radius', _dialRadius, 60.0, 120.0, (val) {
+              setState(() => _dialRadius = val);
             }),
           ],
         );
@@ -756,7 +918,7 @@ AppBarEngine.custom(
   ),
   body: const MyContentWidget(),
 )''';
-        } else {
+        } else if (_selectedModel == AppBarModel.immersiveSpatial) {
           return '''
 // Level 2: Configurable Mode (Model 4)
 AppBarEngine.custom(
@@ -768,6 +930,61 @@ AppBarEngine.custom(
     midgroundParallaxFactor: ${_spatialMgFactor.toStringAsFixed(2)},
     focalDepthBlur: ${_spatialFocalBlur.toStringAsFixed(1)},
   ),
+  body: const MyContentWidget(),
+)''';
+        } else if (_selectedModel == AppBarModel.multiPanelSplitCurtain) {
+          return '''
+// Level 2: Configurable Mode (Model 5)
+AppBarEngine.custom(
+  model: AppBarModel.multiPanelSplitCurtain,
+  configuration: MultiPanelSplitCurtainConfig(
+    leftPanelTitle: '$_curtainLeftTitle',
+    leftPanelSubtitle: '$_curtainLeftSubtitle',
+    splitGap: ${_curtainSplitGap.toStringAsFixed(1)},
+  ),
+  body: const MyContentWidget(),
+)''';
+        } else if (_selectedModel == AppBarModel.spatial3DFlip) {
+          return '''
+// Level 2: Configurable Mode (Model 6)
+AppBarEngine.custom(
+  model: AppBarModel.spatial3DFlip,
+  configuration: Spatial3DFlipConfig(
+    frontTitle: '$_flipFrontTitle',
+    frontMetricValue: '$_flipFrontMetric',
+    backTitle: '$_flipBackTitle',
+  ),
+  body: const MyContentWidget(),
+)''';
+        } else if (_selectedModel == AppBarModel.verticalRailTransform) {
+          return '''
+// Level 2: Configurable Mode (Model 7)
+AppBarEngine.custom(
+  model: AppBarModel.verticalRailTransform,
+  configuration: VerticalRailTransformConfig(
+    expandedTitle: '$_railTitle',
+    expandedSubtitle: '$_railSubtitle',
+    selectedIndex: $_railIndex,
+  ),
+  body: const MyContentWidget(),
+)''';
+        } else if (_selectedModel == AppBarModel.radialDial) {
+          return '''
+// Level 2: Configurable Mode (Model 8)
+AppBarEngine.custom(
+  model: AppBarModel.radialDial,
+  configuration: RadialDialConfig(
+    dialCenterTitle: '$_dialTitle',
+    arcRadius: ${_dialRadius.toStringAsFixed(1)},
+    selectedDialIndex: $_dialIndex,
+  ),
+  body: const MyContentWidget(),
+)''';
+        } else {
+          return '''
+// Level 1 / Default Mode
+AppBarEngine(
+  model: AppBarModel.${_selectedModel.name},
   body: const MyContentWidget(),
 )''';
         }

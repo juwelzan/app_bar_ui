@@ -313,6 +313,34 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('Spatial Reality Canvas'), findsWidgets);
 
+      // Switch to Model 5: Multi-Panel Split Curtain
+      final m5 = find.text('M5: Multi-Panel Split Curtain');
+      await Scrollable.ensureVisible(tester.element(m5), alignment: 0.5);
+      await tester.tap(m5);
+      await tester.pumpAndSettle();
+      expect(find.text('Enterprise Cloud'), findsWidgets);
+
+      // Switch to Model 6: 3D Perspective Flip
+      final m6 = find.text('M6: 3D Perspective Flip');
+      await Scrollable.ensureVisible(tester.element(m6), alignment: 0.5);
+      await tester.tap(m6);
+      await tester.pumpAndSettle();
+      expect(find.text('Portfolio Vault'), findsWidgets);
+
+      // Switch to Model 7: Vertical Rail Transform
+      final m7 = find.text('M7: Vertical Rail Transform');
+      await Scrollable.ensureVisible(tester.element(m7), alignment: 0.5);
+      await tester.tap(m7);
+      await tester.pumpAndSettle();
+      expect(find.text('Engineering Hub'), findsWidgets);
+
+      // Switch to Model 8: Radial Polar Dial
+      final m8 = find.text('M8: Radial Polar Dial');
+      await Scrollable.ensureVisible(tester.element(m8), alignment: 0.5);
+      await tester.tap(m8);
+      await tester.pumpAndSettle();
+      expect(find.text('Radial Navigator'), findsWidgets);
+
       // Switch to Level 1: Preset Mode
       final presetChip = find.text('Preset');
       await Scrollable.ensureVisible(tester.element(presetChip), alignment: 0.5);

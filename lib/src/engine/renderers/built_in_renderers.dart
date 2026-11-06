@@ -16,6 +16,10 @@ import '../../design_system/models/traditional_structured/traditional_structured
 import '../../design_system/models/full_screen_hero/full_screen_hero_renderer.dart';
 import '../../design_system/models/floating_island/floating_island_renderer.dart';
 import '../../design_system/models/immersive_spatial/immersive_spatial_renderer.dart';
+import '../../design_system/models/split_curtain/split_curtain_renderer.dart';
+import '../../design_system/models/spatial_3d_flip/spatial_3d_flip_renderer.dart';
+import '../../design_system/models/vertical_rail_transform/vertical_rail_transform_renderer.dart';
+import '../../design_system/models/radial_dial/radial_dial_renderer.dart';
 
 /// Bootstraps all built-in model renderers into the registry.
 void bootstrapBuiltInRenderers(AppBarModelRegistry registry) {
@@ -309,6 +313,28 @@ void bootstrapBuiltInRenderers(AppBarModelRegistry registry) {
     AppBarModel.immersiveSpatial,
     () => const ImmersiveSpatialRenderer(),
     capabilities: const ModelCapabilities(supportsParallax: true, supports3DTransform: true),
+  );
+
+  // --- Complete Design System: Batch B (Models 5–8) ---
+  registry.register(
+    AppBarModel.multiPanelSplitCurtain,
+    () => const MultiPanelSplitCurtainRenderer(),
+    capabilities: const ModelCapabilities(supportsCurtainSplit: true, supportsSticky: true),
+  );
+  registry.register(
+    AppBarModel.spatial3DFlip,
+    () => const Spatial3DFlipRenderer(),
+    capabilities: const ModelCapabilities(supports3DTransform: true, supportsSticky: true),
+  );
+  registry.register(
+    AppBarModel.verticalRailTransform,
+    () => const VerticalRailTransformRenderer(),
+    capabilities: const ModelCapabilities(supportsSticky: true, supportsMultiStage: true),
+  );
+  registry.register(
+    AppBarModel.radialDial,
+    () => const RadialDialRenderer(),
+    capabilities: const ModelCapabilities(supportsShapeMorph: true, supportsSticky: true),
   );
 }
 

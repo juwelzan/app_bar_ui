@@ -180,6 +180,19 @@ enum AppBarModel {
 
   /// Model 4: Multi-plane 3D spatial virtual z-depth with focal blur convergence.
   immersiveSpatial,
+
+  // --- Complete Design System: 20 Autonomous Models (Batch B) ---
+  /// Model 5: Lateral split curtain panels sliding inward to fuse into pinned toolbar.
+  multiPanelSplitCurtain,
+
+  /// Model 6: 3D perspective projection flip between hero card and action toolbar.
+  spatial3DFlip,
+
+  /// Model 7: Adaptive horizontal hero transforming into a compact navigation rail.
+  verticalRailTransform,
+
+  /// Model 8: Polar arc dial distributing interactive nodes along a trigonometric circle.
+  radialDial,
 }
 
 /// Convenience display extensions on [AppBarModel].
@@ -195,6 +208,14 @@ extension AppBarModelDisplayName on AppBarModel {
         return 'Floating Dynamic Island';
       case AppBarModel.immersiveSpatial:
         return 'Immersive Spatial Parallax';
+      case AppBarModel.multiPanelSplitCurtain:
+        return 'Multi-Panel Split Curtain';
+      case AppBarModel.spatial3DFlip:
+        return '3D Perspective Flip';
+      case AppBarModel.verticalRailTransform:
+        return 'Vertical Rail Transform';
+      case AppBarModel.radialDial:
+        return 'Radial Polar Dial';
       case AppBarModel.classic:
         return 'Classic Material';
       default:
