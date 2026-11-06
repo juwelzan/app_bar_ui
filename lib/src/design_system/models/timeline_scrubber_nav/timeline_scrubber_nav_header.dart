@@ -158,29 +158,36 @@ class _TimelineScrubberNavDelegate extends SliverPersistentHeaderDelegate {
                             const Spacer(),
 
                             // Horizontal Connecting Progress Track with Milestone Nodes
-                            SizedBox(
-                              height: 80.0,
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  // Continuous Background Line
-                                  Positioned(
-                                    left: 24.0,
-                                    right: 24.0,
-                                    top: 24.0,
-                                    child: Container(
-                                      height: 3.0,
-                                      decoration: BoxDecoration(
-                                        color: trackColor,
-                                        borderRadius: BorderRadius.circular(1.5),
-                                      ),
-                                    ),
-                                  ),
+                            Expanded(
+                              child: LayoutBuilder(
+                                builder: (context, constraints) {
+                                  final trackWidth = constraints.maxWidth < 460.0 ? 460.0 : constraints.maxWidth;
+                                  return SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: SizedBox(
+                                      width: trackWidth,
+                                      height: 80.0,
+                                      child: Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          // Continuous Background Line
+                                          Positioned(
+                                            left: 24.0,
+                                            right: 24.0,
+                                            top: 24.0,
+                                            child: Container(
+                                              height: 3.0,
+                                              decoration: BoxDecoration(
+                                                color: trackColor,
+                                                borderRadius: BorderRadius.circular(1.5),
+                                              ),
+                                            ),
+                                          ),
 
-                                  // Horizontal Nodes Row
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: List.generate(config.nodes.length, (idx) {
+                                          // Horizontal Nodes Row
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: List.generate(config.nodes.length, (idx) {
                                       final node = config.nodes[idx];
                                       final isSelected = idx == config.activeNodeIndex;
                                       final isDone = node.isCompleted;
@@ -259,6 +266,10 @@ class _TimelineScrubberNavDelegate extends SliverPersistentHeaderDelegate {
                                 ],
                               ),
                             ),
+                          );
+                        },
+                      ),
+                    ),
                           ],
                         ),
                       ),

@@ -144,6 +144,18 @@ export 'src/design_system/models/minimalist_micro_bar/minimalist_micro_bar_heade
 export 'src/design_system/models/profile_identity/profile_identity_config.dart';
 export 'src/design_system/models/profile_identity/profile_identity_header.dart';
 
+// Complete AppBar Design System: Models (Batch D)
+export 'src/design_system/models/expandable_control_center/control_center_tile.dart';
+export 'src/design_system/models/expandable_control_center/expandable_control_center_config.dart';
+export 'src/design_system/models/expandable_control_center/expandable_control_center_header.dart';
+export 'src/design_system/models/timeline_scrubber_nav/timeline_node_item.dart';
+export 'src/design_system/models/timeline_scrubber_nav/timeline_scrubber_nav_config.dart';
+export 'src/design_system/models/timeline_scrubber_nav/timeline_scrubber_nav_header.dart';
+export 'src/design_system/models/search_spotlight/search_spotlight_config.dart';
+export 'src/design_system/models/search_spotlight/search_spotlight_header.dart';
+export 'src/design_system/models/gesture_elastic_canvas/gesture_elastic_canvas_config.dart';
+export 'src/design_system/models/gesture_elastic_canvas/gesture_elastic_canvas_header.dart';
+
 import 'app_bar_ui_platform_interface.dart';
 
 /// Legacy platform interface wrapper.

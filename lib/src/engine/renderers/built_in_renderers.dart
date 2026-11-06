@@ -24,6 +24,10 @@ import '../../design_system/models/editorial_typography/editorial_typography_ren
 import '../../design_system/models/card_deck_stacked/card_deck_stacked_renderer.dart';
 import '../../design_system/models/minimalist_micro_bar/minimalist_micro_bar_renderer.dart';
 import '../../design_system/models/profile_identity/profile_identity_renderer.dart';
+import '../../design_system/models/expandable_control_center/expandable_control_center_renderer.dart';
+import '../../design_system/models/timeline_scrubber_nav/timeline_scrubber_nav_renderer.dart';
+import '../../design_system/models/search_spotlight/search_spotlight_renderer.dart';
+import '../../design_system/models/gesture_elastic_canvas/gesture_elastic_canvas_renderer.dart';
 
 /// Bootstraps all built-in model renderers into the registry.
 void bootstrapBuiltInRenderers(AppBarModelRegistry registry) {
@@ -361,6 +365,28 @@ void bootstrapBuiltInRenderers(AppBarModelRegistry registry) {
     AppBarModel.profileIdentity,
     () => const ProfileIdentityRenderer(),
     capabilities: const ModelCapabilities(supportsShapeMorph: true, supportsSticky: true),
+  );
+
+  // --- Complete Design System: Batch D (Models 13–16) ---
+  registry.register(
+    AppBarModel.expandableControlCenter,
+    () => const ExpandableControlCenterRenderer(),
+    capabilities: const ModelCapabilities(supportsSticky: true, supportsMultiStage: true),
+  );
+  registry.register(
+    AppBarModel.timelineScrubberNav,
+    () => const TimelineScrubberNavRenderer(),
+    capabilities: const ModelCapabilities(supportsSticky: true, supportsMultiStage: true),
+  );
+  registry.register(
+    AppBarModel.searchSpotlight,
+    () => const SearchSpotlightRenderer(),
+    capabilities: const ModelCapabilities(supportsSticky: true, supportsMultiStage: true),
+  );
+  registry.register(
+    AppBarModel.gestureElasticCanvas,
+    () => const GestureElasticCanvasRenderer(),
+    capabilities: const ModelCapabilities(supportsDragToExpand: true, supportsSticky: true, supportsMultiStage: true),
   );
 }
 

@@ -369,6 +369,42 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('Dr. Eleanor Vance'), findsWidgets);
 
+      // Switch to Model 13: Expandable Control Center
+      final m13 = find.text('M13: Expandable Control Center');
+      await Scrollable.ensureVisible(tester.element(m13), alignment: 0.5);
+      await tester.tap(m13);
+      await tester.pumpAndSettle();
+      // ignore: avoid_print
+      print('After M13: ${tester.takeException()}');
+      expect(find.text('Control Center Pro'), findsWidgets);
+
+      // Switch to Model 14: Timeline Scrubber Navigation
+      final m14 = find.text('M14: Timeline Scrubber Navigation');
+      await Scrollable.ensureVisible(tester.element(m14), alignment: 0.5);
+      await tester.tap(m14);
+      await tester.pumpAndSettle();
+      // ignore: avoid_print
+      print('After M14: ${tester.takeException()}');
+      expect(find.text('Project Roadmap'), findsWidgets);
+
+      // Switch to Model 15: Search Spotlight First
+      final m15 = find.text('M15: Search Spotlight First');
+      await Scrollable.ensureVisible(tester.element(m15), alignment: 0.5);
+      await tester.tap(m15);
+      await tester.pumpAndSettle();
+      // ignore: avoid_print
+      print('After M15: ${tester.takeException()}');
+      expect(find.text('Spotlight Search'), findsWidgets);
+
+      // Switch to Model 16: Gesture Elastic Canvas
+      final m16 = find.text('M16: Gesture Elastic Canvas');
+      await Scrollable.ensureVisible(tester.element(m16), alignment: 0.5);
+      await tester.tap(m16);
+      await tester.pumpAndSettle();
+      // ignore: avoid_print
+      print('After M16: ${tester.takeException()}');
+      expect(find.text('Elastic Horizon'), findsWidgets);
+
       // Switch to Level 1: Preset Mode
       final presetChip = find.text('Preset');
       await Scrollable.ensureVisible(tester.element(presetChip), alignment: 0.5);

@@ -104,6 +104,21 @@ class _DesignSystemGalleryTabState extends State<DesignSystemGalleryTab> {
   bool _profileVerified = true;
   double _profileAvatarSize = 72.0;
 
+  // --- Model 13: Expandable Control Center Parameters ---
+  String _hubTitle = 'Control Center Pro';
+
+  // --- Model 14: Timeline Scrubber Navigation Parameters ---
+  String _timelineTitle = 'Project Roadmap';
+  int _activeMilestoneIndex = 2;
+
+  // --- Model 15: Search Spotlight First Parameters ---
+  String _searchPrompt = 'Search repositories, commits, and packages...';
+  int _selectedFilterIndex = 0;
+
+  // --- Model 16: Gesture Elastic Canvas Parameters ---
+  String _elasticCanvasTitle = 'Elastic Horizon';
+  String _elasticMetric = '99.98% Operational';
+
   // Telemetry
   int _switchCount = 0;
 
@@ -367,6 +382,55 @@ class _DesignSystemGalleryTabState extends State<DesignSystemGalleryTab> {
           body: _buildScrollableBody(context),
         );
 
+      case AppBarModel.expandableControlCenter:
+        return AppBarEngine.custom(
+          key: ValueKey('l2_hub_$_hubTitle'),
+          controller: _appBarController,
+          model: AppBarModel.expandableControlCenter,
+          configuration: ExpandableControlCenterConfig(
+            hubTitle: _hubTitle,
+          ),
+          body: _buildScrollableBody(context),
+        );
+
+      case AppBarModel.timelineScrubberNav:
+        return AppBarEngine.custom(
+          key: ValueKey('l2_timeline_${_timelineTitle}_$_activeMilestoneIndex'),
+          controller: _appBarController,
+          model: AppBarModel.timelineScrubberNav,
+          configuration: TimelineScrubberNavConfig(
+            timelineTitle: _timelineTitle,
+            activeNodeIndex: _activeMilestoneIndex,
+            onNodeSelected: (idx) => setState(() => _activeMilestoneIndex = idx),
+          ),
+          body: _buildScrollableBody(context),
+        );
+
+      case AppBarModel.searchSpotlight:
+        return AppBarEngine.custom(
+          key: ValueKey('l2_spotlight_${_searchPrompt}_$_selectedFilterIndex'),
+          controller: _appBarController,
+          model: AppBarModel.searchSpotlight,
+          configuration: SearchSpotlightConfig(
+            searchPrompt: _searchPrompt,
+            selectedFilterIndex: _selectedFilterIndex,
+            onFilterSelected: (idx) => setState(() => _selectedFilterIndex = idx),
+          ),
+          body: _buildScrollableBody(context),
+        );
+
+      case AppBarModel.gestureElasticCanvas:
+        return AppBarEngine.custom(
+          key: ValueKey('l2_elastic_${_elasticCanvasTitle}_$_elasticMetric'),
+          controller: _appBarController,
+          model: AppBarModel.gestureElasticCanvas,
+          configuration: GestureElasticCanvasConfig(
+            canvasTitle: _elasticCanvasTitle,
+            statusMetric: _elasticMetric,
+          ),
+          body: _buildScrollableBody(context),
+        );
+
       default:
         return AppBarEngine(
           controller: _appBarController,
@@ -566,6 +630,11 @@ class _DesignSystemGalleryTabState extends State<DesignSystemGalleryTab> {
       (AppBarModel.cardDeckStacked, 'M10: Card Deck Stacked', Icons.style_outlined),
       (AppBarModel.minimalistMicroBar, 'M11: Minimalist Micro-Bar', Icons.code_outlined),
       (AppBarModel.profileIdentity, 'M12: Profile & Identity Centered', Icons.account_circle_outlined),
+      // Batch D (Models 13–16)
+      (AppBarModel.expandableControlCenter, 'M13: Expandable Control Center', Icons.tune_outlined),
+      (AppBarModel.timelineScrubberNav, 'M14: Timeline Scrubber Navigation', Icons.timeline_outlined),
+      (AppBarModel.searchSpotlight, 'M15: Search Spotlight First', Icons.search_outlined),
+      (AppBarModel.gestureElasticCanvas, 'M16: Gesture Elastic Canvas', Icons.waves_outlined),
     ];
 
     return Column(
@@ -960,6 +1029,69 @@ class _DesignSystemGalleryTabState extends State<DesignSystemGalleryTab> {
           ],
         );
 
+      case AppBarModel.expandableControlCenter:
+        return Column(
+          children: [
+            TextField(
+              decoration: const InputDecoration(labelText: 'Hub Title', isDense: true),
+              controller: TextEditingController(text: _hubTitle)
+                ..selection = TextSelection.collapsed(offset: _hubTitle.length),
+              onChanged: (val) => setState(() => _hubTitle = val),
+            ),
+          ],
+        );
+
+      case AppBarModel.timelineScrubberNav:
+        return Column(
+          children: [
+            TextField(
+              decoration: const InputDecoration(labelText: 'Roadmap Title', isDense: true),
+              controller: TextEditingController(text: _timelineTitle)
+                ..selection = TextSelection.collapsed(offset: _timelineTitle.length),
+              onChanged: (val) => setState(() => _timelineTitle = val),
+            ),
+            const SizedBox(height: 10.0),
+            _buildSliderRow('Active Milestone Index', _activeMilestoneIndex.toDouble(), 0.0, 3.0, (val) {
+              setState(() => _activeMilestoneIndex = val.round());
+            }),
+          ],
+        );
+
+      case AppBarModel.searchSpotlight:
+        return Column(
+          children: [
+            TextField(
+              decoration: const InputDecoration(labelText: 'Search Prompt Placeholder', isDense: true),
+              controller: TextEditingController(text: _searchPrompt)
+                ..selection = TextSelection.collapsed(offset: _searchPrompt.length),
+              onChanged: (val) => setState(() => _searchPrompt = val),
+            ),
+            const SizedBox(height: 10.0),
+            _buildSliderRow('Active Filter Index', _selectedFilterIndex.toDouble(), 0.0, 3.0, (val) {
+              setState(() => _selectedFilterIndex = val.round());
+            }),
+          ],
+        );
+
+      case AppBarModel.gestureElasticCanvas:
+        return Column(
+          children: [
+            TextField(
+              decoration: const InputDecoration(labelText: 'Elastic Canvas Title', isDense: true),
+              controller: TextEditingController(text: _elasticCanvasTitle)
+                ..selection = TextSelection.collapsed(offset: _elasticCanvasTitle.length),
+              onChanged: (val) => setState(() => _elasticCanvasTitle = val),
+            ),
+            const SizedBox(height: 10.0),
+            TextField(
+              decoration: const InputDecoration(labelText: 'Telemetry Metric Label', isDense: true),
+              controller: TextEditingController(text: _elasticMetric)
+                ..selection = TextSelection.collapsed(offset: _elasticMetric.length),
+              onChanged: (val) => setState(() => _elasticMetric = val),
+            ),
+          ],
+        );
+
       default:
         return const Text('Configure parameters in Level 2 mode.');
     }
@@ -1256,6 +1388,49 @@ AppBarEngine.custom(
     bio: '$_profileBio',
     verified: $_profileVerified,
     expandedAvatarSize: ${_profileAvatarSize.toStringAsFixed(1)},
+  ),
+  body: const MyContentWidget(),
+)''';
+        } else if (_selectedModel == AppBarModel.expandableControlCenter) {
+          return '''
+// Level 2: Configurable Mode (Model 13)
+AppBarEngine.custom(
+  model: AppBarModel.expandableControlCenter,
+  configuration: ExpandableControlCenterConfig(
+    hubTitle: '$_hubTitle',
+  ),
+  body: const MyContentWidget(),
+)''';
+        } else if (_selectedModel == AppBarModel.timelineScrubberNav) {
+          return '''
+// Level 2: Configurable Mode (Model 14)
+AppBarEngine.custom(
+  model: AppBarModel.timelineScrubberNav,
+  configuration: TimelineScrubberNavConfig(
+    timelineTitle: '$_timelineTitle',
+    activeNodeIndex: $_activeMilestoneIndex,
+  ),
+  body: const MyContentWidget(),
+)''';
+        } else if (_selectedModel == AppBarModel.searchSpotlight) {
+          return '''
+// Level 2: Configurable Mode (Model 15)
+AppBarEngine.custom(
+  model: AppBarModel.searchSpotlight,
+  configuration: SearchSpotlightConfig(
+    searchPrompt: '$_searchPrompt',
+    selectedFilterIndex: $_selectedFilterIndex,
+  ),
+  body: const MyContentWidget(),
+)''';
+        } else if (_selectedModel == AppBarModel.gestureElasticCanvas) {
+          return '''
+// Level 2: Configurable Mode (Model 16)
+AppBarEngine.custom(
+  model: AppBarModel.gestureElasticCanvas,
+  configuration: GestureElasticCanvasConfig(
+    canvasTitle: '$_elasticCanvasTitle',
+    statusMetric: '$_elasticMetric',
   ),
   body: const MyContentWidget(),
 )''';
