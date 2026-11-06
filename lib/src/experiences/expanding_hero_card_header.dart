@@ -177,3 +177,4 @@ class _ExpandingHeroCardDelegate
         oldDelegate.config != config;
   }
 }
+

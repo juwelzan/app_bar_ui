@@ -185,3 +185,4 @@ class _VerticalFoldingAccordionDelegate
         oldDelegate.config != config;
   }
 }
+

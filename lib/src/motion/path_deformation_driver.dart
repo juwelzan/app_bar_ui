@@ -85,3 +85,4 @@ class LiquidWaveClipper extends CustomClipper<Path> {
         oldClipper.flattenProgress != flattenProgress;
   }
 }
+

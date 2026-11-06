@@ -175,3 +175,4 @@ class _LayeredDepthParallaxDelegate
         oldDelegate.config != config;
   }
 }
+

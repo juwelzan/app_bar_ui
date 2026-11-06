@@ -178,3 +178,4 @@ class _HorizontalSlidingPanelsDelegate extends SliverPersistentHeaderDelegate {
         oldDelegate.config != config;
   }
 }
+

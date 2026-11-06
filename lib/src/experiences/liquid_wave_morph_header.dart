@@ -157,3 +157,4 @@ class _LiquidWaveMorphDelegate extends SliverPersistentHeaderDelegate {
         oldDelegate.config != config;
   }
 }
+
