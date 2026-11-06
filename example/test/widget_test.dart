@@ -181,7 +181,7 @@ void main() {
   );
 
   testWidgets(
-    'Animated Experiences Lab switches across Batches 1, 2, 3, 4, 5, 6, 7, 8, and 9 styles',
+    'Animated Experiences Lab switches across Batches 1, 2, 3, 4, 5, 6, 7, 8, 9, and 10 styles',
     (WidgetTester tester) async {
       await tester.pumpWidget(const ScrollResponsiveDemoApp());
       await tester.pumpAndSettle();
@@ -192,7 +192,7 @@ void main() {
 
       // Verify active batches banner
       expect(
-        find.text('Batches 1–9 Active (Styles 1–45 of 50)'),
+        find.text('All 50 Experiences Active (Batches 1–10 Complete)'),
         findsOneWidget,
       );
       expect(find.text('1. Morphing Split'), findsOneWidget);
@@ -212,75 +212,60 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('Explore Catalogs'), findsOneWidget);
 
-      // Select Batch 8 filter pill
-      final batch8Filter = find.text('Batch 8 (36–40)');
-      await Scrollable.ensureVisible(tester.element(batch8Filter), alignment: 0.5);
+      // Select Batch 10 filter pill
+      final batch10Filter = find.text('Batch 10 (46–50)');
+      await Scrollable.ensureVisible(tester.element(batch10Filter), alignment: 0.5);
       await tester.pumpAndSettle();
-      await tester.tap(batch8Filter);
-      await tester.pumpAndSettle();
-
-      // Style 40: Depth Overlap Stacked Panel Header
-      final style40 = find.text('40. Depth Overlap Stacked Panel Header');
-      await Scrollable.ensureVisible(tester.element(style40), alignment: 0.5);
-      await tester.pumpAndSettle();
-      await tester.tap(style40);
-      await tester.pumpAndSettle();
-      expect(find.text('Primary Cash Reserve'), findsOneWidget);
-
-      // Select Batch 9 filter pill
-      final batch9Filter = find.text('Batch 9 (41–45)');
-      await Scrollable.ensureVisible(tester.element(batch9Filter), alignment: 0.5);
-      await tester.pumpAndSettle();
-      await tester.tap(batch9Filter);
+      await tester.tap(batch10Filter);
       await tester.pumpAndSettle();
 
-      // Style 41: Perspective Depth Velocity Tilt Header
-      final style41 = find.text('41. Perspective Depth Velocity Tilt Header');
-      await Scrollable.ensureVisible(tester.element(style41), alignment: 0.5);
+      // Style 46: Interactive Timeline Scrubber Header
+      final style46 = find.text('46. Interactive Timeline Scrubber Header');
+      await Scrollable.ensureVisible(tester.element(style46), alignment: 0.5);
       await tester.pumpAndSettle();
-      await tester.tap(style41);
+      await tester.tap(style46);
       await tester.pumpAndSettle();
-      expect(find.text('Inertial Perspective Canvas'), findsOneWidget);
+      expect(find.text('Product Roadmap 2026'), findsOneWidget);
 
-      // Style 42: Dispersing Letter Scatter Header
-      final style42 = find.text('42. Dispersing Letter Scatter Header');
-      await Scrollable.ensureVisible(tester.element(style42), alignment: 0.5);
+      // Style 47: Multi-Anchor Dock Header
+      final style47 = find.text('47. Multi-Anchor Dock Header');
+      await Scrollable.ensureVisible(tester.element(style47), alignment: 0.5);
       await tester.pumpAndSettle();
-      await tester.tap(style42);
+      await tester.tap(style47);
       await tester.pumpAndSettle();
-      expect(find.text('D'), findsOneWidget);
+      expect(find.text('Operations Hub'), findsOneWidget);
 
-      // Style 43: Polygon-to-Rectangle Morph Header
-      final style43 = find.text('43. Polygon-to-Rectangle Morph Header');
-      await Scrollable.ensureVisible(tester.element(style43), alignment: 0.5);
+      // Style 48: Sliver-to-Rail Transform Header
+      final style48 = find.text('48. Sliver-to-Rail Transform Header');
+      await Scrollable.ensureVisible(tester.element(style48), alignment: 0.5);
       await tester.pumpAndSettle();
-      await tester.tap(style43);
+      await tester.tap(style48);
       await tester.pumpAndSettle();
-      expect(find.text('Hexagonal Core'), findsOneWidget);
+      expect(find.text('Workspace Navigator'), findsOneWidget);
 
-      // Style 44: Detached Damped Floating Island Header
-      final style44 = find.text('44. Detached Damped Floating Island Header');
-      await Scrollable.ensureVisible(tester.element(style44), alignment: 0.5);
+      // Style 49: Context-Aware Focal Swap Header
+      final style49 = find.text('49. Context-Aware Focal Swap Header');
+      await Scrollable.ensureVisible(tester.element(style49), alignment: 0.5);
       await tester.pumpAndSettle();
-      await tester.tap(style44);
+      await tester.tap(style49);
       await tester.pumpAndSettle();
-      expect(find.text('Floating Recoil Island'), findsOneWidget);
+      expect(find.text('Treasury Portfolio'), findsOneWidget);
 
-      // Style 45: Full Bleed Edge Hero Scale Header
-      final style45 = find.text('45. Full Bleed Edge Hero Scale Header');
-      await Scrollable.ensureVisible(tester.element(style45), alignment: 0.5);
+      // Style 50: Spline Curved Motion Path Header
+      final style50 = find.text('50. Spline Curved Motion Path Header');
+      await Scrollable.ensureVisible(tester.element(style50), alignment: 0.5);
       await tester.pumpAndSettle();
-      await tester.tap(style45);
+      await tester.tap(style50);
       await tester.pumpAndSettle();
-      expect(find.text('Alpine Glacier Ridge'), findsOneWidget);
+      expect(find.text('Infinity Spline Frontier'), findsOneWidget);
 
-      // Open View Code dialog for Full Bleed Edge Hero Scale Header
+      // Open View Code dialog for Spline Curved Motion Path Header
       final viewCodeBtn = find.text('View Code');
       await Scrollable.ensureVisible(tester.element(viewCodeBtn), alignment: 0.5);
       await tester.pumpAndSettle();
       await tester.tap(viewCodeBtn);
       await tester.pumpAndSettle();
-      expect(find.text('Full Bleed Edge Hero Scale Header Integration Code'), findsOneWidget);
+      expect(find.text('Spline Curved Motion Path Header Integration Code'), findsOneWidget);
       await tester.tap(find.text('Close'));
       await tester.pumpAndSettle();
 

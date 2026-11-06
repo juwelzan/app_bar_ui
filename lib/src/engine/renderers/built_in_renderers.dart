@@ -10,6 +10,7 @@ import 'batch6_renderers.dart';
 import 'batch7_renderers.dart';
 import 'batch8_renderers.dart';
 import 'batch9_renderers.dart';
+import 'batch10_renderers.dart';
 import 'standard_renderers.dart';
 
 /// Bootstraps all built-in model renderers into the registry.
@@ -255,32 +256,26 @@ void bootstrapBuiltInRenderers(AppBarModelRegistry registry) {
   // --- Batch 10 (46–50) ---
   registry.register(
     AppBarModel.scrubberTimelineProgress,
-    () => const AdaptablePlaceholderRenderer(),
+    () => const InteractiveTimelineScrubberRenderer(),
   );
   registry.register(
     AppBarModel.multiAnchorDock,
-    () => const AdaptablePlaceholderRenderer(
-      customCapabilities: ModelCapabilities(supportsFloatingDock: true),
-    ),
-    capabilities: const ModelCapabilities(supportsFloatingDock: true),
+    () => const MultiAnchorDockRenderer(),
+    capabilities: const ModelCapabilities(supportsDragToExpand: true),
   );
   registry.register(
     AppBarModel.sliverToRailTransform,
-    () => const AdaptablePlaceholderRenderer(
-      customCapabilities: ModelCapabilities(supportsCustomLayoutBuilder: true),
-    ),
-    capabilities: const ModelCapabilities(supportsCustomLayoutBuilder: true),
+    () => const SliverToRailTransformRenderer(),
   );
   registry.register(
     AppBarModel.contextAwareFocalSwap,
-    () => const AdaptablePlaceholderRenderer(
-      customCapabilities: ModelCapabilities(supportsMultiStage: true),
-    ),
+    () => const ContextAwareFocalSwapRenderer(),
     capabilities: const ModelCapabilities(supportsMultiStage: true),
   );
   registry.register(
     AppBarModel.splineCurvedMotionPath,
-    () => const AdaptablePlaceholderRenderer(),
+    () => const SplineCurvedMotionPathRenderer(),
+    capabilities: const ModelCapabilities(supports3DTransform: true),
   );
 
   // --- Universal Standard ---

@@ -1536,6 +1536,163 @@ class FullBleedHeroScaleConfig extends AppBarMotionConfig {
   final double collapseScaleThreshold;
 }
 
+/// Configuration for Style 46: Interactive Timeline Scrubber Header.
+class InteractiveTimelineScrubberConfig extends AppBarMotionConfig {
+  /// Creates an [InteractiveTimelineScrubberConfig].
+  const InteractiveTimelineScrubberConfig({
+    super.curve = Curves.easeOutCubic,
+    super.reducedMotionCurve = Curves.linear,
+    this.expandedHeight = 220.0,
+    this.collapsedHeight = 64.0,
+    this.trackHeight = 4.0,
+    this.indicatorSize = 16.0,
+    this.milestoneCount = 5,
+    this.showActiveMilestonePill = true,
+  });
+
+  /// Height of the timeline canvas in expanded mode.
+  final double expandedHeight;
+
+  /// Height of the pinned navigation bar when collapsed.
+  final double collapsedHeight;
+
+  /// Thickness of the timeline scrubber track bar.
+  final double trackHeight;
+
+  /// Size of the active milestone indicator dot.
+  final double indicatorSize;
+
+  /// Number of discrete milestone divisions along the timeline.
+  final int milestoneCount;
+
+  /// Whether to display a floating badge with the active milestone title.
+  final bool showActiveMilestonePill;
+}
+
+/// Configuration for Style 47: Multi-Anchor Dock Header.
+class MultiAnchorDockConfig extends AppBarMotionConfig {
+  /// Creates a [MultiAnchorDockConfig].
+  const MultiAnchorDockConfig({
+    super.curve = Curves.easeOutCubic,
+    super.reducedMotionCurve = Curves.linear,
+    this.expandedHeight = 200.0,
+    this.collapsedHeight = 64.0,
+    this.dockElevation = 6.0,
+    this.dockCornerRadius = 24.0,
+    this.recoilDamping = 18.0,
+    this.snapDistance = 32.0,
+  });
+
+  /// Height in resting expanded state.
+  final double expandedHeight;
+
+  /// Height of the docked compact bar.
+  final double collapsedHeight;
+
+  /// Elevation shadow cast by the docked capsule.
+  final double dockElevation;
+
+  /// Corner rounding radius for the action capsule.
+  final double dockCornerRadius;
+
+  /// Spring recoil damping constant.
+  final double recoilDamping;
+
+  /// Proximity distance in pixels to trigger magnetic docking.
+  final double snapDistance;
+}
+
+/// Configuration for Style 48: Sliver-to-Rail Transform Header.
+class SliverToRailTransformConfig extends AppBarMotionConfig {
+  /// Creates a [SliverToRailTransformConfig].
+  const SliverToRailTransformConfig({
+    super.curve = Curves.easeInOutCubic,
+    super.reducedMotionCurve = Curves.linear,
+    this.expandedHeight = 220.0,
+    this.collapsedHeight = 64.0,
+    this.railWidth = 72.0,
+    this.horizontalThreshold = 120.0,
+    this.fadeNavigationLabels = true,
+  });
+
+  /// Height of the horizontal top header when expanded.
+  final double expandedHeight;
+
+  /// Height of the collapsed header bar.
+  final double collapsedHeight;
+
+  /// Target width when adapting into a vertical navigation rail.
+  final double railWidth;
+
+  /// Scroll distance required to complete horizontal-to-vertical transformation.
+  final double horizontalThreshold;
+
+  /// Whether text labels dissolve as items compress into icon rail.
+  final bool fadeNavigationLabels;
+}
+
+/// Configuration for Style 49: Context-Aware Focal Swap Header.
+class ContextAwareFocalSwapConfig extends AppBarMotionConfig {
+  /// Creates a [ContextAwareFocalSwapConfig].
+  const ContextAwareFocalSwapConfig({
+    super.curve = Curves.easeInOutCubic,
+    super.reducedMotionCurve = Curves.linear,
+    this.expandedHeight = 220.0,
+    this.collapsedHeight = 64.0,
+    this.swapThreshold = 100.0,
+    this.crossfadeDuration = const Duration(milliseconds: 250),
+    this.elevationOnSwap = 4.0,
+  });
+
+  /// Height of the primary focal header in expanded state.
+  final double expandedHeight;
+
+  /// Height of the secondary contextual toolbar in collapsed state.
+  final double collapsedHeight;
+
+  /// Scroll distance at which the header cross-fades into the operational toolset.
+  final double swapThreshold;
+
+  /// Cross-fade duration for the focal element replacement.
+  final Duration crossfadeDuration;
+
+  /// Elevation elevation applied when the swapped toolbar is active.
+  final double elevationOnSwap;
+}
+
+/// Configuration for Style 50: Spline Curved Motion Path Header.
+class SplineCurvedMotionPathConfig extends AppBarMotionConfig {
+  /// Creates a [SplineCurvedMotionPathConfig].
+  const SplineCurvedMotionPathConfig({
+    super.curve = Curves.easeInOutCubic,
+    super.reducedMotionCurve = Curves.linear,
+    this.expandedHeight = 240.0,
+    this.collapsedHeight = 64.0,
+    this.controlPointXOffset = 80.0,
+    this.controlPointYOffset = -40.0,
+    this.avatarStartSize = 56.0,
+    this.avatarEndSize = 36.0,
+  });
+
+  /// Height in resting expanded state.
+  final double expandedHeight;
+
+  /// Height of the pinned navigation toolbar when collapsed.
+  final double collapsedHeight;
+
+  /// Horizontal displacement of the cubic Bézier control point from linear chord.
+  final double controlPointXOffset;
+
+  /// Vertical displacement of the cubic Bézier control point.
+  final double controlPointYOffset;
+
+  /// Size of the focal avatar in expanded mode.
+  final double avatarStartSize;
+
+  /// Size of the focal avatar when docked into the pinned bar.
+  final double avatarEndSize;
+}
+
 
 
 

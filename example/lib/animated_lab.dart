@@ -389,6 +389,48 @@ enum ExperienceStyle {
     description:
         'Full-width hero media with overscroll expansion and pinned contract',
     icon: Icons.wallpaper_outlined,
+  ),
+
+  // Batch 10 (Styles 46–50)
+  interactiveTimelineScrubber(
+    id: 46,
+    batch: 10,
+    title: 'Interactive Timeline Scrubber Header',
+    description:
+        'Chronological milestone pins sliding horizontally across an active time track',
+    icon: Icons.timeline_outlined,
+  ),
+  multiAnchorDock(
+    id: 47,
+    batch: 10,
+    title: 'Multi-Anchor Dock Header',
+    description:
+        'Action capsule gliding between dynamic magnetic anchor positions on scroll',
+    icon: Icons.anchor_outlined,
+  ),
+  sliverToRail(
+    id: 48,
+    batch: 10,
+    title: 'Sliver-to-Rail Transform Header',
+    description:
+        'Horizontal top bar compressing labels into compact pinned rail icons',
+    icon: Icons.view_sidebar_outlined,
+  ),
+  contextAwareSwap(
+    id: 49,
+    batch: 10,
+    title: 'Context-Aware Focal Swap Header',
+    description:
+        'Primary hero banner cross-fades into an operational toolset on scroll',
+    icon: Icons.swap_horiz_outlined,
+  ),
+  splineMotionPath(
+    id: 50,
+    batch: 10,
+    title: 'Spline Curved Motion Path Header',
+    description:
+        'Avatar and badges follow curved cubic Bézier spline trajectories in 2D space',
+    icon: Icons.gesture_outlined,
   );
 
   const ExperienceStyle({
@@ -622,6 +664,27 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
   // Style 45 params (Full Bleed Hero Scale)
   double _heroScaleExpandedHeight = 280.0;
   double _heroMaxScale = 1.35;
+
+  // Style 46 params (Interactive Timeline Scrubber)
+  double _timelineExpandedHeight = 220.0;
+  double _timelineTrackHeight = 4.0;
+
+  // Style 47 params (Multi-Anchor Dock)
+  double _dockElevationParam = 6.0;
+  double _dockCornerRadiusParam = 24.0;
+
+  // Style 48 params (Sliver-to-Rail Transform)
+  double _railExpandedHeight = 200.0;
+  int _railSelectedIndex = 0;
+
+  // Style 49 params (Context-Aware Focal Swap)
+  double _focalSwapThreshold = 90.0;
+  double _focalSwapExpandedHeight = 220.0;
+
+  // Style 50 params (Spline Curved Motion Path)
+  double _splineExpandedHeight = 240.0;
+  double _splineControlX = 70.0;
+  double _splineControlY = -35.0;
 
   @override
   void initState() {
@@ -2306,6 +2369,148 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
             maxOverscrollScale: _heroMaxScale,
           ),
         );
+
+      // 46. Interactive Timeline Scrubber Header
+      case ExperienceStyle.interactiveTimelineScrubber:
+        return InteractiveTimelineScrubberHeaderWidget(
+          title: Text(
+            'Product Roadmap 2026',
+            style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
+          ),
+          subtitle: const Text('Q1–Q4 Development & Release Horizon'),
+          milestones: const ['Ideation', 'Alpha', 'Beta', 'Audit', 'Global Launch'],
+          leading: const Icon(Icons.timeline),
+          actions: [
+            IconButton(icon: const Icon(Icons.tune), onPressed: () => _openParameterSheet(context)),
+          ],
+          config: InteractiveTimelineScrubberConfig(
+            expandedHeight: _timelineExpandedHeight,
+            trackHeight: _timelineTrackHeight,
+          ),
+        );
+
+      // 47. Multi-Anchor Dock Header
+      case ExperienceStyle.multiAnchorDock:
+        return MultiAnchorDockHeaderWidget(
+          title: const Text('Operations Hub'),
+          dockContent: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.speed, size: 16.0, color: Colors.amber),
+              const SizedBox(width: 8.0),
+              Text('Live Telemetry (99.98% SLA)', style: theme.textTheme.labelMedium!.copyWith(fontWeight: FontWeight.bold)),
+              const SizedBox(width: 8.0),
+              IconButton(
+                icon: const Icon(Icons.tune, size: 16.0),
+                onPressed: () => _openParameterSheet(context),
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+              ),
+            ],
+          ),
+          expandedBackground: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.hub, size: 48.0, color: theme.colorScheme.primary.withValues(alpha: 0.3)),
+                const SizedBox(height: 8.0),
+                Text('Cluster Node 04', style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold)),
+              ],
+            ),
+          ),
+          leading: const Icon(Icons.cloud_queue),
+          actions: [
+            IconButton(icon: const Icon(Icons.tune), onPressed: () => _openParameterSheet(context)),
+          ],
+          config: MultiAnchorDockConfig(
+            dockElevation: _dockElevationParam,
+            dockCornerRadius: _dockCornerRadiusParam,
+          ),
+        );
+
+      // 48. Sliver-to-Rail Transform Header
+      case ExperienceStyle.sliverToRail:
+        return SliverToRailTransformHeaderWidget(
+          title: const Text('Workspace Navigator'),
+          selectedIndex: _railSelectedIndex,
+          onItemSelected: (index) => setState(() => _railSelectedIndex = index),
+          items: const [
+            RailNavigationItem(icon: Icons.dashboard, label: 'Dash'),
+            RailNavigationItem(icon: Icons.analytics, label: 'Metrics'),
+            RailNavigationItem(icon: Icons.group, label: 'Team'),
+            RailNavigationItem(icon: Icons.settings, label: 'Config'),
+          ],
+          leading: const Icon(Icons.menu),
+          actions: [
+            IconButton(icon: const Icon(Icons.tune), onPressed: () => _openParameterSheet(context)),
+          ],
+          config: SliverToRailTransformConfig(
+            expandedHeight: _railExpandedHeight,
+          ),
+        );
+
+      // 49. Context-Aware Focal Swap Header
+      case ExperienceStyle.contextAwareSwap:
+        return ContextAwareFocalSwapHeaderWidget(
+          primaryHero: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.account_balance, size: 40.0, color: Colors.teal),
+              const SizedBox(height: 6.0),
+              Text('Treasury Portfolio', style: theme.textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.bold)),
+              const SizedBox(height: 4.0),
+              const Text('Scroll down to swap into active trading terminal'),
+            ],
+          ),
+          contextualToolbar: Row(
+            children: [
+              const Icon(Icons.currency_exchange, size: 20.0, color: Colors.teal),
+              const SizedBox(width: 8.0),
+              const Expanded(
+                child: Text('Active Terminal: 48 Pairs Trading', style: TextStyle(fontWeight: FontWeight.bold)),
+              ),
+              IconButton(icon: const Icon(Icons.tune), onPressed: () => _openParameterSheet(context)),
+            ],
+          ),
+          config: ContextAwareFocalSwapConfig(
+            swapThreshold: _focalSwapThreshold,
+            expandedHeight: _focalSwapExpandedHeight,
+          ),
+        );
+
+      // 50. Spline Curved Motion Path Header
+      case ExperienceStyle.splineMotionPath:
+        return SplineCurvedMotionPathHeaderWidget(
+          avatar: Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: LinearGradient(
+                colors: [Colors.purple.shade600, Colors.deepOrange.shade400],
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.deepOrange.withValues(alpha: 0.4),
+                  blurRadius: 10.0,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: const Center(
+              child: Icon(Icons.all_inclusive, color: Colors.white, size: 28.0),
+            ),
+          ),
+          title: const Text('Infinity Spline Frontier'),
+          subtitle: const Text('Bézier arc orbital trajectory gliding to toolbar'),
+          leading: const Icon(Icons.gesture),
+          actions: [
+            IconButton(icon: const Icon(Icons.tune), onPressed: () => _openParameterSheet(context)),
+          ],
+          config: SplineCurvedMotionPathConfig(
+            expandedHeight: _splineExpandedHeight,
+            controlPointXOffset: _splineControlX,
+            controlPointYOffset: _splineControlY,
+          ),
+        );
     }
   }
 
@@ -2336,7 +2541,7 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                'Batches 1–9 Active (Styles 1–45 of 50)',
+                                'All 50 Experiences Active (Batches 1–10 Complete)',
                                 style: theme.textTheme.labelLarge!.copyWith(
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -2372,7 +2577,7 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
                       runSpacing: 6.0,
                       children: [
                         FilterChip(
-                          label: const Text('All (1–40)'),
+                          label: const Text('All (1–50)'),
                           selected: _selectedBatchFilter == 0,
                           onSelected: (_) => setState(() => _selectedBatchFilter = 0),
                         ),
@@ -2420,6 +2625,11 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
                           label: const Text('Batch 9 (41–45)'),
                           selected: _selectedBatchFilter == 9,
                           onSelected: (_) => setState(() => _selectedBatchFilter = 9),
+                        ),
+                        FilterChip(
+                          label: const Text('Batch 10 (46–50)'),
+                          selected: _selectedBatchFilter == 10,
+                          onSelected: (_) => setState(() => _selectedBatchFilter = 10),
                         ),
                       ],
                     ),
@@ -3598,6 +3808,136 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
             },
           ),
         ];
+
+      case ExperienceStyle.interactiveTimelineScrubber:
+        return [
+          Text('Expanded Height: ${_timelineExpandedHeight.toStringAsFixed(0)} px'),
+          Slider(
+            value: _timelineExpandedHeight,
+            min: 160.0,
+            max: 300.0,
+            divisions: 7,
+            onChanged: (val) {
+              setSheetState(() => _timelineExpandedHeight = val);
+              setState(() => _timelineExpandedHeight = val);
+            },
+          ),
+          Text('Track Thickness: ${_timelineTrackHeight.toStringAsFixed(1)} px'),
+          Slider(
+            value: _timelineTrackHeight,
+            min: 2.0,
+            max: 8.0,
+            divisions: 6,
+            onChanged: (val) {
+              setSheetState(() => _timelineTrackHeight = val);
+              setState(() => _timelineTrackHeight = val);
+            },
+          ),
+        ];
+
+      case ExperienceStyle.multiAnchorDock:
+        return [
+          Text('Dock Elevation: ${_dockElevationParam.toStringAsFixed(1)}'),
+          Slider(
+            value: _dockElevationParam,
+            min: 2.0,
+            max: 16.0,
+            divisions: 7,
+            onChanged: (val) {
+              setSheetState(() => _dockElevationParam = val);
+              setState(() => _dockElevationParam = val);
+            },
+          ),
+          Text('Dock Corner Radius: ${_dockCornerRadiusParam.toStringAsFixed(0)} px'),
+          Slider(
+            value: _dockCornerRadiusParam,
+            min: 12.0,
+            max: 32.0,
+            divisions: 5,
+            onChanged: (val) {
+              setSheetState(() => _dockCornerRadiusParam = val);
+              setState(() => _dockCornerRadiusParam = val);
+            },
+          ),
+        ];
+
+      case ExperienceStyle.sliverToRail:
+        return [
+          Text('Expanded Height: ${_railExpandedHeight.toStringAsFixed(0)} px'),
+          Slider(
+            value: _railExpandedHeight,
+            min: 160.0,
+            max: 280.0,
+            divisions: 6,
+            onChanged: (val) {
+              setSheetState(() => _railExpandedHeight = val);
+              setState(() => _railExpandedHeight = val);
+            },
+          ),
+        ];
+
+      case ExperienceStyle.contextAwareSwap:
+        return [
+          Text('Focal Swap Threshold: ${_focalSwapThreshold.toStringAsFixed(0)} px'),
+          Slider(
+            value: _focalSwapThreshold,
+            min: 50.0,
+            max: 150.0,
+            divisions: 10,
+            onChanged: (val) {
+              setSheetState(() => _focalSwapThreshold = val);
+              setState(() => _focalSwapThreshold = val);
+            },
+          ),
+          Text('Expanded Height: ${_focalSwapExpandedHeight.toStringAsFixed(0)} px'),
+          Slider(
+            value: _focalSwapExpandedHeight,
+            min: 160.0,
+            max: 300.0,
+            divisions: 7,
+            onChanged: (val) {
+              setSheetState(() => _focalSwapExpandedHeight = val);
+              setState(() => _focalSwapExpandedHeight = val);
+            },
+          ),
+        ];
+
+      case ExperienceStyle.splineMotionPath:
+        return [
+          Text('Bézier Spline X Arc: ${_splineControlX.toStringAsFixed(0)} px'),
+          Slider(
+            value: _splineControlX,
+            min: 20.0,
+            max: 140.0,
+            divisions: 6,
+            onChanged: (val) {
+              setSheetState(() => _splineControlX = val);
+              setState(() => _splineControlX = val);
+            },
+          ),
+          Text('Bézier Spline Y Arc: ${_splineControlY.toStringAsFixed(0)} px'),
+          Slider(
+            value: _splineControlY,
+            min: -80.0,
+            max: 0.0,
+            divisions: 8,
+            onChanged: (val) {
+              setSheetState(() => _splineControlY = val);
+              setState(() => _splineControlY = val);
+            },
+          ),
+          Text('Expanded Height: ${_splineExpandedHeight.toStringAsFixed(0)} px'),
+          Slider(
+            value: _splineExpandedHeight,
+            min: 180.0,
+            max: 320.0,
+            divisions: 7,
+            onChanged: (val) {
+              setSheetState(() => _splineExpandedHeight = val);
+              setState(() => _splineExpandedHeight = val);
+            },
+          ),
+        ];
     }
   }
 
@@ -4544,6 +4884,99 @@ CustomScrollView(
       config: FullBleedHeroScaleConfig(
         expandedHeight: $_heroScaleExpandedHeight,
         maxOverscrollScale: $_heroMaxScale,
+      ),
+    ),
+    // ... list slivers
+  ],
+)''';
+
+      case ExperienceStyle.interactiveTimelineScrubber:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+CustomScrollView(
+  slivers: [
+    InteractiveTimelineScrubberHeaderWidget(
+      title: const Text('Product Roadmap 2026'),
+      milestones: const ['Ideation', 'Alpha', 'Beta', 'Launch'],
+      config: InteractiveTimelineScrubberConfig(
+        expandedHeight: $_timelineExpandedHeight,
+        trackHeight: $_timelineTrackHeight,
+      ),
+    ),
+    // ... list slivers
+  ],
+)''';
+
+      case ExperienceStyle.multiAnchorDock:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+CustomScrollView(
+  slivers: [
+    MultiAnchorDockHeaderWidget(
+      title: const Text('Operations Hub'),
+      dockContent: const Text('Active Telemetry Capsule'),
+      config: MultiAnchorDockConfig(
+        dockElevation: $_dockElevationParam,
+        dockCornerRadius: $_dockCornerRadiusParam,
+      ),
+    ),
+    // ... list slivers
+  ],
+)''';
+
+      case ExperienceStyle.sliverToRail:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+CustomScrollView(
+  slivers: [
+    SliverToRailTransformHeaderWidget(
+      title: const Text('Workspace Navigator'),
+      items: const [
+        RailNavigationItem(icon: Icons.dashboard, label: 'Dash'),
+        RailNavigationItem(icon: Icons.analytics, label: 'Metrics'),
+      ],
+      config: SliverToRailTransformConfig(
+        expandedHeight: $_railExpandedHeight,
+      ),
+    ),
+    // ... list slivers
+  ],
+)''';
+
+      case ExperienceStyle.contextAwareSwap:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+CustomScrollView(
+  slivers: [
+    ContextAwareFocalSwapHeaderWidget(
+      primaryHero: const Text('Treasury Portfolio Summary'),
+      contextualToolbar: const Text('Trading Execution Dock'),
+      config: ContextAwareFocalSwapConfig(
+        swapThreshold: $_focalSwapThreshold,
+        expandedHeight: $_focalSwapExpandedHeight,
+      ),
+    ),
+    // ... list slivers
+  ],
+)''';
+
+      case ExperienceStyle.splineMotionPath:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+CustomScrollView(
+  slivers: [
+    SplineCurvedMotionPathHeaderWidget(
+      avatar: const CircleAvatar(child: Icon(Icons.star)),
+      title: const Text('Infinity Spline Frontier'),
+      config: SplineCurvedMotionPathConfig(
+        expandedHeight: $_splineExpandedHeight,
+        controlPointXOffset: $_splineControlX,
+        controlPointYOffset: $_splineControlY,
       ),
     ),
     // ... list slivers

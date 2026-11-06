@@ -102,6 +102,11 @@ export 'src/experiences/dispersing_letter_scatter_header.dart';
 export 'src/experiences/polygon_to_rectangle_morph_header.dart';
 export 'src/experiences/detached_damped_island_header.dart';
 export 'src/experiences/full_bleed_hero_scale_header.dart';
+export 'src/experiences/interactive_timeline_scrubber_header.dart';
+export 'src/experiences/multi_anchor_dock_header.dart';
+export 'src/experiences/sliver_to_rail_transform_header.dart';
+export 'src/experiences/context_aware_focal_swap_header.dart';
+export 'src/experiences/spline_curved_motion_path_header.dart';
 
 import 'app_bar_ui_platform_interface.dart';
 

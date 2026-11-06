@@ -84,6 +84,11 @@ void main() {
         AppBarModel.polygonToRectangleMorph,
         AppBarModel.detachedDampedIsland,
         AppBarModel.fullBleedHeroScale,
+        AppBarModel.scrubberTimelineProgress,
+        AppBarModel.multiAnchorDock,
+        AppBarModel.sliverToRailTransform,
+        AppBarModel.contextAwareFocalSwap,
+        AppBarModel.splineCurvedMotionPath,
       ];
 
       for (final model in modelsToTest) {
