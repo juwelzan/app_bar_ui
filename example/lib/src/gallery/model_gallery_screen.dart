@@ -205,22 +205,6 @@ class _ModelGalleryScreenState extends State<ModelGalleryScreen> {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                const SizedBox(width: 6.0),
-                Flexible(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0),
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.surfaceContainerHighest,
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                    child: Text(
-                      meta.motionStyle,
-                      style: const TextStyle(fontSize: 9.5, fontWeight: FontWeight.w600),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ),
               ],
             ),
             const SizedBox(height: 10.0),
@@ -249,26 +233,54 @@ class _ModelGalleryScreenState extends State<ModelGalleryScreen> {
             ),
             const SizedBox(height: 10.0),
 
-            // Behavior Pills
+            // Behavior & Motion Pills
             Wrap(
               spacing: 6.0,
               runSpacing: 4.0,
-              children: meta.supportedBehaviors.map((b) {
-                return Container(
+              children: [
+                Container(
                   padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0),
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.surfaceContainerLowest,
+                    color: theme.colorScheme.secondaryContainer.withValues(alpha: 0.5),
                     borderRadius: BorderRadius.circular(4.0),
-                    border: Border.all(
-                      color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.animation, size: 11.0, color: theme.colorScheme.onSecondaryContainer),
+                      const SizedBox(width: 3.0),
+                      Flexible(
+                        child: Text(
+                          meta.motionStyle,
+                          style: TextStyle(
+                            fontSize: 9.5,
+                            fontWeight: FontWeight.w600,
+                            color: theme.colorScheme.onSecondaryContainer,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                ...meta.supportedBehaviors.map((b) {
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.surfaceContainerLowest,
+                      borderRadius: BorderRadius.circular(4.0),
+                      border: Border.all(
+                        color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
+                      ),
                     ),
-                  ),
-                  child: Text(
-                    b,
-                    style: TextStyle(fontSize: 10.0, color: theme.colorScheme.onSurface),
-                  ),
-                );
-              }).toList(),
+                    child: Text(
+                      b,
+                      style: TextStyle(fontSize: 10.0, color: theme.colorScheme.onSurface),
+                    ),
+                  );
+                }),
+              ],
             ),
             const Spacer(),
 

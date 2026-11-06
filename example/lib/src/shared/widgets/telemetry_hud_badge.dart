@@ -71,13 +71,16 @@ class TelemetryHudBadge extends StatelessWidget {
             children: [
               const Icon(Icons.speed, size: 16.0, color: Color(0xFF10B981)),
               const SizedBox(width: 6.0),
-              Text(
-                'Universal Engine Telemetry',
-                style: theme.textTheme.labelMedium!.copyWith(
-                  fontWeight: FontWeight.bold,
+              Expanded(
+                child: Text(
+                  'Universal Engine Telemetry',
+                  style: theme.textTheme.labelMedium!.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
-              const Spacer(),
+              const SizedBox(width: 6.0),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0),
                 decoration: BoxDecoration(

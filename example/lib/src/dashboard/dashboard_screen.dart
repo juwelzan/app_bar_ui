@@ -173,12 +173,16 @@ AppBarEngine.custom(
                 ),
               ),
               const SizedBox(width: 8.0),
-              Text(
-                'Production Component Engine',
-                style: TextStyle(
-                  fontSize: 12.0,
-                  fontWeight: FontWeight.w600,
-                  color: theme.colorScheme.primary,
+              Expanded(
+                child: Text(
+                  'Production Component Engine',
+                  style: TextStyle(
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.w600,
+                    color: theme.colorScheme.primary,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],

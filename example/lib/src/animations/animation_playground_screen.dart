@@ -123,11 +123,15 @@ class _AnimationPlaygroundScreenState extends State<AnimationPlaygroundScreen>
                       children: [
                         const Icon(Icons.tune, size: 18.0),
                         const SizedBox(width: 8.0),
-                        Text(
-                          'Scrub Progress: ${(_manualProgress * 100).toStringAsFixed(1)}%',
-                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14.0),
+                        Expanded(
+                          child: Text(
+                            'Scrub Progress: ${(_manualProgress * 100).toStringAsFixed(1)}%',
+                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
-                        const Spacer(),
+                        const SizedBox(width: 8.0),
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 3.0),
                           decoration: BoxDecoration(
@@ -136,10 +140,10 @@ class _AnimationPlaygroundScreenState extends State<AnimationPlaygroundScreen>
                           ),
                           child: Text(
                             _manualProgress < 0.2
-                                ? 'EXPANDED STATE'
+                                ? 'EXPANDED'
                                 : _manualProgress > 0.8
-                                    ? 'COLLAPSED STATE'
-                                    : 'INTERMEDIATE MORPH',
+                                    ? 'COLLAPSED'
+                                    : 'INTERMEDIATE',
                             style: TextStyle(
                               fontSize: 10.0,
                               fontWeight: FontWeight.bold,
@@ -208,15 +212,25 @@ class _AnimationPlaygroundScreenState extends State<AnimationPlaygroundScreen>
                       children: [
                         const Text('Target Model: ', style: TextStyle(fontWeight: FontWeight.w600)),
                         const SizedBox(width: 8.0),
-                        DropdownButton<AppBarModel>(
-                          value: _model,
-                          underline: const SizedBox.shrink(),
-                          items: AppBarModel.values.map((m) {
-                            return DropdownMenuItem(value: m, child: Text(m.displayName));
-                          }).toList(),
-                          onChanged: (val) {
-                            if (val != null) setState(() => _model = val);
-                          },
+                        Expanded(
+                          child: DropdownButton<AppBarModel>(
+                            isExpanded: true,
+                            value: _model,
+                            underline: const SizedBox.shrink(),
+                            items: AppBarModel.values.map((m) {
+                              return DropdownMenuItem(
+                                value: m,
+                                child: Text(
+                                  m.displayName,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(fontSize: 13.0),
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (val) {
+                              if (val != null) setState(() => _model = val);
+                            },
+                          ),
                         ),
                       ],
                     ),
@@ -227,15 +241,25 @@ class _AnimationPlaygroundScreenState extends State<AnimationPlaygroundScreen>
                       children: [
                         const Text('Physics Curve: ', style: TextStyle(fontWeight: FontWeight.w600)),
                         const SizedBox(width: 8.0),
-                        DropdownButton<Curve>(
-                          value: _selectedCurve,
-                          underline: const SizedBox.shrink(),
-                          items: _availableCurves.entries.map((entry) {
-                            return DropdownMenuItem(value: entry.value, child: Text(entry.key));
-                          }).toList(),
-                          onChanged: (val) {
-                            if (val != null) setState(() => _selectedCurve = val);
-                          },
+                        Expanded(
+                          child: DropdownButton<Curve>(
+                            isExpanded: true,
+                            value: _selectedCurve,
+                            underline: const SizedBox.shrink(),
+                            items: _availableCurves.entries.map((entry) {
+                              return DropdownMenuItem(
+                                value: entry.value,
+                                child: Text(
+                                  entry.key,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(fontSize: 13.0),
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (val) {
+                              if (val != null) setState(() => _selectedCurve = val);
+                            },
+                          ),
                         ),
                       ],
                     ),
@@ -246,15 +270,25 @@ class _AnimationPlaygroundScreenState extends State<AnimationPlaygroundScreen>
                       children: [
                         const Text('Transition Type: ', style: TextStyle(fontWeight: FontWeight.w600)),
                         const SizedBox(width: 8.0),
-                        DropdownButton<ModelTransitionType>(
-                          value: _transitionType,
-                          underline: const SizedBox.shrink(),
-                          items: ModelTransitionType.values.map((t) {
-                            return DropdownMenuItem(value: t, child: Text(t.name.toUpperCase()));
-                          }).toList(),
-                          onChanged: (val) {
-                            if (val != null) setState(() => _transitionType = val);
-                          },
+                        Expanded(
+                          child: DropdownButton<ModelTransitionType>(
+                            isExpanded: true,
+                            value: _transitionType,
+                            underline: const SizedBox.shrink(),
+                            items: ModelTransitionType.values.map((t) {
+                              return DropdownMenuItem(
+                                value: t,
+                                child: Text(
+                                  t.name.toUpperCase(),
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(fontSize: 13.0),
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (val) {
+                              if (val != null) setState(() => _transitionType = val);
+                            },
+                          ),
                         ),
                       ],
                     ),

@@ -173,53 +173,116 @@ class _ResponsivePlatformLabScreenState extends State<ResponsivePlatformLabScree
           const SizedBox(height: 8.0),
 
           // Row 2: Text Scaler Slider, Platform Selector & Telemetry Information
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: DropdownButton<SimulatedPlatform>(
-                  value: _platform,
-                  underline: const SizedBox.shrink(),
-                  items: SimulatedPlatform.values.map((sp) {
-                    return DropdownMenuItem(value: sp, child: Text(sp.label, style: const TextStyle(fontSize: 11.5)));
-                  }).toList(),
-                  onChanged: (val) {
-                    if (val != null) setState(() => _platform = val);
-                  },
-                ),
-              ),
-              const SizedBox(width: 10.0),
-              Text('Scale: ${_textScale.toStringAsFixed(1)}x', style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold)),
-              Expanded(
-                child: Slider(
-                  value: _textScale,
-                  min: 0.8,
-                  max: 2.0,
-                  divisions: 6,
-                  onChanged: (val) => setState(() => _textScale = val),
-                ),
-              ),
-              const SizedBox(width: 10.0),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 3.0),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.primary.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(6.0),
-                ),
-                child: Text(
-                  'Host: $hostPlatform (Verified)',
-                  style: TextStyle(
-                    fontSize: 10.5,
-                    fontWeight: FontWeight.bold,
-                    color: theme.colorScheme.primary,
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final isNarrow = constraints.maxWidth < 600.0;
+              if (isNarrow) {
+                return Column(
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          child: DropdownButton<SimulatedPlatform>(
+                            value: _platform,
+                            underline: const SizedBox.shrink(),
+                            items: SimulatedPlatform.values.map((sp) {
+                              return DropdownMenuItem(value: sp, child: Text(sp.label, style: const TextStyle(fontSize: 11.5)));
+                            }).toList(),
+                            onChanged: (val) {
+                              if (val != null) setState(() => _platform = val);
+                            },
+                          ),
+                        ),
+                        const Spacer(),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 3.0),
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.primary.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(6.0),
+                          ),
+                          child: Text(
+                            'Host: $hostPlatform (Verified)',
+                            style: TextStyle(
+                              fontSize: 10.5,
+                              fontWeight: FontWeight.bold,
+                              color: theme.colorScheme.primary,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 6.0),
+                    Row(
+                      children: [
+                        Text('Scale: ${_textScale.toStringAsFixed(1)}x', style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold)),
+                        Expanded(
+                          child: Slider(
+                            value: _textScale,
+                            min: 0.8,
+                            max: 2.0,
+                            divisions: 6,
+                            onChanged: (val) => setState(() => _textScale = val),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                );
+              }
+              return Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: DropdownButton<SimulatedPlatform>(
+                      value: _platform,
+                      underline: const SizedBox.shrink(),
+                      items: SimulatedPlatform.values.map((sp) {
+                        return DropdownMenuItem(value: sp, child: Text(sp.label, style: const TextStyle(fontSize: 11.5)));
+                      }).toList(),
+                      onChanged: (val) {
+                        if (val != null) setState(() => _platform = val);
+                      },
+                    ),
                   ),
-                ),
-              ),
-            ],
+                  const SizedBox(width: 10.0),
+                  Text('Scale: ${_textScale.toStringAsFixed(1)}x', style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold)),
+                  Expanded(
+                    child: Slider(
+                      value: _textScale,
+                      min: 0.8,
+                      max: 2.0,
+                      divisions: 6,
+                      onChanged: (val) => setState(() => _textScale = val),
+                    ),
+                  ),
+                  const SizedBox(width: 10.0),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 3.0),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.primary.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(6.0),
+                    ),
+                    child: Text(
+                      'Host: $hostPlatform (Verified)',
+                      style: TextStyle(
+                        fontSize: 10.5,
+                        fontWeight: FontWeight.bold,
+                        color: theme.colorScheme.primary,
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         ],
       ),
