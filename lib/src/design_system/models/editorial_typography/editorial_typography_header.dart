@@ -113,31 +113,32 @@ class _EditorialTypographyDelegate extends SliverPersistentHeaderDelegate {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           // Metadata Row: Category pill, Issue, Date
-                          Row(
-                            children: [
-                              if (leading != null) ...[
-                                leading!,
-                                const SizedBox(width: 8.0),
-                              ],
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 3.0),
-                                decoration: BoxDecoration(
-                                  color: accent.withValues(alpha: 0.12),
-                                  borderRadius: BorderRadius.circular(4.0),
-                                ),
-                                child: Text(
-                                  config.category.toUpperCase(),
-                                  style: TextStyle(
-                                    fontSize: 10.0,
-                                    fontWeight: FontWeight.w800,
-                                    letterSpacing: 1.0,
-                                    color: accent,
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: [
+                                if (leading != null) ...[
+                                  leading!,
+                                  const SizedBox(width: 8.0),
+                                ],
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 3.0),
+                                  decoration: BoxDecoration(
+                                    color: accent.withValues(alpha: 0.12),
+                                    borderRadius: BorderRadius.circular(4.0),
+                                  ),
+                                  child: Text(
+                                    config.category.toUpperCase(),
+                                    style: TextStyle(
+                                      fontSize: 10.0,
+                                      fontWeight: FontWeight.w800,
+                                      letterSpacing: 1.0,
+                                      color: accent,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(width: 10.0),
-                              Expanded(
-                                child: Text(
+                                const SizedBox(width: 10.0),
+                                Text(
                                   '${config.editionNumber} • ${config.publicationDate}',
                                   style: theme.textTheme.bodySmall!.copyWith(
                                     color: theme.colorScheme.onSurfaceVariant,
@@ -146,9 +147,12 @@ class _EditorialTypographyDelegate extends SliverPersistentHeaderDelegate {
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
-                              ),
-                              ...?actions,
-                            ],
+                                if (actions != null && actions!.isNotEmpty) ...[
+                                  const SizedBox(width: 8.0),
+                                  ...actions!,
+                                ],
+                              ],
+                            ),
                           ),
                           const SizedBox(height: 12.0),
 
@@ -222,17 +226,20 @@ class _EditorialTypographyDelegate extends SliverPersistentHeaderDelegate {
                                     overflow: TextOverflow.ellipsis,
                                   ),
                             ),
-                            IconButton(
-                              icon: const Icon(Icons.bookmark_border, size: 20.0),
-                              onPressed: () {},
-                              tooltip: 'Bookmark',
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.share_outlined, size: 20.0),
-                              onPressed: () {},
-                              tooltip: 'Share',
-                            ),
-                            ...?actions,
+                            if (actions != null && actions!.isNotEmpty)
+                              ...actions!
+                            else ...[
+                              IconButton(
+                                icon: const Icon(Icons.bookmark_border, size: 20.0),
+                                onPressed: () {},
+                                tooltip: 'Bookmark',
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.share_outlined, size: 20.0),
+                                onPressed: () {},
+                                tooltip: 'Share',
+                              ),
+                            ],
                           ],
                         ),
                       ),

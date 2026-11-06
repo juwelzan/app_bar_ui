@@ -214,6 +214,8 @@ class _SplitCurtainDelegate extends SliverPersistentHeaderDelegate {
                       children: [
                         if (config.actionButtons.isNotEmpty)
                           ...config.actionButtons
+                        else if (actions != null && actions!.isNotEmpty)
+                          ...actions!
                         else ...[
                           IconButton(
                             icon: const Icon(Icons.search, size: 20.0),
@@ -225,7 +227,6 @@ class _SplitCurtainDelegate extends SliverPersistentHeaderDelegate {
                             onPressed: () {},
                             tooltip: 'Settings',
                           ),
-                          ...?actions,
                         ],
                       ],
                     ),
@@ -272,6 +273,8 @@ class _SplitCurtainDelegate extends SliverPersistentHeaderDelegate {
             ),
             if (config.actionButtons.isNotEmpty)
               ...config.actionButtons
+            else if (actions != null && actions!.isNotEmpty)
+              ...actions!
             else ...[
               IconButton(
                 icon: const Icon(Icons.search, size: 18.0),
@@ -283,7 +286,6 @@ class _SplitCurtainDelegate extends SliverPersistentHeaderDelegate {
                 onPressed: () {},
                 tooltip: 'More',
               ),
-              ...?actions,
             ],
           ],
         ),

@@ -201,8 +201,10 @@ class _TimelineScrubberNavDelegate extends SliverPersistentHeaderDelegate {
                                         borderRadius: BorderRadius.circular(10.0),
                                         child: SizedBox(
                                           width: 100.0,
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
+                                          child: SingleChildScrollView(
+                                            physics: const NeverScrollableScrollPhysics(),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
                                             children: [
                                               // Node Circle
                                               Container(
@@ -260,6 +262,7 @@ class _TimelineScrubberNavDelegate extends SliverPersistentHeaderDelegate {
                                                 overflow: TextOverflow.ellipsis,
                                               ),
                                             ],
+                                            ),
                                           ),
                                         ),
                                       );

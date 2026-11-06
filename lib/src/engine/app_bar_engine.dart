@@ -313,6 +313,8 @@ class _AppBarEngineState extends State<AppBarEngine>
       effectiveTitle = Text(
         widget.title as String,
         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
       );
     } else {
       effectiveTitle = userConfig.content.title;
@@ -325,6 +327,8 @@ class _AppBarEngineState extends State<AppBarEngine>
       effectiveSubtitle = Text(
         widget.subtitle as String,
         style: const TextStyle(fontSize: 13.0),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
       );
     } else {
       effectiveSubtitle = userConfig.content.subtitle;

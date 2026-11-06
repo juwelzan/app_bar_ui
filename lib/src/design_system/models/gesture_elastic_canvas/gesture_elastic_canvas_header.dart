@@ -119,35 +119,39 @@ class _GestureElasticCanvasDelegate extends SliverPersistentHeaderDelegate {
                                   const SizedBox(width: 8.0),
                                 ],
                                 const Spacer(),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 3.0),
-                                  decoration: BoxDecoration(
-                                    color: accent.withValues(alpha: 0.12),
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Container(
-                                        width: 6.0,
-                                        height: 6.0,
-                                        decoration: BoxDecoration(
-                                          color: accent,
-                                          shape: BoxShape.circle,
+                                if (MediaQuery.sizeOf(context).width > 420 &&
+                                    MediaQuery.textScalerOf(context).scale(1.0) <= 1.2) ...[
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 3.0),
+                                    decoration: BoxDecoration(
+                                      color: accent.withValues(alpha: 0.12),
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Container(
+                                          width: 6.0,
+                                          height: 6.0,
+                                          decoration: BoxDecoration(
+                                            color: accent,
+                                            shape: BoxShape.circle,
+                                          ),
                                         ),
-                                      ),
-                                      const SizedBox(width: 6.0),
-                                      Text(
-                                        config.statusMetric,
-                                        style: TextStyle(
-                                          fontSize: 10.5,
-                                          fontWeight: FontWeight.bold,
-                                          color: accent,
+                                        const SizedBox(width: 6.0),
+                                        Text(
+                                          config.statusMetric,
+                                          style: TextStyle(
+                                            fontSize: 10.5,
+                                            fontWeight: FontWeight.bold,
+                                            color: accent,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
+                                  const SizedBox(width: 8.0),
+                                ],
                                 ...?actions,
                               ],
                             ),
@@ -187,12 +191,16 @@ class _GestureElasticCanvasDelegate extends SliverPersistentHeaderDelegate {
                                 children: [
                                   Icon(Icons.keyboard_arrow_down, size: 16.0, color: accent),
                                   const SizedBox(width: 6.0),
-                                  Text(
-                                    'Elastic Pull Gesture Active',
-                                    style: TextStyle(
-                                      fontSize: 11.0,
-                                      fontWeight: FontWeight.w600,
-                                      color: theme.colorScheme.onSurface,
+                                  Flexible(
+                                    child: Text(
+                                      'Elastic Pull Gesture Active',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: 11.0,
+                                        fontWeight: FontWeight.w600,
+                                        color: theme.colorScheme.onSurface,
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -233,28 +241,35 @@ class _GestureElasticCanvasDelegate extends SliverPersistentHeaderDelegate {
                                       overflow: TextOverflow.ellipsis,
                                     ),
                               ),
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0),
-                                decoration: BoxDecoration(
-                                  color: accent.withValues(alpha: 0.15),
-                                  borderRadius: BorderRadius.circular(6.0),
-                                ),
-                                child: Text(
-                                  config.statusMetric,
-                                  style: TextStyle(
-                                    fontSize: 10.0,
-                                    fontWeight: FontWeight.bold,
-                                    color: accent,
+                              if (MediaQuery.sizeOf(context).width > 420 &&
+                                  MediaQuery.textScalerOf(context).scale(1.0) <= 1.2) ...[
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0),
+                                  decoration: BoxDecoration(
+                                    color: accent.withValues(alpha: 0.15),
+                                    borderRadius: BorderRadius.circular(6.0),
+                                  ),
+                                  child: Text(
+                                    config.statusMetric,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontSize: 10.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: accent,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(width: 4.0),
-                              IconButton(
-                                icon: const Icon(Icons.refresh, size: 20.0),
-                                onPressed: config.onRefreshTriggered,
-                                tooltip: 'Trigger Refresh',
-                              ),
-                              ...?actions,
+                                const SizedBox(width: 4.0),
+                              ],
+                              if (actions != null && actions!.isNotEmpty)
+                                ...actions!
+                              else
+                                IconButton(
+                                  icon: const Icon(Icons.refresh, size: 20.0),
+                                  onPressed: config.onRefreshTriggered,
+                                  tooltip: 'Trigger Refresh',
+                                ),
                             ],
                           ),
                         ),

@@ -211,31 +211,35 @@ class _ExpandableControlCenterDelegate extends SliverPersistentHeaderDelegate {
                                               ),
                                               const SizedBox(width: 8.0),
                                               Expanded(
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      tile.title,
-                                                      style: TextStyle(
-                                                        fontSize: 12.0,
-                                                        fontWeight: FontWeight.bold,
-                                                        color: tile.isActive ? activeColor : theme.colorScheme.onSurface,
-                                                      ),
-                                                      maxLines: 1,
-                                                      overflow: TextOverflow.ellipsis,
-                                                    ),
-                                                    if (tile.subtitle != null)
+                                                child: SingleChildScrollView(
+                                                  physics: const NeverScrollableScrollPhysics(),
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    children: [
                                                       Text(
-                                                        tile.subtitle!,
+                                                        tile.title,
                                                         style: TextStyle(
-                                                          fontSize: 10.0,
-                                                          color: theme.colorScheme.onSurfaceVariant,
+                                                          fontSize: 12.0,
+                                                          fontWeight: FontWeight.bold,
+                                                          color: tile.isActive ? activeColor : theme.colorScheme.onSurface,
                                                         ),
                                                         maxLines: 1,
                                                         overflow: TextOverflow.ellipsis,
                                                       ),
-                                                  ],
+                                                      if (tile.subtitle != null)
+                                                        Text(
+                                                          tile.subtitle!,
+                                                          style: TextStyle(
+                                                            fontSize: 10.0,
+                                                            color: theme.colorScheme.onSurfaceVariant,
+                                                          ),
+                                                          maxLines: 1,
+                                                          overflow: TextOverflow.ellipsis,
+                                                        ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
                                             ],

@@ -106,79 +106,87 @@ class _MinimalistMicroBarDelegate extends SliverPersistentHeaderDelegate {
                   : null,
             ),
             padding: const EdgeInsets.symmetric(horizontal: 14.0),
-            child: Row(
-              children: [
-                if (leading != null) ...[
-                  leading!,
-                  const SizedBox(width: 6.0),
-                ] else ...[
-                  const Icon(Icons.terminal, size: 16.0),
-                  const SizedBox(width: 6.0),
-                ],
-                // Monospace Micro-Breadcrumbs
-                Expanded(
-                  child: title ??
+            child: Builder(
+              builder: (context) {
+                final textScale = MediaQuery.textScalerOf(context).scale(1.0);
+                final screenWidth = MediaQuery.sizeOf(context).width;
+                final isCompact = textScale > 1.3 || screenWidth < 360.0;
+
+                return Row(
+                  children: [
+                    if (leading != null) ...[
+                      leading!,
+                      const SizedBox(width: 6.0),
+                    ] else ...[
+                      const Icon(Icons.terminal, size: 16.0),
+                      const SizedBox(width: 6.0),
+                    ],
+                    // Monospace Micro-Breadcrumbs
+                    Expanded(
+                      child: title ??
+                          Text(
+                            config.pathBreadcrumb,
+                            style: TextStyle(
+                              fontFamily: config.monospace ? 'monospace' : null,
+                              fontSize: 11.5,
+                              fontWeight: FontWeight.w600,
+                              color: theme.colorScheme.onSurface,
+                              letterSpacing: -0.2,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                    ),
+                    if (!isCompact && config.documentStatus != null && progress < 0.7) ...[
+                      const SizedBox(width: 8.0),
+                      Opacity(
+                        opacity: (1.0 - progress * 1.4).clamp(0.0, 1.0),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 1.5),
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.surfaceContainerHighest,
+                            borderRadius: BorderRadius.circular(4.0),
+                          ),
+                          child: Text(
+                            config.documentStatus!,
+                            style: TextStyle(
+                              fontSize: 9.5,
+                              fontFamily: config.monospace ? 'monospace' : null,
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                    if (!isCompact && config.readingEta != null) ...[
+                      const SizedBox(width: 8.0),
                       Text(
-                        config.pathBreadcrumb,
+                        config.readingEta!,
                         style: TextStyle(
-                          fontFamily: config.monospace ? 'monospace' : null,
-                          fontSize: 11.5,
-                          fontWeight: FontWeight.w600,
-                          color: theme.colorScheme.onSurface,
-                          letterSpacing: -0.2,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                ),
-                if (config.documentStatus != null && progress < 0.7) ...[
-                  const SizedBox(width: 8.0),
-                  Opacity(
-                    opacity: (1.0 - progress * 1.4).clamp(0.0, 1.0),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 1.5),
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.surfaceContainerHighest,
-                        borderRadius: BorderRadius.circular(4.0),
-                      ),
-                      child: Text(
-                        config.documentStatus!,
-                        style: TextStyle(
-                          fontSize: 9.5,
-                          fontFamily: config.monospace ? 'monospace' : null,
-                          color: theme.colorScheme.onSurfaceVariant,
+                          fontSize: 10.5,
+                          color: theme.colorScheme.outline,
                         ),
                       ),
-                    ),
-                  ),
-                ],
-                if (config.readingEta != null) ...[
-                  const SizedBox(width: 8.0),
-                  Text(
-                    config.readingEta!,
-                    style: TextStyle(
-                      fontSize: 10.5,
-                      color: theme.colorScheme.outline,
-                    ),
-                  ),
-                ],
-                if (config.showProgressDot) ...[
-                  const SizedBox(width: 8.0),
-                  Container(
-                    width: 7.0,
-                    height: 7.0,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Color.lerp(
-                        theme.colorScheme.outlineVariant,
-                        theme.colorScheme.primary,
-                        progress,
+                    ],
+                    if (config.showProgressDot) ...[
+                      const SizedBox(width: 8.0),
+                      Container(
+                        width: 7.0,
+                        height: 7.0,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Color.lerp(
+                            theme.colorScheme.outlineVariant,
+                            theme.colorScheme.primary,
+                            progress,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ],
-                ...?actions,
-              ],
+                    ],
+                    ...?actions,
+                  ],
+                );
+              },
             ),
           ),
         ),

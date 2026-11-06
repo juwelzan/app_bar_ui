@@ -186,38 +186,43 @@ class _AdaptiveBreakpointNavDelegate extends SliverPersistentHeaderDelegate {
   Widget _buildExpandedCanvas(ThemeData theme) {
     switch (profile) {
       case AdaptiveBreakpointProfile.compact:
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                if (leading != null) ...[
-                  leading!,
-                  const SizedBox(width: 8.0),
-                ],
-                Expanded(
-                  child: Text(
-                    config.title,
-                    style: theme.textTheme.titleMedium!.copyWith(
-                      fontWeight: FontWeight.bold,
+        return SingleChildScrollView(
+          physics: const NeverScrollableScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  if (leading != null) ...[
+                    leading!,
+                    const SizedBox(width: 8.0),
+                  ],
+                  Expanded(
+                    child: Text(
+                      config.title,
+                      style: theme.textTheme.titleMedium!.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                   ),
-                ),
-                _buildProfileBadge(theme),
-                ...?actions,
-              ],
-            ),
-            const Spacer(),
-            Text(
-              config.compactSubtitle,
-              style: theme.textTheme.bodyMedium!.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
+                  _buildProfileBadge(theme),
+                  ...?actions,
+                ],
               ),
-            ),
-            const SizedBox(height: 8.0),
-          ],
+              const SizedBox(height: 12.0),
+              Text(
+                config.compactSubtitle,
+                style: theme.textTheme.bodyMedium!.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 8.0),
+            ],
+          ),
         );
 
       case AdaptiveBreakpointProfile.medium:

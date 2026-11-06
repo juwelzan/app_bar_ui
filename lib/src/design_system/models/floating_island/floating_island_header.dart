@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../../../widgets/sliver_widget_marker.dart';
 import 'floating_island_config.dart';
@@ -84,9 +85,12 @@ class _FloatingIslandDelegate extends SliverPersistentHeaderDelegate {
     final progress = collapseRange > 0.0 ? (shrinkOffset / collapseRange).clamp(0.0, 1.0) : 0.0;
 
     // Margin & geometry interpolation
-    final currentMargin = isReducedMotion
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final maxAllowedMargin = (screenWidth - 200.0) / 2;
+    final nominalMargin = isReducedMotion
         ? (progress > 0.5 ? config.compactHorizontalMargin : config.expandedHorizontalMargin)
         : (config.expandedHorizontalMargin + (config.compactHorizontalMargin - config.expandedHorizontalMargin) * progress);
+    final currentMargin = nominalMargin.clamp(8.0, math.max(8.0, maxAllowedMargin)).toDouble();
 
     final currentHeight = isReducedMotion
         ? (progress > 0.5 ? config.compactHeight : config.expandedHeight)
@@ -99,69 +103,77 @@ class _FloatingIslandDelegate extends SliverPersistentHeaderDelegate {
       color: Colors.transparent,
       padding: EdgeInsets.only(top: topPadding + 4.0),
       alignment: Alignment.topCenter,
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: currentMargin),
-        child: Material(
-          elevation: currentElevation,
-          borderRadius: BorderRadius.circular(config.borderRadius),
-          color: config.backgroundColor ?? theme.colorScheme.surfaceContainerHighest,
-          surfaceTintColor: config.surfaceTint,
-          shadowColor: theme.shadowColor.withValues(alpha: 0.25),
-          child: Container(
-            height: currentHeight,
-            padding: const EdgeInsets.symmetric(horizontal: 14.0),
-            alignment: Alignment.center,
-            child: Row(
-              children: [
-                // Leading Island Icon or Custom Leading
-                if (leading != null)
-                  leading!
-                else
-                  Container(
-                    width: 32.0,
-                    height: 32.0,
-                    decoration: BoxDecoration(
-                      color: accent.withValues(alpha: 0.15),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(config.leadingIcon, size: 18.0, color: accent),
-                  ),
-
-                const SizedBox(width: 10.0),
-
-                // Island Title & Telemetry
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      DefaultTextStyle(
-                        style: theme.textTheme.titleSmall!.copyWith(
-                          fontWeight: FontWeight.bold,
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 800.0),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: currentMargin),
+            child: Material(
+              elevation: currentElevation,
+              borderRadius: BorderRadius.circular(config.borderRadius),
+              color: config.backgroundColor ?? theme.colorScheme.surfaceContainerHighest,
+              surfaceTintColor: config.surfaceTint,
+              shadowColor: theme.shadowColor.withValues(alpha: 0.25),
+              child: Container(
+                height: currentHeight,
+                padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                alignment: Alignment.center,
+                child: Row(
+                  children: [
+                    // Leading Island Icon or Custom Leading
+                    if (leading != null)
+                      leading!
+                    else
+                      Container(
+                        width: 32.0,
+                        height: 32.0,
+                        decoration: BoxDecoration(
+                          color: accent.withValues(alpha: 0.15),
+                          shape: BoxShape.circle,
                         ),
-                        child: title ??
-                            Text(
-                              config.islandTitle,
+                        child: Icon(config.leadingIcon, size: 18.0, color: accent),
+                      ),
+
+                    const SizedBox(width: 10.0),
+
+                    // Island Title & Telemetry
+                    Expanded(
+                      child: SingleChildScrollView(
+                        physics: const NeverScrollableScrollPhysics(),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            DefaultTextStyle.merge(
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.titleSmall!.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                              child: title ??
+                                  Text(
+                                    config.islandTitle,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                             ),
-                      ),
-                      if (progress < 0.6 && config.islandSubtitle != null)
-                        Opacity(
-                          opacity: (1.0 - progress / 0.6).clamp(0.0, 1.0),
-                          child: Text(
-                            config.islandSubtitle!,
-                            style: theme.textTheme.bodySmall!.copyWith(
-                              fontSize: 11.0,
-                              color: theme.colorScheme.onSurfaceVariant,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                            if (progress < 0.6 && config.islandSubtitle != null && MediaQuery.textScalerOf(context).scale(1.0) <= 1.4)
+                              Opacity(
+                                opacity: (1.0 - progress / 0.6).clamp(0.0, 1.0),
+                                child: Text(
+                                  config.islandSubtitle!,
+                                  style: theme.textTheme.bodySmall!.copyWith(
+                                    fontSize: 11.0,
+                                    color: theme.colorScheme.onSurfaceVariant,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                          ],
                         ),
-                    ],
-                  ),
-                ),
+                      ),
+                    ),
 
                 // Optional Status Chips
                 if (config.statusChips.isNotEmpty && progress < 0.5)
@@ -190,7 +202,9 @@ class _FloatingIslandDelegate extends SliverPersistentHeaderDelegate {
           ),
         ),
       ),
-    );
+    ),
+  ),
+);
   }
 
   @override
