@@ -176,7 +176,17 @@ class _CascadingProgressivePinDelegate extends SliverPersistentHeaderDelegate {
                 top: searchY,
                 width: searchPinned ? 134.0 : (safeWidth - 32.0),
                 height: 38.0,
-                child: searchBar,
+                child: ClipRect(
+                  child: OverflowBox(
+                    minWidth: 0.0,
+                    maxWidth: safeWidth - 32.0,
+                    alignment: Alignment.centerLeft,
+                    child: SizedBox(
+                      width: safeWidth - 32.0,
+                      child: searchBar,
+                    ),
+                  ),
+                ),
               ),
 
               // 3. Progressively Pinning Status Pills

@@ -181,7 +181,7 @@ void main() {
   );
 
   testWidgets(
-    'Animated Experiences Lab switches across Batches 1, 2, 3, 4, 5, 6, and 7 styles',
+    'Animated Experiences Lab switches across Batches 1, 2, 3, 4, 5, 6, 7, and 8 styles',
     (WidgetTester tester) async {
       await tester.pumpWidget(const ScrollResponsiveDemoApp());
       await tester.pumpAndSettle();
@@ -192,78 +192,80 @@ void main() {
 
       // Verify active batches banner
       expect(
-        find.text('Batches 1–7 Active (Styles 1–35 of 50)'),
+        find.text('Batches 1–8 Active (Styles 1–40 of 50)'),
         findsOneWidget,
       );
       expect(find.text('1. Morphing Split'), findsOneWidget);
 
       // Select Batch 2 filter pill
       final batch2Filter = find.text('Batch 2 (6–10)');
-      await tester.ensureVisible(batch2Filter);
+      await Scrollable.ensureVisible(tester.element(batch2Filter), alignment: 0.5);
+      await tester.pumpAndSettle();
       await tester.tap(batch2Filter);
       await tester.pumpAndSettle();
 
       // Style 6: Horizontal Sliding Panels
       final style6 = find.text('6. Horizontal Sliding Panels');
-      await tester.ensureVisible(style6);
+      await Scrollable.ensureVisible(tester.element(style6), alignment: 0.5);
+      await tester.pumpAndSettle();
       await tester.tap(style6);
       await tester.pumpAndSettle();
       expect(find.text('Explore Catalogs'), findsOneWidget);
 
-      // Select Batch 7 filter pill
-      final batch7Filter = find.text('Batch 7 (31–35)');
-      await Scrollable.ensureVisible(tester.element(batch7Filter), alignment: 0.5);
+      // Select Batch 8 filter pill
+      final batch8Filter = find.text('Batch 8 (36–40)');
+      await Scrollable.ensureVisible(tester.element(batch8Filter), alignment: 0.5);
       await tester.pumpAndSettle();
-      await tester.tap(batch7Filter);
+      await tester.tap(batch8Filter);
       await tester.pumpAndSettle();
 
-      // Style 31: Floating Orbit Header
-      final style31 = find.text('31. Floating Orbit Header');
-      await Scrollable.ensureVisible(tester.element(style31), alignment: 0.5);
+      // Style 36: Magnetic Anchor Snap Header
+      final style36 = find.text('36. Magnetic Anchor Snap Header');
+      await Scrollable.ensureVisible(tester.element(style36), alignment: 0.5);
       await tester.pumpAndSettle();
-      await tester.tap(style31);
+      await tester.tap(style36);
       await tester.pumpAndSettle();
-      expect(find.text('Deep Space Observatory'), findsOneWidget);
+      expect(find.text('Quantum Kinetic Grid'), findsOneWidget);
 
-      // Style 32: Accordion Multi-Tier Header
-      final style32 = find.text('32. Accordion Multi-Tier Header');
-      await Scrollable.ensureVisible(tester.element(style32), alignment: 0.5);
+      // Style 37: Cascading Progressive Pin Header
+      final style37 = find.text('37. Cascading Progressive Pin Header');
+      await Scrollable.ensureVisible(tester.element(style37), alignment: 0.5);
       await tester.pumpAndSettle();
-      await tester.tap(style32);
+      await tester.tap(style37);
       await tester.pumpAndSettle();
-      expect(find.text('Multi-Slice Operations Hub'), findsOneWidget);
+      expect(find.text('Security Ops Center'), findsOneWidget);
 
-      // Style 33: Lateral Curtain Reveal Header
-      final style33 = find.text('33. Lateral Curtain Reveal Header');
-      await Scrollable.ensureVisible(tester.element(style33), alignment: 0.5);
+      // Style 38: Dual-Mode 3D Crossfade Header
+      final style38 = find.text('38. Dual-Mode 3D Crossfade Header');
+      await Scrollable.ensureVisible(tester.element(style38), alignment: 0.5);
       await tester.pumpAndSettle();
-      await tester.tap(style33);
+      await tester.tap(style38);
       await tester.pumpAndSettle();
-      expect(find.text('Grand Philharmonic Auditorium'), findsOneWidget);
+      expect(find.text('Symphony in D Minor'), findsOneWidget);
 
-      // Style 34: Parallax Zoom Hero Header
-      final style34 = find.text('34. Parallax Zoom Hero Header');
-      await Scrollable.ensureVisible(tester.element(style34), alignment: 0.5);
+      // Style 39: Radial Circular Reveal Header
+      final style39 = find.text('39. Radial Circular Reveal Header');
+      await Scrollable.ensureVisible(tester.element(style39), alignment: 0.5);
       await tester.pumpAndSettle();
-      await tester.tap(style34);
+      await tester.tap(style39);
       await tester.pumpAndSettle();
-      expect(find.text('Matterhorn Extreme Ridge'), findsOneWidget);
+      expect(find.text('Global Radial Explorer'), findsOneWidget);
 
-      // Style 35: Dynamic Sine Wave Collapse Header
-      final style35 = find.text('35. Dynamic Sine Wave Collapse Header');
-      await Scrollable.ensureVisible(tester.element(style35), alignment: 0.5);
+      // Style 40: Depth Overlap Stacked Panel Header
+      final style40 = find.text('40. Depth Overlap Stacked Panel Header');
+      await Scrollable.ensureVisible(tester.element(style40), alignment: 0.5);
       await tester.pumpAndSettle();
-      await tester.tap(style35);
+      await tester.tap(style40);
       await tester.pumpAndSettle();
-      expect(find.text('Maritime Tidal Wave Monitor'), findsOneWidget);
+      expect(find.text('Primary Cash Reserve'), findsOneWidget);
 
-      // Open View Code dialog for Dynamic Sine Wave Collapse Header
+      // Open View Code dialog for Depth Overlap Stacked Panel Header
       final viewCodeBtn = find.text('View Code');
       await Scrollable.ensureVisible(tester.element(viewCodeBtn), alignment: 0.5);
       await tester.pumpAndSettle();
       await tester.tap(viewCodeBtn);
       await tester.pumpAndSettle();
-      expect(find.text('Dynamic Sine Wave Collapse Header Integration Code'), findsOneWidget);
+      expect(find.text('Depth Overlap Stacked Panel Header Integration Code'), findsOneWidget);
       await tester.tap(find.text('Close'));
       await tester.pumpAndSettle();
 

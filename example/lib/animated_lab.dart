@@ -305,6 +305,48 @@ enum ExperienceStyle {
     description:
         'Oscillatory sine wave bottom edge dampens amplitude to flat pinned toolbar',
     icon: Icons.waves_outlined,
+  ),
+
+  // Batch 8 (Styles 36–40)
+  magneticAnchorSnap(
+    id: 36,
+    batch: 8,
+    title: 'Magnetic Anchor Snap Header',
+    description:
+        'Controls and hero badge snap into anchor points with simulated magnetic force',
+    icon: Icons.gps_fixed_outlined,
+  ),
+  cascadingProgressivePin(
+    id: 37,
+    batch: 8,
+    title: 'Cascading Progressive Pin Header',
+    description:
+        'Title, search, and action controls latch sequentially at cascading milestones',
+    icon: Icons.push_pin_outlined,
+  ),
+  dualMode3DCrossfade(
+    id: 38,
+    batch: 8,
+    title: 'Dual-Mode 3D Crossfade Header',
+    description:
+        'Perspective 3D flip revolving between two completely distinct widget trees',
+    icon: Icons.flip_camera_android_outlined,
+  ),
+  radialCircularClipperReveal(
+    id: 39,
+    batch: 8,
+    title: 'Radial Circular Reveal Header',
+    description:
+        'Rich content radiates through an animated circular aperture at focal point',
+    icon: Icons.album_outlined,
+  ),
+  depthOverlapStackedPanel(
+    id: 40,
+    batch: 8,
+    title: 'Depth Overlap Stacked Panel Header',
+    description:
+        'Three depth-overlapping cards step forward sequentially on scroll',
+    icon: Icons.layers_outlined,
   );
 
   const ExperienceStyle({
@@ -498,6 +540,27 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
   // Style 35 params (Dynamic Sine Wave)
   double _dynamicWaveAmplitude = 18.0;
   double _dynamicWaveFrequency = 2.0;
+
+  // Style 36 params (Magnetic Anchor Snap)
+  double _magneticExpandedHeight = 210.0;
+  double _magneticSnapThreshold = 100.0;
+
+  // Style 37 params (Cascading Progressive Pin)
+  double _cascadingExpandedHeight = 240.0;
+  double _cascadingTitlePinOffset = 40.0;
+  double _cascadingSearchPinOffset = 85.0;
+
+  // Style 38 params (Dual-Mode 3D Crossfade)
+  double _dualModeThreshold = 110.0;
+  double _dualModePerspective = 0.0015;
+
+  // Style 39 params (Radial Circular Reveal)
+  double _circularRevealThreshold = 120.0;
+  double _circularMinRadius = 24.0;
+
+  // Style 40 params (Depth Overlap Stacked Panel)
+  double _stackedPanelOverlap = 28.0;
+  double _stackedDepthScale = 0.90;
 
   @override
   void initState() {
@@ -1886,6 +1949,182 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
             waveFrequency: _dynamicWaveFrequency,
           ),
         );
+
+      // 36. Magnetic Anchor Snap Header
+      case ExperienceStyle.magneticAnchorSnap:
+        return MagneticAnchorSnapHeaderWidget(
+          heroBadge: const CircleAvatar(
+            radius: 26.0,
+            backgroundColor: Colors.teal,
+            child: Icon(Icons.flash_on, color: Colors.white),
+          ),
+          heroTitle: const Text('Quantum Kinetic Grid'),
+          heroSubtitle: const Text('Magnetic Lattice Sector 9'),
+          dockedLeading: IconButton(icon: const Icon(Icons.menu), onPressed: () {}),
+          dockedActions: [
+            IconButton(icon: const Icon(Icons.tune), onPressed: () => _openParameterSheet(context)),
+          ],
+          config: MagneticAnchorSnapConfig(
+            expandedHeight: _magneticExpandedHeight,
+            snapThreshold: _magneticSnapThreshold,
+          ),
+        );
+
+      // 37. Cascading Progressive Pin Header
+      case ExperienceStyle.cascadingProgressivePin:
+        return CascadingProgressivePinHeaderWidget(
+          title: const Text('Security Ops Center'),
+          searchBar: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(19.0),
+            ),
+            child: const Row(
+              children: [
+                Icon(Icons.search, size: 18.0),
+                SizedBox(width: 6.0),
+                Expanded(
+                  child: Text(
+                    'Search firewalls...',
+                    style: TextStyle(fontSize: 12.0),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          statusPills: const Row(
+            children: [
+              Chip(avatar: Icon(Icons.check_circle, size: 16.0, color: Colors.green), label: Text('Active')),
+              SizedBox(width: 6.0),
+              Chip(avatar: Icon(Icons.shield, size: 16.0, color: Colors.blue), label: Text('Zero Threats')),
+              SizedBox(width: 6.0),
+              Chip(avatar: Icon(Icons.speed, size: 16.0, color: Colors.orange), label: Text('1.2 TB/s')),
+            ],
+          ),
+          leading: IconButton(icon: const Icon(Icons.menu), onPressed: () {}),
+          config: CascadingProgressivePinConfig(
+            expandedHeight: _cascadingExpandedHeight,
+            titlePinOffset: _cascadingTitlePinOffset,
+            searchPinOffset: _cascadingSearchPinOffset,
+          ),
+        );
+
+      // 38. Dual-Mode 3D Crossfade Header
+      case ExperienceStyle.dualMode3DCrossfade:
+        return DualMode3DCrossfadeHeaderWidget(
+          primaryMode: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              children: [
+                const Icon(Icons.album, size: 54.0, color: Colors.deepPurpleAccent),
+                const SizedBox(width: 14.0),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Symphony in D Minor', style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold)),
+                      const Text('Berlin Philharmonic • 24-bit FLAC Master'),
+                      const SizedBox(height: 6.0),
+                      const LinearProgressIndicator(value: 0.65),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          secondaryMode: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              children: [
+                const Icon(Icons.play_circle_fill, size: 28.0, color: Colors.deepPurpleAccent),
+                const SizedBox(width: 8.0),
+                Text('Now Playing: Symphony in D Minor', style: theme.textTheme.titleSmall!.copyWith(fontWeight: FontWeight.bold)),
+                const Spacer(),
+                IconButton(icon: const Icon(Icons.tune), onPressed: () => _openParameterSheet(context)),
+              ],
+            ),
+          ),
+          config: DualMode3DCrossfadeConfig(
+            transitionThreshold: _dualModeThreshold,
+            perspective: _dualModePerspective,
+          ),
+        );
+
+      // 39. Radial Circular Reveal Header
+      case ExperienceStyle.radialCircularClipperReveal:
+        return RadialCircularClipperRevealHeaderWidget(
+          compactBar: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              children: [
+                const Icon(Icons.menu),
+                const SizedBox(width: 12.0),
+                Text('Global Radial Explorer', style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold)),
+                const Spacer(),
+                IconButton(icon: const Icon(Icons.tune), onPressed: () => _openParameterSheet(context)),
+              ],
+            ),
+          ),
+          expandedCanvas: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [theme.colorScheme.primaryContainer, theme.colorScheme.tertiaryContainer],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Radial Aperture Discovery Canvas', style: theme.textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 6.0),
+                const Text('Circular iris contracts into origin anchor as you scroll upward'),
+              ],
+            ),
+          ),
+          config: RadialCircularClipperRevealConfig(
+            revealThreshold: _circularRevealThreshold,
+            minRadius: _circularMinRadius,
+          ),
+        );
+
+      // 40. Depth Overlap Stacked Panel Header
+      case ExperienceStyle.depthOverlapStackedPanel:
+        return DepthOverlapStackedPanelHeaderWidget(
+          cards: [
+            StackedPanelCardItem(
+              leadingIcon: Icons.account_balance_wallet,
+              title: const Text('Primary Cash Reserve'),
+              content: const Text('\$52,430.00 • Active Yield 4.8%'),
+              color: theme.colorScheme.primaryContainer,
+            ),
+            StackedPanelCardItem(
+              leadingIcon: Icons.trending_up,
+              title: const Text('Global Tech ETF Portfolio'),
+              content: const Text('+\$8,290.40 Gain (Year to Date)'),
+              color: theme.colorScheme.secondaryContainer,
+            ),
+            StackedPanelCardItem(
+              leadingIcon: Icons.lock_clock,
+              title: const Text('Vault Institutional Bond'),
+              content: const Text('Locked 180-Day Maturity Bond'),
+              color: theme.colorScheme.tertiaryContainer,
+            ),
+          ],
+          actions: [
+            IconButton(icon: const Icon(Icons.tune), onPressed: () => _openParameterSheet(context)),
+          ],
+          config: DepthOverlapStackedPanelConfig(
+            panelOverlap: _stackedPanelOverlap,
+            depthScaleFactor: _stackedDepthScale,
+          ),
+        );
     }
   }
 
@@ -1916,7 +2155,7 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                'Batches 1–7 Active (Styles 1–35 of 50)',
+                                'Batches 1–8 Active (Styles 1–40 of 50)',
                                 style: theme.textTheme.labelLarge!.copyWith(
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -1952,7 +2191,7 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
                       runSpacing: 6.0,
                       children: [
                         FilterChip(
-                          label: const Text('All (1–35)'),
+                          label: const Text('All (1–40)'),
                           selected: _selectedBatchFilter == 0,
                           onSelected: (_) => setState(() => _selectedBatchFilter = 0),
                         ),
@@ -1990,6 +2229,11 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
                           label: const Text('Batch 7 (31–35)'),
                           selected: _selectedBatchFilter == 7,
                           onSelected: (_) => setState(() => _selectedBatchFilter = 7),
+                        ),
+                        FilterChip(
+                          label: const Text('Batch 8 (36–40)'),
+                          selected: _selectedBatchFilter == 8,
+                          onSelected: (_) => setState(() => _selectedBatchFilter = 8),
                         ),
                       ],
                     ),
@@ -2908,6 +3152,147 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
             },
           ),
         ];
+
+      case ExperienceStyle.magneticAnchorSnap:
+        return [
+          Text('Expanded Height: ${_magneticExpandedHeight.toStringAsFixed(0)} px'),
+          Slider(
+            value: _magneticExpandedHeight,
+            min: 160.0,
+            max: 280.0,
+            divisions: 12,
+            onChanged: (val) {
+              setSheetState(() => _magneticExpandedHeight = val);
+              setState(() => _magneticExpandedHeight = val);
+            },
+          ),
+          Text('Snap Threshold: ${_magneticSnapThreshold.toStringAsFixed(0)} px'),
+          Slider(
+            value: _magneticSnapThreshold,
+            min: 60.0,
+            max: 160.0,
+            divisions: 10,
+            onChanged: (val) {
+              setSheetState(() => _magneticSnapThreshold = val);
+              setState(() => _magneticSnapThreshold = val);
+            },
+          ),
+        ];
+
+      case ExperienceStyle.cascadingProgressivePin:
+        return [
+          Text('Expanded Height: ${_cascadingExpandedHeight.toStringAsFixed(0)} px'),
+          Slider(
+            value: _cascadingExpandedHeight,
+            min: 180.0,
+            max: 300.0,
+            divisions: 12,
+            onChanged: (val) {
+              setSheetState(() => _cascadingExpandedHeight = val);
+              setState(() => _cascadingExpandedHeight = val);
+            },
+          ),
+          Text('Title Pin Offset: ${_cascadingTitlePinOffset.toStringAsFixed(0)} px'),
+          Slider(
+            value: _cascadingTitlePinOffset,
+            min: 20.0,
+            max: 80.0,
+            divisions: 6,
+            onChanged: (val) {
+              setSheetState(() => _cascadingTitlePinOffset = val);
+              setState(() => _cascadingTitlePinOffset = val);
+            },
+          ),
+          Text('Search Pin Offset: ${_cascadingSearchPinOffset.toStringAsFixed(0)} px'),
+          Slider(
+            value: _cascadingSearchPinOffset,
+            min: 50.0,
+            max: 140.0,
+            divisions: 9,
+            onChanged: (val) {
+              setSheetState(() => _cascadingSearchPinOffset = val);
+              setState(() => _cascadingSearchPinOffset = val);
+            },
+          ),
+        ];
+
+      case ExperienceStyle.dualMode3DCrossfade:
+        return [
+          Text('3D Flip Threshold: ${_dualModeThreshold.toStringAsFixed(0)} px'),
+          Slider(
+            value: _dualModeThreshold,
+            min: 60.0,
+            max: 180.0,
+            divisions: 12,
+            onChanged: (val) {
+              setSheetState(() => _dualModeThreshold = val);
+              setState(() => _dualModeThreshold = val);
+            },
+          ),
+          Text('Perspective: ${_dualModePerspective.toStringAsFixed(4)}'),
+          Slider(
+            value: _dualModePerspective,
+            min: 0.0005,
+            max: 0.0035,
+            divisions: 6,
+            onChanged: (val) {
+              setSheetState(() => _dualModePerspective = val);
+              setState(() => _dualModePerspective = val);
+            },
+          ),
+        ];
+
+      case ExperienceStyle.radialCircularClipperReveal:
+        return [
+          Text('Reveal Threshold: ${_circularRevealThreshold.toStringAsFixed(0)} px'),
+          Slider(
+            value: _circularRevealThreshold,
+            min: 60.0,
+            max: 200.0,
+            divisions: 14,
+            onChanged: (val) {
+              setSheetState(() => _circularRevealThreshold = val);
+              setState(() => _circularRevealThreshold = val);
+            },
+          ),
+          Text('Min Focal Radius: ${_circularMinRadius.toStringAsFixed(0)} px'),
+          Slider(
+            value: _circularMinRadius,
+            min: 12.0,
+            max: 48.0,
+            divisions: 6,
+            onChanged: (val) {
+              setSheetState(() => _circularMinRadius = val);
+              setState(() => _circularMinRadius = val);
+            },
+          ),
+        ];
+
+      case ExperienceStyle.depthOverlapStackedPanel:
+        return [
+          Text('Panel Overlap: ${_stackedPanelOverlap.toStringAsFixed(0)} px'),
+          Slider(
+            value: _stackedPanelOverlap,
+            min: 16.0,
+            max: 48.0,
+            divisions: 8,
+            onChanged: (val) {
+              setSheetState(() => _stackedPanelOverlap = val);
+              setState(() => _stackedPanelOverlap = val);
+            },
+          ),
+          Text('Depth Scale: ${(_stackedDepthScale * 100).toStringAsFixed(0)}%'),
+          Slider(
+            value: _stackedDepthScale,
+            min: 0.80,
+            max: 0.98,
+            divisions: 9,
+            onChanged: (val) {
+              setSheetState(() => _stackedDepthScale = val);
+              setState(() => _stackedDepthScale = val);
+            },
+          ),
+        ];
     }
   }
 
@@ -3648,6 +4033,126 @@ CustomScrollView(
       config: DynamicSineWaveCollapseConfig(
         waveAmplitude: $_dynamicWaveAmplitude,
         waveFrequency: $_dynamicWaveFrequency,
+      ),
+    ),
+    // ... list slivers
+  ],
+)''';
+
+      case ExperienceStyle.magneticAnchorSnap:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+CustomScrollView(
+  slivers: [
+    MagneticAnchorSnapHeaderWidget(
+      heroBadge: const CircleAvatar(
+        radius: 26.0,
+        child: Icon(Icons.flash_on),
+      ),
+      heroTitle: const Text('Quantum Kinetic Grid'),
+      heroSubtitle: const Text('Magnetic Lattice Sector 9'),
+      config: MagneticAnchorSnapConfig(
+        expandedHeight: $_magneticExpandedHeight,
+        snapThreshold: $_magneticSnapThreshold,
+      ),
+    ),
+    // ... list slivers
+  ],
+)''';
+
+      case ExperienceStyle.cascadingProgressivePin:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+CustomScrollView(
+  slivers: [
+    CascadingProgressivePinHeaderWidget(
+      title: const Text('Security Ops Center'),
+      searchBar: Container(
+        height: 38.0,
+        child: const Text('Search firewalls...'),
+      ),
+      statusPills: const Row(
+        children: [
+          Chip(label: Text('Active')),
+          Chip(label: Text('Zero Threats')),
+        ],
+      ),
+      config: CascadingProgressivePinConfig(
+        expandedHeight: $_cascadingExpandedHeight,
+        titlePinOffset: $_cascadingTitlePinOffset,
+        searchPinOffset: $_cascadingSearchPinOffset,
+      ),
+    ),
+    // ... list slivers
+  ],
+)''';
+
+      case ExperienceStyle.dualMode3DCrossfade:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+CustomScrollView(
+  slivers: [
+    DualMode3DCrossfadeHeaderWidget(
+      primaryMode: const Column(
+        children: [
+          Text('Primary Rich Media Mode'),
+        ],
+      ),
+      secondaryMode: const Row(
+        children: [
+          Text('Compact Docked Mode'),
+        ],
+      ),
+      config: DualMode3DCrossfadeConfig(
+        transitionThreshold: $_dualModeThreshold,
+        perspective: $_dualModePerspective,
+      ),
+    ),
+    // ... list slivers
+  ],
+)''';
+
+      case ExperienceStyle.radialCircularClipperReveal:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+CustomScrollView(
+  slivers: [
+    RadialCircularClipperRevealHeaderWidget(
+      compactBar: const Text('Compact Navigation Bar'),
+      expandedCanvas: const Text('Expansive Radial Discovery Canvas'),
+      config: RadialCircularClipperRevealConfig(
+        revealThreshold: $_circularRevealThreshold,
+        minRadius: $_circularMinRadius,
+      ),
+    ),
+    // ... list slivers
+  ],
+)''';
+
+      case ExperienceStyle.depthOverlapStackedPanel:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+CustomScrollView(
+  slivers: [
+    DepthOverlapStackedPanelHeaderWidget(
+      cards: const [
+        StackedPanelCardItem(
+          title: Text('Primary Cash Reserve'),
+          content: Text('\$52,430.00 Available'),
+        ),
+        StackedPanelCardItem(
+          title: Text('Global Tech ETF'),
+          content: Text('+\$8,290.40 Gain'),
+        ),
+      ],
+      config: DepthOverlapStackedPanelConfig(
+        panelOverlap: $_stackedPanelOverlap,
+        depthScaleFactor: $_stackedDepthScale,
       ),
     ),
     // ... list slivers
