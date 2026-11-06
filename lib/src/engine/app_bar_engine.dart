@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../design_system/app_bar_model_configuration.dart';
+import '../design_system/model_transition_spec.dart';
 import '../widgets/sliver_widget_marker.dart';
 import 'app_bar_configuration.dart';
 import 'app_bar_controller.dart';
@@ -38,11 +40,12 @@ import 'capability_validator.dart';
 /// )
 /// ```
 class AppBarEngine extends StatefulWidget with SliverWidgetMarker {
-  /// Creates a unified full-page AppBar experience wrapping [body].
+  /// Creates a unified full-page AppBar experience wrapping [body] (Level 1 Preset Mode).
   const AppBarEngine({
     super.key,
     required this.model,
     this.configuration,
+    this.typedConfiguration,
     this.controller,
     required Widget this.body,
     this.scrollController,
@@ -58,8 +61,43 @@ class AppBarEngine extends StatefulWidget with SliverWidgetMarker {
     super.key,
     required this.model,
     this.configuration,
+    this.typedConfiguration,
     this.controller,
   })  : isSliverMode = true,
+        body = null,
+        scrollController = null,
+        physics = null,
+        restorationId = null,
+        scaffoldBackgroundColor = null,
+        bottomNavigationBar = null,
+        floatingActionButton = null;
+
+  /// Level 2 Customization: Configurable Mode with strongly-typed model configuration.
+  const AppBarEngine.custom({
+    super.key,
+    required this.model,
+    required AppBarModelConfiguration configuration,
+    this.controller,
+    required Widget this.body,
+    this.scrollController,
+    this.physics,
+    this.restorationId,
+    this.scaffoldBackgroundColor,
+    this.bottomNavigationBar,
+    this.floatingActionButton,
+  })  : isSliverMode = false,
+        configuration = null,
+        typedConfiguration = configuration;
+
+  /// Level 2 Customization in Sliver Mode.
+  const AppBarEngine.customSliver({
+    super.key,
+    required this.model,
+    required AppBarModelConfiguration configuration,
+    this.controller,
+  })  : isSliverMode = true,
+        configuration = null,
+        typedConfiguration = configuration,
         body = null,
         scrollController = null,
         physics = null,
@@ -73,6 +111,9 @@ class AppBarEngine extends StatefulWidget with SliverWidgetMarker {
 
   /// Unified configuration controlling layout, content, styling, motion, and behaviors.
   final AppBarConfiguration? configuration;
+
+  /// Dedicated strongly-typed model configuration (Level 2 Customization).
+  final AppBarModelConfiguration? typedConfiguration;
 
   /// Optional runtime controller for programmatically expanding, collapsing,
   /// auto-hiding, or switching models on the fly.
@@ -271,6 +312,7 @@ class _AppBarEngineState extends State<AppBarEngine>
       motion: merged.motion,
       behavior: merged.behavior,
       elements: merged.elements,
+      typedConfig: widget.typedConfiguration ?? merged.typedConfig,
     );
   }
 
@@ -299,11 +341,12 @@ class _AppBarEngineState extends State<AppBarEngine>
     Duration duration = const Duration(milliseconds: 300),
     Curve curve = Curves.easeInOut,
     bool preserveScrollOffset = true,
+    ModelTransitionSpec? transition,
   }) {
     _transitionToModel(
       newModel,
-      duration: duration,
-      curve: curve,
+      duration: transition?.duration ?? duration,
+      curve: transition?.curve ?? curve,
       preserveScrollOffset: preserveScrollOffset,
     );
   }
@@ -362,12 +405,21 @@ class _AppBarEngineState extends State<AppBarEngine>
   Widget build(BuildContext context) {
     final resolvedConfig = _resolveEffectiveConfiguration();
 
-    // Build the sliver for the active model
-    final sliver = _activeRenderer.buildSliver(
-      context: context,
-      configuration: resolvedConfig,
-      controller: _effectiveController,
-    );
+    // Build the sliver for the active model (or custom layout builder override)
+    final sliver = resolvedConfig.layout.customLayoutBuilder != null
+        ? SliverPersistentHeader(
+            pinned: resolvedConfig.behavior.pinned,
+            floating: resolvedConfig.behavior.floating,
+            delegate: _CustomLayoutHeaderDelegate(
+              resolvedConfig: resolvedConfig,
+              builder: resolvedConfig.layout.customLayoutBuilder!,
+            ),
+          )
+        : _activeRenderer.buildSliver(
+            context: context,
+            configuration: resolvedConfig,
+            controller: _effectiveController,
+          );
 
     if (widget.isSliverMode) {
       // In sliver mode, return the sliver directly
@@ -398,5 +450,36 @@ class _AppBarEngineState extends State<AppBarEngine>
         ),
       ),
     );
+  }
+}
+
+class _CustomLayoutHeaderDelegate extends SliverPersistentHeaderDelegate {
+  _CustomLayoutHeaderDelegate({
+    required this.resolvedConfig,
+    required this.builder,
+  });
+
+  final ResolvedAppBarConfiguration resolvedConfig;
+  final CustomLayoutBuilder builder;
+
+  @override
+  double get minExtent => resolvedConfig.layout.collapsedHeight;
+
+  @override
+  double get maxExtent => resolvedConfig.layout.expandedHeight;
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    final currentHeight = (maxExtent - shrinkOffset).clamp(minExtent, maxExtent);
+    return builder(
+      context,
+      BoxConstraints.tightFor(height: currentHeight),
+      resolvedConfig,
+    );
+  }
+
+  @override
+  bool shouldRebuild(covariant _CustomLayoutHeaderDelegate oldDelegate) {
+    return oldDelegate.resolvedConfig != resolvedConfig || oldDelegate.builder != builder;
   }
 }

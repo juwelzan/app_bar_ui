@@ -167,5 +167,42 @@ enum AppBarModel {
   // --- Universal Standard ---
   /// Classic standard Material/Cupertino style navigation bar.
   classic,
+
+  // --- Complete Design System: 20 Autonomous Models (Batch A) ---
+  /// Model 1: Corporate multi-tier breadcrumb hierarchy and sticky tabs.
+  traditionalStructured,
+
+  /// Model 2: 100vh viewport cinematic media canvas with glassmorphic toolbar.
+  fullScreenHero,
+
+  /// Model 3: Detached floating pill hovering freely over scroll content.
+  floatingIsland,
+
+  /// Model 4: Multi-plane 3D spatial virtual z-depth with focal blur convergence.
+  immersiveSpatial,
+}
+
+/// Convenience display extensions on [AppBarModel].
+extension AppBarModelDisplayName on AppBarModel {
+  /// Human-readable display label for gallery pickers, inspector tools, and diagnostics.
+  String get displayName {
+    switch (this) {
+      case AppBarModel.traditionalStructured:
+        return 'Traditional Structured';
+      case AppBarModel.fullScreenHero:
+        return 'Full-Screen Hero';
+      case AppBarModel.floatingIsland:
+        return 'Floating Dynamic Island';
+      case AppBarModel.immersiveSpatial:
+        return 'Immersive Spatial Parallax';
+      case AppBarModel.classic:
+        return 'Classic Material';
+      default:
+        final exp = RegExp(r'(?<=[a-z])[A-Z]');
+        return name
+            .replaceAllMapped(exp, (m) => ' ${m.group(0)}')
+            .replaceFirstMapped(RegExp(r'^[a-z]'), (m) => m.group(0)!.toUpperCase());
+    }
+  }
 }
 

@@ -108,6 +108,19 @@ export 'src/experiences/sliver_to_rail_transform_header.dart';
 export 'src/experiences/context_aware_focal_swap_header.dart';
 export 'src/experiences/spline_curved_motion_path_header.dart';
 
+// Complete AppBar Design System: Architecture & Models (Batch A)
+export 'src/design_system/app_bar_model_configuration.dart';
+export 'src/design_system/model_transition_spec.dart';
+export 'src/design_system/models/traditional_structured/breadcrumb_node.dart';
+export 'src/design_system/models/traditional_structured/traditional_structured_config.dart';
+export 'src/design_system/models/traditional_structured/traditional_structured_header.dart';
+export 'src/design_system/models/full_screen_hero/full_screen_hero_config.dart';
+export 'src/design_system/models/full_screen_hero/full_screen_hero_header.dart';
+export 'src/design_system/models/floating_island/floating_island_config.dart';
+export 'src/design_system/models/floating_island/floating_island_header.dart';
+export 'src/design_system/models/immersive_spatial/immersive_spatial_config.dart';
+export 'src/design_system/models/immersive_spatial/immersive_spatial_header.dart';
+
 import 'app_bar_ui_platform_interface.dart';
 
 /// Legacy platform interface wrapper.

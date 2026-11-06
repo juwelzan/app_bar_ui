@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:app_bar_ui/app_bar_ui.dart';
 import 'animated_lab.dart';
+import 'design_system_gallery.dart';
 
 /// Global theme mode notifier for interactive light and dark theme switching.
 final ValueNotifier<ThemeMode> themeModeNotifier = ValueNotifier<ThemeMode>(
@@ -64,6 +65,7 @@ class _ShowcaseHomeScreenState extends State<ShowcaseHomeScreen> {
     ParallaxAndRevealsTab(),
     PresetSwitcherTab(),
     AnimatedExperiencesLabTab(),
+    DesignSystemGalleryTab(),
   ];
 
   @override
@@ -105,6 +107,11 @@ class _ShowcaseHomeScreenState extends State<ShowcaseHomeScreen> {
             icon: Icon(Icons.science_outlined),
             selectedIcon: Icon(Icons.science),
             label: 'Lab (50)',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.architecture_outlined),
+            selectedIcon: Icon(Icons.architecture),
+            label: 'Models (20)',
           ),
         ],
       ),

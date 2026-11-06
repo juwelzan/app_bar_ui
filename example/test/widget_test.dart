@@ -278,4 +278,58 @@ void main() {
       expect(find.text('A11Y Fallback'), findsOneWidget);
     },
   );
+
+  testWidgets(
+    'DesignSystemGalleryTab switches across Batch A Models (1–4) and customization levels cleanly',
+    (WidgetTester tester) async {
+      await tester.pumpWidget(const ScrollResponsiveDemoApp());
+      await tester.pumpAndSettle();
+
+      // Navigate to Tab 7: Models (20)
+      final modelsTab = find.text('Models (20)');
+      await Scrollable.ensureVisible(tester.element(modelsTab), alignment: 0.5);
+      await tester.tap(modelsTab);
+      await tester.pumpAndSettle();
+
+      // Verify gallery studio title
+      expect(find.text('Design System Studio'), findsOneWidget);
+
+      // Model 1 is active initially (Level 2: Configured)
+      expect(find.text('Enterprise Cloud Nexus'), findsWidgets);
+      expect(find.text('M1: Traditional Structured'), findsOneWidget);
+
+      // Switch to Model 2: Full-Screen Hero
+      await tester.tap(find.text('M2: Full-Screen Hero'));
+      await tester.pumpAndSettle();
+      expect(find.text('Cinematic Odyssey'), findsWidgets);
+
+      // Switch to Model 3: Floating Dynamic Island
+      await tester.tap(find.text('M3: Floating Dynamic Island'));
+      await tester.pumpAndSettle();
+      expect(find.text('Dynamic Flight Track'), findsWidgets);
+
+      // Switch to Model 4: Immersive Spatial
+      await tester.tap(find.text('M4: Immersive Spatial Parallax'));
+      await tester.pumpAndSettle();
+      expect(find.text('Spatial Reality Canvas'), findsWidgets);
+
+      // Switch to Level 1: Preset Mode
+      final presetChip = find.text('Preset');
+      await Scrollable.ensureVisible(tester.element(presetChip), alignment: 0.5);
+      await tester.pumpAndSettle();
+      await tester.tap(presetChip);
+      await tester.pumpAndSettle();
+      expect(find.textContaining('Level 1: Preset Mode'), findsWidgets);
+
+      // Switch to Level 3: Custom Builder Mode
+      final customChip = find.text('Custom');
+      await Scrollable.ensureVisible(tester.element(customChip), alignment: 0.5);
+      await tester.pumpAndSettle();
+      await tester.tap(customChip);
+      await tester.pumpAndSettle();
+      expect(find.textContaining('Level 3 Custom Override'), findsOneWidget);
+
+      expect(tester.takeException(), isNull);
+    },
+  );
 }

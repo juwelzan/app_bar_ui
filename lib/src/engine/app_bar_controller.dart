@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../design_system/model_transition_spec.dart';
 import 'app_bar_configuration.dart';
 import 'app_bar_model.dart';
 
@@ -11,6 +12,7 @@ abstract class AppBarEngineHost {
     Duration duration = const Duration(milliseconds: 300),
     Curve curve = Curves.easeInOut,
     bool preserveScrollOffset = true,
+    ModelTransitionSpec? transition,
   });
 
   /// Triggers a configuration update inside the host engine state.
@@ -138,14 +140,16 @@ class AppBarController extends ChangeNotifier {
     Duration duration = const Duration(milliseconds: 300),
     Curve curve = Curves.easeInOut,
     bool preserveScrollOffset = true,
+    ModelTransitionSpec? transition,
   }) {
     if (_isDisposed) return;
     _currentModel = newModel;
     _host?.requestModelChange(
       newModel,
-      duration: duration,
-      curve: curve,
+      duration: transition?.duration ?? duration,
+      curve: transition?.curve ?? curve,
       preserveScrollOffset: preserveScrollOffset,
+      transition: transition,
     );
     notifyListeners();
   }

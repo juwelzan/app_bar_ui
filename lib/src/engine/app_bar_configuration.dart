@@ -1,6 +1,7 @@
 import 'dart:ui' show ImageFilter;
 import 'package:flutter/material.dart';
 
+import '../design_system/app_bar_model_configuration.dart';
 import 'element_configuration.dart';
 
 /// Screen width breakpoints for adaptive responsive layouts.
@@ -641,7 +642,11 @@ class AppBarConfiguration {
     this.motion = const MotionConfiguration(),
     this.behavior = const BehaviorConfiguration(),
     this.elements = const ElementOverrideConfiguration(),
+    this.typedConfig,
   });
+
+  /// Strongly-typed independent model configuration (Level 2 customization).
+  final AppBarModelConfiguration? typedConfig;
 
   /// Minimal clean header preset.
   factory AppBarConfiguration.minimal({
@@ -745,7 +750,11 @@ class ResolvedAppBarConfiguration {
     required this.motion,
     required this.behavior,
     required this.elements,
+    this.typedConfig,
   });
+
+  /// Optional strongly-typed model configuration.
+  final AppBarModelConfiguration? typedConfig;
 
   /// Resolved layout configuration.
   final LayoutConfiguration layout;

@@ -12,6 +12,10 @@ import 'batch8_renderers.dart';
 import 'batch9_renderers.dart';
 import 'batch10_renderers.dart';
 import 'standard_renderers.dart';
+import '../../design_system/models/traditional_structured/traditional_structured_renderer.dart';
+import '../../design_system/models/full_screen_hero/full_screen_hero_renderer.dart';
+import '../../design_system/models/floating_island/floating_island_renderer.dart';
+import '../../design_system/models/immersive_spatial/immersive_spatial_renderer.dart';
 
 /// Bootstraps all built-in model renderers into the registry.
 void bootstrapBuiltInRenderers(AppBarModelRegistry registry) {
@@ -283,6 +287,28 @@ void bootstrapBuiltInRenderers(AppBarModelRegistry registry) {
     AppBarModel.classic,
     () => const ClassicAppBarRenderer(),
     capabilities: ModelCapabilities.standard,
+  );
+
+  // --- Complete Design System: Batch A (Models 1–4) ---
+  registry.register(
+    AppBarModel.traditionalStructured,
+    () => const TraditionalStructuredRenderer(),
+    capabilities: const ModelCapabilities(supportsSticky: true, supportsMultiStage: true),
+  );
+  registry.register(
+    AppBarModel.fullScreenHero,
+    () => const FullScreenHeroRenderer(),
+    capabilities: const ModelCapabilities(supportsParallax: true, supportsDragToExpand: true),
+  );
+  registry.register(
+    AppBarModel.floatingIsland,
+    () => const FloatingIslandRenderer(),
+    capabilities: const ModelCapabilities(supportsDragToExpand: true),
+  );
+  registry.register(
+    AppBarModel.immersiveSpatial,
+    () => const ImmersiveSpatialRenderer(),
+    capabilities: const ModelCapabilities(supportsParallax: true, supports3DTransform: true),
   );
 }
 
