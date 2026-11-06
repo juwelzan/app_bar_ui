@@ -145,3 +145,4 @@ class _MagneticScrollSnapDelegate extends SliverPersistentHeaderDelegate {
         oldDelegate.config != config;
   }
 }
+

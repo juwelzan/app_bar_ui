@@ -191,3 +191,4 @@ class _ParallaxZoomHeroDelegate extends SliverPersistentHeaderDelegate {
         oldDelegate.config != config;
   }
 }
+
