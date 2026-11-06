@@ -40,11 +40,23 @@ import 'capability_validator.dart';
 /// )
 /// ```
 class AppBarEngine extends StatefulWidget with SliverWidgetMarker {
-  /// Creates a unified full-page AppBar experience wrapping [body] (Level 1 Preset Mode).
+  /// Creates a unified full-page AppBar experience wrapping [body].
+  ///
+  /// Supports both **Simple Mode** (direct parameters like [title], [subtitle],
+  /// [leading], [actions], [backgroundColor]) and **Advanced Mode** (passing an
+  /// [AppBarConfiguration] or a strongly-typed [AppBarModelConfiguration] into [configuration]).
   const AppBarEngine({
     super.key,
     required this.model,
-    this.configuration,
+    this.title,
+    this.subtitle,
+    this.leading,
+    this.onLeadingTap,
+    this.actions,
+    this.backgroundColor,
+    this.expandedHeight,
+    this.collapsedHeight,
+    Object? configuration,
     this.typedConfiguration,
     this.controller,
     required Widget this.body,
@@ -54,16 +66,28 @@ class AppBarEngine extends StatefulWidget with SliverWidgetMarker {
     this.scaffoldBackgroundColor,
     this.bottomNavigationBar,
     this.floatingActionButton,
-  })  : isSliverMode = false;
+  })  : configuration = configuration is AppBarConfiguration ? configuration : null,
+        _passedModelConfiguration = configuration is AppBarModelConfiguration ? configuration : null,
+        isSliverMode = false;
 
   /// Creates a unified sliver AppBar experience for use inside a [CustomScrollView].
   const AppBarEngine.sliver({
     super.key,
     required this.model,
-    this.configuration,
+    this.title,
+    this.subtitle,
+    this.leading,
+    this.onLeadingTap,
+    this.actions,
+    this.backgroundColor,
+    this.expandedHeight,
+    this.collapsedHeight,
+    Object? configuration,
     this.typedConfiguration,
     this.controller,
-  })  : isSliverMode = true,
+  })  : configuration = configuration is AppBarConfiguration ? configuration : null,
+        _passedModelConfiguration = configuration is AppBarModelConfiguration ? configuration : null,
+        isSliverMode = true,
         body = null,
         scrollController = null,
         physics = null,
@@ -76,6 +100,14 @@ class AppBarEngine extends StatefulWidget with SliverWidgetMarker {
   const AppBarEngine.custom({
     super.key,
     required this.model,
+    this.title,
+    this.subtitle,
+    this.leading,
+    this.onLeadingTap,
+    this.actions,
+    this.backgroundColor,
+    this.expandedHeight,
+    this.collapsedHeight,
     required AppBarModelConfiguration configuration,
     this.controller,
     required Widget this.body,
@@ -87,17 +119,27 @@ class AppBarEngine extends StatefulWidget with SliverWidgetMarker {
     this.floatingActionButton,
   })  : isSliverMode = false,
         configuration = null,
-        typedConfiguration = configuration;
+        typedConfiguration = configuration,
+        _passedModelConfiguration = configuration;
 
   /// Level 2 Customization in Sliver Mode.
   const AppBarEngine.customSliver({
     super.key,
     required this.model,
+    this.title,
+    this.subtitle,
+    this.leading,
+    this.onLeadingTap,
+    this.actions,
+    this.backgroundColor,
+    this.expandedHeight,
+    this.collapsedHeight,
     required AppBarModelConfiguration configuration,
     this.controller,
   })  : isSliverMode = true,
         configuration = null,
         typedConfiguration = configuration,
+        _passedModelConfiguration = configuration,
         body = null,
         scrollController = null,
         physics = null,
@@ -109,11 +151,38 @@ class AppBarEngine extends StatefulWidget with SliverWidgetMarker {
   /// The active AppBar model defining the visual structure and behavior paradigm.
   final AppBarModel model;
 
+  /// Direct title shorthand (String or Widget).
+  final dynamic title;
+
+  /// Direct subtitle shorthand (String or Widget).
+  final dynamic subtitle;
+
+  /// Direct leading navigation widget.
+  final Widget? leading;
+
+  /// Optional callback invoked when [leading] (or default leading icon) is tapped.
+  final VoidCallback? onLeadingTap;
+
+  /// Direct action buttons list.
+  final List<Widget>? actions;
+
+  /// Direct background color override.
+  final Color? backgroundColor;
+
+  /// Direct expanded height override.
+  final double? expandedHeight;
+
+  /// Direct collapsed height override.
+  final double? collapsedHeight;
+
   /// Unified configuration controlling layout, content, styling, motion, and behaviors.
   final AppBarConfiguration? configuration;
 
   /// Dedicated strongly-typed model configuration (Level 2 Customization).
   final AppBarModelConfiguration? typedConfiguration;
+
+  /// Internal model configuration captured if passed directly to [configuration].
+  final AppBarModelConfiguration? _passedModelConfiguration;
 
   /// Optional runtime controller for programmatically expanding, collapsing,
   /// auto-hiding, or switching models on the fly.
@@ -236,11 +305,66 @@ class _AppBarEngineState extends State<AppBarEngine>
     // 2. User configuration
     final userConfig = widget.configuration ?? const AppBarConfiguration();
 
-    // 3. Merged base + user
+    // 3. Resolve direct content (Simple Mode shortcuts)
+    Widget? effectiveTitle;
+    if (widget.title is Widget) {
+      effectiveTitle = widget.title as Widget;
+    } else if (widget.title is String) {
+      effectiveTitle = Text(
+        widget.title as String,
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
+      );
+    } else {
+      effectiveTitle = userConfig.content.title;
+    }
+
+    Widget? effectiveSubtitle;
+    if (widget.subtitle is Widget) {
+      effectiveSubtitle = widget.subtitle as Widget;
+    } else if (widget.subtitle is String) {
+      effectiveSubtitle = Text(
+        widget.subtitle as String,
+        style: const TextStyle(fontSize: 13.0),
+      );
+    } else {
+      effectiveSubtitle = userConfig.content.subtitle;
+    }
+
+    Widget? effectiveLeading;
+    if (widget.leading != null) {
+      if (widget.onLeadingTap != null) {
+        effectiveLeading = IconButton(
+          icon: widget.leading!,
+          onPressed: widget.onLeadingTap,
+        );
+      } else {
+        effectiveLeading = widget.leading;
+      }
+    } else if (widget.onLeadingTap != null) {
+      effectiveLeading = IconButton(
+        icon: const BackButtonIcon(),
+        onPressed: widget.onLeadingTap,
+      );
+    } else {
+      effectiveLeading = userConfig.content.leading;
+    }
+
+    final effectiveActions = widget.actions ?? userConfig.content.actions;
+    final effectiveExpandedHeight = widget.expandedHeight ??
+        widget.configuration?.layout.expandedHeight ??
+        baseConfig.layout.expandedHeight;
+    final effectiveCollapsedHeight = widget.collapsedHeight ??
+        widget.configuration?.layout.collapsedHeight ??
+        baseConfig.layout.collapsedHeight;
+    final effectiveBackgroundColor = widget.backgroundColor ??
+        widget.configuration?.appearance.backgroundColor ??
+        baseConfig.appearance.backgroundColor;
+
+    // 4. Merged base + user + direct parameters
     var merged = AppBarConfiguration(
       layout: baseConfig.layout.copyWith(
-        expandedHeight: widget.configuration?.layout.expandedHeight ?? baseConfig.layout.expandedHeight,
-        collapsedHeight: widget.configuration?.layout.collapsedHeight ?? baseConfig.layout.collapsedHeight,
+        expandedHeight: effectiveExpandedHeight,
+        collapsedHeight: effectiveCollapsedHeight,
         minHeight: widget.configuration?.layout.minHeight ?? baseConfig.layout.minHeight,
         maxHeight: widget.configuration?.layout.maxHeight ?? baseConfig.layout.maxHeight,
         width: widget.configuration?.layout.width ?? baseConfig.layout.width,
@@ -253,9 +377,14 @@ class _AppBarEngineState extends State<AppBarEngine>
         breakpoints: widget.configuration?.layout.breakpoints ?? baseConfig.layout.breakpoints,
         customLayoutBuilder: widget.configuration?.layout.customLayoutBuilder ?? baseConfig.layout.customLayoutBuilder,
       ),
-      content: userConfig.content,
+      content: userConfig.content.copyWith(
+        title: effectiveTitle,
+        subtitle: effectiveSubtitle,
+        leading: effectiveLeading,
+        actions: effectiveActions,
+      ),
       appearance: baseConfig.appearance.copyWith(
-        backgroundColor: widget.configuration?.appearance.backgroundColor ?? baseConfig.appearance.backgroundColor,
+        backgroundColor: effectiveBackgroundColor,
         collapsedBackgroundColor: widget.configuration?.appearance.collapsedBackgroundColor ?? baseConfig.appearance.collapsedBackgroundColor,
         foregroundColor: widget.configuration?.appearance.foregroundColor ?? baseConfig.appearance.foregroundColor,
         elevation: widget.configuration?.appearance.elevation ?? baseConfig.appearance.elevation,
@@ -293,17 +422,21 @@ class _AppBarEngineState extends State<AppBarEngine>
       elements: userConfig.elements,
     );
 
-    // 4. Apply runtime override if active
+    // 5. Apply runtime override if active
     if (_runtimeConfigOverride != null) {
       merged = _runtimeConfigOverride!(merged);
     }
 
-    // 5. Validate capabilities
+    // 6. Validate capabilities
     CapabilityValidator.validate(
       model: _activeModel,
       capabilities: _activeRenderer.capabilities,
       configuration: merged,
     );
+
+    final effectiveTypedConfig = widget.typedConfiguration ??
+        widget._passedModelConfiguration ??
+        merged.typedConfig;
 
     return ResolvedAppBarConfiguration(
       layout: merged.layout,
@@ -312,7 +445,7 @@ class _AppBarEngineState extends State<AppBarEngine>
       motion: merged.motion,
       behavior: merged.behavior,
       elements: merged.elements,
-      typedConfig: widget.typedConfiguration ?? merged.typedConfig,
+      typedConfig: effectiveTypedConfig,
     );
   }
 

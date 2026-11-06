@@ -34,6 +34,10 @@ class TraditionalStructuredRenderer extends AppBarModelRenderer {
             expandedHeight: configuration.layout.expandedHeight,
             collapsedHeight: configuration.layout.collapsedHeight,
             backgroundColor: configuration.appearance.backgroundColor,
+            organizationName: (configuration.content.title is Text
+                    ? (configuration.content.title as Text).data
+                    : null) ??
+                'Organization',
             safeArea: configuration.layout.safeArea,
           );
 
