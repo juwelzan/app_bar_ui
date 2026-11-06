@@ -1363,6 +1363,179 @@ class DepthOverlapStackedPanelConfig extends AppBarMotionConfig {
   final double slideSequenceThreshold;
 }
 
+/// Configuration for Style 41: Perspective Depth Velocity Tilt Header.
+class PerspectiveVelocityTiltConfig extends AppBarMotionConfig {
+  /// Creates a [PerspectiveVelocityTiltConfig].
+  const PerspectiveVelocityTiltConfig({
+    super.curve = Curves.easeOutCubic,
+    super.reducedMotionCurve = Curves.linear,
+    this.expandedHeight = 220.0,
+    this.collapsedHeight = 64.0,
+    this.maxTiltAngle = 0.22,
+    this.perspective = 0.0018,
+    this.velocitySensitivity = 0.0003,
+    this.returnSpringStiffness = 220.0,
+  });
+
+  /// Height when fully expanded.
+  final double expandedHeight;
+
+  /// Height when docked.
+  final double collapsedHeight;
+
+  /// Maximum 3D pitch tilt angle in radians (e.g. 0.22 rad ≈ 12.6°).
+  final double maxTiltAngle;
+
+  /// 3D perspective matrix factor (setEntry(3, 2, perspective)).
+  final double perspective;
+
+  /// Multiplier translating scroll velocity (px/s) into tilt radians.
+  final double velocitySensitivity;
+
+  /// Spring stiffness for returning to flat orientation upon scroll stop.
+  final double returnSpringStiffness;
+}
+
+/// Configuration for Style 42: Animated Typography Dispersing Letter Scatter Header.
+class DispersingLetterScatterConfig extends AppBarMotionConfig {
+  /// Creates a [DispersingLetterScatterConfig].
+  const DispersingLetterScatterConfig({
+    super.curve = Curves.easeInOutCubic,
+    super.reducedMotionCurve = Curves.linear,
+    this.expandedHeight = 200.0,
+    this.collapsedHeight = 64.0,
+    this.scatterRadius = 65.0,
+    this.maxGlyphRotation = 0.6,
+    this.scatterThreshold = 110.0,
+    this.staggerPerGlyph = 0.04,
+  });
+
+  /// Height when expanded with scattered typography.
+  final double expandedHeight;
+
+  /// Height when collapsed with reconverged title.
+  final double collapsedHeight;
+
+  /// Maximum radius in logical pixels each character glyph scatters outward.
+  final double scatterRadius;
+
+  /// Maximum randomized rotation in radians per scattered glyph.
+  final double maxGlyphRotation;
+
+  /// Scroll distance required for complete reconvergence of scattered letters.
+  final double scatterThreshold;
+
+  /// Normalized stagger offset per character index along the word timeline.
+  final double staggerPerGlyph;
+}
+
+/// Configuration for Style 43: Scroll-Driven Shape Polygon-To-Rectangle Morph Header.
+class PolygonToRectangleMorphConfig extends AppBarMotionConfig {
+  /// Creates a [PolygonToRectangleMorphConfig].
+  const PolygonToRectangleMorphConfig({
+    super.curve = Curves.easeInOutCubic,
+    super.reducedMotionCurve = Curves.linear,
+    this.expandedHeight = 220.0,
+    this.collapsedHeight = 64.0,
+    this.polygonSides = 6,
+    this.morphThreshold = 120.0,
+    this.polygonCornerRadius = 16.0,
+  });
+
+  /// Height when expanded with geometric polygon boundary.
+  final double expandedHeight;
+
+  /// Height when collapsed into rectangular pinned bar.
+  final double collapsedHeight;
+
+  /// Number of polygon vertices/sides in expanded state (e.g. 6 for hexagon).
+  final int polygonSides;
+
+  /// Scroll distance over which polygon morphs into full-bleed rectangle.
+  final double morphThreshold;
+
+  /// Corner bevel radius on polygon vertices.
+  final double polygonCornerRadius;
+}
+
+/// Configuration for Style 44: Detached Damped Floating Island Header.
+class DetachedDampedIslandConfig extends AppBarMotionConfig {
+  /// Creates a [DetachedDampedIslandConfig].
+  const DetachedDampedIslandConfig({
+    super.curve = Curves.easeOutBack,
+    super.reducedMotionCurve = Curves.linear,
+    this.expandedHeight = 72.0,
+    this.collapsedHeight = 56.0,
+    this.expandedHorizontalMargin = 16.0,
+    this.collapsedHorizontalMargin = 28.0,
+    this.expandedBorderRadius = 18.0,
+    this.collapsedBorderRadius = 28.0,
+    this.stiffness = 260.0,
+    this.damping = 19.0,
+    this.maxOverscrollStretch = 35.0,
+    this.islandElevation = 4.0,
+  });
+
+  /// Height of the floating island in expanded state.
+  final double expandedHeight;
+
+  /// Compact height of the floating island in docked state.
+  final double collapsedHeight;
+
+  /// Lateral margin in expanded state.
+  final double expandedHorizontalMargin;
+
+  /// Lateral margin in compact docked state.
+  final double collapsedHorizontalMargin;
+
+  /// Corner radius in expanded state.
+  final double expandedBorderRadius;
+
+  /// Corner radius in compact docked state.
+  final double collapsedBorderRadius;
+
+  /// Physical spring stiffness for recoil physics.
+  final double stiffness;
+
+  /// Physical spring damping coefficient.
+  final double damping;
+
+  /// Maximum overscroll elastic stretch displacement.
+  final double maxOverscrollStretch;
+
+  /// Elevation shadow intensity.
+  final double islandElevation;
+}
+
+/// Configuration for Style 45: Full Bleed Edge-To-Edge Hero Scale Header.
+class FullBleedHeroScaleConfig extends AppBarMotionConfig {
+  /// Creates a [FullBleedHeroScaleConfig].
+  const FullBleedHeroScaleConfig({
+    super.curve = Curves.easeOutCubic,
+    super.reducedMotionCurve = Curves.linear,
+    this.expandedHeight = 280.0,
+    this.collapsedHeight = 64.0,
+    this.maxOverscrollScale = 1.35,
+    this.scrimMaxOpacity = 0.70,
+    this.collapseScaleThreshold = 140.0,
+  });
+
+  /// Height of the hero image in resting expanded state.
+  final double expandedHeight;
+
+  /// Height of the compact toolbar when collapsed.
+  final double collapsedHeight;
+
+  /// Scale multiplier applied to hero cover on overscroll stretch.
+  final double maxOverscrollScale;
+
+  /// Maximum opacity of the optical dark gradient scrim when collapsed.
+  final double scrimMaxOpacity;
+
+  /// Scroll distance required to complete scale and optical title morph.
+  final double collapseScaleThreshold;
+}
+
 
 
 

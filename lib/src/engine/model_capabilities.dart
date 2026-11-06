@@ -141,3 +141,4 @@ class ModelCapabilities {
     supportsStackedPanels: true,
   );
 }
+

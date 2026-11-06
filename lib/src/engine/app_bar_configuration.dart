@@ -765,3 +765,4 @@ class ResolvedAppBarConfiguration {
   /// Resolved element override configuration.
   final ElementOverrideConfiguration elements;
 }
+

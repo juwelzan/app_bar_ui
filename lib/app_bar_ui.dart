@@ -97,6 +97,11 @@ export 'src/experiences/cascading_progressive_pin_header.dart';
 export 'src/experiences/dual_mode_3d_crossfade_header.dart';
 export 'src/experiences/radial_circular_clipper_reveal_header.dart';
 export 'src/experiences/depth_overlap_stacked_panel_header.dart';
+export 'src/experiences/perspective_velocity_tilt_header.dart';
+export 'src/experiences/dispersing_letter_scatter_header.dart';
+export 'src/experiences/polygon_to_rectangle_morph_header.dart';
+export 'src/experiences/detached_damped_island_header.dart';
+export 'src/experiences/full_bleed_hero_scale_header.dart';
 
 import 'app_bar_ui_platform_interface.dart';
 

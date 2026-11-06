@@ -29,3 +29,4 @@ abstract class AppBarModelRenderer {
   /// Cleanly releases any retained controllers, tickers, or native resources.
   void dispose() {}
 }
+

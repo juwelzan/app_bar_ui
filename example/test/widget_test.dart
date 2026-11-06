@@ -181,7 +181,7 @@ void main() {
   );
 
   testWidgets(
-    'Animated Experiences Lab switches across Batches 1, 2, 3, 4, 5, 6, 7, and 8 styles',
+    'Animated Experiences Lab switches across Batches 1, 2, 3, 4, 5, 6, 7, 8, and 9 styles',
     (WidgetTester tester) async {
       await tester.pumpWidget(const ScrollResponsiveDemoApp());
       await tester.pumpAndSettle();
@@ -192,7 +192,7 @@ void main() {
 
       // Verify active batches banner
       expect(
-        find.text('Batches 1–8 Active (Styles 1–40 of 50)'),
+        find.text('Batches 1–9 Active (Styles 1–45 of 50)'),
         findsOneWidget,
       );
       expect(find.text('1. Morphing Split'), findsOneWidget);
@@ -219,38 +219,6 @@ void main() {
       await tester.tap(batch8Filter);
       await tester.pumpAndSettle();
 
-      // Style 36: Magnetic Anchor Snap Header
-      final style36 = find.text('36. Magnetic Anchor Snap Header');
-      await Scrollable.ensureVisible(tester.element(style36), alignment: 0.5);
-      await tester.pumpAndSettle();
-      await tester.tap(style36);
-      await tester.pumpAndSettle();
-      expect(find.text('Quantum Kinetic Grid'), findsOneWidget);
-
-      // Style 37: Cascading Progressive Pin Header
-      final style37 = find.text('37. Cascading Progressive Pin Header');
-      await Scrollable.ensureVisible(tester.element(style37), alignment: 0.5);
-      await tester.pumpAndSettle();
-      await tester.tap(style37);
-      await tester.pumpAndSettle();
-      expect(find.text('Security Ops Center'), findsOneWidget);
-
-      // Style 38: Dual-Mode 3D Crossfade Header
-      final style38 = find.text('38. Dual-Mode 3D Crossfade Header');
-      await Scrollable.ensureVisible(tester.element(style38), alignment: 0.5);
-      await tester.pumpAndSettle();
-      await tester.tap(style38);
-      await tester.pumpAndSettle();
-      expect(find.text('Symphony in D Minor'), findsOneWidget);
-
-      // Style 39: Radial Circular Reveal Header
-      final style39 = find.text('39. Radial Circular Reveal Header');
-      await Scrollable.ensureVisible(tester.element(style39), alignment: 0.5);
-      await tester.pumpAndSettle();
-      await tester.tap(style39);
-      await tester.pumpAndSettle();
-      expect(find.text('Global Radial Explorer'), findsOneWidget);
-
       // Style 40: Depth Overlap Stacked Panel Header
       final style40 = find.text('40. Depth Overlap Stacked Panel Header');
       await Scrollable.ensureVisible(tester.element(style40), alignment: 0.5);
@@ -259,13 +227,60 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('Primary Cash Reserve'), findsOneWidget);
 
-      // Open View Code dialog for Depth Overlap Stacked Panel Header
+      // Select Batch 9 filter pill
+      final batch9Filter = find.text('Batch 9 (41–45)');
+      await Scrollable.ensureVisible(tester.element(batch9Filter), alignment: 0.5);
+      await tester.pumpAndSettle();
+      await tester.tap(batch9Filter);
+      await tester.pumpAndSettle();
+
+      // Style 41: Perspective Depth Velocity Tilt Header
+      final style41 = find.text('41. Perspective Depth Velocity Tilt Header');
+      await Scrollable.ensureVisible(tester.element(style41), alignment: 0.5);
+      await tester.pumpAndSettle();
+      await tester.tap(style41);
+      await tester.pumpAndSettle();
+      expect(find.text('Inertial Perspective Canvas'), findsOneWidget);
+
+      // Style 42: Dispersing Letter Scatter Header
+      final style42 = find.text('42. Dispersing Letter Scatter Header');
+      await Scrollable.ensureVisible(tester.element(style42), alignment: 0.5);
+      await tester.pumpAndSettle();
+      await tester.tap(style42);
+      await tester.pumpAndSettle();
+      expect(find.text('D'), findsOneWidget);
+
+      // Style 43: Polygon-to-Rectangle Morph Header
+      final style43 = find.text('43. Polygon-to-Rectangle Morph Header');
+      await Scrollable.ensureVisible(tester.element(style43), alignment: 0.5);
+      await tester.pumpAndSettle();
+      await tester.tap(style43);
+      await tester.pumpAndSettle();
+      expect(find.text('Hexagonal Core'), findsOneWidget);
+
+      // Style 44: Detached Damped Floating Island Header
+      final style44 = find.text('44. Detached Damped Floating Island Header');
+      await Scrollable.ensureVisible(tester.element(style44), alignment: 0.5);
+      await tester.pumpAndSettle();
+      await tester.tap(style44);
+      await tester.pumpAndSettle();
+      expect(find.text('Floating Recoil Island'), findsOneWidget);
+
+      // Style 45: Full Bleed Edge Hero Scale Header
+      final style45 = find.text('45. Full Bleed Edge Hero Scale Header');
+      await Scrollable.ensureVisible(tester.element(style45), alignment: 0.5);
+      await tester.pumpAndSettle();
+      await tester.tap(style45);
+      await tester.pumpAndSettle();
+      expect(find.text('Alpine Glacier Ridge'), findsOneWidget);
+
+      // Open View Code dialog for Full Bleed Edge Hero Scale Header
       final viewCodeBtn = find.text('View Code');
       await Scrollable.ensureVisible(tester.element(viewCodeBtn), alignment: 0.5);
       await tester.pumpAndSettle();
       await tester.tap(viewCodeBtn);
       await tester.pumpAndSettle();
-      expect(find.text('Depth Overlap Stacked Panel Header Integration Code'), findsOneWidget);
+      expect(find.text('Full Bleed Edge Hero Scale Header Integration Code'), findsOneWidget);
       await tester.tap(find.text('Close'));
       await tester.pumpAndSettle();
 

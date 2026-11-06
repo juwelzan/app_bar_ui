@@ -347,6 +347,48 @@ enum ExperienceStyle {
     description:
         'Three depth-overlapping cards step forward sequentially on scroll',
     icon: Icons.layers_outlined,
+  ),
+
+  // Batch 9 (Styles 41–45)
+  perspectiveVelocityTilt(
+    id: 41,
+    batch: 9,
+    title: 'Perspective Depth Velocity Tilt Header',
+    description:
+        '3D pitch tilt on velocity inertia flattening into locked header',
+    icon: Icons.threed_rotation_outlined,
+  ),
+  dispersingLetterScatter(
+    id: 42,
+    batch: 9,
+    title: 'Dispersing Letter Scatter Header',
+    description:
+        'Headline letters disperse radially during expansion and reconverge',
+    icon: Icons.scatter_plot_outlined,
+  ),
+  polygonToRectangleMorph(
+    id: 43,
+    batch: 9,
+    title: 'Polygon-to-Rectangle Morph Header',
+    description:
+        'Hexagonal geometric card morphs continuously into rectangular dock',
+    icon: Icons.hexagon_outlined,
+  ),
+  detachedDampedIsland(
+    id: 44,
+    batch: 9,
+    title: 'Detached Damped Floating Island Header',
+    description:
+        'Decoupled floating pill with spring recoil and adaptive margins',
+    icon: Icons.crop_free_outlined,
+  ),
+  fullBleedHeroScale(
+    id: 45,
+    batch: 9,
+    title: 'Full Bleed Edge Hero Scale Header',
+    description:
+        'Full-width hero media with overscroll expansion and pinned contract',
+    icon: Icons.wallpaper_outlined,
   );
 
   const ExperienceStyle({
@@ -561,6 +603,25 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
   // Style 40 params (Depth Overlap Stacked Panel)
   double _stackedPanelOverlap = 28.0;
   double _stackedDepthScale = 0.90;
+
+  // Style 41 params (Perspective Depth Velocity Tilt)
+  double _velocityTiltMaxAngle = 0.28;
+  double _velocityTiltExpandedHeight = 220.0;
+
+  // Style 42 params (Animated Typography Letter Scatter)
+  double _scatterRadius = 140.0;
+  double _scatterMaxRotation = 0.65;
+
+  // Style 43 params (Polygon Morph)
+  double _polygonMorphExpandedHeight = 220.0;
+
+  // Style 44 params (Detached Damped Island)
+  double _islandExpandedMargin = 16.0;
+  double _islandCollapsedMargin = 32.0;
+
+  // Style 45 params (Full Bleed Hero Scale)
+  double _heroScaleExpandedHeight = 280.0;
+  double _heroMaxScale = 1.35;
 
   @override
   void initState() {
@@ -2125,6 +2186,126 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
             depthScaleFactor: _stackedDepthScale,
           ),
         );
+
+      // 41. Perspective Depth Velocity Tilt Header
+      case ExperienceStyle.perspectiveVelocityTilt:
+        return PerspectiveVelocityTiltHeaderWidget(
+          title: Text(
+            'Inertial Perspective Canvas',
+            style: theme.textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),
+          ),
+          subtitle: const Text('Dynamic 3D pitch tilts smoothly in response to scroll velocity'),
+          leading: const Icon(Icons.speed),
+          actions: [
+            IconButton(icon: const Icon(Icons.tune), onPressed: () => _openParameterSheet(context)),
+          ],
+          config: PerspectiveVelocityTiltConfig(
+            maxTiltAngle: _velocityTiltMaxAngle,
+            expandedHeight: _velocityTiltExpandedHeight,
+          ),
+        );
+
+      // 42. Dispersing Letter Scatter Header
+      case ExperienceStyle.dispersingLetterScatter:
+        return DispersingLetterScatterHeaderWidget(
+          titleText: 'DISPERSE',
+          subtitle: const Text('Headline characters scatter radially and reconverge upon scrolling'),
+          leading: const Icon(Icons.scatter_plot),
+          actions: [
+            IconButton(icon: const Icon(Icons.tune), onPressed: () => _openParameterSheet(context)),
+          ],
+          config: DispersingLetterScatterConfig(
+            scatterRadius: _scatterRadius,
+            maxGlyphRotation: _scatterMaxRotation,
+          ),
+        );
+
+      // 43. Polygon-to-Rectangle Morph Header
+      case ExperienceStyle.polygonToRectangleMorph:
+        return PolygonToRectangleMorphHeaderWidget(
+          polygonContent: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.hexagon, size: 44.0, color: Colors.amber),
+                const SizedBox(height: 8.0),
+                Text('Hexagonal Core', style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold)),
+              ],
+            ),
+          ),
+          dockedContent: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              children: [
+                const Icon(Icons.hexagon_outlined, size: 20.0),
+                const SizedBox(width: 8.0),
+                const Expanded(child: Text('Rectangular Dock Bar', style: TextStyle(fontWeight: FontWeight.bold))),
+                IconButton(icon: const Icon(Icons.tune), onPressed: () => _openParameterSheet(context)),
+              ],
+            ),
+          ),
+          config: PolygonToRectangleMorphConfig(
+            expandedHeight: _polygonMorphExpandedHeight,
+          ),
+        );
+
+      // 44. Detached Damped Floating Island Header
+      case ExperienceStyle.detachedDampedIsland:
+        return DetachedDampedIslandHeaderWidget(
+          compactChild: const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 12.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.lens, size: 12.0, color: Colors.teal),
+                SizedBox(width: 6.0),
+                Text('Island Compact', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13.0)),
+              ],
+            ),
+          ),
+          config: DetachedDampedIslandConfig(
+            expandedHorizontalMargin: _islandExpandedMargin,
+            collapsedHorizontalMargin: _islandCollapsedMargin,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              children: [
+                const Icon(Icons.bubble_chart, color: Colors.teal),
+                const SizedBox(width: 8.0),
+                const Expanded(child: Text('Floating Recoil Island', style: TextStyle(fontWeight: FontWeight.bold))),
+                IconButton(icon: const Icon(Icons.tune), onPressed: () => _openParameterSheet(context)),
+              ],
+            ),
+          ),
+        );
+
+      // 45. Full Bleed Edge-To-Edge Hero Scale Header
+      case ExperienceStyle.fullBleedHeroScale:
+        return FullBleedHeroScaleHeaderWidget(
+          heroCover: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.indigo.shade900, Colors.deepPurple.shade700, Colors.teal.shade700],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+            child: const Center(
+              child: Icon(Icons.terrain, size: 68.0, color: Colors.white38),
+            ),
+          ),
+          title: const Text('Alpine Glacier Ridge'),
+          subtitle: const Text('Elevation 3,840m • Alpine National Park'),
+          leading: const BackButton(color: Colors.white),
+          actions: [
+            IconButton(icon: const Icon(Icons.tune, color: Colors.white), onPressed: () => _openParameterSheet(context)),
+          ],
+          config: FullBleedHeroScaleConfig(
+            expandedHeight: _heroScaleExpandedHeight,
+            maxOverscrollScale: _heroMaxScale,
+          ),
+        );
     }
   }
 
@@ -2155,7 +2336,7 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                'Batches 1–8 Active (Styles 1–40 of 50)',
+                                'Batches 1–9 Active (Styles 1–45 of 50)',
                                 style: theme.textTheme.labelLarge!.copyWith(
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -2234,6 +2415,11 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
                           label: const Text('Batch 8 (36–40)'),
                           selected: _selectedBatchFilter == 8,
                           onSelected: (_) => setState(() => _selectedBatchFilter = 8),
+                        ),
+                        FilterChip(
+                          label: const Text('Batch 9 (41–45)'),
+                          selected: _selectedBatchFilter == 9,
+                          onSelected: (_) => setState(() => _selectedBatchFilter = 9),
                         ),
                       ],
                     ),
@@ -3293,6 +3479,125 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
             },
           ),
         ];
+
+      case ExperienceStyle.perspectiveVelocityTilt:
+        return [
+          Text('Max 3D Tilt Angle: ${_velocityTiltMaxAngle.toStringAsFixed(2)} rad'),
+          Slider(
+            value: _velocityTiltMaxAngle,
+            min: 0.10,
+            max: 0.50,
+            divisions: 8,
+            onChanged: (val) {
+              setSheetState(() => _velocityTiltMaxAngle = val);
+              setState(() => _velocityTiltMaxAngle = val);
+            },
+          ),
+          Text('Expanded Height: ${_velocityTiltExpandedHeight.toStringAsFixed(0)} px'),
+          Slider(
+            value: _velocityTiltExpandedHeight,
+            min: 160.0,
+            max: 300.0,
+            divisions: 7,
+            onChanged: (val) {
+              setSheetState(() => _velocityTiltExpandedHeight = val);
+              setState(() => _velocityTiltExpandedHeight = val);
+            },
+          ),
+        ];
+
+      case ExperienceStyle.dispersingLetterScatter:
+        return [
+          Text('Scatter Radius: ${_scatterRadius.toStringAsFixed(0)} px'),
+          Slider(
+            value: _scatterRadius,
+            min: 60.0,
+            max: 220.0,
+            divisions: 8,
+            onChanged: (val) {
+              setSheetState(() => _scatterRadius = val);
+              setState(() => _scatterRadius = val);
+            },
+          ),
+          Text('Max Glyph Rotation: ${_scatterMaxRotation.toStringAsFixed(2)} rad'),
+          Slider(
+            value: _scatterMaxRotation,
+            min: 0.20,
+            max: 1.20,
+            divisions: 10,
+            onChanged: (val) {
+              setSheetState(() => _scatterMaxRotation = val);
+              setState(() => _scatterMaxRotation = val);
+            },
+          ),
+        ];
+
+      case ExperienceStyle.polygonToRectangleMorph:
+        return [
+          Text('Expanded Height: ${_polygonMorphExpandedHeight.toStringAsFixed(0)} px'),
+          Slider(
+            value: _polygonMorphExpandedHeight,
+            min: 160.0,
+            max: 300.0,
+            divisions: 7,
+            onChanged: (val) {
+              setSheetState(() => _polygonMorphExpandedHeight = val);
+              setState(() => _polygonMorphExpandedHeight = val);
+            },
+          ),
+        ];
+
+      case ExperienceStyle.detachedDampedIsland:
+        return [
+          Text('Expanded Margin: ${_islandExpandedMargin.toStringAsFixed(0)} px'),
+          Slider(
+            value: _islandExpandedMargin,
+            min: 8.0,
+            max: 32.0,
+            divisions: 6,
+            onChanged: (val) {
+              setSheetState(() => _islandExpandedMargin = val);
+              setState(() => _islandExpandedMargin = val);
+            },
+          ),
+          Text('Collapsed Margin: ${_islandCollapsedMargin.toStringAsFixed(0)} px'),
+          Slider(
+            value: _islandCollapsedMargin,
+            min: 16.0,
+            max: 48.0,
+            divisions: 8,
+            onChanged: (val) {
+              setSheetState(() => _islandCollapsedMargin = val);
+              setState(() => _islandCollapsedMargin = val);
+            },
+          ),
+        ];
+
+      case ExperienceStyle.fullBleedHeroScale:
+        return [
+          Text('Expanded Height: ${_heroScaleExpandedHeight.toStringAsFixed(0)} px'),
+          Slider(
+            value: _heroScaleExpandedHeight,
+            min: 200.0,
+            max: 360.0,
+            divisions: 8,
+            onChanged: (val) {
+              setSheetState(() => _heroScaleExpandedHeight = val);
+              setState(() => _heroScaleExpandedHeight = val);
+            },
+          ),
+          Text('Max Overscroll Scale: ${_heroMaxScale.toStringAsFixed(2)}x'),
+          Slider(
+            value: _heroMaxScale,
+            min: 1.10,
+            max: 1.80,
+            divisions: 7,
+            onChanged: (val) {
+              setSheetState(() => _heroMaxScale = val);
+              setState(() => _heroMaxScale = val);
+            },
+          ),
+        ];
     }
   }
 
@@ -4153,6 +4458,92 @@ CustomScrollView(
       config: DepthOverlapStackedPanelConfig(
         panelOverlap: $_stackedPanelOverlap,
         depthScaleFactor: $_stackedDepthScale,
+      ),
+    ),
+    // ... list slivers
+  ],
+)''';
+
+      case ExperienceStyle.perspectiveVelocityTilt:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+CustomScrollView(
+  slivers: [
+    PerspectiveVelocityTiltHeaderWidget(
+      title: const Text('Inertial Canvas'),
+      config: PerspectiveVelocityTiltConfig(
+        maxTiltAngle: $_velocityTiltMaxAngle,
+        expandedHeight: $_velocityTiltExpandedHeight,
+      ),
+    ),
+    // ... list slivers
+  ],
+)''';
+
+      case ExperienceStyle.dispersingLetterScatter:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+CustomScrollView(
+  slivers: [
+    DispersingLetterScatterHeaderWidget(
+      titleText: 'DISPERSE',
+      config: DispersingLetterScatterConfig(
+        scatterRadius: $_scatterRadius,
+        maxGlyphRotation: $_scatterMaxRotation,
+      ),
+    ),
+    // ... list slivers
+  ],
+)''';
+
+      case ExperienceStyle.polygonToRectangleMorph:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+CustomScrollView(
+  slivers: [
+    PolygonToRectangleMorphHeaderWidget(
+      polygonContent: const Text('Geometric Polygon'),
+      dockedContent: const Text('Docked Bar'),
+      config: PolygonToRectangleMorphConfig(
+        expandedHeight: $_polygonMorphExpandedHeight,
+      ),
+    ),
+    // ... list slivers
+  ],
+)''';
+
+      case ExperienceStyle.detachedDampedIsland:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+CustomScrollView(
+  slivers: [
+    DetachedDampedIslandHeaderWidget(
+      child: const Text('Floating Island'),
+      config: DetachedDampedIslandConfig(
+        expandedHorizontalMargin: $_islandExpandedMargin,
+        collapsedHorizontalMargin: $_islandCollapsedMargin,
+      ),
+    ),
+    // ... list slivers
+  ],
+)''';
+
+      case ExperienceStyle.fullBleedHeroScale:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+CustomScrollView(
+  slivers: [
+    FullBleedHeroScaleHeaderWidget(
+      heroCover: Image.network('https://images.unsplash.com/photo-1506744038136-46273834b3fb'),
+      title: const Text('Alpine Glacier Ridge'),
+      config: FullBleedHeroScaleConfig(
+        expandedHeight: $_heroScaleExpandedHeight,
+        maxOverscrollScale: $_heroMaxScale,
       ),
     ),
     // ... list slivers

@@ -168,3 +168,4 @@ enum AppBarModel {
   /// Classic standard Material/Cupertino style navigation bar.
   classic,
 }
+

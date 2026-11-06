@@ -9,6 +9,7 @@ import 'batch5_renderers.dart';
 import 'batch6_renderers.dart';
 import 'batch7_renderers.dart';
 import 'batch8_renderers.dart';
+import 'batch9_renderers.dart';
 import 'standard_renderers.dart';
 
 /// Bootstraps all built-in model renderers into the registry.
@@ -228,34 +229,26 @@ void bootstrapBuiltInRenderers(AppBarModelRegistry registry) {
   // --- Batch 9 (41–45) ---
   registry.register(
     AppBarModel.perspectiveVelocityTilt,
-    () => const AdaptablePlaceholderRenderer(
-      customCapabilities: ModelCapabilities(supports3DTransform: true),
-    ),
+    () => const PerspectiveVelocityTiltRenderer(),
     capabilities: const ModelCapabilities(supports3DTransform: true),
   );
   registry.register(
     AppBarModel.dispersingLetterScatter,
-    () => const AdaptablePlaceholderRenderer(),
+    () => const DispersingLetterScatterRenderer(),
   );
   registry.register(
     AppBarModel.polygonToRectangleMorph,
-    () => const AdaptablePlaceholderRenderer(
-      customCapabilities: ModelCapabilities(supportsShapeMorph: true),
-    ),
+    () => const PolygonToRectangleMorphRenderer(),
     capabilities: const ModelCapabilities(supportsShapeMorph: true),
   );
   registry.register(
     AppBarModel.detachedDampedIsland,
-    () => const AdaptablePlaceholderRenderer(
-      customCapabilities: ModelCapabilities(supportsDragToExpand: true),
-    ),
+    () => const DetachedDampedIslandRenderer(),
     capabilities: const ModelCapabilities(supportsDragToExpand: true),
   );
   registry.register(
     AppBarModel.fullBleedHeroScale,
-    () => const AdaptablePlaceholderRenderer(
-      customCapabilities: ModelCapabilities(supportsParallax: true),
-    ),
+    () => const FullBleedHeroScaleRenderer(),
     capabilities: const ModelCapabilities(supportsParallax: true),
   );
 
@@ -297,3 +290,4 @@ void bootstrapBuiltInRenderers(AppBarModelRegistry registry) {
     capabilities: ModelCapabilities.standard,
   );
 }
+

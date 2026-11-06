@@ -79,6 +79,11 @@ void main() {
         AppBarModel.circularMorph,
         AppBarModel.tabTransform,
         AppBarModel.magneticAnchorSnap,
+        AppBarModel.perspectiveVelocityTilt,
+        AppBarModel.dispersingLetterScatter,
+        AppBarModel.polygonToRectangleMorph,
+        AppBarModel.detachedDampedIsland,
+        AppBarModel.fullBleedHeroScale,
       ];
 
       for (final model in modelsToTest) {
