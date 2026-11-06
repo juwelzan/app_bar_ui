@@ -44,3 +44,4 @@ class ProfileIdentityRenderer extends AppBarModelRenderer {
     );
   }
 }
+

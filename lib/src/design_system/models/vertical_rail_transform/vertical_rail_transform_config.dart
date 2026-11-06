@@ -57,3 +57,4 @@ class VerticalRailTransformConfig extends AppBarModelConfiguration {
   /// Optional avatar widget rendered alongside destinations.
   final Widget? avatar;
 }
+

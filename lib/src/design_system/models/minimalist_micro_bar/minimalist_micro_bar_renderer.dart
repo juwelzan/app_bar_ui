@@ -43,3 +43,4 @@ class MinimalistMicroBarRenderer extends AppBarModelRenderer {
     );
   }
 }
+

@@ -44,3 +44,4 @@ class EditorialTypographyRenderer extends AppBarModelRenderer {
     );
   }
 }
+

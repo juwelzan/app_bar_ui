@@ -78,3 +78,4 @@ class CardDeckStackedConfig extends AppBarModelConfiguration {
   /// Vertical step overlap between adjacent cards in the resting fan.
   final double cardOverlap;
 }
+

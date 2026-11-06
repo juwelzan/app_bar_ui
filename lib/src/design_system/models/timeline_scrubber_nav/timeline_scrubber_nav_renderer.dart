@@ -45,3 +45,4 @@ class TimelineScrubberNavRenderer extends AppBarModelRenderer {
     );
   }
 }
+

@@ -60,3 +60,4 @@ class EditorialTypographyConfig extends AppBarModelConfiguration {
   /// Optional custom accent color for the reading bar and category pill.
   final Color? accentColor;
 }
+

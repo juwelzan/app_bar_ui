@@ -22,3 +22,4 @@ class RailNavigationDestination {
   /// Optional notification or count badge string.
   final String? badge;
 }
+

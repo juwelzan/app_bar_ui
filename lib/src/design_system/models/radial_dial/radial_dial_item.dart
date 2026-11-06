@@ -22,3 +22,4 @@ class RadialDialItem {
   /// Tap callback when this dial item is selected.
   final VoidCallback? onTap;
 }
+

@@ -219,6 +219,19 @@ enum AppBarModel {
 
   /// Model 16: Physics-based rubber-band elastic header canvas with damped spring overscroll.
   gestureElasticCanvas,
+
+  // --- Complete Design System: 20 Autonomous Models (Batch E) ---
+  /// Model 17: Adaptive breakpoint navigation automatically reforming between mobile, tablet, and desktop breakpoints.
+  adaptiveBreakpointNav,
+
+  /// Model 18: Context focal swap header dynamically swapping primary focus, actions, and telemetry based on active domain.
+  contextFocalSwapNav,
+
+  /// Model 19: Fluid organic sine wave morphing header with animated boundary deformation.
+  liquidWaveMorphNav,
+
+  /// Model 20: Blank developer-defined custom canvas with full builder lifecycle and zero engine constraints.
+  developerCustomCanvas,
 }
 
 /// Convenience display extensions on [AppBarModel].
@@ -258,6 +271,14 @@ extension AppBarModelDisplayName on AppBarModel {
         return 'Search Spotlight First';
       case AppBarModel.gestureElasticCanvas:
         return 'Gesture Elastic Canvas';
+      case AppBarModel.adaptiveBreakpointNav:
+        return 'Adaptive Breakpoint Navigation';
+      case AppBarModel.contextFocalSwapNav:
+        return 'Context Focal Swap Navigation';
+      case AppBarModel.liquidWaveMorphNav:
+        return 'Liquid Wave Morph Navigation';
+      case AppBarModel.developerCustomCanvas:
+        return 'Developer Custom Canvas';
       case AppBarModel.classic:
         return 'Classic Material';
       default:

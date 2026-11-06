@@ -50,3 +50,4 @@ class FullScreenHeroRenderer extends AppBarModelRenderer {
     );
   }
 }
+

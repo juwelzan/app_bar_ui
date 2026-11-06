@@ -322,3 +322,4 @@ class _SearchSpotlightDelegate extends SliverPersistentHeaderDelegate {
         oldDelegate.topPadding != topPadding;
   }
 }
+

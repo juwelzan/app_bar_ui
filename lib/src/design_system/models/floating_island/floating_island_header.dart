@@ -204,3 +204,4 @@ class _FloatingIslandDelegate extends SliverPersistentHeaderDelegate {
         oldDelegate.topPadding != topPadding;
   }
 }
+

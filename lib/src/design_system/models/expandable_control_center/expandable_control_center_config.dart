@@ -71,3 +71,4 @@ class ExpandableControlCenterConfig extends AppBarModelConfiguration {
   /// Optional callback invoked when a tile is tapped by index.
   final ValueChanged<int>? onTileToggled;
 }
+

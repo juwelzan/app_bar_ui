@@ -336,3 +336,4 @@ class _ExpandableControlCenterDelegate extends SliverPersistentHeaderDelegate {
         oldDelegate.topPadding != topPadding;
   }
 }
+

@@ -397,6 +397,34 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('Elastic Horizon'), findsWidgets);
 
+      // Switch to Model 17: Adaptive Breakpoint Nav
+      final m17 = find.text('M17: Adaptive Breakpoint Nav');
+      await Scrollable.ensureVisible(tester.element(m17), alignment: 0.5);
+      await tester.tap(m17);
+      await tester.pumpAndSettle();
+      expect(find.text('Enterprise Command Center'), findsWidgets);
+
+      // Switch to Model 18: Context Focal Swap Nav
+      final m18 = find.text('M18: Context Focal Swap Nav');
+      await Scrollable.ensureVisible(tester.element(m18), alignment: 0.5);
+      await tester.tap(m18);
+      await tester.pumpAndSettle();
+      expect(find.text('Financial Core'), findsWidgets);
+
+      // Switch to Model 19: Liquid Wave Morph Nav
+      final m19 = find.text('M19: Liquid Wave Morph Nav');
+      await Scrollable.ensureVisible(tester.element(m19), alignment: 0.5);
+      await tester.tap(m19);
+      await tester.pumpAndSettle();
+      expect(find.text('Fluid Organic Dynamics'), findsWidgets);
+
+      // Switch to Model 20: Developer Custom Canvas
+      final m20 = find.text('M20: Developer Custom Canvas');
+      await Scrollable.ensureVisible(tester.element(m20), alignment: 0.5);
+      await tester.tap(m20);
+      await tester.pumpAndSettle();
+      expect(find.text('Architectural Canvas 20'), findsWidgets);
+
       // Switch to Level 1: Preset Mode
       final presetChip = find.text('Preset');
       await Scrollable.ensureVisible(tester.element(presetChip), alignment: 0.5);

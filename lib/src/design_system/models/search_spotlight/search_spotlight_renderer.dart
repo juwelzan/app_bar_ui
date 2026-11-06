@@ -45,3 +45,4 @@ class SearchSpotlightRenderer extends AppBarModelRenderer {
     );
   }
 }
+

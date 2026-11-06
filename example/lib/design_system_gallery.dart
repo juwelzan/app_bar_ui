@@ -119,6 +119,25 @@ class _DesignSystemGalleryTabState extends State<DesignSystemGalleryTab> {
   String _elasticCanvasTitle = 'Elastic Horizon';
   String _elasticMetric = '99.98% Operational';
 
+  // --- Model 17: Adaptive Breakpoint Navigation Parameters ---
+  String _adaptiveTitle = 'Enterprise Command Center';
+  String _adaptiveCompactSub = 'Mobile Profile Active';
+  String _adaptiveMediumSub = 'Tablet Workspace Active';
+  String _adaptiveExpandedSub = 'Enterprise Desktop Grid Active';
+
+  // --- Model 18: Context Focal Swap Navigation Parameters ---
+  int _focalDomainIndex = 0;
+
+  // --- Model 19: Liquid Wave Morph Navigation Parameters ---
+  String _waveTitle = 'Fluid Organic Dynamics';
+  String _waveSubtitle = 'Harmonic wave boundary';
+  double _waveAmplitude = 20.0;
+  double _waveFrequency = 2.0;
+
+  // --- Model 20: Developer Custom Canvas Parameters ---
+  String _canvasName = 'Architectural Canvas 20';
+  bool _showBlueprintGrid = true;
+
   // Telemetry
   int _switchCount = 0;
 
@@ -163,16 +182,18 @@ class _DesignSystemGalleryTabState extends State<DesignSystemGalleryTab> {
           // Right Inspector: Controls, Sliders & Code Generator
           Expanded(
             flex: 5,
-            child: Container(
-              decoration: BoxDecoration(
-                color: theme.colorScheme.surface,
-                border: Border(
-                  left: BorderSide(
-                    color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
+            child: Material(
+              color: theme.colorScheme.surface,
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border(
+                    left: BorderSide(
+                      color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
+                    ),
                   ),
                 ),
+                child: _buildInspector(context, theme),
               ),
-              child: _buildInspector(context, theme),
             ),
           ),
         ],
@@ -431,6 +452,58 @@ class _DesignSystemGalleryTabState extends State<DesignSystemGalleryTab> {
           body: _buildScrollableBody(context),
         );
 
+      case AppBarModel.adaptiveBreakpointNav:
+        return AppBarEngine.custom(
+          key: ValueKey('l2_adapt_${_adaptiveTitle}_$_adaptiveCompactSub'),
+          controller: _appBarController,
+          model: AppBarModel.adaptiveBreakpointNav,
+          configuration: AdaptiveBreakpointNavConfig(
+            title: _adaptiveTitle,
+            compactSubtitle: _adaptiveCompactSub,
+            mediumSubtitle: _adaptiveMediumSub,
+            expandedSubtitle: _adaptiveExpandedSub,
+          ),
+          body: _buildScrollableBody(context),
+        );
+
+      case AppBarModel.contextFocalSwapNav:
+        return AppBarEngine.custom(
+          key: ValueKey('l2_focal_$_focalDomainIndex'),
+          controller: _appBarController,
+          model: AppBarModel.contextFocalSwapNav,
+          configuration: ContextFocalSwapNavConfig(
+            activeDomainIndex: _focalDomainIndex,
+            onDomainSwapped: (idx) => setState(() => _focalDomainIndex = idx),
+          ),
+          body: _buildScrollableBody(context),
+        );
+
+      case AppBarModel.liquidWaveMorphNav:
+        return AppBarEngine.custom(
+          key: ValueKey('l2_wave_${_waveTitle}_${_waveAmplitude}_$_waveFrequency'),
+          controller: _appBarController,
+          model: AppBarModel.liquidWaveMorphNav,
+          configuration: LiquidWaveMorphNavConfig(
+            title: _waveTitle,
+            subtitle: _waveSubtitle,
+            waveAmplitude: _waveAmplitude,
+            waveFrequency: _waveFrequency,
+          ),
+          body: _buildScrollableBody(context),
+        );
+
+      case AppBarModel.developerCustomCanvas:
+        return AppBarEngine.custom(
+          key: ValueKey('l2_canvas_${_canvasName}_$_showBlueprintGrid'),
+          controller: _appBarController,
+          model: AppBarModel.developerCustomCanvas,
+          configuration: DeveloperCustomCanvasConfig(
+            canvasName: _canvasName,
+            showBlueprintGrid: _showBlueprintGrid,
+          ),
+          body: _buildScrollableBody(context),
+        );
+
       default:
         return AppBarEngine(
           controller: _appBarController,
@@ -635,6 +708,11 @@ class _DesignSystemGalleryTabState extends State<DesignSystemGalleryTab> {
       (AppBarModel.timelineScrubberNav, 'M14: Timeline Scrubber Navigation', Icons.timeline_outlined),
       (AppBarModel.searchSpotlight, 'M15: Search Spotlight First', Icons.search_outlined),
       (AppBarModel.gestureElasticCanvas, 'M16: Gesture Elastic Canvas', Icons.waves_outlined),
+      // Batch E (Models 17–20)
+      (AppBarModel.adaptiveBreakpointNav, 'M17: Adaptive Breakpoint Nav', Icons.devices_outlined),
+      (AppBarModel.contextFocalSwapNav, 'M18: Context Focal Swap Nav', Icons.swap_horiz_outlined),
+      (AppBarModel.liquidWaveMorphNav, 'M19: Liquid Wave Morph Nav', Icons.water_drop_outlined),
+      (AppBarModel.developerCustomCanvas, 'M20: Developer Custom Canvas', Icons.architecture_outlined),
     ];
 
     return Column(
@@ -1092,6 +1170,103 @@ class _DesignSystemGalleryTabState extends State<DesignSystemGalleryTab> {
           ],
         );
 
+      case AppBarModel.adaptiveBreakpointNav:
+        return Column(
+          children: [
+            TextField(
+              decoration: const InputDecoration(labelText: 'Title', isDense: true),
+              controller: TextEditingController(text: _adaptiveTitle)
+                ..selection = TextSelection.collapsed(offset: _adaptiveTitle.length),
+              onChanged: (val) => setState(() => _adaptiveTitle = val),
+            ),
+            const SizedBox(height: 10.0),
+            TextField(
+              decoration: const InputDecoration(labelText: 'Compact (<600px) Subtitle', isDense: true),
+              controller: TextEditingController(text: _adaptiveCompactSub)
+                ..selection = TextSelection.collapsed(offset: _adaptiveCompactSub.length),
+              onChanged: (val) => setState(() => _adaptiveCompactSub = val),
+            ),
+            const SizedBox(height: 10.0),
+            TextField(
+              decoration: const InputDecoration(labelText: 'Medium (600-1024px) Subtitle', isDense: true),
+              controller: TextEditingController(text: _adaptiveMediumSub)
+                ..selection = TextSelection.collapsed(offset: _adaptiveMediumSub.length),
+              onChanged: (val) => setState(() => _adaptiveMediumSub = val),
+            ),
+            const SizedBox(height: 10.0),
+            TextField(
+              decoration: const InputDecoration(labelText: 'Expanded (>1024px) Subtitle', isDense: true),
+              controller: TextEditingController(text: _adaptiveExpandedSub)
+                ..selection = TextSelection.collapsed(offset: _adaptiveExpandedSub.length),
+              onChanged: (val) => setState(() => _adaptiveExpandedSub = val),
+            ),
+          ],
+        );
+
+      case AppBarModel.contextFocalSwapNav:
+        return Column(
+          children: [
+            _buildSliderRow('Active Domain Index', _focalDomainIndex.toDouble(), 0.0, 2.0, (val) {
+              setState(() => _focalDomainIndex = val.round());
+            }),
+            const SizedBox(height: 8.0),
+            Text(
+              'Selected: ${_focalDomainIndex == 0 ? "Financial Core" : _focalDomainIndex == 1 ? "Infrastructure DevOps" : "Cyber Security"}',
+              style: theme.textTheme.bodySmall,
+            ),
+          ],
+        );
+
+      case AppBarModel.liquidWaveMorphNav:
+        return Column(
+          children: [
+            TextField(
+              decoration: const InputDecoration(labelText: 'Title', isDense: true),
+              controller: TextEditingController(text: _waveTitle)
+                ..selection = TextSelection.collapsed(offset: _waveTitle.length),
+              onChanged: (val) => setState(() => _waveTitle = val),
+            ),
+            const SizedBox(height: 10.0),
+            TextField(
+              decoration: const InputDecoration(labelText: 'Subtitle', isDense: true),
+              controller: TextEditingController(text: _waveSubtitle)
+                ..selection = TextSelection.collapsed(offset: _waveSubtitle.length),
+              onChanged: (val) => setState(() => _waveSubtitle = val),
+            ),
+            const SizedBox(height: 10.0),
+            _buildSliderRow('Wave Amplitude', _waveAmplitude, 5.0, 35.0, (val) {
+              setState(() => _waveAmplitude = val);
+            }),
+            const SizedBox(height: 10.0),
+            _buildSliderRow('Wave Frequency', _waveFrequency, 1.0, 4.0, (val) {
+              setState(() => _waveFrequency = val);
+            }),
+          ],
+        );
+
+      case AppBarModel.developerCustomCanvas:
+        return Column(
+          children: [
+            TextField(
+              decoration: const InputDecoration(labelText: 'Canvas Name', isDense: true),
+              controller: TextEditingController(text: _canvasName)
+                ..selection = TextSelection.collapsed(offset: _canvasName.length),
+              onChanged: (val) => setState(() => _canvasName = val),
+            ),
+            const SizedBox(height: 10.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('Show Blueprint Grid', style: TextStyle(fontSize: 13.0)),
+                Switch(
+                  value: _showBlueprintGrid,
+                  onChanged: (val) => setState(() => _showBlueprintGrid = val),
+                ),
+              ],
+            ),
+          ],
+        );
+
       default:
         return const Text('Configure parameters in Level 2 mode.');
     }
@@ -1431,6 +1606,53 @@ AppBarEngine.custom(
   configuration: GestureElasticCanvasConfig(
     canvasTitle: '$_elasticCanvasTitle',
     statusMetric: '$_elasticMetric',
+  ),
+  body: const MyContentWidget(),
+)''';
+        } else if (_selectedModel == AppBarModel.adaptiveBreakpointNav) {
+          return '''
+// Level 2: Configurable Mode (Model 17)
+AppBarEngine.custom(
+  model: AppBarModel.adaptiveBreakpointNav,
+  configuration: AdaptiveBreakpointNavConfig(
+    title: '$_adaptiveTitle',
+    compactSubtitle: '$_adaptiveCompactSub',
+    mediumSubtitle: '$_adaptiveMediumSub',
+    expandedSubtitle: '$_adaptiveExpandedSub',
+  ),
+  body: const MyContentWidget(),
+)''';
+        } else if (_selectedModel == AppBarModel.contextFocalSwapNav) {
+          return '''
+// Level 2: Configurable Mode (Model 18)
+AppBarEngine.custom(
+  model: AppBarModel.contextFocalSwapNav,
+  configuration: ContextFocalSwapNavConfig(
+    activeDomainIndex: $_focalDomainIndex,
+  ),
+  body: const MyContentWidget(),
+)''';
+        } else if (_selectedModel == AppBarModel.liquidWaveMorphNav) {
+          return '''
+// Level 2: Configurable Mode (Model 19)
+AppBarEngine.custom(
+  model: AppBarModel.liquidWaveMorphNav,
+  configuration: LiquidWaveMorphNavConfig(
+    title: '$_waveTitle',
+    subtitle: '$_waveSubtitle',
+    waveAmplitude: ${_waveAmplitude.toStringAsFixed(1)},
+    waveFrequency: ${_waveFrequency.toStringAsFixed(1)},
+  ),
+  body: const MyContentWidget(),
+)''';
+        } else if (_selectedModel == AppBarModel.developerCustomCanvas) {
+          return '''
+// Level 2: Configurable Mode (Model 20)
+AppBarEngine.custom(
+  model: AppBarModel.developerCustomCanvas,
+  configuration: DeveloperCustomCanvasConfig(
+    canvasName: '$_canvasName',
+    showBlueprintGrid: $_showBlueprintGrid,
   ),
   body: const MyContentWidget(),
 )''';

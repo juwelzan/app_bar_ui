@@ -279,3 +279,4 @@ class _VerticalRailTransformDelegate extends SliverPersistentHeaderDelegate {
         oldDelegate.topPadding != topPadding;
   }
 }
+

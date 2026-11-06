@@ -76,3 +76,4 @@ class TimelineScrubberNavConfig extends AppBarModelConfiguration {
   /// Callback when user selects a milestone node.
   final ValueChanged<int>? onNodeSelected;
 }
+

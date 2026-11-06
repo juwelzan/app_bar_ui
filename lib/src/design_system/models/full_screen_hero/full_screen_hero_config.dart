@@ -52,3 +52,4 @@ class FullScreenHeroConfig extends AppBarModelConfiguration {
   /// Optional override for the expanded viewport height (defaults to 100vh).
   final double? customViewportHeight;
 }
+

@@ -59,3 +59,4 @@ class RadialDialConfig extends AppBarModelConfiguration {
   /// Collapsed height of the compact pinned toolbar.
   final double collapsedHeight;
 }
+

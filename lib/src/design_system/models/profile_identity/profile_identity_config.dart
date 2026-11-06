@@ -56,3 +56,4 @@ class ProfileIdentityConfig extends AppBarModelConfiguration {
   /// Collapsed height of the pinned toolbar.
   final double collapsedHeight;
 }
+

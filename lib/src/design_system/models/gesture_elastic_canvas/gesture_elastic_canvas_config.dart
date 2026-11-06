@@ -48,3 +48,4 @@ class GestureElasticCanvasConfig extends AppBarModelConfiguration {
   /// Callback triggered when an overscroll gesture threshold is met.
   final VoidCallback? onRefreshTriggered;
 }
+

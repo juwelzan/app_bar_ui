@@ -56,3 +56,4 @@ class ImmersiveSpatialConfig extends AppBarModelConfiguration {
   /// Secondary subtitle string.
   final String? subtitleText;
 }
+

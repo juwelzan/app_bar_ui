@@ -322,3 +322,4 @@ class _CardDeckStackedDelegate extends SliverPersistentHeaderDelegate {
         oldDelegate.topPadding != topPadding;
   }
 }
+

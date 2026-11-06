@@ -64,3 +64,4 @@ class Spatial3DFlipConfig extends AppBarModelConfiguration {
   /// Corner radius of the 3D rotating card.
   final double borderRadius;
 }
+

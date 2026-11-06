@@ -30,3 +30,4 @@ abstract class AppBarModelConfiguration {
   /// Resting elevation in logical pixels.
   final double elevation;
 }
+

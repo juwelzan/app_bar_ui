@@ -101,7 +101,7 @@ class _GestureElasticCanvasDelegate extends SliverPersistentHeaderDelegate {
                 fit: StackFit.expand,
                 children: [
                   // --- EXPANDED ELASTIC ATMOSPHERE CANVAS ---
-                  if (progress < 0.88)
+                  if (progress < 0.65)
                     Opacity(
                       opacity: isReducedMotion
                           ? (progress > 0.5 ? 0.0 : 1.0)

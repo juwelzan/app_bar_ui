@@ -46,3 +46,4 @@ class GestureElasticCanvasRenderer extends AppBarModelRenderer {
     );
   }
 }
+

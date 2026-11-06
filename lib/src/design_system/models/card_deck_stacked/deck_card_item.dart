@@ -34,3 +34,4 @@ class DeckCardItem {
   /// Optional tap callback.
   final VoidCallback? onTap;
 }
+

@@ -57,3 +57,4 @@ class FloatingIslandConfig extends AppBarModelConfiguration {
   /// Highlight accent color for live indicators.
   final Color? accentColor;
 }
+

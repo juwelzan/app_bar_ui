@@ -28,6 +28,10 @@ import '../../design_system/models/expandable_control_center/expandable_control_
 import '../../design_system/models/timeline_scrubber_nav/timeline_scrubber_nav_renderer.dart';
 import '../../design_system/models/search_spotlight/search_spotlight_renderer.dart';
 import '../../design_system/models/gesture_elastic_canvas/gesture_elastic_canvas_renderer.dart';
+import '../../design_system/models/adaptive_breakpoint_nav/adaptive_breakpoint_nav_renderer.dart';
+import '../../design_system/models/context_focal_swap_nav/context_focal_swap_nav_renderer.dart';
+import '../../design_system/models/liquid_wave_morph_nav/liquid_wave_morph_nav_renderer.dart';
+import '../../design_system/models/developer_custom_canvas/developer_custom_canvas_renderer.dart';
 
 /// Bootstraps all built-in model renderers into the registry.
 void bootstrapBuiltInRenderers(AppBarModelRegistry registry) {
@@ -387,6 +391,28 @@ void bootstrapBuiltInRenderers(AppBarModelRegistry registry) {
     AppBarModel.gestureElasticCanvas,
     () => const GestureElasticCanvasRenderer(),
     capabilities: const ModelCapabilities(supportsDragToExpand: true, supportsSticky: true, supportsMultiStage: true),
+  );
+
+  // --- Complete Design System: Batch E (Models 17–20) ---
+  registry.register(
+    AppBarModel.adaptiveBreakpointNav,
+    () => const AdaptiveBreakpointNavRenderer(),
+    capabilities: const ModelCapabilities(supportsSticky: true, supportsMultiStage: true),
+  );
+  registry.register(
+    AppBarModel.contextFocalSwapNav,
+    () => const ContextFocalSwapNavRenderer(),
+    capabilities: const ModelCapabilities(supportsSticky: true, supportsMultiStage: true),
+  );
+  registry.register(
+    AppBarModel.liquidWaveMorphNav,
+    () => const LiquidWaveMorphNavRenderer(),
+    capabilities: const ModelCapabilities(supportsShapeMorph: true, supportsSticky: true),
+  );
+  registry.register(
+    AppBarModel.developerCustomCanvas,
+    () => const DeveloperCustomCanvasRenderer(),
+    capabilities: const ModelCapabilities(supportsSticky: true, supportsMultiStage: true),
   );
 }
 

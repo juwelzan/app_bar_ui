@@ -65,3 +65,4 @@ class ModelTransitionSpec {
   /// Fractional offset when [ModelTransitionType.slide] is chosen.
   final Offset slideOffset;
 }
+

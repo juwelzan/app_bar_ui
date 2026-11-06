@@ -44,3 +44,4 @@ class VerticalRailTransformRenderer extends AppBarModelRenderer {
     );
   }
 }
+

@@ -309,3 +309,4 @@ class _RadialDialDelegate extends SliverPersistentHeaderDelegate {
         oldDelegate.topPadding != topPadding;
   }
 }
+

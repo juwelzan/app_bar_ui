@@ -56,3 +56,4 @@ class SearchSpotlightConfig extends AppBarModelConfiguration {
   /// Callback when a filter chip is tapped.
   final ValueChanged<int>? onFilterSelected;
 }
+

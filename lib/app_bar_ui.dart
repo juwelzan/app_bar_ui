@@ -156,6 +156,18 @@ export 'src/design_system/models/search_spotlight/search_spotlight_header.dart';
 export 'src/design_system/models/gesture_elastic_canvas/gesture_elastic_canvas_config.dart';
 export 'src/design_system/models/gesture_elastic_canvas/gesture_elastic_canvas_header.dart';
 
+// Complete AppBar Design System: Models (Batch E)
+export 'src/design_system/models/adaptive_breakpoint_nav/adaptive_breakpoint_profile.dart';
+export 'src/design_system/models/adaptive_breakpoint_nav/adaptive_breakpoint_nav_config.dart';
+export 'src/design_system/models/adaptive_breakpoint_nav/adaptive_breakpoint_nav_header.dart';
+export 'src/design_system/models/context_focal_swap_nav/focal_domain_context.dart';
+export 'src/design_system/models/context_focal_swap_nav/context_focal_swap_nav_config.dart';
+export 'src/design_system/models/context_focal_swap_nav/context_focal_swap_nav_header.dart';
+export 'src/design_system/models/liquid_wave_morph_nav/liquid_wave_morph_nav_config.dart';
+export 'src/design_system/models/liquid_wave_morph_nav/liquid_wave_morph_nav_header.dart';
+export 'src/design_system/models/developer_custom_canvas/developer_custom_canvas_config.dart';
+export 'src/design_system/models/developer_custom_canvas/developer_custom_canvas_header.dart';
+
 import 'app_bar_ui_platform_interface.dart';
 
 /// Legacy platform interface wrapper.

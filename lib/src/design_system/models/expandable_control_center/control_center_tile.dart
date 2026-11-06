@@ -26,3 +26,4 @@ class ControlCenterTile {
   /// Callback when user taps or toggles this tile.
   final VoidCallback? onTap;
 }
+

@@ -197,3 +197,4 @@ class _MinimalistMicroBarDelegate extends SliverPersistentHeaderDelegate {
         oldDelegate.topPadding != topPadding;
   }
 }
+

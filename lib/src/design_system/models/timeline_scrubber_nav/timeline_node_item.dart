@@ -30,3 +30,4 @@ class TimelineNodeItem {
   /// Optional tap callback.
   final VoidCallback? onTap;
 }
+
