@@ -55,6 +55,11 @@ export 'src/experiences/vertical_folding_accordion_header.dart';
 export 'src/experiences/layered_depth_parallax_header.dart';
 export 'src/experiences/expanding_hero_card_header.dart';
 export 'src/experiences/liquid_wave_morph_header.dart';
+export 'src/experiences/auto_hiding_velocity_header.dart';
+export 'src/experiences/scroll_synchronized_progress_header.dart';
+export 'src/experiences/sticky_collapse_dual_tier_header.dart';
+export 'src/experiences/multi_stage_staged_reveal_header.dart';
+export 'src/experiences/animated_dock_header.dart';
 
 import 'app_bar_ui_platform_interface.dart';
 

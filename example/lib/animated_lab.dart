@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:app_bar_ui/app_bar_ui.dart';
 
 /// Interactive laboratory showcasing the 50 genuinely different animated
-/// AppBar experiences across Batches 1 & 2 (Styles 1–10).
+/// AppBar experiences across Batches 1, 2, & 3 (Styles 1–15).
 class AnimatedExperiencesLabTab extends StatefulWidget {
   const AnimatedExperiencesLabTab({super.key});
 
@@ -95,6 +95,48 @@ enum ExperienceStyle {
     description:
         'Mathematical sine wave ripples flattening into straight edge',
     icon: Icons.water_drop_outlined,
+  ),
+
+  // Batch 3 (Styles 11–15)
+  autoHiding(
+    id: 11,
+    batch: 3,
+    title: 'Auto-Hiding Velocity Header',
+    description:
+        'Velocity and scroll direction-sensitive auto-slide hide/reveal',
+    icon: Icons.visibility_off_outlined,
+  ),
+  progressSync(
+    id: 12,
+    batch: 3,
+    title: 'Scroll-Synchronized Progress',
+    description:
+        'Circular progress ring and linear track tied to reading percentage',
+    icon: Icons.timelapse_outlined,
+  ),
+  stickyDualTier(
+    id: 13,
+    batch: 3,
+    title: 'Sticky-Collapse Dual-Tier',
+    description:
+        'Tier 1 branding collapses away while Tier 2 navigation locks sticky',
+    icon: Icons.table_rows_outlined,
+  ),
+  multiStage(
+    id: 14,
+    batch: 3,
+    title: 'Multi-Stage Staged Reveal',
+    description:
+        '3 discrete architectural states triggered at scroll boundaries',
+    icon: Icons.view_carousel_outlined,
+  ),
+  animatedDock(
+    id: 15,
+    batch: 3,
+    title: 'Animated Dock Header',
+    description:
+        'Top header smoothly dissolves into a floating bottom navigation dock',
+    icon: Icons.dock_outlined,
   );
 
   const ExperienceStyle({
@@ -114,9 +156,10 @@ enum ExperienceStyle {
 
 class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
   ExperienceStyle _selectedStyle = ExperienceStyle.morphingSplit;
-  int _selectedBatchFilter = 0; // 0 = All active, 1 = Batch 1, 2 = Batch 2
+  int _selectedBatchFilter = 0; // 0 = All active (1-15), 1 = Batch 1, 2 = Batch 2, 3 = Batch 3
   final ScrollController _scrollController = ScrollController();
   final GlobalKey<dynamic> _elasticKey = GlobalKey();
+  final GlobalKey<AutoHidingVelocityHeaderWidgetState> _autoHideKey = GlobalKey();
 
   // Telemetry state
   double _currentOffset = 0.0;
@@ -133,25 +176,25 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
   double _elasticDamping = 18.0;
   double _elasticStiffness = 220.0;
   double _elasticHorizontalMargin = 16.0;
-  double _elasticElevation = 4.0;
+  final double _elasticElevation = 4.0;
 
   // Style 3 params (Disappearing Actions)
   double _disappearingExpandedHeight = 160.0;
   double _disappearingDetachOffset = 45.0;
   double _disappearingFadeOffset = 80.0;
-  double _disappearingActionSpacing = 10.0;
-  double _disappearingElevation = 6.0;
+  final double _disappearingActionSpacing = 10.0;
+  final double _disappearingElevation = 6.0;
 
   // Style 4 params (Circular Morph)
   double _circleTargetDiameter = 54.0;
   double _circleExpandedHeight = 140.0;
-  Alignment _circleAnchorAlignment = Alignment.topRight;
+  final Alignment _circleAnchorAlignment = Alignment.topRight;
 
   // Style 5 params (Flip 3D)
   double _flipPerspective = 0.0016;
   double _flipFrontElevation = 2.0;
   double _flipBackElevation = 4.0;
-  Axis _flipAxis = Axis.horizontal;
+  final Axis _flipAxis = Axis.horizontal;
 
   // Style 6 params (Horizontal Sliding Panels)
   double _panel1SlideDistance = 100.0;
@@ -161,7 +204,7 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
   // Style 7 params (Vertical Folding Accordion)
   double _accordionFoldThreshold = 100.0;
   double _accordionPerspective = 0.002;
-  double _accordionSeamShadow = 0.45;
+  final double _accordionSeamShadow = 0.45;
 
   // Style 8 params (Layered Depth Parallax)
   double _parallaxBgFactor = 0.25;
@@ -172,12 +215,36 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
   double _cardHMargin = 16.0;
   double _cardVMargin = 12.0;
   double _cardRadius = 20.0;
-  double _cardExpandThreshold = 65.0;
+  final double _cardExpandThreshold = 65.0;
 
   // Style 10 params (Liquid Wave Morph)
   double _waveAmplitude = 22.0;
   double _waveFrequency = 1.4;
-  double _waveFlattenOffset = 85.0;
+  final double _waveFlattenOffset = 85.0;
+
+  // Style 11 params (Auto-Hiding Velocity)
+  double _autoHideVelocityThreshold = 150.0;
+  double _autoRevealVelocityThreshold = -120.0;
+  final double _autoHideElevation = 3.0;
+
+  // Style 12 params (Scroll-Synchronized Progress)
+  double _progressStrokeWidth = 3.5;
+  bool _progressShowBadge = true;
+
+  // Style 13 params (Sticky-Collapse Dual-Tier)
+  double _tier1Height = 85.0;
+  double _tier2Height = 56.0;
+  double _dualTierCollapseThreshold = 85.0;
+
+  // Style 14 params (Multi-Stage Staged Reveal)
+  double _stage1EndOffset = 70.0;
+  double _stage2EndOffset = 140.0;
+  double _multiStageExpandedHeight = 210.0;
+
+  // Style 15 params (Animated Dock)
+  double _dockTriggerOffset = 90.0;
+  double _dockBottomMargin = 16.0;
+  double _dockElevation = 8.0;
 
   @override
   void initState() {
@@ -215,6 +282,8 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
       return ExperienceStyle.values.where((s) => s.batch == 1).toList();
     } else if (_selectedBatchFilter == 2) {
       return ExperienceStyle.values.where((s) => s.batch == 2).toList();
+    } else if (_selectedBatchFilter == 3) {
+      return ExperienceStyle.values.where((s) => s.batch == 3).toList();
     }
     return ExperienceStyle.values;
   }
@@ -263,9 +332,45 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
                   _buildDemoContentSliver(context),
                 ],
               ),
+              // Floating Bottom Dock Capsule (for Style 15)
+              if (_selectedStyle == ExperienceStyle.animatedDock)
+                FloatingBottomDockCapsule(
+                  scrollOffset: _currentOffset,
+                  config: AnimatedDockConfig(
+                    dockTriggerOffset: _dockTriggerOffset,
+                    dockBottomMargin: _dockBottomMargin,
+                    dockElevation: _dockElevation,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.home),
+                        tooltip: 'Home',
+                        onPressed: _resetScroll,
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.search),
+                        tooltip: 'Search',
+                        onPressed: () {},
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.bookmark),
+                        tooltip: 'Saved',
+                        onPressed: () {},
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.tune),
+                        tooltip: 'Tune',
+                        onPressed: () => _openParameterSheet(context),
+                      ),
+                    ],
+                  ),
+                ),
+              // Sticky Live Telemetry HUD
               Positioned(
                 right: 16.0,
-                bottom: 16.0,
+                bottom: _selectedStyle == ExperienceStyle.animatedDock ? 88.0 : 16.0,
                 child: _buildTelemetryHUD(theme),
               ),
             ],
@@ -292,30 +397,16 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
           leftModule: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () {},
-              ),
+              IconButton(icon: const Icon(Icons.arrow_back), onPressed: () {}),
               const SizedBox(width: 4.0),
-              Text(
-                'Projects',
-                style: theme.textTheme.titleMedium!.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              Text('Projects', style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold)),
             ],
           ),
           rightModule: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              IconButton(
-                icon: const Icon(Icons.filter_list),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: const Icon(Icons.search),
-                onPressed: () {},
-              ),
+              IconButton(icon: const Icon(Icons.filter_list), onPressed: () {}),
+              IconButton(icon: const Icon(Icons.search), onPressed: () {}),
             ],
           ),
           compactPill: const Row(
@@ -324,10 +415,7 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
             children: [
               Icon(Icons.layers, size: 18.0),
               SizedBox(width: 6.0),
-              Text(
-                'Projects',
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13.0),
-              ),
+              Text('Projects', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13.0)),
             ],
           ),
         );
@@ -350,17 +438,9 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
                 const Icon(Icons.speed, size: 20.0),
                 const SizedBox(width: 8.0),
                 Expanded(
-                  child: Text(
-                    'Elastic Floating Mode',
-                    style: theme.textTheme.titleSmall!.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  child: Text('Elastic Floating Mode', style: theme.textTheme.titleSmall!.copyWith(fontWeight: FontWeight.bold)),
                 ),
-                IconButton(
-                  icon: const Icon(Icons.tune, size: 20.0),
-                  onPressed: () => _openParameterSheet(context),
-                ),
+                IconButton(icon: const Icon(Icons.tune, size: 20.0), onPressed: () => _openParameterSheet(context)),
               ],
             ),
             child: Container(
@@ -369,17 +449,9 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    'Elastic Dynamics Header',
-                    style: theme.textTheme.titleMedium!.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  Text('Elastic Dynamics Header', style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold)),
                   const SizedBox(height: 2.0),
-                  Text(
-                    'Pull down to observe non-linear spring stretch',
-                    style: theme.textTheme.bodySmall,
-                  ),
+                  Text('Pull down to observe non-linear spring stretch', style: theme.textTheme.bodySmall),
                 ],
               ),
             ),
@@ -389,33 +461,13 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
       // 3. Disappearing Floating Actions
       case ExperienceStyle.disappearingActions:
         return DisappearingFloatingActionsHeaderWidget(
-          title: Text(
-            'Unpinned Header Canvas',
-            style: theme.textTheme.titleMedium!.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          title: Text('Unpinned Header Canvas', style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold)),
           subtitle: const Text('Scroll up: only floating action pills remain'),
-          leading: IconButton(
-            icon: const Icon(Icons.menu),
-            onPressed: () {},
-          ),
+          leading: IconButton(icon: const Icon(Icons.menu), onPressed: () {}),
           actions: [
-            IconButton(
-              icon: const Icon(Icons.bookmark_border),
-              tooltip: 'Bookmark',
-              onPressed: () {},
-            ),
-            IconButton(
-              icon: const Icon(Icons.share),
-              tooltip: 'Share',
-              onPressed: () {},
-            ),
-            IconButton(
-              icon: const Icon(Icons.code),
-              tooltip: 'View Code',
-              onPressed: () => _showCodeDialog(context),
-            ),
+            IconButton(icon: const Icon(Icons.bookmark_border), tooltip: 'Bookmark', onPressed: () {}),
+            IconButton(icon: const Icon(Icons.share), tooltip: 'Share', onPressed: () {}),
+            IconButton(icon: const Icon(Icons.code), tooltip: 'View Code', onPressed: () => _showCodeDialog(context)),
           ],
           config: DisappearingFloatingActionsConfig(
             expandedHeight: _disappearingExpandedHeight,
@@ -440,29 +492,14 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const CircleAvatar(
-                  radius: 32.0,
-                  backgroundColor: Colors.indigo,
-                  child: Icon(Icons.person, size: 36.0, color: Colors.white),
-                ),
+                const CircleAvatar(radius: 32.0, backgroundColor: Colors.indigo, child: Icon(Icons.person, size: 36.0, color: Colors.white)),
                 const SizedBox(height: 6.0),
-                Text(
-                  'Sarah Connor',
-                  style: theme.textTheme.titleMedium!.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  'Cybernetics Architect',
-                  style: theme.textTheme.bodySmall,
-                ),
+                Text('Sarah Connor', style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold)),
+                Text('Cybernetics Architect', style: theme.textTheme.bodySmall),
               ],
             ),
           ),
-          circularChild: const CircleAvatar(
-            backgroundColor: Colors.indigo,
-            child: Icon(Icons.person, color: Colors.white, size: 24.0),
-          ),
+          circularChild: const CircleAvatar(backgroundColor: Colors.indigo, child: Icon(Icons.person, color: Colors.white, size: 24.0)),
         );
 
       // 5. Flip 3D
@@ -486,10 +523,7 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
                   Container(
                     width: 50.0,
                     height: 50.0,
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.primary,
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
+                    decoration: BoxDecoration(color: theme.colorScheme.primary, borderRadius: BorderRadius.circular(12.0)),
                     child: const Icon(Icons.view_in_ar, color: Colors.white, size: 28.0),
                   ),
                   const SizedBox(width: 14.0),
@@ -498,17 +532,9 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(
-                          '3D Flip Face A: Card',
-                          style: theme.textTheme.titleMedium!.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        Text('3D Flip Face A: Card', style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold)),
                         const SizedBox(height: 2.0),
-                        Text(
-                          'Scroll down to flip 180° into Face B',
-                          style: theme.textTheme.bodySmall,
-                        ),
+                        Text('Scroll down to flip 180° into Face B', style: theme.textTheme.bodySmall),
                       ],
                     ),
                   ),
@@ -524,17 +550,9 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
                 const Icon(Icons.flip, color: Colors.teal),
                 const SizedBox(width: 10.0),
                 Expanded(
-                  child: Text(
-                    'Face B: Compact Nav Bar',
-                    style: theme.textTheme.titleSmall!.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  child: Text('Face B: Compact Nav Bar', style: theme.textTheme.titleSmall!.copyWith(fontWeight: FontWeight.bold)),
                 ),
-                IconButton(
-                  icon: const Icon(Icons.refresh),
-                  onPressed: _resetScroll,
-                ),
+                IconButton(icon: const Icon(Icons.refresh), onPressed: _resetScroll),
               ],
             ),
           ),
@@ -554,12 +572,7 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
             children: [
               IconButton(icon: const Icon(Icons.menu), onPressed: () {}),
               const SizedBox(width: 8.0),
-              Text(
-                'Explore Catalogs',
-                style: theme.textTheme.titleMedium!.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              Text('Explore Catalogs', style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold)),
               const Spacer(),
               IconButton(icon: const Icon(Icons.search), onPressed: () {}),
             ],
@@ -573,7 +586,7 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
                 const SizedBox(width: 8.0),
                 FilterChip(selected: false, label: const Text('Technology'), onSelected: (_) {}),
                 const SizedBox(width: 8.0),
-                FilterChip(selected: false, label: const Text('Science Fiction'), onSelected: (_) {}),
+                FilterChip(selected: false, label: const Text('Sci-Fi'), onSelected: (_) {}),
               ],
             ),
           ),
@@ -583,10 +596,7 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
               children: [
                 const Icon(Icons.bolt, size: 16.0, color: Colors.amber),
                 const SizedBox(width: 6.0),
-                Text(
-                  '48 new arrivals updated today',
-                  style: theme.textTheme.bodySmall,
-                ),
+                Text('48 new arrivals updated today', style: theme.textTheme.bodySmall),
               ],
             ),
           ),
@@ -606,12 +616,7 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
             children: [
               IconButton(icon: const Icon(Icons.arrow_back), onPressed: () {}),
               const SizedBox(width: 8.0),
-              Text(
-                'Origami Accordion',
-                style: theme.textTheme.titleMedium!.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              Text('Origami Accordion', style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold)),
               const Spacer(),
               IconButton(icon: const Icon(Icons.more_vert), onPressed: () {}),
             ],
@@ -628,16 +633,8 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        'Tier 2: Collapsible Details',
-                        style: theme.textTheme.titleSmall!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        'Folds 90° along the top hinge with seam shading',
-                        style: theme.textTheme.bodySmall,
-                      ),
+                      Text('Tier 2: Collapsible Details', style: theme.textTheme.titleSmall!.copyWith(fontWeight: FontWeight.bold)),
+                      Text('Folds 90° along the top hinge with seam shading', style: theme.textTheme.bodySmall),
                     ],
                   ),
                 ),
@@ -664,9 +661,7 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
                 colors: [Color(0xFF0D47A1), Color(0xFF1976D2), Color(0xFF42A5F5)],
               ),
             ),
-            child: const Center(
-              child: Icon(Icons.landscape, size: 100.0, color: Colors.white24),
-            ),
+            child: const Center(child: Icon(Icons.landscape, size: 100.0, color: Colors.white24)),
           ),
           midgroundLayer: Align(
             alignment: Alignment.centerLeft,
@@ -676,12 +671,8 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
                 children: [
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.25),
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                    child: const Text('FEATURED DESTINATION',
-                        style: TextStyle(color: Colors.white, fontSize: 11.0, fontWeight: FontWeight.bold)),
+                    decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.25), borderRadius: BorderRadius.circular(20.0)),
+                    child: const Text('FEATURED DESTINATION', style: TextStyle(color: Colors.white, fontSize: 11.0, fontWeight: FontWeight.bold)),
                   ),
                 ],
               ),
@@ -691,10 +682,7 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
             children: [
               IconButton(icon: const Icon(Icons.arrow_back, color: Colors.white), onPressed: () {}),
               const SizedBox(width: 8.0),
-              const Text(
-                'Glacier National Park',
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18.0),
-              ),
+              const Text('Glacier National Park', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18.0)),
               const Spacer(),
               IconButton(icon: const Icon(Icons.favorite_border, color: Colors.white), onPressed: () {}),
             ],
@@ -716,32 +704,17 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
             padding: const EdgeInsets.all(16.0),
             child: Row(
               children: [
-                const CircleAvatar(
-                  radius: 30.0,
-                  backgroundColor: Colors.teal,
-                  child: Icon(Icons.wallet, color: Colors.white, size: 28.0),
-                ),
+                const CircleAvatar(radius: 30.0, backgroundColor: Colors.teal, child: Icon(Icons.wallet, color: Colors.white, size: 28.0)),
                 const SizedBox(width: 16.0),
                 Expanded(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Total Balance',
-                        style: theme.textTheme.bodySmall,
-                      ),
-                      Text(
-                        '\$24,580.00',
-                        style: theme.textTheme.headlineSmall!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      Text('Total Balance', style: theme.textTheme.bodySmall),
+                      Text('\$24,580.00', style: theme.textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.bold)),
                       const SizedBox(height: 2.0),
-                      Text(
-                        'Scroll to expand card full-bleed',
-                        style: theme.textTheme.bodySmall,
-                      ),
+                      Text('Scroll to expand card full-bleed', style: theme.textTheme.bodySmall),
                     ],
                   ),
                 ),
@@ -752,12 +725,7 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
             children: [
               IconButton(icon: const Icon(Icons.menu), onPressed: () {}),
               const SizedBox(width: 8.0),
-              Text(
-                'Wallet: \$24,580.00',
-                style: theme.textTheme.titleMedium!.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              Text('Wallet: \$24,580.00', style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold)),
               const Spacer(),
               IconButton(icon: const Icon(Icons.add), onPressed: () {}),
             ],
@@ -774,10 +742,7 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
             waveFrequency: _waveFrequency,
             flattenOffset: _waveFlattenOffset,
           ),
-          compactTitle: const Text(
-            'Liquid Horizon',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18.0),
-          ),
+          compactTitle: const Text('Liquid Horizon', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18.0)),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             alignment: Alignment.centerLeft,
@@ -785,15 +750,168 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Oceanic Flow Wave',
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20.0),
-                ),
+                const Text('Oceanic Flow Wave', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20.0)),
                 const SizedBox(height: 4.0),
-                Text(
-                  'Sine wave bottom edge dynamically flattens into a straight bar',
-                  style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 13.0),
+                Text('Sine wave bottom edge dynamically flattens into a straight bar', style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 13.0)),
+              ],
+            ),
+          ),
+        );
+
+      // 11. Auto-Hiding Velocity Header
+      case ExperienceStyle.autoHiding:
+        return SliverToBoxAdapter(
+          child: AutoHidingVelocityHeaderWidget(
+            key: _autoHideKey,
+            config: AutoHidingVelocityConfig(
+              height: 64.0,
+              hideVelocityThreshold: _autoHideVelocityThreshold,
+              revealVelocityThreshold: _autoRevealVelocityThreshold,
+              elevation: _autoHideElevation,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
+                children: [
+                  IconButton(icon: const Icon(Icons.arrow_back), onPressed: () {}),
+                  const SizedBox(width: 8.0),
+                  Text('Auto-Hiding Velocity Bar', style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold)),
+                  const Spacer(),
+                  IconButton(icon: const Icon(Icons.tune), onPressed: () => _openParameterSheet(context)),
+                ],
+              ),
+            ),
+          ),
+        );
+
+      // 12. Scroll-Synchronized Progress Header
+      case ExperienceStyle.progressSync:
+        return ScrollSynchronizedProgressHeaderWidget(
+          title: const Text('Chapter 12: Quantum Computing'),
+          subtitle: const Text('18 min read remaining'),
+          leading: IconButton(icon: const Icon(Icons.menu_book), onPressed: () {}),
+          actions: [
+            IconButton(icon: const Icon(Icons.bookmark_border), onPressed: () {}),
+          ],
+          config: ScrollSynchronizedProgressConfig(
+            expandedHeight: 140.0,
+            collapsedHeight: 60.0,
+            progressStrokeWidth: _progressStrokeWidth,
+            showPercentageBadge: _progressShowBadge,
+          ),
+        );
+
+      // 13. Sticky-Collapse Dual-Tier Header
+      case ExperienceStyle.stickyDualTier:
+        return StickyCollapseDualTierHeaderWidget(
+          config: StickyCollapseDualTierConfig(
+            tier1Height: _tier1Height,
+            tier2Height: _tier2Height,
+            collapseThreshold: _dualTierCollapseThreshold,
+          ),
+          tier1Content: Container(
+            color: theme.colorScheme.primaryContainer,
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            alignment: Alignment.centerLeft,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Tier 1: Global Marketplace', style: theme.textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold)),
+                Text('Collapses away completely as user scrolls', style: theme.textTheme.bodySmall),
+              ],
+            ),
+          ),
+          tier2Content: Container(
+            color: theme.colorScheme.surface,
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              children: [
+                const Icon(Icons.category, size: 20.0),
+                const SizedBox(width: 8.0),
+                Expanded(
+                  child: Text('Tier 2: Sticky Pinned Controls', style: theme.textTheme.titleSmall!.copyWith(fontWeight: FontWeight.bold)),
                 ),
+                FilledButton.tonal(
+                  onPressed: () {},
+                  child: const Text('Filter'),
+                ),
+              ],
+            ),
+          ),
+        );
+
+      // 14. Multi-Stage Staged Reveal Header
+      case ExperienceStyle.multiStage:
+        return MultiStageStagedRevealHeaderWidget(
+          config: MultiStageStagedRevealConfig(
+            expandedHeight: _multiStageExpandedHeight,
+            collapsedHeight: 60.0,
+            stage1EndOffset: _stage1EndOffset,
+            stage2EndOffset: _stage2EndOffset,
+          ),
+          stage1Hero: Container(
+            color: theme.colorScheme.tertiaryContainer,
+            padding: const EdgeInsets.all(20.0),
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.rocket_launch, size: 48.0, color: Colors.deepOrange),
+                const SizedBox(height: 8.0),
+                Text('Stage 1: Hero Launchpad', style: theme.textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold)),
+                Text('Scroll down into Stage 2', style: theme.textTheme.bodySmall),
+              ],
+            ),
+          ),
+          stage2Meta: Container(
+            color: theme.colorScheme.surfaceContainerHighest,
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            alignment: Alignment.center,
+            child: Row(
+              children: [
+                const Icon(Icons.tune, color: Colors.teal),
+                const SizedBox(width: 8.0),
+                Expanded(
+                  child: Text('Stage 2: Contextual Meta Controls', style: theme.textTheme.titleSmall!.copyWith(fontWeight: FontWeight.bold)),
+                ),
+                Chip(label: const Text('Active Filters')),
+              ],
+            ),
+          ),
+          stage3Toolbar: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              children: [
+                const Icon(Icons.check_circle, color: Colors.green),
+                const SizedBox(width: 8.0),
+                Expanded(
+                  child: Text('Stage 3: Docked Toolbar', style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold)),
+                ),
+                IconButton(icon: const Icon(Icons.vertical_align_top), onPressed: _resetScroll),
+              ],
+            ),
+          ),
+        );
+
+      // 15. Animated Dock Header
+      case ExperienceStyle.animatedDock:
+        return AnimatedDockHeaderWidget(
+          config: AnimatedDockConfig(
+            topHeaderHeight: 110.0,
+            dockTriggerOffset: _dockTriggerOffset,
+          ),
+          topHeaderContent: Container(
+            color: theme.colorScheme.primaryContainer,
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            alignment: Alignment.centerLeft,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Top Header Canvas', style: theme.textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 2.0),
+                Text('Scroll down: header dissolves into floating bottom dock', style: theme.textTheme.bodySmall),
               ],
             ),
           ),
@@ -810,7 +928,7 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Batch Indicator Banner with interactive switch
+            // Batch Indicator Banner with interactive switcher
             Card(
               color: theme.colorScheme.surfaceContainerHighest,
               child: Padding(
@@ -827,13 +945,13 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Batches 1 & 2 Active (Styles 1–10 of 50)',
+                                'Batches 1, 2, & 3 Active (Styles 1–15 of 50)',
                                 style: theme.textTheme.labelLarge!.copyWith(
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                               Text(
-                                'Autonomous visual structure, motion physics & interaction models.',
+                                'Autonomous visual structures, motion physics & interaction mechanics.',
                                 style: theme.textTheme.bodySmall,
                               ),
                             ],
@@ -859,19 +977,24 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
                       runSpacing: 6.0,
                       children: [
                         FilterChip(
-                          label: const Text('All (1–10)'),
+                          label: const Text('All (1–15)'),
                           selected: _selectedBatchFilter == 0,
                           onSelected: (_) => setState(() => _selectedBatchFilter = 0),
                         ),
                         FilterChip(
-                          label: const Text('Batch 1: Morphing & Physics (1–5)'),
+                          label: const Text('Batch 1 (1–5)'),
                           selected: _selectedBatchFilter == 1,
                           onSelected: (_) => setState(() => _selectedBatchFilter = 1),
                         ),
                         FilterChip(
-                          label: const Text('Batch 2: Layered & Geometric (6–10)'),
+                          label: const Text('Batch 2 (6–10)'),
                           selected: _selectedBatchFilter == 2,
                           onSelected: (_) => setState(() => _selectedBatchFilter = 2),
+                        ),
+                        FilterChip(
+                          label: const Text('Batch 3 (11–15)'),
+                          selected: _selectedBatchFilter == 3,
+                          onSelected: (_) => setState(() => _selectedBatchFilter = 3),
                         ),
                       ],
                     ),
@@ -954,18 +1077,14 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
           return Card(
             margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
             child: ListTile(
-              leading: CircleAvatar(
-                child: Text('${index + 1}'),
-              ),
+              leading: CircleAvatar(child: Text('${index + 1}')),
               title: Text('Scrollable Content Item #${index + 1}'),
-              subtitle: Text(
-                'Observing "${_selectedStyle.title}" response at ${_currentOffset.toStringAsFixed(1)}px offset.',
-              ),
+              subtitle: Text('Observing "${_selectedStyle.title}" response at ${_currentOffset.toStringAsFixed(1)}px offset.'),
               trailing: const Icon(Icons.chevron_right),
             ),
           );
         },
-        childCount: 25,
+        childCount: 30,
       ),
     );
   }
@@ -979,29 +1098,16 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              Icons.analytics_outlined,
-              size: 16.0,
-              color: theme.colorScheme.onInverseSurface,
-            ),
+            Icon(Icons.analytics_outlined, size: 16.0, color: theme.colorScheme.onInverseSurface),
             const SizedBox(width: 8.0),
             Text(
               'Offset: ${_currentOffset.toStringAsFixed(1)}px',
-              style: TextStyle(
-                fontFamily: 'monospace',
-                fontSize: 12.0,
-                color: theme.colorScheme.onInverseSurface,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontFamily: 'monospace', fontSize: 12.0, color: theme.colorScheme.onInverseSurface, fontWeight: FontWeight.bold),
             ),
             const SizedBox(width: 12.0),
             Text(
               _simulateReducedMotion ? 'A11Y Fallback' : '60 FPS Motion',
-              style: TextStyle(
-                fontSize: 11.0,
-                color: theme.colorScheme.inversePrimary,
-                fontWeight: FontWeight.w600,
-              ),
+              style: TextStyle(fontSize: 11.0, color: theme.colorScheme.inversePrimary, fontWeight: FontWeight.w600),
             ),
           ],
         ),
@@ -1025,17 +1131,8 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Tune: ${_selectedStyle.title}',
-                        style: const TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.close),
-                        onPressed: () => Navigator.pop(context),
-                      ),
+                      Text('Tune: ${_selectedStyle.title}', style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
+                      IconButton(icon: const Icon(Icons.close), onPressed: () => Navigator.pop(context)),
                     ],
                   ),
                   const Divider(),
@@ -1153,17 +1250,6 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
               setState(() => _elasticHorizontalMargin = val);
             },
           ),
-          Text('Compact Elevation: ${_elasticElevation.toStringAsFixed(1)}'),
-          Slider(
-            value: _elasticElevation,
-            min: 0.0,
-            max: 12.0,
-            divisions: 12,
-            onChanged: (val) {
-              setSheetState(() => _elasticElevation = val);
-              setState(() => _elasticElevation = val);
-            },
-          ),
         ];
 
       case ExperienceStyle.disappearingActions:
@@ -1201,28 +1287,6 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
               setState(() => _disappearingFadeOffset = val);
             },
           ),
-          Text('Action Spacing: ${_disappearingActionSpacing.toStringAsFixed(0)} px'),
-          Slider(
-            value: _disappearingActionSpacing,
-            min: 4.0,
-            max: 20.0,
-            divisions: 8,
-            onChanged: (val) {
-              setSheetState(() => _disappearingActionSpacing = val);
-              setState(() => _disappearingActionSpacing = val);
-            },
-          ),
-          Text('Floating Elevation: ${_disappearingElevation.toStringAsFixed(1)}'),
-          Slider(
-            value: _disappearingElevation,
-            min: 0.0,
-            max: 10.0,
-            divisions: 10,
-            onChanged: (val) {
-              setSheetState(() => _disappearingElevation = val);
-              setState(() => _disappearingElevation = val);
-            },
-          ),
         ];
 
       case ExperienceStyle.circularMorph:
@@ -1248,22 +1312,6 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
               setSheetState(() => _circleExpandedHeight = val);
               setState(() => _circleExpandedHeight = val);
             },
-          ),
-          Row(
-            children: [
-              const Text('Anchor: '),
-              SegmentedButton<Alignment>(
-                segments: const [
-                  ButtonSegment(value: Alignment.topRight, label: Text('Right')),
-                  ButtonSegment(value: Alignment.topLeft, label: Text('Left')),
-                ],
-                selected: {_circleAnchorAlignment},
-                onSelectionChanged: (set) {
-                  setSheetState(() => _circleAnchorAlignment = set.first);
-                  setState(() => _circleAnchorAlignment = set.first);
-                },
-              ),
-            ],
           ),
         ];
 
@@ -1301,22 +1349,6 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
               setSheetState(() => _flipBackElevation = val);
               setState(() => _flipBackElevation = val);
             },
-          ),
-          Row(
-            children: [
-              const Text('Flip Axis: '),
-              SegmentedButton<Axis>(
-                segments: const [
-                  ButtonSegment(value: Axis.horizontal, label: Text('Horizontal')),
-                  ButtonSegment(value: Axis.vertical, label: Text('Vertical')),
-                ],
-                selected: {_flipAxis},
-                onSelectionChanged: (set) {
-                  setSheetState(() => _flipAxis = set.first);
-                  setState(() => _flipAxis = set.first);
-                },
-              ),
-            ],
           ),
         ];
 
@@ -1381,22 +1413,11 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
               setState(() => _accordionPerspective = val);
             },
           ),
-          Text('Seam Shadow Intensity: ${(_accordionSeamShadow * 100).toStringAsFixed(0)}%'),
-          Slider(
-            value: _accordionSeamShadow,
-            min: 0.1,
-            max: 0.9,
-            divisions: 8,
-            onChanged: (val) {
-              setSheetState(() => _accordionSeamShadow = val);
-              setState(() => _accordionSeamShadow = val);
-            },
-          ),
         ];
 
       case ExperienceStyle.layeredDepth:
         return [
-          Text('Background Parallax Factor: ${_parallaxBgFactor.toStringAsFixed(2)}x'),
+          Text('Background Parallax: ${_parallaxBgFactor.toStringAsFixed(2)}x'),
           Slider(
             value: _parallaxBgFactor,
             min: 0.1,
@@ -1407,7 +1428,7 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
               setState(() => _parallaxBgFactor = val);
             },
           ),
-          Text('Midground Parallax Factor: ${_parallaxMidFactor.toStringAsFixed(2)}x'),
+          Text('Midground Parallax: ${_parallaxMidFactor.toStringAsFixed(2)}x'),
           Slider(
             value: _parallaxMidFactor,
             min: 0.3,
@@ -1418,7 +1439,7 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
               setState(() => _parallaxMidFactor = val);
             },
           ),
-          Text('Max Focal Depth Blur: ${_parallaxMaxBlur.toStringAsFixed(1)} px'),
+          Text('Max Blur: ${_parallaxMaxBlur.toStringAsFixed(1)} px'),
           Slider(
             value: _parallaxMaxBlur,
             min: 0.0,
@@ -1466,17 +1487,6 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
               setState(() => _cardRadius = val);
             },
           ),
-          Text('Expand Threshold: ${_cardExpandThreshold.toStringAsFixed(0)} px'),
-          Slider(
-            value: _cardExpandThreshold,
-            min: 30.0,
-            max: 120.0,
-            divisions: 9,
-            onChanged: (val) {
-              setSheetState(() => _cardExpandThreshold = val);
-              setState(() => _cardExpandThreshold = val);
-            },
-          ),
         ];
 
       case ExperienceStyle.liquidWave:
@@ -1503,15 +1513,164 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
               setState(() => _waveFrequency = val);
             },
           ),
-          Text('Wave Flatten Offset: ${_waveFlattenOffset.toStringAsFixed(0)} px'),
+        ];
+
+      case ExperienceStyle.autoHiding:
+        return [
+          Text('Hide Velocity Threshold: ${_autoHideVelocityThreshold.toStringAsFixed(0)} px/s'),
           Slider(
-            value: _waveFlattenOffset,
+            value: _autoHideVelocityThreshold,
+            min: 50.0,
+            max: 400.0,
+            divisions: 14,
+            onChanged: (val) {
+              setSheetState(() => _autoHideVelocityThreshold = val);
+              setState(() => _autoHideVelocityThreshold = val);
+            },
+          ),
+          Text('Reveal Velocity Threshold: ${_autoRevealVelocityThreshold.toStringAsFixed(0)} px/s'),
+          Slider(
+            value: _autoRevealVelocityThreshold,
+            min: -300.0,
+            max: -30.0,
+            divisions: 9,
+            onChanged: (val) {
+              setSheetState(() => _autoRevealVelocityThreshold = val);
+              setState(() => _autoRevealVelocityThreshold = val);
+            },
+          ),
+        ];
+
+      case ExperienceStyle.progressSync:
+        return [
+          Text('Progress Stroke Width: ${_progressStrokeWidth.toStringAsFixed(1)} px'),
+          Slider(
+            value: _progressStrokeWidth,
+            min: 2.0,
+            max: 6.0,
+            divisions: 8,
+            onChanged: (val) {
+              setSheetState(() => _progressStrokeWidth = val);
+              setState(() => _progressStrokeWidth = val);
+            },
+          ),
+          SwitchListTile(
+            title: const Text('Show Percentage Badge'),
+            value: _progressShowBadge,
+            onChanged: (val) {
+              setSheetState(() => _progressShowBadge = val);
+              setState(() => _progressShowBadge = val);
+            },
+          ),
+        ];
+
+      case ExperienceStyle.stickyDualTier:
+        return [
+          Text('Tier 1 Height: ${_tier1Height.toStringAsFixed(0)} px'),
+          Slider(
+            value: _tier1Height,
+            min: 60.0,
+            max: 130.0,
+            divisions: 14,
+            onChanged: (val) {
+              setSheetState(() => _tier1Height = val);
+              setState(() => _tier1Height = val);
+            },
+          ),
+          Text('Tier 2 Height: ${_tier2Height.toStringAsFixed(0)} px'),
+          Slider(
+            value: _tier2Height,
+            min: 44.0,
+            max: 72.0,
+            divisions: 7,
+            onChanged: (val) {
+              setSheetState(() => _tier2Height = val);
+              setState(() => _tier2Height = val);
+            },
+          ),
+          Text('Collapse Threshold: ${_dualTierCollapseThreshold.toStringAsFixed(0)} px'),
+          Slider(
+            value: _dualTierCollapseThreshold,
             min: 40.0,
             max: 140.0,
             divisions: 10,
             onChanged: (val) {
-              setSheetState(() => _waveFlattenOffset = val);
-              setState(() => _waveFlattenOffset = val);
+              setSheetState(() => _dualTierCollapseThreshold = val);
+              setState(() => _dualTierCollapseThreshold = val);
+            },
+          ),
+        ];
+
+      case ExperienceStyle.multiStage:
+        return [
+          Text('Stage 1 End Offset: ${_stage1EndOffset.toStringAsFixed(0)} px'),
+          Slider(
+            value: _stage1EndOffset,
+            min: 40.0,
+            max: 100.0,
+            divisions: 6,
+            onChanged: (val) {
+              setSheetState(() => _stage1EndOffset = val);
+              setState(() => _stage1EndOffset = val);
+            },
+          ),
+          Text('Stage 2 End Offset: ${_stage2EndOffset.toStringAsFixed(0)} px'),
+          Slider(
+            value: _stage2EndOffset,
+            min: 100.0,
+            max: 200.0,
+            divisions: 10,
+            onChanged: (val) {
+              setSheetState(() => _stage2EndOffset = val);
+              setState(() => _stage2EndOffset = val);
+            },
+          ),
+          Text('Expanded Height: ${_multiStageExpandedHeight.toStringAsFixed(0)} px'),
+          Slider(
+            value: _multiStageExpandedHeight,
+            min: 160.0,
+            max: 260.0,
+            divisions: 10,
+            onChanged: (val) {
+              setSheetState(() => _multiStageExpandedHeight = val);
+              setState(() => _multiStageExpandedHeight = val);
+            },
+          ),
+        ];
+
+      case ExperienceStyle.animatedDock:
+        return [
+          Text('Dock Trigger Offset: ${_dockTriggerOffset.toStringAsFixed(0)} px'),
+          Slider(
+            value: _dockTriggerOffset,
+            min: 40.0,
+            max: 160.0,
+            divisions: 12,
+            onChanged: (val) {
+              setSheetState(() => _dockTriggerOffset = val);
+              setState(() => _dockTriggerOffset = val);
+            },
+          ),
+          Text('Bottom Margin: ${_dockBottomMargin.toStringAsFixed(0)} px'),
+          Slider(
+            value: _dockBottomMargin,
+            min: 8.0,
+            max: 32.0,
+            divisions: 6,
+            onChanged: (val) {
+              setSheetState(() => _dockBottomMargin = val);
+              setState(() => _dockBottomMargin = val);
+            },
+          ),
+          Text('Dock Elevation: ${_dockElevation.toStringAsFixed(1)}'),
+          Slider(
+            value: _dockElevation,
+            min: 2.0,
+            max: 16.0,
+            divisions: 14,
+            onChanged: (val) {
+              setSheetState(() => _dockElevation = val);
+              setState(() => _dockElevation = val);
             },
           ),
         ];
@@ -1856,6 +2015,138 @@ CustomScrollView(
       ),
     ),
     // ... list slivers
+  ],
+)''';
+
+      case ExperienceStyle.autoHiding:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+NotificationListener<ScrollNotification>(
+  onNotification: (notification) => false,
+  child: CustomScrollView(
+    slivers: [
+      SliverToBoxAdapter(
+        child: AutoHidingVelocityHeaderWidget(
+          config: AutoHidingVelocityConfig(
+            height: 64.0,
+            hideVelocityThreshold: $_autoHideVelocityThreshold,
+            revealVelocityThreshold: $_autoRevealVelocityThreshold,
+          ),
+          child: Row(
+            children: const [
+              Icon(Icons.arrow_back),
+              SizedBox(width: 8),
+              Text('Auto-Hiding Toolbar', style: TextStyle(fontWeight: FontWeight.bold)),
+            ],
+          ),
+        ),
+      ),
+      // ... list slivers
+    ],
+  ),
+)''';
+
+      case ExperienceStyle.progressSync:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+CustomScrollView(
+  slivers: [
+    ScrollSynchronizedProgressHeaderWidget(
+      title: const Text('Article Title', style: TextStyle(fontWeight: FontWeight.bold)),
+      subtitle: const Text('12 min read remaining'),
+      leading: const Icon(Icons.book),
+      config: ScrollSynchronizedProgressConfig(
+        expandedHeight: 140.0,
+        collapsedHeight: 60.0,
+        progressStrokeWidth: $_progressStrokeWidth,
+        showPercentageBadge: $_progressShowBadge,
+      ),
+    ),
+    // ... list slivers
+  ],
+)''';
+
+      case ExperienceStyle.stickyDualTier:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+CustomScrollView(
+  slivers: [
+    StickyCollapseDualTierHeaderWidget(
+      config: StickyCollapseDualTierConfig(
+        tier1Height: $_tier1Height,
+        tier2Height: $_tier2Height,
+        collapseThreshold: $_dualTierCollapseThreshold,
+      ),
+      tier1Content: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: const Text('Tier 1: Branding Banner', style: TextStyle(fontWeight: FontWeight.bold)),
+      ),
+      tier2Content: Row(
+        children: const [
+          Icon(Icons.category),
+          SizedBox(width: 8),
+          Text('Tier 2: Sticky Pinned Search / Tabs'),
+        ],
+      ),
+    ),
+    // ... list slivers
+  ],
+)''';
+
+      case ExperienceStyle.multiStage:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+CustomScrollView(
+  slivers: [
+    MultiStageStagedRevealHeaderWidget(
+      config: MultiStageStagedRevealConfig(
+        expandedHeight: $_multiStageExpandedHeight,
+        collapsedHeight: 60.0,
+        stage1EndOffset: $_stage1EndOffset,
+        stage2EndOffset: $_stage2EndOffset,
+      ),
+      stage1Hero: const Center(child: Text('Stage 1: Hero Showcase')),
+      stage2Meta: Row(children: const [Icon(Icons.tune), SizedBox(width: 8), Text('Stage 2: Contextual Meta')]),
+      stage3Toolbar: Row(children: const [Icon(Icons.arrow_back), SizedBox(width: 8), Text('Stage 3: Compact Dock')]),
+    ),
+    // ... list slivers
+  ],
+)''';
+
+      case ExperienceStyle.animatedDock:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+Stack(
+  children: [
+    CustomScrollView(
+      slivers: [
+        AnimatedDockHeaderWidget(
+          config: AnimatedDockConfig(
+            topHeaderHeight: 110.0,
+            dockTriggerOffset: $_dockTriggerOffset,
+          ),
+          topHeaderContent: const Text('Top Header Presentation'),
+        ),
+        // ... list slivers
+      ],
+    ),
+    FloatingBottomDockCapsule(
+      scrollOffset: currentOffset,
+      config: AnimatedDockConfig(dockTriggerOffset: $_dockTriggerOffset),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: const [
+          Icon(Icons.home),
+          Icon(Icons.search),
+          Icon(Icons.bookmark),
+        ],
+      ),
+    ),
   ],
 )''';
     }

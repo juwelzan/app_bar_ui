@@ -375,4 +375,170 @@ class LiquidWaveMorphConfig extends AppBarMotionConfig {
   final double elevation;
 }
 
+/// Configuration for Style 11: Auto-Hiding Velocity-Sensitive Header.
+class AutoHidingVelocityConfig extends AppBarMotionConfig {
+  /// Creates an [AutoHidingVelocityConfig].
+  const AutoHidingVelocityConfig({
+    super.curve = Curves.fastOutSlowIn,
+    super.reducedMotionCurve = Curves.linear,
+    this.height = kToolbarHeight,
+    this.hideVelocityThreshold = 150.0,
+    this.revealVelocityThreshold = -120.0,
+    this.animationDuration = const Duration(milliseconds: 250),
+    this.elevation = 3.0,
+    this.floating = false,
+    this.horizontalMargin = 0.0,
+    this.topMargin = 0.0,
+    this.borderRadius = 0.0,
+  });
+
+  /// Height of the auto-hiding toolbar.
+  final double height;
+
+  /// Downward velocity in pixels/second that triggers an immediate slide-away hide.
+  final double hideVelocityThreshold;
+
+  /// Upward velocity in pixels/second that triggers an immediate reveal.
+  final double revealVelocityThreshold;
+
+  /// Duration of the slide animation.
+  final Duration animationDuration;
+
+  /// Resting elevation.
+  final double elevation;
+
+  /// Whether the header floats above content with margins and rounded corners.
+  final bool floating;
+
+  /// Left/right margin when [floating] is true.
+  final double horizontalMargin;
+
+  /// Top margin when [floating] is true.
+  final double topMargin;
+
+  /// Corner radius when [floating] is true.
+  final double borderRadius;
+}
+
+/// Configuration for Style 12: Scroll-Synchronized Progress Header.
+class ScrollSynchronizedProgressConfig extends AppBarMotionConfig {
+  /// Creates a [ScrollSynchronizedProgressConfig].
+  const ScrollSynchronizedProgressConfig({
+    super.curve = Curves.easeInOut,
+    super.reducedMotionCurve = Curves.linear,
+    this.expandedHeight = 140.0,
+    this.collapsedHeight = kToolbarHeight,
+    this.progressStrokeWidth = 3.5,
+    this.showPercentageBadge = true,
+    this.elevation = 2.0,
+  });
+
+  /// Height when fully expanded.
+  final double expandedHeight;
+
+  /// Height when collapsed into compact bar.
+  final double collapsedHeight;
+
+  /// Thickness of the reading progress bar or ring.
+  final double progressStrokeWidth;
+
+  /// Whether to render a live numerical percentage badge in the toolbar.
+  final bool showPercentageBadge;
+
+  /// Collapsed toolbar elevation.
+  final double elevation;
+}
+
+/// Configuration for Style 13: Sticky-Collapse Dual-Tier Header.
+class StickyCollapseDualTierConfig extends AppBarMotionConfig {
+  /// Creates a [StickyCollapseDualTierConfig].
+  const StickyCollapseDualTierConfig({
+    super.curve = Curves.easeInOutCubic,
+    super.reducedMotionCurve = Curves.linear,
+    this.tier1Height = 85.0,
+    this.tier2Height = 56.0,
+    this.collapseThreshold = 85.0,
+    this.elevation = 3.0,
+  });
+
+  /// Height of Tier 1 (branding/identity) that collapses completely out of view.
+  final double tier1Height;
+
+  /// Height of Tier 2 (navigation, search, tabs) that docks permanently sticky.
+  final double tier2Height;
+
+  /// Scroll distance required to complete Tier 1 collapse.
+  final double collapseThreshold;
+
+  /// Sticky docked elevation.
+  final double elevation;
+}
+
+/// Configuration for Style 14: Multi-Stage Staged Reveal Header.
+class MultiStageStagedRevealConfig extends AppBarMotionConfig {
+  /// Creates a [MultiStageStagedRevealConfig].
+  const MultiStageStagedRevealConfig({
+    super.curve = Curves.easeInOutCubic,
+    super.reducedMotionCurve = Curves.linear,
+    this.expandedHeight = 210.0,
+    this.collapsedHeight = 60.0,
+    this.stage1EndOffset = 70.0,
+    this.stage2EndOffset = 140.0,
+    this.elevation = 2.0,
+  });
+
+  /// Maximum expanded height (Stage 1: Hero presentation).
+  final double expandedHeight;
+
+  /// Pinned collapsed height (Stage 3: Minimalist toolbar).
+  final double collapsedHeight;
+
+  /// Scroll offset boundary where Stage 1 transitions to Stage 2.
+  final double stage1EndOffset;
+
+  /// Scroll offset boundary where Stage 2 transitions to Stage 3.
+  final double stage2EndOffset;
+
+  /// Elevation in compact collapsed state.
+  final double elevation;
+}
+
+/// Configuration for Style 15: Animated Dock Header.
+class AnimatedDockConfig extends AppBarMotionConfig {
+  /// Creates an [AnimatedDockConfig].
+  const AnimatedDockConfig({
+    super.curve = Curves.fastOutSlowIn,
+    super.reducedMotionCurve = Curves.linear,
+    this.topHeaderHeight = 110.0,
+    this.bottomDockHeight = 64.0,
+    this.dockTriggerOffset = 90.0,
+    this.dockHorizontalMargin = 20.0,
+    this.dockBottomMargin = 16.0,
+    this.dockBorderRadius = 32.0,
+    this.dockElevation = 8.0,
+  });
+
+  /// Height of the initial top header canvas.
+  final double topHeaderHeight;
+
+  /// Height of the floating bottom dock navigation capsule.
+  final double bottomDockHeight;
+
+  /// Scroll offset threshold that triggers top header collapse and bottom dock reveal.
+  final double dockTriggerOffset;
+
+  /// Horizontal margin around the floating bottom dock capsule.
+  final double dockHorizontalMargin;
+
+  /// Distance between bottom dock and bottom edge / safe area.
+  final double dockBottomMargin;
+
+  /// Border radius of the floating bottom dock capsule.
+  final double dockBorderRadius;
+
+  /// Elevation shadow of the floating bottom dock.
+  final double dockElevation;
+}
+
+
 

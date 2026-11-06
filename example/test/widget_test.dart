@@ -181,7 +181,7 @@ void main() {
   );
 
   testWidgets(
-    'Animated Experiences Lab switches across Batch 1 and Batch 2 styles',
+    'Animated Experiences Lab switches across Batches 1, 2, and 3 styles',
     (WidgetTester tester) async {
       await tester.pumpWidget(const ScrollResponsiveDemoApp());
       await tester.pumpAndSettle();
@@ -192,20 +192,13 @@ void main() {
 
       // Verify active batches banner
       expect(
-        find.text('Batches 1 & 2 Active (Styles 1–10 of 50)'),
+        find.text('Batches 1, 2, & 3 Active (Styles 1–15 of 50)'),
         findsOneWidget,
       );
       expect(find.text('1. Morphing Split'), findsOneWidget);
 
-      // Select Style 2: Elastic Floating
-      final style2 = find.text('2. Elastic Floating');
-      await tester.ensureVisible(style2);
-      await tester.tap(style2);
-      await tester.pumpAndSettle();
-      expect(find.text('Elastic Dynamics Header'), findsOneWidget);
-
       // Select Batch 2 filter pill
-      final batch2Filter = find.text('Batch 2: Layered & Geometric (6–10)');
+      final batch2Filter = find.text('Batch 2 (6–10)');
       await tester.ensureVisible(batch2Filter);
       await tester.tap(batch2Filter);
       await tester.pumpAndSettle();
@@ -217,38 +210,57 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('Explore Catalogs'), findsOneWidget);
 
-      // Style 7: Vertical Folding Accordion
-      final style7 = find.text('7. Vertical Folding Accordion');
-      await tester.ensureVisible(style7);
-      await tester.tap(style7);
+      // Select Batch 3 filter pill
+      final batch3Filter = find.text('Batch 3 (11–15)');
+      await tester.ensureVisible(batch3Filter);
+      await tester.tap(batch3Filter);
       await tester.pumpAndSettle();
-      expect(find.text('Origami Accordion'), findsOneWidget);
 
-      // Style 8: Layered Depth Parallax
-      final style8 = find.text('8. Layered Depth Parallax');
-      await tester.ensureVisible(style8);
-      await tester.tap(style8);
+      // Style 11: Auto-Hiding Velocity Header
+      final style11 = find.text('11. Auto-Hiding Velocity Header');
+      await tester.ensureVisible(style11);
+      await tester.tap(style11);
       await tester.pumpAndSettle();
-      expect(find.text('Glacier National Park'), findsOneWidget);
+      expect(find.text('Auto-Hiding Velocity Bar'), findsOneWidget);
 
-      // Style 9: Expanding Hero Card
-      final style9 = find.text('9. Expanding Hero Card');
-      await tester.ensureVisible(style9);
-      await tester.tap(style9);
+      // Style 12: Scroll-Synchronized Progress
+      final style12 = find.text('12. Scroll-Synchronized Progress');
+      await tester.ensureVisible(style12);
+      await tester.tap(style12);
       await tester.pumpAndSettle();
-      expect(find.text('\$24,580.00'), findsOneWidget);
+      expect(find.text('Chapter 12: Quantum Computing'), findsOneWidget);
 
-      // Style 10: Liquid Wave Morph
-      final style10 = find.text('10. Liquid Wave Morph');
-      await tester.ensureVisible(style10);
-      await tester.tap(style10);
+      // Style 13: Sticky-Collapse Dual-Tier
+      final style13 = find.text('13. Sticky-Collapse Dual-Tier');
+      await tester.ensureVisible(style13);
+      await tester.tap(style13);
       await tester.pumpAndSettle();
-      expect(find.text('Oceanic Flow Wave'), findsOneWidget);
+      expect(find.text('Tier 1: Global Marketplace'), findsOneWidget);
 
-      // Open View Code dialog for Liquid Wave
+      // Style 14: Multi-Stage Staged Reveal
+      final style14 = find.text('14. Multi-Stage Staged Reveal');
+      await tester.ensureVisible(style14);
+      await tester.tap(style14);
+      await tester.pumpAndSettle();
+      expect(find.text('Stage 1: Hero Launchpad'), findsOneWidget);
+
+      // Style 15: Animated Dock Header
+      final style15 = find.text('15. Animated Dock Header');
+      await tester.ensureVisible(style15);
+      await tester.tap(style15);
+      await tester.pumpAndSettle();
+      expect(find.text('Top Header Canvas'), findsOneWidget);
+
+      // Drag to trigger bottom dock emergence
+      await tester.drag(find.byType(CustomScrollView), const Offset(0.0, -120.0));
+      await tester.pumpAndSettle();
+      expect(find.byTooltip('Home'), findsOneWidget);
+      expect(find.byTooltip('Search'), findsOneWidget);
+
+      // Open View Code dialog for Animated Dock
       await tester.tap(find.text('View Code'));
       await tester.pumpAndSettle();
-      expect(find.text('Liquid Wave Morph Integration Code'), findsOneWidget);
+      expect(find.text('Animated Dock Header Integration Code'), findsOneWidget);
       await tester.tap(find.text('Close'));
       await tester.pumpAndSettle();
 
