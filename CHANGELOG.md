@@ -5,6 +5,45 @@ All notable changes to `app_bar_ui` will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - 2026-11-06
+
+### Major Architectural Release: Complete Autonomous AppBar Design System & Engine
+- **Single Public Entry Point (`AppBarEngine`)**:
+  - Implemented unified, high-level `AppBarEngine` and `AppBarEngine.sliver` widgets.
+  - **Simple Mode**: Direct zero-boilerplate parameters (`title`, `subtitle`, `leading`, `onLeadingTap`, `actions`, `backgroundColor`, `expandedHeight`, `collapsedHeight`) with automatic String promotion to styled Text and automatic navigation button synthesis.
+  - **Advanced Mode**: Directly accepts strongly-typed model configurations (`FullScreenHeroConfig`, `FloatingIslandConfig`, etc.) in `configuration:`.
+  - **Sliver Mode**: Seamless embedding inside `CustomScrollView`.
+- **20 Genuinely Autonomous Design System Models**:
+  - Replaced superficial variations with 20 completely independent architectural models with distinct layouts, geometry, gestures, and physics:
+    - Model 1: `traditionalStructured` (3-tier enterprise layout with sticky tabs)
+    - Model 2: `fullScreenHero` (Immersive hero banner with optical scrim and scale)
+    - Model 3: `floatingIsland` (Detached dynamic island capsule with outer margins)
+    - Model 4: `immersiveSpatial` (3-layer differential depth parallax stage)
+    - Model 5: `multiPanelSplitCurtain` (Lateral split identity and action panels fusing on scroll)
+    - Model 6: `spatial3DFlip` (180° perspective projection flip card)
+    - Model 7: `verticalRailTransform` (Horizontal app bar transforming into vertical side rail)
+    - Model 8: `radialDial` (Trigonometric polar arc dial with orbital action nodes)
+    - Model 9: `editorialTypography` (Classic masthead with live reading progress indicator)
+    - Model 10: `cardDeckStacked` (Stacked card wallet compressing into slim tab strip)
+    - Model 11: `minimalistMicroBar` (Monospace breadcrumb trail with velocity auto-hide)
+    - Model 12: `profileIdentity` (Hero avatar gliding along Bezier curve to dock in toolbar)
+    - Model 13: `expandableControlCenter` (2x3 toggle tile grid collapsing into status icon strip)
+    - Model 14: `timelineScrubberNav` (Milestone timeline with interactive scrubber navigation)
+    - Model 15: `searchSpotlight` (Spotlight search bar with quick category suggestion chips)
+    - Model 16: `gestureElasticCanvas` (Elastic pull-to-refresh canvas with live spring physics)
+    - Model 17: `adaptiveBreakpointNav` (Dynamic responsive layout adapting across 600px/840px boundaries)
+    - Model 18: `contextFocalSwapNav` (Instant multi-tenant domain switching)
+    - Model 19: `liquidWaveMorphNav` (Sinusoidal crest fluid dampening wave boundary)
+    - Model 20: `developerCustomCanvas` (Unconstrained custom builder canvas with blueprint inspector)
+    - Baseline: `classic` (Material/Cupertino standard navigation)
+- **Zero-Leak Runtime Model Switching**:
+  - Added dynamic model transformation via `AppBarController.changeModel()` with crossfade, slide, and scale transitions (`ModelTransitionSpec`).
+  - Strict resource isolation ensuring previous animation controllers and tickers are disposed without state or memory leakage.
+- **Pure Math Header Physics & 120 FPS Rendering**:
+  - Eliminated continuous `setState` and body rebuild cascades; layout math derives synchronously from `shrinkOffset`.
+- **Legacy Cleanup & Optimization**:
+  - Removed 75 legacy prototype files (23,605 lines of dead code) to maintain a lightweight, streamlined package footprint.
+
 ## [1.2.0] - 2026-11-06
 
 ### Added

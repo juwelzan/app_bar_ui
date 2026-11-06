@@ -1,6 +1,6 @@
 name: app_bar_ui
-description: "A production-ready Flutter package providing a scroll-responsive header framework with pinned side actions, icon transitions, and native status bar sync."
-version: 1.2.0
+description: "Next-generation Flutter AppBar engine featuring 20+ genuinely autonomous design system models, zero-boilerplate Simple Mode, strongly typed Advanced Mode, and 120 FPS pure-math scroll physics."
+version: 2.0.0
 homepage: https://github.com/example/app_bar_ui
 repository: https://github.com/example/app_bar_ui
 issue_tracker: https://github.com/example/app_bar_ui/issues

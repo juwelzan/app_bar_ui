@@ -1,606 +1,248 @@
 # app_bar_ui
 
-[![pub package](https://img.shields.io/badge/pub-v1.1.0-blue.svg)](https://pub.dev/packages/app_bar_ui)
+[![pub package](https://img.shields.io/badge/pub-v2.0.0-blue.svg)](https://pub.dev/packages/app_bar_ui)
 [![Flutter](https://img.shields.io/badge/Flutter-3.3+-02569B?logo=flutter)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/Dart-3.0+-0175C2?logo=dart)](https://dart.dev)
-[![Tests Passing](https://img.shields.io/badge/tests-201%20passed-success.svg)](https://github.com/example/app_bar_ui)
+[![Tests Passing](https://img.shields.io/badge/tests-297%20passed-success.svg)](https://github.com/example/app_bar_ui)
 [![License: MIT](https://img.shields.io/badge/license-MIT-purple.svg)](https://opensource.org/licenses/MIT)
 [![Platforms](https://img.shields.io/badge/platforms-Android%20%7C%20iOS%20%7C%20iPadOS%20%7C%20macOS%20%7C%20Windows%20%7C%20Linux%20%7C%20Web-brightgreen.svg)](https://flutter.dev)
 
-A production-ready, highly optimized Flutter package providing a **Scroll-Driven UI Framework**.
-
-Combines naturally scrolling headers, independently pinned transparent side actions, dual-state icon transitions, synchronized native status bar management, flow-based parallax, and modular sliver components with **zero unnecessary rebuilds** and rock-solid 60/120 FPS high-refresh rate performance.
+A next-generation, high-performance Flutter navigation engine providing **20+ genuinely autonomous AppBar Design System Models**, a unified zero-boilerplate **`AppBarEngine`** entry point, and rock-solid **120 FPS pure-math scroll physics** with zero unnecessary body element rebuilds.
 
 ---
 
-## Key Features
+## 🌟 What Makes app_bar_ui 2.0 Unique?
 
-- **Transparent Overlay Architecture** — Pinned side actions have zero background, zero elevation, zero border, and zero blur. Touches in the center and body pass directly to scrollable content.
-- **Dual-State Icon Transitions** — Smoothly transitions between initial and scrolled icon states (e.g. Profile $\rightarrow$ Drawer on left; Notification $\rightarrow$ Profile on right) with synchronized fade, scale, and subtle slide.
-- **7 Out-of-the-Box Presets** — Named constructors for instant setup: `.material()`, `.minimal()`, `.iosInspired()`, `.collapsingHeader()`, `.transparentFloating()`, `.dashboard()`, and `.custom()`.
-- **12 Modular Scroll Components** — Collapsing headers, rubber-band pull-to-expand, sticky tab bars, auto-hiding FABs, auto-hiding bottom bars, flow parallax, reading progress bars, section reveals, scroll-to-top buttons, side actions, expandable speed-dial FABs, and page indicators.
-- **Ambient Scope & Developer API** — Descendant widgets access ambient telemetry and programmatic controls via `context.scrollResponsive` (`scrollToTop()`, `scrollToBottom()`, `collapseHeader()`, `expandHeader()`, `scrollBy()`, `scrollToItem()`).
-- **Smart Visibility Controller** — Advanced multi-target visibility management with target locking (`lock()`, `unlock()`), priority sorting, and declarative transitions (`SmartVisibilityTransition`).
-- **Unified Animation Engine** — Universal `ScrollRange<T>` interpolation (`Size`, `BorderRadius`, `EdgeInsets`, `double`, `Offset`, `Color`), `ScrollAvatarTransform` morphing, and `ScrollStaggeredBuilder` cascading delays.
-- **Native Status Bar Synchronization** — Coordinates system status bar visibility with threshold-based hysteresis and serialized platform invocations, preserving Android 3-button/gesture navigation and iOS home indicators without safe area layout jumps.
-- **Zero-Rebuild Performance** — Evaluated via granular `ValueNotifier` leaves. Scrolling the page triggers **0 widget element rebuilds** of body content.
-- **Cross-Platform Compatibility** — Verified across all 7 target platforms (Android, iOS, iPadOS, macOS, Windows, Linux, and Web) with built-in reduced motion accessibility (`MediaQuery.disableAnimationsOf`).
+Traditional Flutter app bars are typically identical boxes with minor variations in background color or icon placement. **app_bar_ui changes this entirely**:
+
+1. **20 Genuinely Autonomous Models** — Switching between models doesn't just restyle a title; it transforms the **entire layout structure, gesture handling, scroll mechanics, spatial depth, and animation timeline**.
+2. **Single Public Entry Point (`AppBarEngine`)** — Developers interact with one unified API supporting both **Simple Mode** (direct parameters with zero boilerplate) and **Advanced Mode** (strongly-typed model configurations).
+3. **Pure Math Header Physics** — Geometry, scaling, opacities, and clipping are computed strictly from scroll offsets (`shrinkOffset / maxExtent`). No continuous `setState`, no rebuild cascades, and 0 body widget rebuilds during scroll.
+4. **Zero-Leak Runtime Model Switching** — Switch models dynamically at runtime (e.g., during responsive screen rotation or user state change). Previous animation tickers and states are cleanly disposed with zero memory leaks.
+5. **Native Accessibility (A11Y)** — First-class support for `MediaQuery.disableAnimationsOf(context)` across all 20 models, immediately providing clean, comfortable static layouts for users who prefer reduced motion.
 
 ---
 
-## Architectural Layers
+## 🚀 Quick Start
 
-```
-+-------------------------------------------------------------+
-| System Status Bar (Hides on scroll-down, restores on scroll-up) |
-+-------------------------------------------------------------+
-| Layer 3: Reading Progress Indicator (Linear or Circular)    |
-+-------------------------------------------------------------+
-| Layer 2: Transparent Pinned Side Actions (SafeArea aligned) |
-| [Pinned Leading]                     [Pinned Trailing]      |
-| (Avatar -> Drawer)                   (Bell -> Profile)      |
-|                                                             |
-| +---------------------------------------------------------+ |
-| | Layer 1: CustomScrollView                               | |
-| | - Header Section (Scrolls naturally away with content)  | |
-| | - Sticky Tab Bar (Pins beneath header on scroll)        | |
-| | - Scrollable Body Content (Slivers, Lists, Grid, Cards) | |
-| +---------------------------------------------------------+ |
-+-------------------------------------------------------------+
-| Layer 4: Auto-Hiding Bottom Bar & Scroll-Aware FAB          |
-+-------------------------------------------------------------+
-```
+### 1. Simple Mode (Zero Boilerplate)
 
----
-
-## Installation
-
-Add `app_bar_ui` to your `pubspec.yaml`:
-
-```yaml
-dependencies:
-  flutter:
-    sdk: flutter
-  app_bar_ui: ^1.0.0
-```
-
-Then run:
-
-```bash
-flutter pub get
-```
-
----
-
-## Quick Start (Presets)
-
-Construct an entire scroll-responsive screen with a single named constructor:
-
-### 1. Material Preset
-```dart
-ScrollResponsiveScaffold.material(
-  headerTitle: const Text('Material Scaffold'),
-  headerSubtitle: const Text('Material 3 responsive design'),
-  initialLeading: const Icon(Icons.menu),
-  initialTrailing: const Icon(Icons.search),
-  body: ListView.builder(
-    itemCount: 40,
-    itemBuilder: (context, index) => ListTile(title: Text('Item $index')),
-  ),
-);
-```
-
-### 2. Minimal Preset (Zero-Clutter)
-```dart
-ScrollResponsiveScaffold.minimal(
-  headerTitle: const Text('Notes'),
-  initialLeading: const Icon(Icons.arrow_back),
-  body: const Center(child: Text('Minimal Clean Layout')),
-);
-```
-
-### 3. iOS-Inspired Preset (Cupertino Physics & Smooth Collapse)
-```dart
-ScrollResponsiveScaffold.iosInspired(
-  headerTitle: const Text('Settings'),
-  initialLeading: const Icon(Icons.arrow_back_ios),
-  body: const SettingsList(),
-);
-```
-
-### 4. Collapsing Header Preset
-```dart
-ScrollResponsiveScaffold.collapsingHeader(
-  headerTitle: const Text('Store Showcase'),
-  body: const ProductGrid(),
-);
-```
-
-### 5. Transparent Floating Preset
-```dart
-ScrollResponsiveScaffold.transparentFloating(
-  headerTitle: const Text('Photo Gallery'),
-  body: const PhotoFeed(),
-);
-```
-
-### 6. Dashboard Preset (High-Density Metrics)
-```dart
-ScrollResponsiveScaffold.dashboard(
-  headerTitle: const Text('Analytics'),
-  initialLeading: const Icon(Icons.menu),
-  initialTrailing: const Icon(Icons.notifications_none),
-  body: const MetricsDashboard(),
-);
-```
-
----
-
-## 50 Ready-To-Use AppBar & Header Presets (`ScrollHeader`)
-
-`app_bar_ui` provides **50 professionally designed header presets** out of the box spanning four distinct categories: **Core & Foundation**, **Navigation & Layout**, **Visual & Creative**, and **Specialized AppBars**. Whether you need a minimal flat header, an iOS Cupertino bar with blur, a collapsing hero banner, an image background with contrast scrim, a shopping header with live cart badges, or a custom builder with live scroll progress, simply pass `ScrollHeader` into `ScrollResponsiveScaffold.header`:
+Build any autonomous AppBar model in seconds using direct parameters:
 
 ```dart
-ScrollResponsiveScaffold(
-  header: ScrollHeader.collapsing(
-    title: const Text('Store Showcase'),
-    subtitle: const Text('New season arrivals'),
-    leading: const BackButton(),
-    actions: const [
-      IconButton(icon: Icon(Icons.tune), onPressed: null),
-    ],
-  ),
-  body: const ProductCatalog(),
-);
+import 'package:flutter/material.dart';
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+class MyScreen extends StatelessWidget {
+  const MyScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBarEngine(
+      model: AppBarModel.floatingIsland,
+      title: 'Flight Tracker',
+      subtitle: 'Gate B12 • On Time',
+      onLeadingTap: () => Navigator.pop(context),
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.share_outlined),
+          onPressed: () {},
+        ),
+      ],
+      body: ListView.builder(
+        itemCount: 30,
+        itemBuilder: (context, index) => ListTile(title: Text('Passenger $index')),
+      ),
+    );
+  }
+}
 ```
 
-### The 50 Header Styles Overview
+### 2. Sliver Mode (CustomScrollView Integration)
 
-| # | Preset Name | Architecture | Category | Key Characteristics & Behavior |
-|:---:|:---|:---:|:---:|:---|
-| **1** | `ScrollHeader.minimal` | Box | Core | Clean, simple, low visual weight with optional divider on scroll. |
-| **2** | `ScrollHeader.transparent` | Box | Core | 100% transparent header overlaid above scrollable content. |
-| **3** | `ScrollHeader.floating` | Box | Core | Rounded floating card with configurable elevation, margin, and border radius. |
-| **4** | `ScrollHeader.material` | Box | Core | Material Design 3 layout with surface tint and scroll-under elevation. |
-| **5** | `ScrollHeader.ios` | Box | Core | iOS Cupertino compact navigation style with backdrop blur (`BackdropFilter`). |
-| **6** | `ScrollHeader.centerTitle` | Box | Core | Symmetrically balanced header with centered title and leading/trailing actions. |
-| **7** | `ScrollHeader.largeTitle` | Sliver | Core | Large typography display title that collapses smoothly into an inline title. |
-| **8** | `ScrollHeader.flexibleSpace` | Sliver | Core | Expandable header accommodating arbitrary custom widgets in flexible space. |
-| **9** | `ScrollHeader.collapsing` | Sliver | Core | Smooth persistent collapse from hero height down to toolbar height. |
-| **10** | `ScrollHeader.parallax` | Sliver | Core | Background moves at fractional scroll speed (e.g. 0.5x) via `FlowDelegate`. |
-| **11** | `ScrollHeader.gradient` | Box | Core | Multi-stop vibrant linear or radial gradient with scroll-under shift. |
-| **12** | `ScrollHeader.image` | Box | Core | High-resolution image background with configurable dark/light scrim overlay. |
-| **13** | `ScrollHeader.profile` | Box | Core | Avatar, profile name, role/handle badge, stats row, and actions. |
-| **14** | `ScrollHeader.dashboard` | Box | Core | Greeting, user name, date/status chip, metrics row, and quick actions. |
-| **15** | `ScrollHeader.search` | Box | Core | Integrated search field with query callbacks (`onSearchChanged`, `onSearchSubmitted`). |
-| **16** | `ScrollHeader.segmented` | Box | Core | Embedded segmented control or category pill selector. |
-| **17** | `ScrollHeader.stickyTab` | Sliver | Core | Pinned tab bar navigation pinned directly under the header on scroll. |
-| **18** | `ScrollHeader.compactScroll` | Sliver | Core | Ultra-compact space-saving header collapsing into a 48px micro-bar on scroll. |
-| **19** | `ScrollHeader.sideActionTransition` | Box | Core | Side action icons transform based on scroll state with dual tap callbacks. |
-| **20** | `ScrollHeader.customBuilder` | Sliver | Core | Fully custom layout using developer callback receiving real-time `progress` (0.0 to 1.0). |
-| **21** | `ScrollHeader.bottomAlignedTitle` | Box | Navigation | Title pinned to bottom edge with top-aligned navigation buttons. |
-| **22** | `ScrollHeader.asymmetric` | Box | Navigation | Asymmetric layout with unequal leading, expanded title, and trailing action weight. |
-| **23** | `ScrollHeader.split` | Box | Navigation | Distinct two-section visual separation between navigation/title and actions. |
-| **24** | `ScrollHeader.twoRow` | Box | Navigation | Dual-row layout: upper primary toolbar with lower secondary control/filter row. |
-| **25** | `ScrollHeader.multiAction` | Box | Navigation | Priority actions with automatic overflow popup menu (`maxVisibleActions`). |
-| **26** | `ScrollHeader.compactIcon` | Box | Navigation | Ultra-minimal icon-centric toolbar for high spatial efficiency. |
-| **27** | `ScrollHeader.breadcrumb` | Box | Navigation | Hierarchical navigation breadcrumb trail with horizontal overflow scrolling. |
-| **28** | `ScrollHeader.backTitle` | Box | Navigation | Seamless inline back button joined directly with page title. |
-| **29** | `ScrollHeader.contextualSelection` | Box | Navigation | Multi-select mode bar showing active selection count, close, and batch actions. |
-| **30** | `ScrollHeader.adaptiveNavigation` | Box | Navigation | Responsive layout switching automatically between compact and expanded desktop bars. |
-| **31** | `ScrollHeader.glass` | Box | Visual | Translucent frosted glass effect with platform-safe fallback and blur. |
-| **32** | `ScrollHeader.blurredBackground` | Box | Visual | Performance-isolated backdrop blur header with configurable `blurSigma`. |
-| **33** | `ScrollHeader.bordered` | Box | Visual | Flat elevation-free aesthetic framed with clean hairline borders. |
-| **34** | `ScrollHeader.shadowElevated` | Box | Visual | High-depth multi-stop drop shadow header with configurable elevation. |
-| **35** | `ScrollHeader.layered` | Box | Visual | Tri-layer depth header featuring decorative back, middle, and front cards. |
-| **36** | `ScrollHeader.shapeMorphing` | Sliver | Visual | Dynamic border radius and shape transformation driven by scroll offset. |
-| **37** | `ScrollHeader.animatedGradient` | Box | Visual | Ambient continuously shifting gradient background animation. |
-| **38** | `ScrollHeader.colorTransition` | Sliver | Visual | Continuous background and foreground color interpolation on scroll. |
-| **39** | `ScrollHeader.illustrated` | Sliver | Visual | Collapsing banner with custom illustration, scale, and fade animations. |
-| **40** | `ScrollHeader.edgeToEdge` | Box | Visual | Margin-free full bleed layout extending cleanly behind status and navigation bars. |
-| **41** | `ScrollHeader.mediaPlayer` | Box | Specialized | Media playback header with album art, track details, and embedded play/skip controls. |
-| **42** | `ScrollHeader.shopping` | Box | Specialized | Storefront header with live shopping cart badge counter and quick search. |
-| **43** | `ScrollHeader.chat` | Box | Specialized | Messaging conversation header with contact avatar, online presence dot, and call actions. |
-| **44** | `ScrollHeader.detailPage` | Sliver | Specialized | Article/media detail header with Hero animation transition, contrast scrim, and floating pills. |
-| **45** | `ScrollHeader.reading` | Box | Specialized | Editorial reader header with integrated horizontal reading progress indicator. |
-| **46** | `ScrollHeader.map` | Box | Specialized | Interactive location preview header with floating search card and location chips. |
-| **47** | `ScrollHeader.form` | Box | Specialized | State-aware form/editor header with cancel button and reactive Save action (`isDirty`). |
-| **48** | `ScrollHeader.wizard` | Box | Specialized | Multi-step setup header with segmented step progress indicators and step counter. |
-| **49** | `ScrollHeader.notificationCenter` | Box | Specialized | Notification inbox header with unread badge counter, "Mark all read", and filter pills. |
-| **50** | `ScrollHeader.customScrollLayout` | Sliver | Specialized | Completely customizable sliver persistent header layout delegate or builder. |
+Embed any model directly inside a sliver-based scroll viewport:
 
----
-
-### Preset Usage Examples
-
-#### Profile Header (`ScrollHeader.profile`)
 ```dart
-ScrollHeader.profile(
-  name: const Text('Elena Rostova'),
-  handleOrRole: const Text('@elena • Principal Architect'),
-  avatar: const CircleAvatar(
-    radius: 28,
-    child: Text('ER'),
-  ),
-  stats: const Row(
-    children: [
-      Text('24.5K Followers', style: TextStyle(fontWeight: FontWeight.bold)),
-      SizedBox(width: 16),
-      Text('612 Following', style: TextStyle(fontWeight: FontWeight.bold)),
-    ],
-  ),
-  leading: const BackButton(),
-  actions: [
-    IconButton(icon: const Icon(Icons.share), onPressed: () {}),
+CustomScrollView(
+  slivers: [
+    AppBarEngine.sliver(
+      model: AppBarModel.traditionalStructured,
+      title: 'Enterprise Nexus',
+      subtitle: 'Production Cluster',
+      actions: [
+        IconButton(icon: const Icon(Icons.tune), onPressed: () {}),
+      ],
+    ),
+    SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) => ListTile(title: Text('Data Item $index')),
+        childCount: 40,
+      ),
+    ),
   ],
 )
 ```
 
-#### Parallax Background Header (`ScrollHeader.parallax`)
+---
+
+## 🎨 Advanced Mode (Typed Configurations)
+
+Every autonomous model possesses its own strongly-typed configuration class exposing fine-grained visual, structural, and behavioral parameters. Pass the configuration directly to `configuration:` without boilerplate wrappers:
+
 ```dart
-ScrollHeader.parallax(
-  title: const Text('Mount Rainier'),
-  subtitle: const Text('National Park, Washington'),
-  speedFactor: 0.5, // Background moves at half scroll speed
-  expandedHeight: 260.0,
-  background: Image.asset('assets/rainier.jpg', fit: BoxFit.cover),
-  leading: const BackButton(color: Colors.white),
+AppBarEngine(
+  model: AppBarModel.fullScreenHero,
+  configuration: FullScreenHeroConfig(
+    viewportHeight: 400.0,
+    collapsedHeight: 64.0,
+    headline: 'Cinematic Odyssey',
+    tagline: 'An IMAX Original Documentary',
+    background: Image.network(
+      'https://images.unsplash.com/photo-1518709268805-4e9042af9f23',
+      fit: BoxFit.cover,
+    ),
+    headlineCurve: Curves.easeOutCubic,
+    scrimColor: Colors.black.withOpacity(0.4),
+  ),
+  body: const MovieOverviewBody(),
 )
 ```
 
-#### Search Header (`ScrollHeader.search`)
-```dart
-ScrollHeader.search(
-  title: const Text('Discover'),
-  searchHint: 'Search articles, topics, and authors...',
-  onSearchChanged: (query) => filterResults(query),
-  onSearchSubmitted: (query) => performSearch(query),
-  actions: [
-    IconButton(icon: const Icon(Icons.tune), onPressed: openFilters),
-  ],
-)
-```
+---
 
-#### Custom Builder Header (`ScrollHeader.customBuilder`)
+## ⚡ Runtime Model Switching (Zero Resource Leaks)
+
+Switch between models on the fly with animated cross-fades or slide transitions using `AppBarController`:
+
 ```dart
-ScrollHeader.customBuilder(
-  expandedHeight: 200.0,
-  collapsedHeight: 64.0,
-  builder: (context, progress, overlapsContent) {
-    return Container(
-      color: Color.lerp(Colors.blue, Colors.purple, progress),
-      child: Center(
-        child: Text(
-          'Scroll Progress: ${(progress * 100).toInt()}%',
-          style: const TextStyle(color: Colors.white, fontSize: 18.0),
+class DynamicShowcase extends StatefulWidget {
+  const DynamicShowcase({super.key});
+
+  @override
+  State<DynamicShowcase> createState() => _DynamicShowcaseState();
+}
+
+class _DynamicShowcaseState extends State<DynamicShowcase> {
+  final _controller = AppBarController(
+    initialModel: AppBarModel.traditionalStructured,
+  );
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _switchToCreativeDeck() {
+    // Dynamically transforms the AppBar experience with zero state leakage
+    _controller.changeModel(
+      AppBarModel.cardDeckStacked,
+      transition: const ModelTransitionSpec(
+        type: ModelTransitionType.fade,
+        duration: Duration(milliseconds: 350),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBarEngine(
+      controller: _controller,
+      title: 'Interactive Studio',
+      body: Center(
+        child: ElevatedButton(
+          onPressed: _switchToCreativeDeck,
+          child: const Text('Switch to Card Deck Model'),
         ),
       ),
     );
-  },
-)
-```
-
-#### Glass Header (`ScrollHeader.glass`)
-```dart
-ScrollHeader.glass(
-  title: const Text('Translucent Atmosphere'),
-  blurSigma: 12.0,
-  leading: const BackButton(),
-  actions: [
-    IconButton(icon: const Icon(Icons.tune), onPressed: () {}),
-  ],
-)
-```
-
-#### Multi-Action Header with Auto-Overflow (`ScrollHeader.multiAction`)
-```dart
-ScrollHeader.multiAction(
-  title: const Text('Document Actions'),
-  maxVisibleActions: 2,
-  leading: const BackButton(),
-  actions: [
-    IconButton(icon: const Icon(Icons.share), onPressed: () {}),
-    IconButton(icon: const Icon(Icons.edit), onPressed: () {}),
-    IconButton(icon: const Icon(Icons.copy), onPressed: () {}),
-    IconButton(icon: const Icon(Icons.delete), onPressed: () {}),
-  ],
-)
-```
-
-#### Form Header with Reactive State (`ScrollHeader.form`)
-```dart
-ScrollHeader.form(
-  title: const Text('Edit Account Profile'),
-  subtitle: const Text('Unsaved modifications'),
-  isDirty: true,
-  onSave: () => submitForm(),
-  leading: const CloseButton(),
-)
-```
-
-#### Shopping Header (`ScrollHeader.shopping`)
-```dart
-ScrollHeader.shopping(
-  title: const Text('Fresh Direct Marketplace'),
-  cartItemCount: 4,
-  onCartTap: () => openCart(),
-  leading: const BackButton(),
-)
-```
-
-### Preset Customization (`ScrollHeaderStyle`)
-
-All presets accept an optional `style: ScrollHeaderStyle(...)` allowing you to customize colors, elevation, border radius, margins, blur filters, and transitions without losing the preset's inherent layout:
-
-```dart
-ScrollHeader.floating(
-  title: const Text('Customized Floating Island'),
-  style: const ScrollHeaderStyle(
-    elevation: 8.0,
-    backgroundColor: Colors.white,
-    borderRadius: BorderRadius.all(Radius.circular(20.0)),
-    margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-  ),
-)
+  }
+}
 ```
 
 ---
 
-## Core Scaffolding & Dual-State Transitions
+## 🏛️ The 21 Distinct AppBar Models
 
-```dart
-ScrollResponsiveScaffold(
-  // Pinned Left Action: Profile Avatar initially -> Drawer icon when scrolled
-  initialLeading: const CircleAvatar(
-    radius: 18,
-    child: Text('AM'),
-  ),
-  scrolledLeading: const Icon(Icons.menu),
-
-  // Pinned Right Action: Notification Bell initially -> Profile Avatar when scrolled
-  initialTrailing: const Icon(Icons.notifications_none),
-  scrolledTrailing: const CircleAvatar(
-    radius: 18,
-    child: Text('AM'),
-  ),
-
-  // Header scrolls away naturally
-  headerTitle: const Text('My Workspace'),
-  headerSubtitle: const Text('Learn • Build • Innovate'),
-
-  // Navigation drawer opened automatically when tapping scrolled leading icon
-  drawer: const AppNavigationDrawer(),
-
-  // Independent thresholds & animations
-  config: const ScrollResponsiveConfig(
-    thresholds: ScrollThresholdConfig(
-      leadingStartOffset: 20.0,
-      leadingEndOffset: 80.0,
-      trailingStartOffset: 40.0,
-      trailingEndOffset: 100.0,
-      statusBarHideOffset: 100.0,
-      statusBarShowOffset: 50.0, // Hysteresis prevents edge jitter
-    ),
-    animation: ScrollAnimationConfig(
-      curve: Curves.easeInOutCubic,
-      enableFade: true,
-      enableScale: true,
-      enableSlide: true,
-    ),
-  ),
-
-  // Real-time telemetry callback
-  onScrollUpdate: (ScrollProgressDetails details) {
-    // details.offset, details.leadingProgress, details.trailingProgress, details.isStatusBarHidden
-  },
-
-  body: const MyScrollableContent(),
-);
-```
+| # | Model Enum | Visual Structure | Scroll Mechanics | Best For |
+|---|---|---|---|---|
+| **0** | `classic` | Standard Material / Cupertino toolbar | Pinned or collapsible baseline header | Clean, conventional utility screens |
+| **1** | `traditionalStructured` | 3-tier layout: Organization, Title/Status, Sticky Tabs | Collapses upper tiers into a compact pinned bar | Enterprise dashboards, multi-tab portals |
+| **2** | `fullScreenHero` | Immersive full-viewport hero banner | Exponential parallax scale & optical scrim fade | Media landing, travel, articles |
+| **3** | `floatingIsland` | Detached rounded capsule card with outer margins | Shrinks horizontally & elevates on scroll | Consumer apps, music playback, modern SaaS |
+| **4** | `immersiveSpatial` | 3-layer differential depth stage | Foreground, midground, background parallax with focal blur | Gaming profiles, visual portfolios, 3D art |
+| **5** | `multiPanelSplitCurtain` | Lateral split panels (Identity left, Actions right) | Panels slide inward horizontally to fuse into a pill toolbar | Dual-action hubs, control centers, admin consoles |
+| **6** | `spatial3DFlip` | 3D perspective front card & back toolbar | Flips 180° around X-axis as scroll threshold triggers | Finance wallets, secure credential cards |
+| **7** | `verticalRailTransform` | Horizontal app bar transforming into vertical side rail | Morphs into pinned left navigation rail on scroll or large screens | Wide tablets, desktop layouts, productivity |
+| **8** | `radialDial` | Polar coordinate dial with orbital action nodes | Orbital nodes converge along trigonometric arc into compact cluster | Creative tools, camera controls, gesture hubs |
+| **9** | `editorialTypography` | Elegant newspaper masthead, issue date, headline | Masthead fades while headline collapses with reading progress | Long-form journalism, blogs, documentation |
+| **10** | `cardDeckStacked` | Multi-card stacked deck with depth perspective | Cards compress and stack into compact tab strip | Passbooks, loyalty cards, payment wallets |
+| **11** | `minimalistMicroBar` | Monospace breadcrumb trail, live ETA, status dot | Auto-hides on velocity downward flick; reveals on tap | Code viewers, terminal monitors, focused reading |
+| **12** | `profileIdentity` | Large hero circular avatar, bio, badge counters | Avatar shrinks along Bezier path to dock inline in pinned toolbar | Social profiles, author pages, user bios |
+| **13** | `expandableControlCenter` | 2x3 interactive toggle tile grid (WiFi, Dark Mode, etc.) | Collapses into horizontal status icon strip in pinned bar | Device control, smart home, quick settings |
+| **14** | `timelineScrubberNav` | Interactive milestone timeline with progress nodes | Scrubbing scrolls viewport; scrolling updates active timeline node | Project roadmaps, delivery trackers, event schedules |
+| **15** | `searchSpotlight` | Centered expanded search field with instant chips | Search field contracts into slim bar while chips scroll away | E-commerce, directory discovery, catalog exploration |
+| **16** | `gestureElasticCanvas` | Elastic oversized pull-to-refresh & metrics canvas | Overscroll expands elastic canvas with live spring settling | Financial tickers, live telemetry, fitness dashboards |
+| **17** | `adaptiveBreakpointNav` | Responsive engine adapting between 3 form-factor layouts | Seamlessly morphs layout across 600px and 840px boundaries | Multi-device apps, responsive web, tablets |
+| **18** | `contextFocalSwapNav` | Multi-domain focal context switch bar (Personal/Business) | Swapping domain updates toolbar styling and actions instantly | Multi-tenant apps, banking, workspace switchers |
+| **19** | `liquidWaveMorphNav` | Dynamic Bezier fluid wave boundary | Sinusoidal crest dampens and flattens out smoothly on scroll | Wellness apps, water trackers, playful consumer UI |
+| **20** | `developerCustomCanvas` | Unconstrained custom canvas with blueprint inspection | Developer provides completely bespoke sliver delegate or builder | Experimental layouts, custom brand identities |
 
 ---
 
-## Modular Scroll Components Guide
+## 🛠️ Level 3 Customization: Developer Custom Canvas
 
-### 1. `ScrollCollapsingHeader`
-Smoothly transitions between `expandedHeight` and `collapsedHeight` with builder support, parallax, and optional sticky pinning.
+When you require layout mechanics that go beyond pre-built parameters, Model 20 (`developerCustomCanvas`) gives you absolute freedom while maintaining integration with the `AppBarEngine`:
 
 ```dart
-ScrollCollapsingHeader(
-  expandedHeight: 220.0,
-  collapsedHeight: 64.0,
-  pinned: true,
-  builder: (context, progress) {
-    return Container(
-      decoration: BoxDecoration(color: Color.lerp(Colors.blue, Colors.indigo, progress)),
-      child: Center(
+AppBarEngine(
+  model: AppBarModel.developerCustomCanvas,
+  configuration: DeveloperCustomCanvasConfig(
+    expandedHeight: 240.0,
+    collapsedHeight: 60.0,
+    showDebugGrid: false,
+    customSliverBuilder: (context, shrinkOffset, progress) {
+      return Container(
+        alignment: Alignment.center,
+        color: Color.lerp(Colors.indigo, Colors.teal, progress),
         child: Text(
-          'Collapsing Header',
-          style: TextStyle(fontSize: 18.0 + (1.0 - progress) * 8.0, color: Colors.white),
+          'Scroll Progress: ${(progress * 100).toStringAsFixed(0)}%',
+          style: const TextStyle(color: Colors.white, fontSize: 20),
         ),
-      ),
-    );
-  },
-);
-```
-
-### 2. `ScrollPullToExpandHeader`
-Provides iOS-style rubber-band cover image expansion, profile header zoom, and pull-to-expand visual feedback.
-
-```dart
-ScrollPullToExpandHeader(
-  expandedHeight: 250.0,
-  stretchTriggerOffset: 120.0,
-  onStretchTrigger: () async => fetchLatestProfileData(),
-  child: Image.asset('assets/cover.jpg', fit: BoxFit.cover),
-  content: const ProfileSummaryOverlay(),
-);
-```
-
-### 3. `ScrollStickyTabBar`
-Pins a tab bar directly beneath the header once scrolled past, adapting elevation and borders dynamically.
-
-```dart
-ScrollStickyTabBar(
-  pinned: true,
-  elevation: 3.0,
-  child: TabBar(
-    controller: _tabController,
-    tabs: const [Tab(text: 'Overview'), Tab(text: 'Specs'), Tab(text: 'Reviews')],
+      );
+    },
   ),
-);
-```
-
-### 4. `ScrollParallax`
-High-performance parallax container that moves its child at a configurable speed multiplier relative to the viewport. Repaints via `Flow` and `FlowDelegate` at 60/120 FPS with **zero widget rebuilds**.
-
-```dart
-ScrollParallax(
-  speedFactor: 0.5, // 0.5x speed background movement
-  child: Image.asset('assets/landscape.jpg', fit: BoxFit.cover),
-);
-```
-
-### 5. `ScrollProgressIndicator`
-Reading progress bar tracking reading depth (0.0 to 1.0) with linear and circular display styles.
-
-```dart
-ScrollProgressIndicator(
-  type: ProgressIndicatorType.linear,
-  color: Colors.amber,
-  height: 3.5,
-);
-```
-
-### 6. `ScrollSectionReveal`
-Triggers smooth entrance animations (fade, slide, scale) as content scrolls into the active viewport.
-
-```dart
-ScrollSectionReveal(
-  slideOffset: const Offset(0.0, 30.0),
-  staggerDelay: Duration(milliseconds: 50 * index),
-  child: Card(child: ListTile(title: Text('Card #$index'))),
-);
-```
-
-### 7. `ScrollToTopButton` & `ScrollAwareFab`
-Auto-hides FAB when scrolling down; smoothly transitions into a scroll-to-top button.
-
-```dart
-ScrollToTopButton(
-  scrollController: _scrollController,
-  threshold: 300.0,
-);
-```
-
-### 8. `ScrollAutoHideBottomBar`
-Slides navigation bars offscreen during downward scrolls and restores them on upward scrolls.
-
-```dart
-ScrollAutoHideBottomBar(
-  scrollController: _scrollController,
-  child: BottomNavigationBar(...),
-);
-```
-
-### 9. `ScrollExpandableFab`
-Scroll-aware multi-action speed dial FAB with modal barrier and staggered animation.
-
-```dart
-ScrollExpandableFab(
-  scrollController: _scrollController,
-  icon: const Icon(Icons.add),
-  children: [
-    FabAction(icon: const Icon(Icons.edit), label: 'Draft', onTap: () => ...),
-    FabAction(icon: const Icon(Icons.share), label: 'Share', onTap: () => ...),
-  ],
-);
+  body: const MyListContent(),
+)
 ```
 
 ---
 
-## Ambient Scope & Context Extension
+## ♿ Accessibility & Reduced Motion
 
-Any descendant widget in the subtree can access telemetry or trigger navigation without manual controller drilling:
+All 20 models rigorously respect system accessibility preferences:
 
 ```dart
-// Check telemetry anywhere in child widgets
-final telemetry = context.scrollResponsive;
-print('Current offset: ${telemetry.currentOffset}');
-print('Is at top: ${telemetry.isAtTop}');
-print('Is header collapsed: ${telemetry.isHeaderCollapsed}');
-
-// Trigger programmatic controls
-context.scrollResponsive.scrollToTop();
-context.scrollResponsive.scrollToBottom();
-context.scrollResponsive.collapseHeader();
-context.scrollResponsive.expandHeader();
-context.scrollResponsive.scrollBy(150.0);
+// Automatically handled internally across all 20 models:
+final isReducedMotion = MediaQuery.disableAnimationsOf(context);
 ```
 
----
-
-## Platform Support & Compatibility Matrix
-
-| Platform | Scroll Header | Pinned Actions | Advanced Slivers | Native Status Bar | Notes |
-|---|---|---|---|---|---|
-| **Android** | ✅ Full | ✅ Full | ✅ Full | ✅ Native | Preserves 3-button or gesture pill navigation. Hysteresis prevents jitter. |
-| **iOS** | ✅ Full | ✅ Full | ✅ Full | ✅ Native | Preserves Home Indicator. `preventContentJump` locks top safe padding. |
-| **iPadOS** | ✅ Full | ✅ Full | ✅ Full | ✅ Native | Dynamically adapts to Stage Manager and Split View viewport resizing. |
-| **macOS** | ✅ Full | ✅ Full | ✅ Full | ⚠️ Graceful | Window decorations owned by AppKit; status bar safely no-ops. Mouse wheel supported. |
-| **Windows** | ✅ Full | ✅ Full | ✅ Full | ⚠️ Graceful | Window borders managed by DWM; status bar safely no-ops. Mouse wheel supported. |
-| **Linux** | ✅ Full | ✅ Full | ✅ Full | ⚠️ Graceful | Window chrome managed by desktop environment; status bar safely no-ops. |
-| **Web** | ✅ Full | ✅ Full | ✅ Full | ⚠️ Graceful | Browser chrome user-agent managed; status bar safely no-ops. Mouse wheel and touch supported. |
-
-### Accessibility & Reduced Motion
-Built-in support for `Semantics` and reduced-motion preferences (`MediaQuery.disableAnimationsOf(context)`). When reduced motion is requested, scale, slide, and rotation transitions are suppressed while maintaining full opacity cross-fade, semantic labels, and tap interactivity.
+When reduced motion is enabled:
+- Parallax depth calculations, 3D rotations, and orbital transforms are deactivated.
+- Continuous Bezier morphs snap directly to comfortable, accessible static states.
+- Color shifts and text hierarchies remain completely clear and legible.
 
 ---
 
-## Configuration Reference
+## 📊 Performance & Invariants
 
-### `ScrollResponsiveConfig`
-| Property | Type | Default | Description |
-|---|---|---|---|
-| `pinSideActions` | `bool` | `true` | Pins side action icons. |
-| `transparentActions` | `bool` | `true` | Enforces transparent action container backgrounds. |
-| `hideStatusBarOnScroll` | `bool` | `true` | Enables scroll-responsive status bar hiding. |
-| `enableReverseAnimation` | `bool` | `true` | Enables reverse animations on scroll up. |
-| `thresholds` | `ScrollThresholdConfig` | `ScrollThresholdConfig()` | Independent scroll transition thresholds. |
-| `animation` | `ScrollAnimationConfig` | `ScrollAnimationConfig()` | Animation timing, curves, scale, and slide settings. |
-| `statusBar` | `StatusBarConfig` | `StatusBarConfig()` | Mobile status bar behavior and hysteresis settings. |
-| `pinnedActions` | `PinnedActionsConfig` | `PinnedActionsConfig()` | Touch target sizes and layout padding. |
-
-### `ScrollThresholdConfig`
-| Property | Type | Default | Description |
-|---|---|---|---|
-| `leadingStartOffset` | `double` | `20.0` | Scroll offset (px) where left action starts transitioning. |
-| `leadingEndOffset` | `double` | `80.0` | Scroll offset (px) where left action finishes transitioning. |
-| `trailingStartOffset` | `double` | `20.0` | Scroll offset (px) where right action starts transitioning. |
-| `trailingEndOffset` | `double` | `80.0` | Scroll offset (px) where right action finishes transitioning. |
-| `statusBarHideOffset` | `double` | `100.0` | Scroll offset (px) to hide mobile status bar. |
-| `statusBarShowOffset` | `double` | `50.0` | Scroll offset (px) to restore status bar (hysteresis deadband). |
+- **Impeller & Skia Ready** — Hardware accelerated through `Transform` and `SliverPersistentHeaderDelegate`.
+- **Zero Element Rebuilds** — Body content is completely decoupled from scroll updates.
+- **Pure Math Animations** — All layout geometries derive synchronously from `shrinkOffset` with zero frame-delay ticker latency.
+- **Cross-Platform Verified** — Validated on macOS, iOS, Android, Linux, Windows, and Web.
 
 ---
 
-## Running the Showcase Application
-
-Run the multi-tab showcase application included in the repository:
-
-```bash
-cd example
-flutter run
-```
-
-Features 5 interactive showcase tabs:
-- **Tab 1: Core Header** — Dual icon swaps, live telemetry dashboard, and configuration controls.
-- **Tab 2: Collapsing** — Smooth collapsing header with pinned sticky tab bar navigation.
-- **Tab 3: Pull Expand** — Profile cover with iOS-style rubber-band zoom and spring-back physics.
-- **Tab 4: Parallax** — Flow-based parallax banner, linear reading progress indicator, and section reveals.
-- **Tab 5: Presets** — Live interactive preview of all 6 built-in scaffold presets.
-
----
-
-## License
+## 📄 License
 
 This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.

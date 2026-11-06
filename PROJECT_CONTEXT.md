@@ -58,34 +58,57 @@ dev_dependencies:
 lib/
 ├── app_bar_ui.dart                   # Public API barrel exports
 ├── src/
+│   ├── engine/                       # Universal AppBar Engine & controllers
+│   │   ├── app_bar_engine.dart               # Master public widget (Simple, Advanced, & Sliver Modes)
+│   │   ├── app_bar_model.dart                # Streamlined 21-model enum (classic + 20 design system models)
+│   │   ├── app_bar_controller.dart           # Dynamic model switching & scroll telemetry controller
+│   │   ├── app_bar_configuration.dart        # Unified configuration container & resolved configurations
+│   │   ├── app_bar_model_registry.dart       # Lazy model renderer registry
+│   │   ├── app_bar_model_renderer.dart       # Abstract base renderer contract
+│   │   ├── capability_validator.dart         # Validates model-feature compatibility
+│   │   ├── element_configuration.dart        # Element-level custom builders & visibility
+│   │   ├── element_resolver.dart             # Element resolving engine
+│   │   ├── model_capabilities.dart           # Declares supported physics/features per model
+│   │   └── renderers/                        # Built-in model renderer factories
+│   │       ├── built_in_renderers.dart       # Bootstrap registry for 21 clean models
+│   │       └── standard_renderers.dart       # ClassicAppBarRenderer implementation
+│   ├── design_system/                # 20 Genuinely Autonomous AppBar Models
+│   │   ├── app_bar_model_configuration.dart  # Abstract typed config marker
+│   │   ├── model_transition_spec.dart        # Animated zero-leak model switching specs
+│   │   └── models/                           # 20 independent model packages
+│   │       ├── traditional_structured/       # Model 1: 3-tier enterprise layout with sticky tabs
+│   │       ├── full_screen_hero/             # Model 2: Immersive hero banner with optical scrim
+│   │       ├── floating_island/              # Model 3: Detached rounded capsule island
+│   │       ├── immersive_spatial/            # Model 4: 3-layer differential depth stage
+│   │       ├── split_curtain/                # Model 5: Lateral split panels fusing on scroll
+│   │       ├── spatial_3d_flip/              # Model 6: 180° perspective projection flip card
+│   │       ├── vertical_rail_transform/      # Model 7: Horizontal bar transforming to vertical side rail
+│   │       ├── radial_dial/                  # Model 8: Polar coordinate orbital dial
+│   │       ├── editorial_typography/         # Model 9: Elegant newspaper masthead & reading progress
+│   │       ├── card_deck_stacked/            # Model 10: Stacked card wallet compressing into tab strip
+│   │       ├── minimalist_micro_bar/         # Model 11: Monospace breadcrumb trail with velocity auto-hide
+│   │       ├── profile_identity/             # Model 12: Hero avatar gliding to dock in toolbar
+│   │       ├── expandable_control_center/    # Model 13: 2x3 toggle tile grid collapsing into status bar
+│   │       ├── timeline_scrubber_nav/        # Model 14: Interactive milestone timeline scrubber
+│   │       ├── search_spotlight/             # Model 15: Centered spotlight search field with suggestion chips
+│   │       ├── gesture_elastic_canvas/       # Model 16: Elastic pull-to-refresh canvas with live spring
+│   │       ├── adaptive_breakpoint_nav/      # Model 17: Responsive layout adapting across 600px/840px boundaries
+│   │       ├── context_focal_swap_nav/       # Model 18: Instant multi-domain focal context switcher
+│   │       ├── liquid_wave_morph_nav/        # Model 19: Dynamic fluid wave boundary flattening on scroll
+│   │       └── developer_custom_canvas/      # Model 20: Unconstrained custom builder canvas & blueprint
 │   ├── models/                       # Immutable configuration models
 │   │   ├── scroll_responsive_config.dart   # Core thresholds, animations, status bar, pinned actions
 │   │   ├── visibility_config.dart         # Smart visibility targets and rules
 │   │   └── scroll_responsive_presets.dart # Pre-configured architecture presets
-│   ├── engine/                       # Low-level scroll, visibility, and system UI controllers
-│   │   ├── scroll_responsive_engine.dart     # Scroll tracking, metrics, hysteresis, direction
-│   │   ├── scroll_responsive_controller.dart # Unified programmatic controller extending ScrollController
-│   │   ├── smart_visibility_controller.dart  # Centralized multi-target visibility streams
-│   │   ├── status_bar_manager.dart           # Native System UI & SystemChrome coordinator
-│   │   └── scroll_snap_engine.dart           # Scroll snapping physics and programmatic engine
 │   ├── animations/                   # Shared scroll-linked animation system
-│   │   ├── scroll_driven_animation.dart      # ScrollRange<T>, ScrollTransform (opacity, scale, slide, rotation)
-│   │   ├── scroll_color_tween.dart           # ScrollColorTransition (colors & gradients)
-│   │   └── scroll_morph_builder.dart         # ScrollMorphBuilder (midpoint switching & cross-fade)
+│   │   ├── scroll_driven_animation.dart      # ScrollRange<T>, ScrollTransform
+│   │   ├── scroll_color_tween.dart           # ScrollColorTransition
+│   │   └── scroll_morph_builder.dart         # ScrollMorphBuilder
 │   ├── presets/                      # 50 Ready-To-Use AppBar & Header Presets
-│   │   ├── scroll_header.dart                # Master unified ScrollHeader entrypoint (50 constructors)
+│   │   ├── scroll_header.dart                # Master unified ScrollHeader entrypoint
 │   │   ├── scroll_header_preset.dart         # Enum of all 50 presets with metadata
 │   │   ├── scroll_header_style.dart          # Styling, padding, and geometry model
 │   │   └── headers/                          # Modular preset implementations
-│   │       ├── base_header.dart              # Base delegate & HeaderContainer
-│   │       ├── minimal_headers.dart          # Minimal, Transparent, Floating, CenterTitle
-│   │       ├── standard_headers.dart         # Material, iOS, Gradient, ImageBackground
-│   │       ├── collapsing_headers.dart       # LargeTitle, FlexibleSpace, Collapsing, CompactScroll
-│   │       ├── specialized_headers.dart      # Profile, Dashboard, Search, Segmented, StickyTab
-│   │       ├── dynamic_headers.dart          # Parallax, SideActionTransition, CustomBuilder
-│   │       ├── navigation_headers.dart       # Navigation & Layout styles (Presets 21–30)
-│   │       ├── visual_headers.dart           # Visual & Creative styles (Presets 31–40)
-│   │       └── specialized_appbar_headers.dart # Specialized AppBars (Presets 41–50)
 │   └── widgets/                      # Reusable public components
 │       ├── sliver_widget_marker.dart         # Sliver marker mixin for auto Box/Sliver routing
 │       ├── scroll_responsive_scaffold.dart   # Master orchestrator scaffold
