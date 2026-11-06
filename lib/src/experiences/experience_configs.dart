@@ -866,6 +866,168 @@ class ExpandingSearchConfig extends AppBarMotionConfig {
   final double elevation;
 }
 
+/// Configuration for Style 26: Animated Breadcrumb Transformation Header.
+class BreadcrumbTransformConfig extends AppBarMotionConfig {
+  /// Creates a [BreadcrumbTransformConfig].
+  const BreadcrumbTransformConfig({
+    super.curve = Curves.easeOutCubic,
+    super.reducedMotionCurve = Curves.linear,
+    this.expandedHeight = 130.0,
+    this.collapsedHeight = 56.0,
+    this.maxVisibleCompactNodes = 2,
+    this.collapseThreshold = 80.0,
+    this.elevation = 3.0,
+  });
+
+  /// Maximum expanded height.
+  final double expandedHeight;
+
+  /// Minimum collapsed docked height.
+  final double collapsedHeight;
+
+  /// Maximum number of breadcrumb nodes visible when collapsed into compact mode.
+  final int maxVisibleCompactNodes;
+
+  /// Scroll distance required to complete breadcrumb compression.
+  final double collapseThreshold;
+
+  /// Docked toolbar elevation.
+  final double elevation;
+}
+
+/// Configuration for Style 27: Card-to-Header Morph Header.
+class CardToHeaderMorphConfig extends AppBarMotionConfig {
+  /// Creates a [CardToHeaderMorphConfig].
+  const CardToHeaderMorphConfig({
+    super.curve = Curves.easeOutCubic,
+    super.reducedMotionCurve = Curves.linear,
+    this.cardExpandedHeight = 160.0,
+    this.dockedHeight = 60.0,
+    this.initialHorizontalMargin = 16.0,
+    this.initialVerticalMargin = 12.0,
+    this.initialBorderRadius = 24.0,
+    this.initialElevation = 4.0,
+    this.dockedElevation = 2.0,
+    this.morphThreshold = 75.0,
+  });
+
+  /// Expanded height of the floating hero card.
+  final double cardExpandedHeight;
+
+  /// Collapsed docked toolbar height after attaching flush to viewport edge.
+  final double dockedHeight;
+
+  /// Horizontal margin of the card in resting state.
+  final double initialHorizontalMargin;
+
+  /// Vertical margin of the card in resting state.
+  final double initialVerticalMargin;
+
+  /// Border radius of the card in resting state (morphs to 0.0 when docked).
+  final double initialBorderRadius;
+
+  /// Resting card shadow elevation.
+  final double initialElevation;
+
+  /// Docked toolbar elevation.
+  final double dockedElevation;
+
+  /// Scroll distance over which the card morphs into the docked header.
+  final double morphThreshold;
+}
+
+/// Configuration for Style 28: Reveal-From-Edge Header.
+class RevealFromEdgeConfig extends AppBarMotionConfig {
+  /// Creates a [RevealFromEdgeConfig].
+  const RevealFromEdgeConfig({
+    super.curve = Curves.easeOutCubic,
+    super.reducedMotionCurve = Curves.linear,
+    this.headerHeight = 64.0,
+    this.revealVelocityThreshold = -150.0,
+    this.hideVelocityThreshold = 150.0,
+    this.elevation = 4.0,
+  });
+
+  /// Height of the edge-revealed header.
+  final double headerHeight;
+
+  /// Upward velocity threshold required to trigger slide-in reveal from edge.
+  final double revealVelocityThreshold;
+
+  /// Downward velocity threshold required to trigger slide-out withdrawal.
+  final double hideVelocityThreshold;
+
+  /// Header elevation shadow.
+  final double elevation;
+}
+
+/// Configuration for Style 29: Gesture-Driven Drag Expansion Header.
+class GestureDrivenDragExpansionConfig extends AppBarMotionConfig {
+  /// Creates a [GestureDrivenDragExpansionConfig].
+  const GestureDrivenDragExpansionConfig({
+    super.curve = Curves.easeOutCubic,
+    super.reducedMotionCurve = Curves.linear,
+    this.restingHeight = 80.0,
+    this.maxDragExpandedHeight = 240.0,
+    this.latchThreshold = 150.0,
+    this.springDamping = 18.0,
+    this.springStiffness = 220.0,
+    this.elevation = 4.0,
+  });
+
+  /// Resting collapsed height of the header.
+  final double restingHeight;
+
+  /// Maximum height accessible via downward drag gesture pull.
+  final double maxDragExpandedHeight;
+
+  /// Drag distance threshold required to latch the expanded drawer open.
+  final double latchThreshold;
+
+  /// Spring physics damping.
+  final double springDamping;
+
+  /// Spring physics stiffness.
+  final double springStiffness;
+
+  /// Header elevation.
+  final double elevation;
+}
+
+/// Configuration for Style 30: Adaptive Multi-Device Responsive Header.
+class AdaptiveMultiDeviceConfig extends AppBarMotionConfig {
+  /// Creates an [AdaptiveMultiDeviceConfig].
+  const AdaptiveMultiDeviceConfig({
+    super.curve = Curves.easeInOutCubic,
+    super.reducedMotionCurve = Curves.linear,
+    this.mobileBreakpoint = 600.0,
+    this.desktopBreakpoint = 900.0,
+    this.mobileHeight = 56.0,
+    this.tabletHeight = 108.0,
+    this.desktopHeight = 72.0,
+    this.elevation = 3.0,
+  });
+
+  /// Viewport width below which mobile single-row layout is applied.
+  final double mobileBreakpoint;
+
+  /// Viewport width above which desktop wide multi-column layout is applied.
+  final double desktopBreakpoint;
+
+  /// Header height on mobile viewports (< mobileBreakpoint).
+  final double mobileHeight;
+
+  /// Header height on tablet viewports (mobileBreakpoint -> desktopBreakpoint).
+  final double tabletHeight;
+
+  /// Header height on desktop viewports (> desktopBreakpoint).
+  final double desktopHeight;
+
+  /// Header elevation.
+  final double elevation;
+}
+
+
 
 
 

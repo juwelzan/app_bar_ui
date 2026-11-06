@@ -70,6 +70,11 @@ export 'src/experiences/avatar_to_profile_header.dart';
 export 'src/experiences/progressive_disclosure_header.dart';
 export 'src/experiences/sideways_collapse_header.dart';
 export 'src/experiences/expanding_search_header.dart';
+export 'src/experiences/breadcrumb_transform_header.dart';
+export 'src/experiences/card_to_header_morph_header.dart';
+export 'src/experiences/reveal_from_edge_header.dart';
+export 'src/experiences/gesture_driven_drag_expansion_header.dart';
+export 'src/experiences/adaptive_multi_device_header.dart';
 
 import 'app_bar_ui_platform_interface.dart';
 

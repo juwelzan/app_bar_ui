@@ -181,7 +181,7 @@ void main() {
   );
 
   testWidgets(
-    'Animated Experiences Lab switches across Batches 1, 2, 3, 4, and 5 styles',
+    'Animated Experiences Lab switches across Batches 1, 2, 3, 4, 5, and 6 styles',
     (WidgetTester tester) async {
       await tester.pumpWidget(const ScrollResponsiveDemoApp());
       await tester.pumpAndSettle();
@@ -192,7 +192,7 @@ void main() {
 
       // Verify active batches banner
       expect(
-        find.text('Batches 1–5 Active (Styles 1–25 of 50)'),
+        find.text('Batches 1–6 Active (Styles 1–30 of 50)'),
         findsOneWidget,
       );
       expect(find.text('1. Morphing Split'), findsOneWidget);
@@ -216,34 +216,6 @@ void main() {
       await tester.tap(batch5Filter);
       await tester.pumpAndSettle();
 
-      // Style 21: Animated Tab-Transform Header
-      final style21 = find.text('21. Animated Tab-Transform Header');
-      await tester.ensureVisible(style21);
-      await tester.tap(style21);
-      await tester.pumpAndSettle();
-      expect(find.text('Engineering Portal'), findsOneWidget);
-
-      // Style 22: Avatar-to-Profile Arc Header
-      final style22 = find.text('22. Avatar-to-Profile Arc Header');
-      await tester.ensureVisible(style22);
-      await tester.tap(style22);
-      await tester.pumpAndSettle();
-      expect(find.text('Dr. Evelyn Cross'), findsOneWidget);
-
-      // Style 23: Progressive Disclosure Header
-      final style23 = find.text('23. Progressive Disclosure Header');
-      await tester.ensureVisible(style23);
-      await tester.tap(style23);
-      await tester.pumpAndSettle();
-      expect(find.text('Market Discovery'), findsOneWidget);
-
-      // Style 24: Sideways-Collapse Header
-      final style24 = find.text('24. Sideways-Collapse Header');
-      await tester.ensureVisible(style24);
-      await tester.tap(style24);
-      await tester.pumpAndSettle();
-      expect(find.text('Global Workspace Hub'), findsOneWidget);
-
       // Style 25: Expanding Search Transformation
       final style25 = find.text('25. Expanding Search Transformation');
       await tester.ensureVisible(style25);
@@ -251,10 +223,51 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('Global Catalog Hub'), findsOneWidget);
 
-      // Open View Code dialog for Expanding Search Transformation
+      // Select Batch 6 filter pill
+      final batch6Filter = find.text('Batch 6 (26–30)');
+      await tester.ensureVisible(batch6Filter);
+      await tester.tap(batch6Filter);
+      await tester.pumpAndSettle();
+
+      // Style 26: Breadcrumb Transformation Header
+      final style26 = find.text('26. Breadcrumb Transformation Header');
+      await tester.ensureVisible(style26);
+      await tester.tap(style26);
+      await tester.pumpAndSettle();
+      expect(find.text('Audio Gear Specs'), findsOneWidget);
+
+      // Style 27: Card-to-Header Morph Header
+      final style27 = find.text('27. Card-to-Header Morph Header');
+      await tester.ensureVisible(style27);
+      await tester.tap(style27);
+      await tester.pumpAndSettle();
+      expect(find.text('Enterprise Cloud Platform'), findsOneWidget);
+
+      // Style 28: Reveal-From-Edge Header
+      final style28 = find.text('28. Reveal-From-Edge Header');
+      await tester.ensureVisible(style28);
+      await tester.tap(style28);
+      await tester.pumpAndSettle();
+      expect(find.text('Edge-Revealed Toolbar'), findsOneWidget);
+
+      // Style 29: Gesture-Driven Drag Expansion Header
+      final style29 = find.text('29. Gesture-Driven Drag Expansion');
+      await tester.ensureVisible(style29);
+      await tester.tap(style29);
+      await tester.pumpAndSettle();
+      expect(find.text('Touch & Pull Expansion Header'), findsOneWidget);
+
+      // Style 30: Adaptive Multi-Device Header
+      final style30 = find.text('30. Adaptive Multi-Device Header');
+      await tester.ensureVisible(style30);
+      await tester.tap(style30);
+      await tester.pumpAndSettle();
+      expect(find.text('Responsive Cloud Hub'), findsOneWidget);
+
+      // Open View Code dialog for Adaptive Multi-Device Header
       await tester.tap(find.text('View Code'));
       await tester.pumpAndSettle();
-      expect(find.text('Expanding Search Transformation Integration Code'), findsOneWidget);
+      expect(find.text('Adaptive Multi-Device Header Integration Code'), findsOneWidget);
       await tester.tap(find.text('Close'));
       await tester.pumpAndSettle();
 

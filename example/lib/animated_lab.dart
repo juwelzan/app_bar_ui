@@ -221,6 +221,48 @@ enum ExperienceStyle {
     description:
         'Action search icon smoothly morphs into active full-bleed search bar',
     icon: Icons.search_outlined,
+  ),
+
+  // Batch 6 (Styles 26–30)
+  breadcrumbTransform(
+    id: 26,
+    batch: 6,
+    title: 'Breadcrumb Transformation Header',
+    description:
+        'Deep multi-level paths collapse progressively into a condensed dropdown pill',
+    icon: Icons.linear_scale_outlined,
+  ),
+  cardToHeader(
+    id: 27,
+    batch: 6,
+    title: 'Card-to-Header Morph Header',
+    description:
+        'Floating rounded hero card morphs its margins and radius flush into top docked bar',
+    icon: Icons.crop_portrait_outlined,
+  ),
+  revealFromEdge(
+    id: 28,
+    batch: 6,
+    title: 'Reveal-From-Edge Header',
+    description:
+        'Edge-anchored navigation bar that slides in upon upward gesture velocity',
+    icon: Icons.vertical_align_bottom_outlined,
+  ),
+  gestureDragExpansion(
+    id: 29,
+    batch: 6,
+    title: 'Gesture-Driven Drag Expansion',
+    description:
+        'Direct vertical touch manipulation pulling down a secondary canvas with spring recoil',
+    icon: Icons.pan_tool_alt_outlined,
+  ),
+  adaptiveMultiDevice(
+    id: 30,
+    batch: 6,
+    title: 'Adaptive Multi-Device Header',
+    description:
+        'Reflows layout across mobile single-row, tablet split, and desktop 3-column',
+    icon: Icons.devices_outlined,
   );
 
   const ExperienceStyle({
@@ -372,6 +414,28 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
   // Style 25 params (Expanding Search)
   final GlobalKey<ExpandingSearchHeaderWidgetState> _expandingSearchKey = GlobalKey();
   double _expandingSearchThreshold = 75.0;
+
+  // Style 26 params (Breadcrumb Transform)
+  double _breadcrumbExpandedHeight = 130.0;
+  double _breadcrumbCollapseThreshold = 80.0;
+  int _selectedBreadcrumbIndex = 3;
+
+  // Style 27 params (Card-to-Header Morph)
+  double _cardMorphExpandedHeight = 160.0;
+  double _cardMorphThreshold = 75.0;
+
+  // Style 28 params (Reveal-From-Edge)
+  final GlobalKey<RevealFromEdgeHeaderWidgetState> _revealEdgeKey = GlobalKey();
+  double _revealHeaderHeight = 64.0;
+
+  // Style 29 params (Gesture-Driven Drag Expansion)
+  final GlobalKey<GestureDrivenDragExpansionHeaderWidgetState> _gestureDragKey = GlobalKey();
+  double _dragMaxExpandedHeight = 220.0;
+  double _dragLatchThreshold = 140.0;
+
+  // Style 30 params (Adaptive Multi-Device)
+  double _adaptiveMobileBreakpoint = 600.0;
+  double _adaptiveDesktopBreakpoint = 900.0;
 
   @override
   void initState() {
@@ -1417,6 +1481,200 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
             expandThreshold: _expandingSearchThreshold,
           ),
         );
+
+      // 26. Breadcrumb Transformation Header
+      case ExperienceStyle.breadcrumbTransform:
+        const breadcrumbs = [
+          BreadcrumbNode(label: 'Home', icon: Icons.home),
+          BreadcrumbNode(label: 'Products'),
+          BreadcrumbNode(label: 'Electronics'),
+          BreadcrumbNode(label: 'Audio Gear'),
+        ];
+        return BreadcrumbTransformHeaderWidget(
+          title: Text(
+            '${breadcrumbs[_selectedBreadcrumbIndex].label} Specs',
+            style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
+          ),
+          items: breadcrumbs,
+          onNodeSelected: (idx) {
+            setState(() => _selectedBreadcrumbIndex = idx);
+          },
+          actions: [
+            IconButton(icon: const Icon(Icons.share), onPressed: () {}),
+            IconButton(icon: const Icon(Icons.tune), onPressed: () => _openParameterSheet(context)),
+          ],
+          config: BreadcrumbTransformConfig(
+            expandedHeight: _breadcrumbExpandedHeight,
+            collapseThreshold: _breadcrumbCollapseThreshold,
+          ),
+        );
+
+      // 27. Card-to-Header Morph Header
+      case ExperienceStyle.cardToHeader:
+        return CardToHeaderMorphHeaderWidget(
+          heroCardContent: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              children: [
+                const Icon(Icons.rocket_launch, size: 40.0, color: Colors.indigoAccent),
+                const SizedBox(width: 12.0),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Enterprise Cloud Platform', style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold), maxLines: 1, overflow: TextOverflow.ellipsis),
+                      Text('Floating hero card morphing flush into docked navigation bar', style: theme.textTheme.bodySmall, maxLines: 1, overflow: TextOverflow.ellipsis),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          dockedToolbar: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              children: [
+                const Icon(Icons.rocket_launch, size: 20.0, color: Colors.indigoAccent),
+                const SizedBox(width: 8.0),
+                Text('Enterprise Cloud Docked', style: theme.textTheme.titleSmall!.copyWith(fontWeight: FontWeight.bold)),
+                const Spacer(),
+                IconButton(icon: const Icon(Icons.tune), onPressed: () => _openParameterSheet(context)),
+              ],
+            ),
+          ),
+          config: CardToHeaderMorphConfig(
+            cardExpandedHeight: _cardMorphExpandedHeight,
+            morphThreshold: _cardMorphThreshold,
+          ),
+        );
+
+      // 28. Reveal-From-Edge Header
+      case ExperienceStyle.revealFromEdge:
+        return SliverToBoxAdapter(
+          child: RevealFromEdgeHeaderWidget(
+            key: _revealEdgeKey,
+            config: RevealFromEdgeConfig(
+              headerHeight: _revealHeaderHeight,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
+                children: [
+                  const Icon(Icons.vertical_align_bottom, color: Colors.deepPurple),
+                  const SizedBox(width: 8.0),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Edge-Revealed Toolbar', style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold)),
+                        Text('Slides in on upward velocity, hides on downward scroll', style: theme.textTheme.bodySmall),
+                      ],
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.visibility_off),
+                    tooltip: 'Hide Edge Header',
+                    onPressed: () => _revealEdgeKey.currentState?.hide(),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+
+      // 29. Gesture-Driven Drag Expansion Header
+      case ExperienceStyle.gestureDragExpansion:
+        return SliverToBoxAdapter(
+          child: GestureDrivenDragExpansionHeaderWidget(
+            key: _gestureDragKey,
+            config: GestureDrivenDragExpansionConfig(
+              maxDragExpandedHeight: _dragMaxExpandedHeight,
+              latchThreshold: _dragLatchThreshold,
+            ),
+            restingContent: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
+                children: [
+                  const Icon(Icons.pan_tool_alt, color: Colors.teal),
+                  const SizedBox(width: 8.0),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Touch & Pull Expansion Header', style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold)),
+                        Text('Drag downward to pull secondary control canvas', style: theme.textTheme.bodySmall),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            expandedCanvasContent: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Secondary Utility Canvas', style: theme.textTheme.titleSmall!.copyWith(fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 8.0),
+                  Wrap(
+                    spacing: 8.0,
+                    children: [
+                      ActionChip(avatar: const Icon(Icons.bolt, size: 16.0), label: const Text('Performance'), onPressed: () {}),
+                      ActionChip(avatar: const Icon(Icons.memory, size: 16.0), label: const Text('RAM Flush'), onPressed: () {}),
+                      ActionChip(avatar: const Icon(Icons.lock, size: 16.0), label: const Text('Security'), onPressed: () {}),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+
+      // 30. Adaptive Multi-Device Header
+      case ExperienceStyle.adaptiveMultiDevice:
+        return SliverToBoxAdapter(
+          child: AdaptiveMultiDeviceHeaderWidget(
+            title: const Text('Responsive Cloud Hub'),
+            searchBar: Container(
+              height: 40.0,
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              child: const Row(
+                children: [
+                  Icon(Icons.search, size: 18.0),
+                  SizedBox(width: 8.0),
+                  Expanded(
+                    child: Text(
+                      'Search resources, clusters...',
+                      style: TextStyle(fontSize: 13.0),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            tabs: const [
+              Padding(padding: EdgeInsets.symmetric(horizontal: 6.0), child: Chip(label: Text('Overview'))),
+              Padding(padding: EdgeInsets.symmetric(horizontal: 6.0), child: Chip(label: Text('Pipelines'))),
+              Padding(padding: EdgeInsets.symmetric(horizontal: 6.0), child: Chip(label: Text('Clusters'))),
+            ],
+            actions: [
+              IconButton(icon: const Icon(Icons.tune), onPressed: () => _openParameterSheet(context)),
+            ],
+            avatar: const CircleAvatar(radius: 16.0, child: Icon(Icons.person, size: 18.0)),
+            config: AdaptiveMultiDeviceConfig(
+              mobileBreakpoint: _adaptiveMobileBreakpoint,
+              desktopBreakpoint: _adaptiveDesktopBreakpoint,
+            ),
+          ),
+        );
     }
   }
 
@@ -1447,7 +1705,7 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                'Batches 1–5 Active (Styles 1–25 of 50)',
+                                'Batches 1–6 Active (Styles 1–30 of 50)',
                                 style: theme.textTheme.labelLarge!.copyWith(
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -1483,7 +1741,7 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
                       runSpacing: 6.0,
                       children: [
                         FilterChip(
-                          label: const Text('All (1–25)'),
+                          label: const Text('All (1–30)'),
                           selected: _selectedBatchFilter == 0,
                           onSelected: (_) => setState(() => _selectedBatchFilter = 0),
                         ),
@@ -1511,6 +1769,11 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
                           label: const Text('Batch 5 (21–25)'),
                           selected: _selectedBatchFilter == 5,
                           onSelected: (_) => setState(() => _selectedBatchFilter = 5),
+                        ),
+                        FilterChip(
+                          label: const Text('Batch 6 (26–30)'),
+                          selected: _selectedBatchFilter == 6,
+                          onSelected: (_) => setState(() => _selectedBatchFilter = 6),
                         ),
                       ],
                     ),
@@ -2180,6 +2443,125 @@ class _AnimatedExperiencesLabTabState extends State<AnimatedExperiencesLabTab> {
             },
           ),
         ];
+
+      case ExperienceStyle.breadcrumbTransform:
+        return [
+          Text('Expanded Height: ${_breadcrumbExpandedHeight.toStringAsFixed(0)} px'),
+          Slider(
+            value: _breadcrumbExpandedHeight,
+            min: 100.0,
+            max: 200.0,
+            divisions: 10,
+            onChanged: (val) {
+              setSheetState(() => _breadcrumbExpandedHeight = val);
+              setState(() => _breadcrumbExpandedHeight = val);
+            },
+          ),
+          Text('Collapse Threshold: ${_breadcrumbCollapseThreshold.toStringAsFixed(0)} px'),
+          Slider(
+            value: _breadcrumbCollapseThreshold,
+            min: 40.0,
+            max: 120.0,
+            divisions: 8,
+            onChanged: (val) {
+              setSheetState(() => _breadcrumbCollapseThreshold = val);
+              setState(() => _breadcrumbCollapseThreshold = val);
+            },
+          ),
+        ];
+
+      case ExperienceStyle.cardToHeader:
+        return [
+          Text('Card Expanded Height: ${_cardMorphExpandedHeight.toStringAsFixed(0)} px'),
+          Slider(
+            value: _cardMorphExpandedHeight,
+            min: 120.0,
+            max: 240.0,
+            divisions: 12,
+            onChanged: (val) {
+              setSheetState(() => _cardMorphExpandedHeight = val);
+              setState(() => _cardMorphExpandedHeight = val);
+            },
+          ),
+          Text('Morph Threshold: ${_cardMorphThreshold.toStringAsFixed(0)} px'),
+          Slider(
+            value: _cardMorphThreshold,
+            min: 40.0,
+            max: 120.0,
+            divisions: 8,
+            onChanged: (val) {
+              setSheetState(() => _cardMorphThreshold = val);
+              setState(() => _cardMorphThreshold = val);
+            },
+          ),
+        ];
+
+      case ExperienceStyle.revealFromEdge:
+        return [
+          Text('Header Height: ${_revealHeaderHeight.toStringAsFixed(0)} px'),
+          Slider(
+            value: _revealHeaderHeight,
+            min: 48.0,
+            max: 96.0,
+            divisions: 8,
+            onChanged: (val) {
+              setSheetState(() => _revealHeaderHeight = val);
+              setState(() => _revealHeaderHeight = val);
+            },
+          ),
+        ];
+
+      case ExperienceStyle.gestureDragExpansion:
+        return [
+          Text('Max Drag Expanded Height: ${_dragMaxExpandedHeight.toStringAsFixed(0)} px'),
+          Slider(
+            value: _dragMaxExpandedHeight,
+            min: 160.0,
+            max: 300.0,
+            divisions: 14,
+            onChanged: (val) {
+              setSheetState(() => _dragMaxExpandedHeight = val);
+              setState(() => _dragMaxExpandedHeight = val);
+            },
+          ),
+          Text('Latch Threshold: ${_dragLatchThreshold.toStringAsFixed(0)} px'),
+          Slider(
+            value: _dragLatchThreshold,
+            min: 90.0,
+            max: 200.0,
+            divisions: 11,
+            onChanged: (val) {
+              setSheetState(() => _dragLatchThreshold = val);
+              setState(() => _dragLatchThreshold = val);
+            },
+          ),
+        ];
+
+      case ExperienceStyle.adaptiveMultiDevice:
+        return [
+          Text('Mobile Breakpoint: ${_adaptiveMobileBreakpoint.toStringAsFixed(0)} px'),
+          Slider(
+            value: _adaptiveMobileBreakpoint,
+            min: 400.0,
+            max: 700.0,
+            divisions: 6,
+            onChanged: (val) {
+              setSheetState(() => _adaptiveMobileBreakpoint = val);
+              setState(() => _adaptiveMobileBreakpoint = val);
+            },
+          ),
+          Text('Desktop Breakpoint: ${_adaptiveDesktopBreakpoint.toStringAsFixed(0)} px'),
+          Slider(
+            value: _adaptiveDesktopBreakpoint,
+            min: 750.0,
+            max: 1200.0,
+            divisions: 9,
+            onChanged: (val) {
+              setSheetState(() => _adaptiveDesktopBreakpoint = val);
+              setState(() => _adaptiveDesktopBreakpoint = val);
+            },
+          ),
+        ];
     }
   }
 
@@ -2670,6 +3052,139 @@ CustomScrollView(
     ),
     // ... list slivers
   ],
+)''';
+
+      case ExperienceStyle.breadcrumbTransform:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+CustomScrollView(
+  slivers: [
+    BreadcrumbTransformHeaderWidget(
+      title: const Text('Audio Gear Specs'),
+      items: const [
+        BreadcrumbNode(label: 'Home', icon: Icons.home),
+        BreadcrumbNode(label: 'Products'),
+        BreadcrumbNode(label: 'Electronics'),
+        BreadcrumbNode(label: 'Audio Gear'),
+      ],
+      config: BreadcrumbTransformConfig(
+        expandedHeight: $_breadcrumbExpandedHeight,
+        collapseThreshold: $_breadcrumbCollapseThreshold,
+      ),
+      onNodeSelected: (index) {
+        // Handle navigation
+      },
+    ),
+    // ... list slivers
+  ],
+)''';
+
+      case ExperienceStyle.cardToHeader:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+CustomScrollView(
+  slivers: [
+    CardToHeaderMorphHeaderWidget(
+      heroCardContent: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          children: [
+            const Icon(Icons.rocket_launch, size: 40.0),
+            const SizedBox(width: 12.0),
+            Text('Enterprise Cloud Platform'),
+          ],
+        ),
+      ),
+      dockedToolbar: Row(
+        children: [
+          const Icon(Icons.rocket_launch, size: 20.0),
+          const SizedBox(width: 8.0),
+          Text('Enterprise Cloud Docked'),
+        ],
+      ),
+      config: CardToHeaderMorphConfig(
+        cardExpandedHeight: $_cardMorphExpandedHeight,
+        morphThreshold: $_cardMorphThreshold,
+      ),
+    ),
+    // ... list slivers
+  ],
+)''';
+
+      case ExperienceStyle.revealFromEdge:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+RevealFromEdgeHeaderWidget(
+  config: RevealFromEdgeConfig(
+    headerHeight: $_revealHeaderHeight,
+    minVelocityThreshold: 150.0,
+  ),
+  child: Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+    child: Row(
+      children: [
+        const Icon(Icons.vertical_align_bottom),
+        const SizedBox(width: 8.0),
+        Text('Edge-Revealed Toolbar'),
+      ],
+    ),
+  ),
+)''';
+
+      case ExperienceStyle.gestureDragExpansion:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+GestureDrivenDragExpansionHeaderWidget(
+  config: GestureDrivenDragExpansionConfig(
+    maxDragExpandedHeight: $_dragMaxExpandedHeight,
+    latchThreshold: $_dragLatchThreshold,
+  ),
+  restingContent: Row(
+    children: [
+      const Icon(Icons.pan_tool_alt),
+      const SizedBox(width: 8.0),
+      Text('Touch & Pull Expansion Header'),
+    ],
+  ),
+  expandedCanvasContent: Column(
+    children: [
+      Text('Secondary Utility Canvas'),
+    ],
+  ),
+)''';
+
+      case ExperienceStyle.adaptiveMultiDevice:
+        return '''
+import 'package:app_bar_ui/app_bar_ui.dart';
+
+AdaptiveMultiDeviceHeaderWidget(
+  title: const Text('Responsive Cloud Hub'),
+  searchBar: Container(
+    height: 40.0,
+    child: Row(
+      children: const [
+        Icon(Icons.search),
+        Text('Search resources, clusters...'),
+      ],
+    ),
+  ),
+  tabs: const [
+    Chip(label: Text('Overview')),
+    Chip(label: Text('Pipelines')),
+    Chip(label: Text('Clusters')),
+  ],
+  actions: [
+    IconButton(icon: const Icon(Icons.tune), onPressed: () {}),
+  ],
+  avatar: const CircleAvatar(child: Icon(Icons.person)),
+  config: AdaptiveMultiDeviceConfig(
+    mobileBreakpoint: $_adaptiveMobileBreakpoint,
+    desktopBreakpoint: $_adaptiveDesktopBreakpoint,
+  ),
 )''';
     }
   }
