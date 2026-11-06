@@ -206,6 +206,19 @@ enum AppBarModel {
 
   /// Model 12: Prominent centered avatar and identity scale-morphing into toolbar.
   profileIdentity,
+
+  // --- Complete Design System: 20 Autonomous Models (Batch D) ---
+  /// Model 13: Quick-settings control hub with interactive tiles collapsing into icon status bar.
+  expandableControlCenter,
+
+  /// Model 14: Chronological scrubber header with milestone nodes along horizontal track.
+  timelineScrubberNav,
+
+  /// Model 15: Full-width prominent search experience with suggested query pills and filter chips.
+  searchSpotlight,
+
+  /// Model 16: Physics-based rubber-band elastic header canvas with damped spring overscroll.
+  gestureElasticCanvas,
 }
 
 /// Convenience display extensions on [AppBarModel].
@@ -237,6 +250,14 @@ extension AppBarModelDisplayName on AppBarModel {
         return 'Minimalist Micro-Bar';
       case AppBarModel.profileIdentity:
         return 'Profile Identity Centered';
+      case AppBarModel.expandableControlCenter:
+        return 'Expandable Control Center';
+      case AppBarModel.timelineScrubberNav:
+        return 'Timeline Scrubber Navigation';
+      case AppBarModel.searchSpotlight:
+        return 'Search Spotlight First';
+      case AppBarModel.gestureElasticCanvas:
+        return 'Gesture Elastic Canvas';
       case AppBarModel.classic:
         return 'Classic Material';
       default:
