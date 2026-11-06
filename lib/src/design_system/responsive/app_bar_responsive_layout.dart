@@ -26,6 +26,16 @@ enum AppBarScreenCategory {
 
   /// Returns true if this category represents a desktop or ultrawide workstation.
   bool get isDesktopOrWider => this == desktop || this == ultrawide;
+
+  /// Resolves the screen category from the given [BuildContext].
+  static AppBarScreenCategory of(BuildContext context) {
+    return AppBarResponsiveMetrics.of(context).category;
+  }
+
+  /// Resolves the screen category for a given viewport width.
+  static AppBarScreenCategory fromWidth(double width) {
+    return AppBarResponsiveMetrics.resolveCategory(width);
+  }
 }
 
 /// Resolved responsive metrics calculated from constraints and media query.

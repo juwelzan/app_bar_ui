@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:app_bar_ui/app_bar_ui.dart';
@@ -570,10 +571,73 @@ class _DesignSystemGalleryTabState extends State<DesignSystemGalleryTab> {
 
   Widget _buildScrollableBody(BuildContext context) {
     final theme = Theme.of(context);
+    final category = AppBarScreenCategory.of(context);
+    final size = MediaQuery.sizeOf(context);
+    final textScale = MediaQuery.textScalerOf(context).scale(1.0);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
       child: Column(
-        children: List.generate(25, (index) {
+        children: [
+          // Live Responsive Telemetry Banner Card
+          Card(
+            margin: const EdgeInsets.only(bottom: 12.0),
+            color: theme.colorScheme.primaryContainer.withValues(alpha: 0.35),
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.0),
+              side: BorderSide(color: theme.colorScheme.primary.withValues(alpha: 0.3)),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(Icons.devices, size: 18.0, color: theme.colorScheme.primary),
+                      const SizedBox(width: 8.0),
+                      Expanded(
+                        child: Text(
+                          'Universal Responsive Engine',
+                          style: theme.textTheme.titleSmall!.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: theme.colorScheme.primary,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      const SizedBox(width: 8.0),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.primary,
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: Text(
+                          category.name.toUpperCase(),
+                          style: TextStyle(
+                            fontSize: 10.0,
+                            fontWeight: FontWeight.bold,
+                            color: theme.colorScheme.onPrimary,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 6.0),
+                  Text(
+                    'Viewport: ${size.width.toInt()} × ${size.height.toInt()} pt • Scale: ${textScale.toStringAsFixed(1)}x • Optical Centering: Active',
+                    style: theme.textTheme.bodySmall!.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          ...List.generate(25, (index) {
           return Card(
             margin: const EdgeInsets.only(bottom: 10.0),
             elevation: 0.5,
@@ -590,6 +654,7 @@ class _DesignSystemGalleryTabState extends State<DesignSystemGalleryTab> {
             ),
           );
         }),
+        ],
       ),
     );
   }
@@ -677,7 +742,7 @@ class _DesignSystemGalleryTabState extends State<DesignSystemGalleryTab> {
         ],
 
         // Section 5: Telemetry HUD
-        _buildTelemetryHUD(theme),
+        _buildTelemetryHUD(context, theme),
         const SizedBox(height: 16.0),
 
         // Section 6: Live Code Generator
@@ -1298,7 +1363,11 @@ class _DesignSystemGalleryTabState extends State<DesignSystemGalleryTab> {
     );
   }
 
-  Widget _buildTelemetryHUD(ThemeData theme) {
+  Widget _buildTelemetryHUD(BuildContext context, ThemeData theme) {
+    final category = AppBarScreenCategory.of(context);
+    final size = MediaQuery.sizeOf(context);
+    final textScale = MediaQuery.textScalerOf(context).scale(1.0);
+
     return Container(
       padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
@@ -1337,6 +1406,14 @@ class _DesignSystemGalleryTabState extends State<DesignSystemGalleryTab> {
           Text('Model: ${_selectedModel.name} (${_selectedModel.displayName})', style: const TextStyle(fontSize: 11.0)),
           Text('Switch Count: $_switchCount • Transition: ${_transitionType.name}', style: const TextStyle(fontSize: 11.0)),
           Text('Level: ${_selectedLevel.label}', style: const TextStyle(fontSize: 11.0)),
+          Text(
+            'Responsive Profile: ${category.name} (${size.width.toInt()}×${size.height.toInt()} pt • ${textScale.toStringAsFixed(1)}x)',
+            style: const TextStyle(fontSize: 11.0),
+          ),
+          Text(
+            'Platform Target: ${kIsWeb ? "Web (dart:io Safe)" : defaultTargetPlatform.name.toUpperCase()}',
+            style: const TextStyle(fontSize: 11.0),
+          ),
         ],
       ),
     );
